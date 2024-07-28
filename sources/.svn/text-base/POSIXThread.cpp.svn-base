@@ -1,0 +1,38 @@
+/*
+ *  POSIXThread.cpp
+ *  Roxane
+ *
+ *  Created by Bruno Causse on 08/03/06.
+ *  Copyright 2006 personnel. All rights reserved.
+ *
+ */
+
+#include "POSIXThread.h"
+
+
+POSIXThread::POSIXThread(Runnable *ptr): _threadObj(ptr) , _threadID(NULL) {
+};
+
+
+void POSIXThread::start() {
+
+	pthread_create(&_threadID, NULL, &(POSIXThread::threadFunction), _threadObj);
+}
+
+
+void POSIXThread::join() {
+	pthread_join(_threadID, NULL);
+}
+
+
+
+void* POSIXThread::threadFunction(void* pt)  {
+
+	Runnable* runnable = static_cast< Runnable*>(pt);
+	
+	runnable->run();
+	
+	return NULL;
+
+}
+

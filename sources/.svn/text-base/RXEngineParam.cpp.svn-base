@@ -1,0 +1,10 @@
+/*
+ *  RXEngineParam.cpp
+ *  BitBoard
+ *
+ *  Created by Bruno Causse on 15/09/05.
+ *  Copyright 2005 personnel. All rights reserved.
+ *
+ */
+
+#include "RXEngineParam.h"

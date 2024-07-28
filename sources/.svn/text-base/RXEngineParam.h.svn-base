@@ -1,0 +1,70 @@
+/*
+ *  RXEngineParam.h
+ *  BitBoard
+ *
+ *  Created by Bruno Causse on 15/09/05.
+ *  Copyright 2005 personnel. All rights reserved.
+ *
+ */
+
+#ifndef RXENGINEPARAM_H
+#define RXENGINEPARAM_H
+
+#include "POSIXMutex.h"
+
+class RXEngineParam {
+
+	friend class RXEngine;
+	
+	bool time_dependent;
+	
+	double tMatch;
+	double tRemaining;
+		
+	bool search_on_opponent_time;
+
+	int midGame_depth_limit;
+	int endGame_start;
+	
+	mutable POSIXMutex mutex;
+	
+	public :
+	
+		RXEngineParam(double tm, double tr, bool opponent_time = false) :  time_dependent(true), tMatch(tm), tRemaining(tr), search_on_opponent_time(opponent_time) {};
+
+		RXEngineParam(int depth = 7, int solved = 18) : time_dependent(false), midGame_depth_limit(depth), endGame_start(solved), search_on_opponent_time(false) {};
+		
+		void time_dependent_on();
+		void time_dependent_off();
+
+		bool is_time_dependent() const ;
+					
+};
+
+
+inline void RXEngineParam::time_dependent_on() {
+	mutex.lock();
+	time_dependent = true;
+	mutex.unlock();
+}
+
+inline void RXEngineParam::time_dependent_off() {
+	mutex.lock();
+	time_dependent = false;
+	mutex.unlock();
+}
+
+inline bool RXEngineParam::is_time_dependent() const{
+	
+	mutex.lock();
+	bool ret = time_dependent;
+	mutex.unlock();
+	
+	return ret;
+}
+
+
+	
+	
+
+#endif

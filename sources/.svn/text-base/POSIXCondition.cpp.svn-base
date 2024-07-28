@@ -1,0 +1,102 @@
+#include "POSIXCondition.h"
+#include <sys/time.h>
+#include <unistd.h>
+
+
+
+POSIXCondition::POSIXCondition()
+{
+
+   sent_signal    = false;
+   
+   active_waiters = 0;
+   
+   pthread_condattr_t condattrDetails;
+   memset(&condattrDetails,0,sizeof(condattrDetails));
+
+   if(pthread_condattr_init(&condattrDetails) == 0) {
+
+   	pthread_cond_init(&condition, &condattrDetails);
+
+	pthread_condattr_destroy(&condattrDetails);
+   }
+
+};
+
+
+POSIXCondition::~POSIXCondition()
+{
+   unsigned int retry = 0;
+
+   while ((pthread_cond_destroy(&condition) == EBUSY) && (retry <= 10))
+   {
+      retry++;
+      broadcast();
+   }
+};
+
+
+
+
+bool POSIXCondition::wait(unsigned int ms)
+{
+   struct timespec timeout;
+   struct timeval  tp;
+
+   gettimeofday(&tp, NULL);
+
+   /* Convert from timeval to timespec */
+   timeout.tv_sec   = (ms / 1000) + tp.tv_sec;
+   timeout.tv_nsec  = ((ms % 1000) * 1000000) + (tp.tv_usec * 1000);
+
+   while (timeout.tv_nsec >= 1000000000)
+   {
+      timeout.tv_nsec -= 1000000000;
+      timeout.tv_sec++;
+   }
+
+
+   active_waiters++;
+
+   int result = 0;
+
+   while (!sent_signal)
+   {
+      if ((result = pthread_cond_timedwait(&condition, &(mutex.getMutex()), &timeout)) == ETIMEDOUT)
+        break;
+   }
+
+   active_waiters--;
+
+   if ((result == 0) && (active_waiters == 0))
+     sent_signal = false;
+
+
+   /*
+      return true if timed-out, else return false
+   */
+   return (result == ETIMEDOUT);
+};
+
+
+
+
+void POSIXCondition::broadcast()
+{
+   //mutex.lock();
+   pthread_cond_broadcast(&condition);
+   sent_signal = true;
+   //mutex.unlock();
+};
+
+
+void POSIXCondition::lock_mutex()
+{
+   mutex.lock();
+};
+
+
+void POSIXCondition::unlock_mutex()
+{
+   mutex.unlock();
+};

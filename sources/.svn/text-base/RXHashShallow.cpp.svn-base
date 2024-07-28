@@ -1,0 +1,189 @@
+/*
+ *  RXHashShallow.cpp
+ *  Roxane
+ *
+ *  Created by Bruno Causse on 28/03/06.
+ *  Copyright 2006 personnel. All rights reserved.
+ *
+ */
+
+#include "RXHashShallow.h"
+
+/*
+ *  RXHashTable.cpp
+ *  learn_01
+ *
+ *  Created by Bruno Causse on 18/05/05.
+ *  Copyright 2005 personnel. All rights reserved.
+ *
+ */
+#include <iostream>
+#include <new>
+#include <sstream>
+ 
+
+#include "RXHashTable.h"
+
+RXHashShallow::RXHashShallow(unsigned int nBitsTable, unsigned int nBitsGates) : table(0), date(0) {
+
+	_maskTable = (1UL<<nBitsTable) -1;
+	table.resize(1UL<<nBitsTable);
+
+	_maskGates = (1UL<<nBitsGates) -1;
+	gates.resize(1UL<<nBitsGates);
+
+}
+
+
+
+void RXHashShallow::reset() {
+
+	for(std::vector<RXHashEntry>::iterator iter = table.begin(); iter!=table.end(); iter++) {
+		(iter->deepest).date = 0;
+		(iter->newest).date = 0;
+	}
+	
+	date = 0;
+}
+
+
+void RXHashShallow::update(const unsigned long long hash_code, const unsigned char depth, const int alpha, const int beta, const int score, const char move) {
+
+	POSIXMutex& mutex = gates[(hash_code>>32) & _maskGates];
+	mutex.lock();
+
+	RXHashEntry& entry = table[(hash_code>>32) & _maskTable];
+	
+	RXHash& deepest = entry.deepest;
+	RXHash& newest = entry.newest;
+	
+		
+	/* try to update deepest entry */
+	if (hash_code == deepest.lock && depth == deepest.depth) {
+		
+		if (score < beta && score < deepest.upper) 
+			deepest.upper = static_cast<short>(score);
+		if (score > alpha && score > deepest.lower)
+			deepest.lower = static_cast<short>(score);
+			
+		deepest.date = date;
+		deepest.move = move;
+		
+	/* else try to update newest entry */
+	} else if (hash_code == newest.lock && depth == newest.depth) {
+		if (score < beta && score < newest.upper)
+			newest.upper = static_cast<short>(score);
+		if (score > alpha && score > newest.lower)
+			newest.lower =  static_cast<short>(score);
+					
+		newest.date = date;
+		newest.move =  move;
+		
+	/* else try to add to deepest entry */
+	} else if (deepest.lock == hash_code || deepest.date < date ||  deepest.depth < depth) { // priority 
+		
+		if(deepest.lock != hash_code &&	(newest.lock == hash_code || (newest.date < deepest.date ||
+									((newest.date == deepest.date) && (newest.depth <= deepest.depth)))))
+			newest = deepest;
+			
+		deepest.lock = hash_code;
+		deepest.depth = depth;
+		deepest.date = date;
+		deepest.lower = -MAX_SCORE;
+		deepest.upper = +MAX_SCORE;
+		if (score < beta) deepest.upper = static_cast<short>(score);
+		if (score > alpha) deepest.lower = static_cast<short>(score);
+		deepest.move =  move;
+		
+	/* else add to newest entry */
+	} else {
+	
+		newest.lock = hash_code;
+		newest.depth = depth;
+		newest.date = date;
+		newest.lower = -MAX_SCORE;
+		newest.upper = +MAX_SCORE;
+		if (score < beta) newest.upper = static_cast<short>(score);
+		if (score > alpha) newest.lower = static_cast<short>(score);
+		newest.move =  move;
+	}
+							   
+	mutex.unlock();
+}
+
+void RXHashShallow::update(const unsigned long long hash_code, const unsigned char depth, const int alpha, const int score, const char move) {
+		
+	POSIXMutex& mutex = gates[(hash_code>>32) & _maskGates];
+	mutex.lock();
+
+	RXHashEntry& entry = table[(hash_code>>32) & _maskTable];
+	
+	RXHash& deepest = entry.deepest;
+	RXHash& newest  = entry.newest;
+	
+	// try to update deepest entry
+	if (hash_code == deepest.lock && depth == deepest.depth) {
+	
+		if (score > alpha) {
+			if(score > deepest.lower)
+				deepest.lower =  static_cast<short>(score);
+		} else {
+			if(score < deepest.upper)
+				deepest.upper =  static_cast<short>(score);
+		}
+							
+		deepest.date = date;
+		deepest.move =  move;
+		
+	// else try to update newest entry
+	} else if (hash_code == newest.lock && depth == newest.depth) {
+
+		if (score > alpha) {
+			if(score > newest.lower)
+				newest.lower = static_cast<short>(score);
+		} else {
+			if(score < newest.upper)
+				newest.upper = static_cast<short>(score);
+		}
+
+		newest.date = date;
+		newest.move = move;
+		
+	/* else try to add to deepest entry */
+	} else if (deepest.lock == hash_code || deepest.date < date ||  deepest.depth < depth) { // priority 
+		
+		if(deepest.lock != hash_code &&	(newest.lock == hash_code || (newest.date < deepest.date ||
+									((newest.date == deepest.date) && (newest.depth <= deepest.depth)))))
+									
+			newest = deepest;
+			
+		deepest.lock = hash_code;
+		deepest.depth = depth;
+		deepest.date = date;
+		if (score > alpha) {
+			deepest.upper = MAX_SCORE;
+			deepest.lower = static_cast<short>(score);
+		} else {
+			deepest.upper = static_cast<short>(score);
+			deepest.lower = -MAX_SCORE;
+		}
+		deepest.move =  move;
+		
+	/* else add to newest entry */
+	} else {
+	
+		newest.lock = hash_code;
+		newest.depth = depth;
+		newest.date = date;
+		if (score > alpha) {
+			newest.upper = MAX_SCORE;
+			newest.lower = static_cast<short>(score);
+		} else {
+			newest.upper = static_cast<short>(score);
+			newest.lower = -MAX_SCORE;
+		}
+		newest.move = move;
+	}
+	
+	mutex.unlock();
+}

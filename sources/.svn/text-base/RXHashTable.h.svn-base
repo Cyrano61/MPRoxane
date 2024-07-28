@@ -1,0 +1,201 @@
+/*
+ *  RXHashTable.h
+ *  learn_01
+ *
+ *  Created by Bruno Causse on 18/05/05.
+ *  Copyright 2005 personnel. All rights reserved.
+ *
+ */
+
+
+#ifndef RXHASHTABLE_H
+#define RXHASHTABLE_H
+
+#include <string>
+#include <map>
+#include <list>
+#include <vector>
+
+#include "RXConstantes.h"
+#include "RXBitBoard.h"
+#include "RXMove.h"
+
+class RXHash {
+	public :
+		unsigned long long lock;
+		unsigned char move;
+		mutable unsigned char date;
+		unsigned char selectivity;
+		unsigned char depth;
+		short lower;
+		short upper;
+		
+};
+
+class RXHashEntry {
+	public :
+		RXHash deepest;
+		RXHash newest;
+};
+
+
+class RXHashTable {
+	
+	public :
+		enum t_hash {HASH_SHARED, HASH_BLACK, HASH_WHITE};
+	
+	private :
+		mutable RXMove _move[61][2];
+	
+		mutable std::vector<RXHashEntry> table;
+		unsigned int nBitsTable;
+		unsigned int _offsetTable[3];
+		unsigned int _maskTable[3];
+
+		//gates for multithread
+		mutable std::vector<POSIXMutex> gates;
+	
+		unsigned int nBitsGates;
+		unsigned int _offsetGates[3];
+		unsigned int _maskGates[3];
+	
+		unsigned char date[2];
+		bool _shared;
+
+		typedef std::list< RXHash > type_variation;
+		typedef std::map< const unsigned long long, type_variation > type_allVariations;
+
+		type_allVariations allVariations[2];
+	
+		void mainVariation(std::ostringstream& buffer, RXBitBoard& board, const t_hash type_hashtable, int depth) const;
+		void copyPV(RXBitBoard& board, const t_hash from_hashtable, const t_hash to_hashtable);
+		void protectPV(RXBitBoard& board, const t_hash type_hashtable, const bool passed = false);
+
+		void saveVariation(type_variation& variation, RXBitBoard& board, const bool passed = false) const;
+	
+		void saveRefutation(type_variation& variation, const int color, RXBitBoard& board, const bool passed = false) const;
+
+	public :
+	
+	
+		RXHashTable(unsigned int nBTable, unsigned int nBGates);
+		~RXHashTable() {};
+
+		void reset();
+
+		void shared(const bool flag);
+		
+		bool is_shared() const;
+	
+		const RXHash* get(const RXBitBoard& board, const t_hash type_hashtable) const;
+		const RXHash* get(const unsigned long long hash_code, const t_hash type_hashtable) const;
+
+		bool get_sync(const RXBitBoard& board, const t_hash type_hashtable, RXHash& entry) const;
+		bool get_sync(const unsigned long long hash_code, const t_hash type_hashtable, RXHash& entry) const;
+
+		void copyPV_shared_to_color(RXBitBoard& board, const int color);
+		void copyPV_color_to_shared(RXBitBoard& board, const int color);
+		void mergePV(RXBitBoard& board);
+		void protectPV(RXBitBoard& board);
+
+		void saveAllVariations(RXBitBoard& board);
+		void restoreVariation(const RXBitBoard& board);
+		
+		void saveAllRefutations(RXBitBoard& board);
+		void restoreRefutation(const RXBitBoard& board);
+		
+		void clearVariations();
+		
+		void update(const unsigned long long hash_code, const t_hash type_hashtable, const unsigned long long selectivity, const unsigned char depth, const int alpha, const int beta, const int score, const char move);
+		void update(const unsigned long long hash_code, const t_hash type_hashtable, const unsigned long long selectivity, const unsigned char depth, const int alpha, const int score, const char move);
+	
+		std::string line2String(RXBitBoard& board, int depth, const t_hash type_hashtable) const;
+		
+		void succ_date(const unsigned int color) { date[_shared ? 0:color]++;};
+		
+		//void update(const unsigned long offset, const RXHash* entry) { entry->date = date[offset == 0 ? 0:1] ;};
+
+};
+
+
+inline const RXHash* RXHashTable::get(const RXBitBoard& board, const t_hash type_hashtable) const {
+	
+	const RXHashEntry& entry = table[_offsetTable[type_hashtable] | ((board.hash_code>>32) & _maskTable[type_hashtable])];
+	if (board.hash_code == entry.deepest.lock)
+		return &(entry.deepest);
+	if (board.hash_code == entry.newest.lock)
+		return &(entry.newest);
+		
+	return NULL;
+}
+
+inline const RXHash* RXHashTable::get(const unsigned long long hash_code, const t_hash type_hashtable) const {
+
+	const RXHashEntry& entry = table[_offsetTable[type_hashtable] | ((hash_code>>32) & _maskTable[type_hashtable])];
+	if (hash_code == entry.deepest.lock)
+		return &(entry.deepest);
+	if (hash_code == entry.newest.lock)
+		return &(entry.newest);
+		
+	return NULL;
+}
+
+inline bool RXHashTable::get_sync(const RXBitBoard& board, const t_hash type_hashtable, RXHash& entry) const {
+	
+	POSIXMutex& mutex = gates[_offsetGates[type_hashtable] | ((board.hash_code>>32) & _maskGates[type_hashtable])];
+	mutex.lock();
+	
+	
+	const RXHashEntry& hashEntry = table[_offsetTable[type_hashtable] | ((board.hash_code>>32) & _maskTable[type_hashtable])];
+	if (board.hash_code == hashEntry.deepest.lock) {
+		entry = hashEntry.deepest; //copy
+		mutex.unlock();
+		return true;
+	}
+		
+	if (board.hash_code == hashEntry.newest.lock) {
+		entry = hashEntry.newest; //copy
+		mutex.unlock();
+		return true;
+	}
+	
+	
+	mutex.unlock();
+	return false;
+}
+
+inline bool RXHashTable::get_sync(const unsigned long long hash_code, const t_hash type_hashtable, RXHash& entry) const {
+	
+	POSIXMutex& mutex = gates[_offsetGates[type_hashtable] | ((hash_code>>32) & _maskGates[type_hashtable])];
+	mutex.lock();
+	
+	
+	const RXHashEntry& hashEntry = table[_offsetTable[type_hashtable] | ((hash_code>>32) & _maskTable[type_hashtable])];
+	if (hash_code == hashEntry.deepest.lock) {
+		entry = hashEntry.deepest; //copy
+		mutex.unlock();
+		return true;
+	}
+	
+	if (hash_code == hashEntry.newest.lock) {
+		entry = hashEntry.newest; //copy
+		mutex.unlock();
+		return true;
+	}
+	
+	
+	mutex.unlock();
+	return false;
+}
+
+
+
+inline void RXHashTable::clearVariations() {
+	allVariations[BLACK].clear();
+	allVariations[WHITE].clear();
+}
+
+
+
+
+#endif

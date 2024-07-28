@@ -1,0 +1,82 @@
+/*
+  ***********************************************************************
+  *                                                                     *
+  * POSIX Synchronous                                                   *
+  * Class Name: POSIXCondition                                          *
+  * Author: Arash Partow - 2000                                         *
+  * URL: http://www.partow.net/programming/posixsynchwrapper/index.html *
+  *                                                                     *
+  * Copyright Notice:                                                   *
+  * Free use of this library is permitted under the guidelines and      *
+  * in accordance with the most current version of the Common Public    *
+  * License.                                                            *
+  * http://www.opensource.org/licenses/cpl.php                          *
+  *                                                                     *
+  ***********************************************************************
+*/
+
+
+#ifndef INCLUDE_POSIXCONDITION_H
+#define INCLUDE_POSIXCONDITION_H
+
+#include <pthread.h>
+#include <errno.h>
+
+#include "POSIXMutex.h"
+
+class POSIXCondition
+{
+
+   public:
+
+    POSIXCondition();
+    POSIXCondition(const POSIXCondition& obj);
+   ~POSIXCondition();
+
+    void wait();
+    bool wait(unsigned int ms);
+    void signal();
+    void broadcast();
+
+    void lock_mutex();
+    void unlock_mutex();
+
+   private:
+
+     pthread_cond_t condition;
+     POSIXMutex     mutex;
+
+
+     bool           sent_signal;
+
+     unsigned int   active_waiters;
+
+};
+
+inline void POSIXCondition::wait()
+{
+
+   active_waiters++;
+
+   while (!sent_signal)
+   {
+      pthread_cond_wait(&condition, &(mutex.getMutex()));
+   }
+
+   active_waiters--;
+
+   if (active_waiters == 0)
+     sent_signal = false;
+
+};
+
+inline void POSIXCondition::signal()
+{
+   if (!sent_signal)
+   {
+      pthread_cond_signal(&condition);
+      sent_signal = true;
+   }
+};
+
+#endif

@@ -1,0 +1,645 @@
+/*
+ *  RXHashTable.cpp
+ *  learn_01
+ *
+ *  Created by Bruno Causse on 18/05/05.
+ *  Copyright 2005 personnel. All rights reserved.
+ *
+ */
+#include <iostream>
+#include <new>
+#include <sstream>
+ 
+
+#include "RXHashTable.h"
+
+
+RXHashTable::RXHashTable(unsigned int nBT, unsigned int nBG) : table(0), gates(0), nBitsTable(nBT),  nBitsGates(nBG), _shared(true) {
+
+	_offsetTable[HASH_SHARED] = 0;
+	_offsetTable[HASH_BLACK] = 0;
+	_offsetTable[HASH_WHITE] = 1UL<<(nBitsTable-1);
+	
+	_maskTable[HASH_SHARED] = (1UL<<nBitsTable)-1;
+	_maskTable[HASH_BLACK] = (1UL<<(nBitsTable-1))-1;
+	_maskTable[HASH_WHITE] = (1UL<<(nBitsTable-1))-1;
+	
+	table.resize(1UL<<nBitsTable);
+
+	_offsetGates[HASH_SHARED] = 0;
+	_offsetGates[HASH_BLACK] = 0;
+	_offsetGates[HASH_WHITE] = 1UL<<(nBitsGates-1);
+	
+	_maskGates[HASH_SHARED] = (1UL<<nBitsGates)-1;
+	_maskGates[HASH_BLACK] = (1UL<<(nBitsGates-1))-1;
+	_maskGates[HASH_WHITE] = (1UL<<(nBitsGates-1))-1;
+	
+	gates.resize(1UL<<nBitsGates);
+	
+	 
+	date[0] = date[1] = 0;
+	
+	
+}
+
+/*
+RXHashTable::~RXHashTable() {
+	for(std::vector<POSIXMutex*>::iterator iter = gates.begin(); iter!=gates.end(); iter++)
+		delete(*iter);
+}
+*/	
+
+void RXHashTable::shared(const bool flag) {
+	_shared = flag;
+	
+	if (date[1]>date[0])
+		date[0] = date[1];
+	else
+		date[1] = date[0];
+		
+	clearVariations();
+}
+
+bool RXHashTable::is_shared() const {
+	return _shared;
+}
+
+
+void RXHashTable::reset() {
+
+	_shared = true;
+	
+	const unsigned long capacity = 1UL<<nBitsTable;
+	
+	for(unsigned long i = 0; i<capacity; i++) {
+		table[i].deepest.date = 0;
+		table[i].newest.date = 0;
+	}
+	
+	date[0] = date[1] = 0;
+	clearVariations();
+}
+
+
+void RXHashTable::update(const unsigned long long hash_code, const t_hash type_hashtable, const unsigned long long selectivity, const unsigned char depth, const int alpha, const int beta, const int score, const char move) {
+	
+	assert(alpha >= -MAX_SCORE && alpha <= MAX_SCORE);
+	assert(beta >= -MAX_SCORE && beta <= MAX_SCORE);
+
+	assert(score != -MAX_SCORE || score != MAX_SCORE);
+	assert(score != -INTERRUPT_SEARCH || score != INTERRUPT_SEARCH);
+	assert(score != -UNDEF_SCORE || score != UNDEF_SCORE);
+	
+	POSIXMutex& mutex = gates[_offsetGates[type_hashtable] | ((hash_code>>32) & _maskGates[type_hashtable])];
+	mutex.lock();
+	
+	
+	RXHashEntry& entry = table[_offsetTable[type_hashtable] | ((hash_code>>32) & _maskTable[type_hashtable])];
+	
+	RXHash& deepest = entry.deepest;
+	RXHash& newest = entry.newest;
+	
+	int _date = date[type_hashtable == HASH_WHITE ? WHITE:BLACK];
+
+
+	/* try to update deepest entry */
+	if (hash_code == deepest.lock && selectivity == deepest.selectivity && depth == deepest.depth) {
+		
+		
+		if (score < beta && score < deepest.upper) 
+			deepest.upper = static_cast<short>(score);
+		if (score > alpha && score > deepest.lower)
+			deepest.lower = static_cast<short>(score);
+			
+		/* control if lower>upper */	
+		if(deepest.lower>deepest.upper) {
+			if(score<beta)
+				deepest.upper = static_cast<short>(score);
+			else
+				deepest.upper = MAX_SCORE;
+							
+			if(score>alpha)
+				deepest.lower = static_cast<short>(score);
+			else
+				deepest.lower = -MAX_SCORE;
+		}
+
+		deepest.date = _date;
+		deepest.move = move;
+		
+	/* else try to update newest entry */
+	} else if (hash_code == newest.lock && selectivity == newest.selectivity && depth == newest.depth) {
+	
+	
+		if (score < beta && score < newest.upper)
+			newest.upper = static_cast<short>(score);
+		if (score > alpha && score > newest.lower)
+			newest.lower =  static_cast<short>(score);
+			
+		/* control if lower>upper */	
+		if(newest.lower>newest.upper) {
+			if(score<beta)
+				newest.upper = static_cast<short>(score);
+			else
+				newest.upper = MAX_SCORE;
+							
+			if(score>alpha)
+				newest.lower = static_cast<short>(score);
+			else
+				newest.lower = -MAX_SCORE;
+		}
+		
+		newest.date = _date;
+		newest.move =  move;
+		
+	/* else try to add to deepest entry */
+	} else if (deepest.lock == hash_code || deepest.date < _date ||  deepest.depth < depth || (deepest.depth == depth && deepest.selectivity < selectivity)) { // priority 
+		
+		if(deepest.lock != hash_code &&	(newest.lock == hash_code || (newest.date < deepest.date ||
+									((newest.date == deepest.date) && (newest.depth < deepest.depth)) ||
+									(newest.date == deepest.date && newest.depth == deepest.depth && newest.selectivity <= deepest.selectivity)))) {
+			newest = deepest;			
+		}
+						
+		deepest.lock = hash_code;
+		deepest.depth = depth;
+		deepest.date = _date;
+		deepest.selectivity = selectivity;
+		deepest.lower = -MAX_SCORE;
+		deepest.upper = +MAX_SCORE;
+		if (score < beta) deepest.upper = static_cast<short>(score);
+		if (score > alpha) deepest.lower = static_cast<short>(score);
+		deepest.move =  move;
+		
+	/* else add to newest entry */
+	} else {
+		
+		newest.lock = hash_code;
+		newest.depth = depth;
+		newest.date = _date;
+		newest.selectivity = selectivity;
+		newest.lower = -MAX_SCORE;
+		newest.upper = +MAX_SCORE;
+		if (score < beta) newest.upper = static_cast<short>(score);
+		if (score > alpha) newest.lower = static_cast<short>(score);
+		newest.move =  move;
+	}
+	
+	
+	mutex.unlock();
+}
+
+void RXHashTable::update(const unsigned long long hash_code, const t_hash type_hashtable, const unsigned long long selectivity, const unsigned char depth, const int alpha, const int score, const char move) {
+
+	assert(alpha >= -MAX_SCORE && alpha <= MAX_SCORE-1);
+	
+	assert(score != -MAX_SCORE || score != MAX_SCORE);
+	assert(score != -INTERRUPT_SEARCH || score != INTERRUPT_SEARCH);
+	assert(score != -UNDEF_SCORE || score != UNDEF_SCORE);
+	
+	POSIXMutex& mutex = gates[_offsetGates[type_hashtable] | ((hash_code>>32) & _maskGates[type_hashtable])];
+	mutex.lock();
+	
+	
+	RXHashEntry& entry = table[_offsetTable[type_hashtable] | ((hash_code>>32) & _maskTable[type_hashtable])];
+	
+	RXHash& deepest = entry.deepest;
+	RXHash& newest  = entry.newest;
+
+	int _date = date[type_hashtable	== HASH_WHITE? WHITE:BLACK];
+	 	
+	// try to update deepest entry
+	if (hash_code == deepest.lock && selectivity == deepest.selectivity && depth == deepest.depth) {
+
+	
+		if (score > alpha) {
+			if(score > deepest.lower)
+				deepest.lower =  static_cast<short>(score);
+		} else {
+			if(score < deepest.upper)
+				deepest.upper =  static_cast<short>(score);
+		}
+		
+		/* control if lower>upper */	
+		if(deepest.lower>deepest.upper) {
+			if (score > alpha) {
+				deepest.upper = MAX_SCORE;
+				deepest.lower = static_cast<short>(score);
+			} else {
+				deepest.upper = static_cast<short>(score);
+				deepest.lower = -MAX_SCORE;
+			}
+		}
+					
+		deepest.date = _date;
+		deepest.move =  move;
+		
+	// else try to update newest entry
+	} else if (hash_code == newest.lock && selectivity == newest.selectivity && depth == newest.depth) {
+
+
+		if (score > alpha) {
+			if(score > newest.lower)
+				newest.lower = static_cast<short>(score);
+		} else {
+			if(score < newest.upper)
+				newest.upper = static_cast<short>(score);
+		}
+
+		/* control if lower>upper */	
+		if(newest.lower>newest.upper) {
+			if (score > alpha) {
+				newest.upper = MAX_SCORE;
+				newest.lower = static_cast<short>(score);
+			} else {
+				newest.upper = static_cast<short>(score);
+				newest.lower = -MAX_SCORE;
+			}
+		}
+
+		newest.date = _date;
+		newest.move = move;
+		
+	/* else try to add to deepest entry */
+	} else if (deepest.lock == hash_code || deepest.date < _date ||  deepest.depth < depth || (deepest.depth == depth && deepest.selectivity < selectivity)) { // priority 
+		
+		if(deepest.lock != hash_code &&	(newest.lock == hash_code || (newest.date < deepest.date ||
+									((newest.date == deepest.date) && (newest.depth < deepest.depth)) ||
+									(newest.date == deepest.date && newest.depth == deepest.depth && newest.selectivity <= deepest.selectivity)))) {
+			newest = deepest;
+		}
+					
+		deepest.lock = hash_code;
+		deepest.depth = depth;
+		deepest.date = _date;
+		deepest.selectivity = selectivity;
+		if (score > alpha) {
+			deepest.upper = MAX_SCORE;
+			deepest.lower = static_cast<short>(score);
+		} else {
+			deepest.upper = static_cast<short>(score);
+			deepest.lower = -MAX_SCORE;
+		}
+		deepest.move =  move;
+		
+	/* else add to newest entry */
+	} else {
+	
+		newest.lock = hash_code;
+		newest.depth = depth;
+		newest.date = _date;
+		newest.selectivity = selectivity;
+		if (score > alpha) {
+			newest.upper = MAX_SCORE;
+			newest.lower = static_cast<short>(score);
+		} else {
+			newest.upper = static_cast<short>(score);
+			newest.lower = -MAX_SCORE;
+		}
+		newest.move = move;
+	}
+		
+	mutex.unlock();
+}
+
+
+std::string RXHashTable::line2String(RXBitBoard& board, int depth, const t_hash type_hashtable) const {
+
+	std::ostringstream buffer;
+	mainVariation(buffer, board, type_hashtable, depth);
+	return buffer.str();
+	
+}
+
+void RXHashTable::mainVariation(std::ostringstream& buffer, RXBitBoard& board, const t_hash type_hashtable, int depth) const {
+	
+	
+	if(depth>0) {
+		const RXHash* entry = get(board, type_hashtable);
+		if(entry != NULL && entry->move != NOMOVE) {
+			buffer << RXMove::index_to_coord(entry->move) << ' ';
+			if(entry->move == PASS) {
+				board.do_pass();
+				mainVariation(buffer, board, type_hashtable, depth-1);
+				board.do_pass();
+			} else {
+				RXMove& move = _move[board.n_empties][type_hashtable==HASH_WHITE? WHITE:BLACK]; //multithread, for shared use BLACK
+				((board).*(board.generate_move[entry->move]))(move);
+				board.do_move(move);
+				mainVariation(buffer, board, type_hashtable, depth-1);
+				board.undo_move(move);
+			}
+		} else {
+			buffer << "-- ";
+			mainVariation(buffer, board, type_hashtable, depth-1);
+		}
+	}
+}
+
+
+
+
+
+
+
+void RXHashTable::copyPV_shared_to_color(RXBitBoard& board, const int color) {
+
+	if(color == BLACK) {
+		copyPV(board, HASH_SHARED, HASH_BLACK);
+	} else { //player == WHITE
+		copyPV(board, HASH_SHARED, HASH_WHITE);
+	}
+
+}
+
+void RXHashTable::copyPV_color_to_shared (RXBitBoard& board, const int color) {
+
+	if(color == BLACK) {
+		copyPV(board, HASH_BLACK, HASH_SHARED);
+	} else { //player == WHITE
+		copyPV(board, HASH_WHITE, HASH_SHARED);
+	}
+
+}
+
+/* *********** Attention ***********
+/*         Aucun moteur actif
+/* *********** Attention **********/
+void RXHashTable::copyPV(RXBitBoard& board, const t_hash from_hashtable, const t_hash to_hashtable) {
+
+	const RXHash* from_Entry = get(board, from_hashtable);									// source
+	if(from_Entry != NULL && from_Entry->move != NOMOVE) {
+
+		RXHash& to_Entry = table[_offsetTable[to_hashtable] |((board.hash_code>>32) & _maskTable[to_hashtable])].deepest; 	//dest
+		
+		if(from_Entry->lock != to_Entry.lock)
+			to_Entry = *from_Entry;															//copy
+
+		if(from_Entry->move == PASS) {
+			board.do_pass();
+			copyPV(board, from_hashtable, to_hashtable);
+			board.do_pass();
+		} else {
+			RXMove& move = _move[board.n_empties][SHARED];
+			((board).*(board.generate_move[from_Entry->move]))(move);
+			board.do_move(move);
+			copyPV(board, from_hashtable, to_hashtable);
+			board.undo_move(move);
+		}
+	}
+}
+
+ /* *********** Attention ***********
+ /*         Aucun moteur actif
+ /* *********** Attention **********/
+void RXHashTable::mergePV(RXBitBoard& board) {
+
+
+	const RXHash* from_EntryBlack = this->get(board, HASH_BLACK);		// source black
+	const RXHash* from_EntryWhite = this->get(board, HASH_WHITE); 		// source white
+
+	//choix de lÕentrŽe
+	const RXHash* from_Entry = NULL;
+	if(from_EntryBlack!=NULL && from_EntryBlack->move != NOMOVE) {
+		from_Entry = from_EntryBlack;
+		if(from_EntryWhite!=NULL && from_EntryWhite->move != NOMOVE) {
+	
+			if(from_EntryWhite->depth > from_EntryBlack->depth)
+				from_Entry = from_EntryWhite;
+			else if((from_EntryWhite->depth == from_EntryBlack->depth) && from_EntryWhite->selectivity > from_EntryBlack->selectivity)
+				from_Entry = from_EntryWhite;
+				
+		}
+		
+	} else if(from_EntryWhite!=NULL && from_EntryWhite->move != NOMOVE) {
+		from_Entry = from_EntryWhite;
+	}
+
+
+	if(from_Entry != NULL) {
+
+		RXHash& to_Entry = table[((board.hash_code>>32) & _maskTable[HASH_SHARED])].deepest; 		//dest
+		
+		if(from_Entry->lock != to_Entry.lock)
+			to_Entry = *from_Entry;											//copy
+
+		if(from_Entry->move == PASS) {
+			board.do_pass();
+			mergePV(board);
+			board.do_pass();
+		} else {
+			RXMove& move = _move[board.n_empties][SHARED];						//shared
+			((board).*(board.generate_move[from_Entry->move]))(move);
+			board.do_move(move);
+			mergePV(board);
+			board.undo_move(move);
+		}
+	}
+}
+
+void RXHashTable::protectPV(RXBitBoard& board) {
+
+	t_hash type_hashtable = HASH_SHARED;
+		
+	if(!_shared) {
+		if (board.player == BLACK)
+			type_hashtable = HASH_BLACK;
+		else
+			type_hashtable = HASH_WHITE;
+			
+	}
+	
+	protectPV(board, type_hashtable);
+}
+
+
+void RXHashTable::protectPV(RXBitBoard& board, const t_hash	type_hashtable, const bool passed) {
+
+	RXHashEntry& entry = table[_offsetTable[type_hashtable] | ((board.hash_code>>32) & _maskTable[type_hashtable])];	
+	RXHash& deepest = entry.deepest;
+	RXHash& newest  = entry.newest;
+
+
+	if(board.hash_code == newest.lock) {
+		//Swap deepest/newest
+		RXHash swap(newest);
+		newest = deepest;
+		deepest = swap;
+	}
+
+	if(board.hash_code == deepest.lock && deepest.move != NOMOVE) {
+		deepest.date = date[type_hashtable == HASH_WHITE? WHITE:BLACK];
+		if(deepest.move == PASS) {
+			if(!passed) {
+				board.do_pass();
+				protectPV(board, type_hashtable, true);
+				board.do_pass();	
+			}
+		} else {
+			RXMove& move = _move[board.n_empties][type_hashtable == HASH_WHITE? WHITE:BLACK]; //multithread BLACK or SHARED
+			((board).*(board.generate_move[deepest.move]))(move);
+			board.do_move(move);
+			protectPV(board, type_hashtable, false);
+			board.undo_move(move);
+		}
+	}
+}
+
+
+
+void RXHashTable::saveAllVariations(RXBitBoard& board) {
+
+//	std::cout << "Save All Variations" << std::endl;
+
+	RXMove& move = _move[board.n_empties][SHARED];
+
+	const unsigned long long discs_opponent = board.discs[board.player^1];
+	for(RXSquareList* empties = board.empties_list->next; empties->position != NOMOVE; empties = empties->next)
+		if((discs_opponent & RXBitBoard::NEIGHBOR[empties->position]) && ((board).*(board.generate_move[empties->position]))(move)) {
+					
+			board.do_move(move);
+			
+			type_variation& variation = allVariations[SHARED][board.hash_code];
+			variation.clear();
+			saveVariation(variation, board);
+//
+//			//debug
+//			std::cout << RXMove::index_to_coord(empties->position) << " : ";
+//			for(type_variation::const_iterator iter_list = variation.begin(); iter_list != variation.end(); iter_list++)
+//				std::cout << RXMove::index_to_coord(iter_list->move) << " ";
+//				
+//			std::cout << std::endl;
+//			//debug
+//			
+			board.undo_move(move);
+
+		}
+	
+	
+}
+
+void RXHashTable::saveVariation(type_variation& variation, RXBitBoard& board, const bool passed) const {
+
+	const RXHash* entry = get(board, HASH_SHARED);
+	if(entry != NULL && entry->move !=NOMOVE) {
+		variation.push_back(*entry);
+		if(entry->move == PASS) {
+			if(!passed){
+				board.do_pass();
+				saveVariation(variation, board, true);
+				board.do_pass();
+			}
+		} else {
+			RXMove& move = _move[board.n_empties][SHARED];
+			((board).*(board.generate_move[entry->move]))(move);
+			board.do_move(move);
+			saveVariation(variation, board);
+			board.undo_move(move);
+		}
+	}
+}
+
+void RXHashTable::restoreVariation(const RXBitBoard& board) {
+
+	t_hash type_hashtable = HASH_SHARED;
+	
+	if(!_shared)
+		if (board.player == BLACK)
+			type_hashtable = HASH_BLACK;
+		else
+			type_hashtable = HASH_WHITE;
+		
+//	std::cout << "Restore Variation" << std::endl;
+	
+	type_variation& variation = allVariations[SHARED][board.hash_code];
+	for(type_variation::const_iterator iter_list = variation.begin(); iter_list != variation.end(); iter_list++) {
+		table[_offsetTable[type_hashtable] | ((iter_list->lock>>32) & _maskTable[type_hashtable])].deepest = *iter_list;
+//		//debug
+//		std::cout << RXMove::index_to_coord(iter_list->move) << " ";
+//		//debug			
+	}
+
+//	std::cout << std::endl;
+
+	allVariations[SHARED].clear();
+}
+
+
+void RXHashTable::saveAllRefutations(RXBitBoard& board) {
+
+//	std::cout << "Save All Refutations" << std::endl;
+
+	int color = board.player^1;
+
+	RXMove& move = _move[board.n_empties][color];
+
+	const unsigned long long discs_opponent = board.discs[board.player^1];
+	for(RXSquareList* empties = board.empties_list->next; empties->position != NOMOVE; empties = empties->next)
+		if((discs_opponent & RXBitBoard::NEIGHBOR[empties->position]) && ((board).*(board.generate_move[empties->position]))(move)) {
+					
+			board.do_move(move);
+			
+			type_variation& variation = allVariations[color][board.hash_code];
+			variation.clear();
+			saveRefutation(variation, color, board);
+			
+//			//debug
+//			std::cout << RXMove::index_to_coord(empties->position) << " : ";
+//			for(type_variation::const_iterator iter_list = variation.begin(); iter_list != variation.end(); iter_list++)
+//				std::cout << RXMove::index_to_coord(iter_list->move) << " ";
+//				
+//			std::cout << std::endl;
+//			//debug
+			
+			board.undo_move(move);
+
+		}
+	
+	
+}
+
+void RXHashTable::saveRefutation(type_variation& variation, const int color, RXBitBoard& board, const bool passed) const {
+
+	const RXHash* entry = get(board, (color == BLACK ? HASH_BLACK:HASH_WHITE));
+	if(entry != NULL && entry->move !=NOMOVE) {
+		variation.push_back(*entry);
+		if(entry->move == PASS) {
+			if(!passed){
+				board.do_pass();
+				saveRefutation(variation, color, board, true);
+				board.do_pass();
+			}
+		} else {
+			RXMove& move = _move[board.n_empties][color];
+			((board).*(board.generate_move[entry->move]))(move);
+			board.do_move(move);
+			saveRefutation(variation, color, board);
+			board.undo_move(move);
+		}
+	}
+}
+
+void RXHashTable::restoreRefutation(const RXBitBoard& board) {
+
+	int color = board.player;
+
+	t_hash type_hashtable = HASH_BLACK;
+							  
+	if(color == WHITE)
+			type_hashtable = HASH_WHITE;
+							  
+//	std::cout << "Restore Refutation" << std::endl;
+		
+	type_variation& variation = allVariations[color][board.hash_code];
+	for(type_variation::const_iterator iter_list = variation.begin(); iter_list != variation.end(); iter_list++) {
+		table[_offsetTable[type_hashtable] | ((iter_list->lock>>32) & _maskTable[type_hashtable])].deepest = *iter_list;
+//		//debug
+//		std::cout << RXMove::index_to_coord(iter_list->move) << " ";
+//		//debug
+	}
+
+//	std::cout << std::endl;
+
+	allVariations[color].clear();
+}
+

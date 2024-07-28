@@ -1,0 +1,335 @@
+K 25
+svn:wc:ra_dav:version-url
+V 34
+/svn/MP_Cyrano/!svn/ver/16/sources
+END
+RXHelper.h
+K 25
+svn:wc:ra_dav:version-url
+V 45
+/svn/MP_Cyrano/!svn/ver/16/sources/RXHelper.h
+END
+RXTimer.h
+K 25
+svn:wc:ra_dav:version-url
+V 44
+/svn/MP_Cyrano/!svn/ver/16/sources/RXTimer.h
+END
+RXBitBoard.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svn/MP_Cyrano/!svn/ver/16/sources/RXBitBoard.cpp
+END
+ggsstream.h
+K 25
+svn:wc:ra_dav:version-url
+V 46
+/svn/MP_Cyrano/!svn/ver/16/sources/ggsstream.h
+END
+RXEngineParam.h
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svn/MP_Cyrano/!svn/ver/16/sources/RXEngineParam.h
+END
+RXHashTable.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svn/MP_Cyrano/!svn/ver/16/sources/RXHashTable.cpp
+END
+RXBBGenerateFlips.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/MP_Cyrano/!svn/ver/16/sources/RXBBGenerateFlips.cpp
+END
+RXRoxane.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 47
+/svn/MP_Cyrano/!svn/ver/16/sources/RXRoxane.cpp
+END
+POSIXCondition.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svn/MP_Cyrano/!svn/ver/16/sources/POSIXCondition.cpp
+END
+types.h
+K 25
+svn:wc:ra_dav:version-url
+V 42
+/svn/MP_Cyrano/!svn/ver/16/sources/types.h
+END
+RXBBSetDisc.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svn/MP_Cyrano/!svn/ver/16/sources/RXBBSetDisc.cpp
+END
+RXMidGame.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/svn/MP_Cyrano/!svn/ver/16/sources/RXMidGame.cpp
+END
+RXBBPatterns.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svn/MP_Cyrano/!svn/ver/16/sources/RXBBPatterns.cpp
+END
+RXMove.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 45
+/svn/MP_Cyrano/!svn/ver/16/sources/RXMove.cpp
+END
+RXEngine.h
+K 25
+svn:wc:ra_dav:version-url
+V 45
+/svn/MP_Cyrano/!svn/ver/16/sources/RXEngine.h
+END
+main.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 43
+/svn/MP_Cyrano/!svn/ver/16/sources/main.cpp
+END
+RXEvaluation.h
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svn/MP_Cyrano/!svn/ver/16/sources/RXEvaluation.h
+END
+RXPattern.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/svn/MP_Cyrano/!svn/ver/16/sources/RXPattern.cpp
+END
+RXTimer.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 46
+/svn/MP_Cyrano/!svn/ver/16/sources/RXTimer.cpp
+END
+POSIXMutex.h
+K 25
+svn:wc:ra_dav:version-url
+V 47
+/svn/MP_Cyrano/!svn/ver/16/sources/POSIXMutex.h
+END
+GGSMessage.h
+K 25
+svn:wc:ra_dav:version-url
+V 47
+/svn/MP_Cyrano/!svn/ver/16/sources/GGSMessage.h
+END
+OsMessage.h
+K 25
+svn:wc:ra_dav:version-url
+V 46
+/svn/MP_Cyrano/!svn/ver/16/sources/OsMessage.h
+END
+ggsstream.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/svn/MP_Cyrano/!svn/ver/16/sources/ggsstream.cpp
+END
+RXHashShallow.h
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svn/MP_Cyrano/!svn/ver/16/sources/RXHashShallow.h
+END
+ODKStream.h
+K 25
+svn:wc:ra_dav:version-url
+V 46
+/svn/MP_Cyrano/!svn/ver/16/sources/ODKStream.h
+END
+GGSObjects.h
+K 25
+svn:wc:ra_dav:version-url
+V 47
+/svn/MP_Cyrano/!svn/ver/16/sources/GGSObjects.h
+END
+POSIXThread.h
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/svn/MP_Cyrano/!svn/ver/16/sources/POSIXThread.h
+END
+RXBBGenerateMove.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svn/MP_Cyrano/!svn/ver/16/sources/RXBBGenerateMove.cpp
+END
+OsObjects.h
+K 25
+svn:wc:ra_dav:version-url
+V 46
+/svn/MP_Cyrano/!svn/ver/16/sources/OsObjects.h
+END
+RXConstantes.h
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svn/MP_Cyrano/!svn/ver/16/sources/RXConstantes.h
+END
+RXEngineParam.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/svn/MP_Cyrano/!svn/ver/16/sources/RXEngineParam.cpp
+END
+sockbuf.h
+K 25
+svn:wc:ra_dav:version-url
+V 44
+/svn/MP_Cyrano/!svn/ver/16/sources/sockbuf.h
+END
+RXBBCountFlips.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svn/MP_Cyrano/!svn/ver/16/sources/RXBBCountFlips.cpp
+END
+RXBitBoard.h
+K 25
+svn:wc:ra_dav:version-url
+V 47
+/svn/MP_Cyrano/!svn/ver/16/sources/RXBitBoard.h
+END
+RXEndGame.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/svn/MP_Cyrano/!svn/ver/16/sources/RXEndGame.cpp
+END
+RXHashTable.h
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/svn/MP_Cyrano/!svn/ver/16/sources/RXHashTable.h
+END
+RXRoxane.h
+K 25
+svn:wc:ra_dav:version-url
+V 45
+/svn/MP_Cyrano/!svn/ver/16/sources/RXRoxane.h
+END
+RXSquareList.h
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svn/MP_Cyrano/!svn/ver/16/sources/RXSquareList.h
+END
+RXBBDoFlips.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svn/MP_Cyrano/!svn/ver/16/sources/RXBBDoFlips.cpp
+END
+POSIXCondition.h
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svn/MP_Cyrano/!svn/ver/16/sources/POSIXCondition.h
+END
+RXEngine.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 47
+/svn/MP_Cyrano/!svn/ver/16/sources/RXEngine.cpp
+END
+RXEvaluation.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svn/MP_Cyrano/!svn/ver/16/sources/RXEvaluation.cpp
+END
+RXBBPattGeneratePatterns.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svn/MP_Cyrano/!svn/ver/16/sources/RXBBPattGeneratePatterns.cpp
+END
+RXBBPatterns.h
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svn/MP_Cyrano/!svn/ver/16/sources/RXBBPatterns.h
+END
+GGSMessage.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svn/MP_Cyrano/!svn/ver/16/sources/GGSMessage.cpp
+END
+POSIXMutex.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svn/MP_Cyrano/!svn/ver/16/sources/POSIXMutex.cpp
+END
+RXMove.h
+K 25
+svn:wc:ra_dav:version-url
+V 43
+/svn/MP_Cyrano/!svn/ver/16/sources/RXMove.h
+END
+OsMessage.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/svn/MP_Cyrano/!svn/ver/16/sources/OsMessage.cpp
+END
+RXHashShallow.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/svn/MP_Cyrano/!svn/ver/16/sources/RXHashShallow.cpp
+END
+ODKStream.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/svn/MP_Cyrano/!svn/ver/16/sources/ODKStream.cpp
+END
+GGSObjects.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/svn/MP_Cyrano/!svn/ver/16/sources/GGSObjects.cpp
+END
+POSIXThread.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 50
+/svn/MP_Cyrano/!svn/ver/16/sources/POSIXThread.cpp
+END
+OsObjects.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 48
+/svn/MP_Cyrano/!svn/ver/16/sources/OsObjects.cpp
+END
+RXPattern.h
+K 25
+svn:wc:ra_dav:version-url
+V 46
+/svn/MP_Cyrano/!svn/ver/16/sources/RXPattern.h
+END
+sockbuf.cpp
+K 25
+svn:wc:ra_dav:version-url
+V 46
+/svn/MP_Cyrano/!svn/ver/16/sources/sockbuf.cpp
+END

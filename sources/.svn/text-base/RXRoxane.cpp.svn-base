@@ -1,0 +1,237 @@
+/*
+ *  RXRoxane.cpp
+ *  BitBoard
+ *
+ *  Created by Bruno Causse on 01/09/05.
+ *  Copyright 2005 personnel. All rights reserved.
+ *
+ */
+ 
+#include <iostream>
+#include <iomanip>
+#include <fstream>
+#include <sstream>
+#include <cmath>
+
+#include "RXRoxane.h"
+#include "RXConstantes.h"
+#include "RXTimer.h"
+#include "RXEngineParam.h"
+#include "RXEvaluation.h"
+
+
+void RXRoxane::resume() {
+
+	resume_mutex.lock();
+	resume_flag = true;
+	resume_mutex.unlock();
+
+	engine[BLACK]->resume();
+	engine[WHITE]->resume();
+	
+	game[BLACK].Clear();
+	game[WHITE].Clear();
+	
+	hTable->reset();
+}
+
+
+void RXRoxane::get_move(const string& _idg, COsGame* _g) {
+	
+	mutex.lock();
+		
+	idg = _idg;
+	g = _g;
+	
+	if(process != NULL)
+		delete process;
+	process = new POSIXThread(this);
+	process->start();
+	
+	mutex.unlock();
+}
+
+void RXRoxane::run() {
+
+	resume_mutex.lock();
+	resume_flag = false;
+	resume_mutex.unlock();
+
+	//wrapper BitBoard
+	othellier.build(g->pos.board.fromGGS());
+
+	if(GGSClient->IsConnected() && othellier.board.n_empties>19) {
+		sendMsg("--");
+		sendMsg("game " + idg);
+	}
+
+	//True if it is black's move
+	int player = g->pos.board.fBlackMove? BLACK : WHITE;
+	
+	int id_engine = SHARED;
+
+	int n_threads = 1;
+
+	//verification que les deux jeux sont identiques
+	//sauf 1er coup
+	if(g->pos.board == g->posStart.board) {
+		hTable->shared(true);
+		n_threads = engine[SHARED]->get_THREAD_MAX();
+	} else {
+		
+		//same game -> engine[Shared]
+		if(game[player^1].board.bt.n == 0 || game[player^1].board == g->pos.board) {
+		
+			if(!hTable->is_shared()) {
+				engine[BLACK]->stop();
+				engine[WHITE]->stop();
+				
+				//unification des PV
+				hTable->mergePV(othellier.board);
+								
+				hTable->shared(true);
+			}
+			
+			id_engine = SHARED;
+			n_threads = engine[SHARED]->get_THREAD_MAX();
+			
+		} else {
+		
+			if(hTable->is_shared()) {
+				engine[SHARED]->stop();
+								
+				hTable->copyPV_shared_to_color((engine[SHARED]->get_board()).board, player^1);
+				
+				if(othellier.board.n_empties>18)
+					hTable->restoreVariation(othellier.board);
+				
+				
+				hTable->shared(false);
+				
+			}
+
+			n_threads = engine[player]->get_THREAD_MAX();
+
+			if(player == BLACK)
+				n_threads /=2;
+			
+			
+			//only for mono core -> Edmond (commenter pour Rostand)
+			//engine[player^1]->wait();
+
+			id_engine = player;
+		}
+	}
+		
+	
+	//affectation
+	game[player] = g->pos;
+				
+	RXEngineParam param(g->posStart.cks[player^1].tCurrent, game[player].cks[player^1].tCurrent, true);	
+	
+	RXBestPosition bPosition;
+	
+	
+	if(GGSClient->IsConnected() && othellier.board.n_empties>19) {
+		std::ostringstream buffer, buffer1;
+		buffer	<< "HashTable " << (hTable->is_shared()? "SHARED" : (player == BLACK? "BLACK" : "WHITE")) << std::endl;
+		sendMsg(buffer.str());
+		buffer1 << "Active threads : " <<  n_threads << std::endl;
+		sendMsg(buffer1.str());
+
+	}
+	
+	engine[id_engine]->set_activeThreads(max(1, n_threads));
+
+	engine[id_engine]->get_move(othellier, hTable, bPosition, param);
+
+	COsMoveListItem mli;
+	bPosition.to_COsMoveListItem(mli);
+
+	game[player].Update(mli);
+
+	
+	resume_mutex.lock();
+	if(!resume_flag && GGSClient->IsConnected())
+		GGSClient->SendMove(idg, mli);
+		
+	
+	resume_mutex.unlock();
+	
+	if(!engine[id_engine]->isPriority())
+		engine[id_engine^1]->set_priority();
+
+}
+
+void RXRoxane::get_move(const std::string& file_name) {
+	
+	mutex.lock();
+
+	double T = 0;
+	unsigned long long nodes = 0;
+	
+	RXEngineParam param; //(false, 0, 0, 26);
+	hTable->shared(true);
+	
+	int n_threads = engine[SHARED]->get_THREAD_MAX();
+	engine[SHARED]->set_activeThreads(max(1, n_threads));
+
+	std::ifstream in(file_name.c_str());
+	if(in) {
+		std::string line;
+		
+		while(std::getline(in, line)) {
+
+			std::cout << std::endl;
+			
+			othellier.build(line);
+			
+			hTable->reset();
+			
+			RXBestPosition bPosition;
+
+			engine[SHARED]->get_move(othellier, hTable, bPosition, param);
+
+			T += bPosition.tElapsed;
+			nodes += bPosition.n_nodes;
+
+		}
+	}
+	
+	engine[SHARED]->stop();
+	
+	engine[SHARED]->writeLog("-----------------------------------------------------------------------------------");
+	engine[SHARED]->writeLog("Total time  : " + RXTimer::toHMS(T));
+	
+	std::ostringstream buffer;
+	buffer << "Total nodes : " << nodes;
+	engine[SHARED]->writeLog(buffer.str());
+	
+	engine[SHARED]->writeLog("");
+	
+	mutex.unlock();
+
+}
+
+void RXRoxane::sendMsg(std::string msg) {
+
+	if(GGSClient->IsConnected())
+		GGSClient->SendMsg(msg);
+	else
+		std::cout << msg << std::endl;
+	
+};
+
+void RXRoxane::flip_Engine() {
+
+	if(!hTable->is_shared()) {
+		if(engine[BLACK]->isPriority()) {
+			engine[BLACK]->wait();
+			engine[WHITE]->set_priority();
+		} else {
+			engine[WHITE]->wait();
+			engine[BLACK]->set_priority();
+		}
+	}
+	
+};
