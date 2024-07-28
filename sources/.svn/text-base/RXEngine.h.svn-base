@@ -1,0 +1,517 @@
+/*
+ *  RXEngine.h
+ *  BitBoard
+ *
+ *  Created by Bruno Causse on 10/08/05.
+ *  Copyright 2005 personnel. All rights reserved.
+ *
+ */
+
+#ifndef RXENGINE_H
+#define RXENGINE_H
+
+#include <string>
+#include <cstddef> // define NULL
+#include <cstdlib> // abs()
+#include <vector>
+#include <fstream>
+#include <locale>
+
+#include "RXBBPatterns.h"
+#include "RXBitBoard.h"
+#include "RXMove.h"
+#include "RXHashTable.h"
+#include "RXHashShallow.h"
+#include "RXEvaluation.h"
+#include "RXTimer.h"
+#include "RXEngineParam.h"
+
+#include "POSIXThread.h"
+#include "POSIXMutex.h"
+#include "POSIXCondition.h"
+#include "RXHelper.h"
+
+class RXRoxane;
+
+
+class My_punct:public std::numpunct<char> {
+public:
+	
+	typedef char char_type;
+	typedef string	string_type;
+	
+	
+	explicit My_punct(size_t r=0):numpunct<char>(r) {}
+	
+protected:
+	char do_decimal_point() const {return ',';}
+	char do_thousands_sep() const {return ' ';}
+	string do_grouping() const {return "\003";}
+};
+
+
+class RXSplitPoint {
+
+	public:
+	
+		enum t_callBackSearch {MID_PVS, MID_XPROBCUT, END_PVS, END_XPROBCUT};
+		
+		RXSplitPoint* parent;
+	
+		RXBBPatterns* sBoard;
+		std::vector<RXBBPatterns> sBoardStack;
+	
+		RXMove* list;
+	
+		t_callBackSearch CBSearch;
+	
+		bool pv;
+		int depth;
+		int selectivity;
+		volatile bool selective_cutoff, child_selective_cutoff;
+		volatile int alpha, beta, bestScore, bestMove; //volatile == synchro sur un int?
+	
+		POSIXMutex sync;
+	
+		unsigned int master;
+		std::vector<int> slaves;
+	
+		volatile int nCpus;		// num of cpu work
+		volatile bool finished;		// splitPoint resolved
+	
+	
+		RXSplitPoint(int maxThreads) : parent(NULL), sBoard(NULL), list(NULL), 
+												slaves(maxThreads), sBoardStack(maxThreads) {};
+};
+
+
+class RXThread {
+		
+	public:
+	
+		RXSplitPoint* splitPoint;
+		unsigned int activeSplitPoints;
+	
+		std::vector<RXSplitPoint> splitPointStack;
+	
+		RXMove _move[61][34];
+		//std::vector< std::vector<RXMove> > _move; // _move(61, std::vector<RXMove>(34)), pour la chaine d'initialisation
+	
+		//states flags
+		volatile bool stop;
+		volatile bool running;
+		volatile bool idle;
+		volatile bool workIsWaiting;
+	
+	
+		//le parametre maxThread est utile pour splitPointStack
+		RXThread(int maxThreads, int maxActiveSplitPoint = 4) : splitPoint(NULL), activeSplitPoints(0),
+																splitPointStack(maxActiveSplitPoint, RXSplitPoint(maxThreads)) {};
+		
+};
+
+
+class RXEngine: public Runnable, public RXHelper {
+		
+	enum t_search {BOOK, MIDGAME, ENDGAME};
+
+	//Shared part (RXEngine.cpp)
+	static const int CHECK_TO_LAST_THREE;
+	
+	static const int NO_CUT;
+	static const int ALPHA_CUT;
+	static const int BETA_CUT;
+
+	static const int HASHTABLE;
+	static const int INFERIOR;
+	static const int EXACT;
+	static const int SUPERIOR;
+	static const int INTERRUPT;
+	static const int GGS_MSG;
+
+	static const int CONFIDENCE[];
+	static const int NO_SELECT;
+	static const int DEPTH_BOOSTER;
+	
+	std::string id;
+	
+	RXTimer timer;
+	
+	double start_level;
+	double time_next_level;
+	double time_for_move;
+	double time_extra_move;
+	mutable bool extra_time;
+	mutable POSIXMutex time_mutex;
+	
+	t_search type_search;
+	int select_search;
+	
+	bool new_search;
+	
+	RXHashTable* hTable;
+	RXHashTable::t_hash type_hashtable;
+
+	RXHashShallow* hTable_shallow;
+
+	RXEngineParam pEngine;
+			
+	RXBBPatterns sBoardSearch;
+	unsigned long long hash_code_search;
+
+	RXRoxane* manager;
+	RXBestPosition bestPosition;
+	
+	POSIXThread* process;
+	POSIXMutex mutex;
+
+	bool resume_flag;
+	POSIXMutex resume_mutex;
+
+	bool priority;
+	mutable POSIXCondition condition;
+	int _count_NWS;
+	
+	ofstream *log;
+
+	
+	int MPC_check(int threadID, const bool endgame, RXBBPatterns& sBoard, const int depth, const int alpha_cutoff, const int beta_cutoff, RXMove* list, const bool hashMove);
+	int PVS_check(int threadID, RXBBPatterns& sBoard, const int depth, int alpha, int beta, bool passed);
+	int PVS_last_three_ply(int threadID, RXBBPatterns& sBoard, int alpha, int beta, bool passed);
+	int alphabeta_last_two_ply(int threadID, RXBBPatterns& sBoard, int alpha, int beta, bool passed);
+
+	bool probable_timeout(double probable_time_next_level) const;
+	double pTime_next_level(RXBitBoard& board, double time_level, int depth = 1, int next_depth = 3) const;
+	void determine_move_time(RXBitBoard& board);
+	
+	double time_limit() const;
+	void extra_time_on() const;
+	void extra_time_off() const;
+	
+	double get_time_for_move() const;
+	
+	void set_type_search(t_search ts);
+	t_search get_type_search() const;
+
+	void set_select_search(int selectivity);
+	int get_select_search() const;
+	
+	std::string variationPrincipal(RXBitBoard& sBoard, int depth) const;
+	std::string showPV(RXBitBoard& board, int depthLine) const;
+	std::string showHashmove(const RXBitBoard& board, const RXHash* entry) const;
+	std::string showBestmove(const int depth, const bool pv_ext, const int selectivity, const int alpha, const int beta, const int score, const int bestmove) const;
+	std::string display(RXBitBoard& board, const int type, const int allowed_display = 0, int score = 0, const double time = 0, const double time_level = 0);
+	
+	//MidGame part (RXMidGame.cpp)
+
+	static const int MAX_DEPTH_USE_PROBCUT;
+	static const int MIN_DEPTH_USE_PROBCUT;
+	
+	static const int MG_CHECK_DEPTH[];
+	static const int MG_SELECT;
+	static const int MG_HIGH_SELECT;
+	static const int MG_LOW_SELECT;
+
+	static const int MG_DEEP_TO_SHALLOW;
+	static const int MG_MOVING_WINDOW;
+
+public:
+	static const int MIN_DEPTH_USE_PV_EXTENSION;
+	static const int PV_EXTENSION_DEPTH;
+	
+private:
+	int pv_extension;
+	bool use_pv_extension;
+	
+	static std::vector< std::vector< std::vector<int> > > midcut_coeff;
+	
+	void MG_get_cut_bounds(const int n_Empties, const int selectivity, const int depth, const int pivot, int& lower_bound, int& upper_bound) const;
+
+	void iterative_deepening(RXBBPatterns& sBoard, RXMove* list, int depth, const int max_depth);
+	void aspiration_search(RXBBPatterns& sBoard, const int depth, RXMove* list);
+	void MG_PVS_root(RXBBPatterns& sBoard, const int depth,  int alpha, int beta, RXMove* list);
+	int MG_PVS_deep(int threadID, RXBBPatterns& sBoard, const bool pv, const int selectivity, const int depth, bool& selective_cutoff, int alpha, int beta, const bool passed);
+	int MG_PVS_shallow(int threadID, RXBBPatterns& sBoard, const bool pv, const int depth, int alpha, int beta, const bool passed);
+	int MG_NWS_XProbCut(int threadID, RXBBPatterns& sBoard, const int selectivity, const int depth, bool& selective_cutoff, int alpha, const bool passed);
+	void MG_SP_search_DEEP(RXSplitPoint* sp, int threadID);
+	void MG_SP_search_XEndcut(RXSplitPoint* sp, int threadID);
+	
+	//EndGame part (RXEndGame.cpp)
+
+	static const bool USE_STABILITY;
+	static const int HIGH_STABILITY_THRESOLD;
+	static const int stability_threshold[];
+
+	static const int EG_MEDIUM_TO_SHALLOW;
+	static const int EG_MEDIUM_HI_TO_LOW ;
+	static int EG_DEEP_TO_MEDIUM;
+
+	static const int MAX_DEPTH_USE_ENDCUT;
+	static int MIN_DEPTH_USE_ENDCUT;
+
+	static const int EG_CHECK_DEPTH[];
+	static const int EG_LOW_SELECT;
+	
+	static std::vector< std::vector<int> > endcut_coeff;
+	
+	void EG_get_cut_bounds(const int n_empties, const int selectivity, const int pivot, int& lower_bound, int& upper_bound) const;
+
+	int EG_pv_extension(int threadID, RXBBPatterns& sBoard, int alpha, int beta, bool passed);
+		
+	void EG_PVS_driver(RXBBPatterns& board, int selectivity, RXMove* list);
+	void EG_PVS_root(RXBBPatterns& board, const int selectivity, int alpha, int beta, RXMove* list);
+	int	EG_PVS_deep(int threadID, RXBBPatterns& sBoard, const bool pv, const int selectivity, bool& selective_cutoff, int alpha, int beta, bool passed);
+	int EG_PVS_hash_mobility(int threadID, RXBitBoard& board, int alpha, int beta, bool passed);
+	int EG_PVS_ETC_mobility(int threadID, RXBitBoard& board, int alpha, int beta, bool passed);
+	int EG_alphabeta_hash_parity(int threadID, RXBitBoard& board, int alpha, int beta, bool passed);
+	int EG_alphabeta_parity(int threadID, RXBitBoard& board, int alpha, int beta, bool passed);
+	int EG_NWS_XEndCut(int threadID, RXBBPatterns& sBoard, const int selectivity, bool& selective_cutoff, int alpha, const bool passed);
+	void EG_SP_search_DEEP(RXSplitPoint* sp, int threadID);
+	void EG_SP_search_XEndcut(RXSplitPoint* sp, int threadID);
+	
+	//--------------------------------------------------------------------------------------------------------------------
+	//la partie MultiThread
+	//--------------------------------------------------------------------------------------------------------------------
+	
+	const int THREAD_MAX;
+	static const int ACTIVE_SPLITPOINT_MAX = 8;
+	static const int THREAD_PER_SPLITPOINT_MAX = 4;
+	
+	volatile unsigned int idThread;
+	
+	volatile bool idle;
+	POSIXMutex	abortMutex;
+	volatile bool abortSearch;
+	static const int MIN_DEPTH_SPLITPOINT;
+	static const int MIN_EMPTIES_SPLITPOINT;
+
+	std::vector<RXThread> threads;
+	bool allThreadsShouldExit;
+	
+	unsigned int activeThreads;
+	
+	POSIXMutex MP_sync;
+	POSIXCondition MP_wait;
+	
+	void init_threads();
+	void stop_threads();
+	void idle_loop(int threadID, RXSplitPoint* waitSp);
+	
+	
+	public:
+
+		static void load_probcut_coeff();
+
+		//Shared part (RXEngine.cpp)
+		RXEngine(RXRoxane* _manager, std::string _id, int maxThread):	manager(_manager), id(_id), THREAD_MAX(maxThread), process(NULL),
+																		select_search(0), allThreadsShouldExit(false), idle(true),
+																		threads(maxThread, RXThread(maxThread, ACTIVE_SPLITPOINT_MAX)) {
+			
+			init_threads();
+			
+			
+			hTable_shallow = new RXHashShallow(20, 9);
+			
+			std::string filename = "log/engine" + id + ".txt";
+			log = new ofstream(filename.c_str());
+			
+		}
+	
+		~RXEngine() {
+			
+			stop_threads();
+			
+			delete hTable_shallow;
+			if (log && log->is_open())
+				log->close();
+			
+		}
+
+		RXBBPatterns& get_board();
+		
+		virtual void run();
+		
+		//log
+		void writeLog(std::string s);
+		
+		void get_move(RXBBPatterns& sBoard, RXHashTable* _htable, RXBestPosition& bPosition, RXEngineParam& param);
+				
+		void stop();
+		void resume();
+
+		bool isPriority() const;
+		void set_priority();
+		void wait();
+					
+		
+		void set_start_level(double start) {
+			time_mutex.lock();
+			start_level = start;
+			time_mutex.unlock();
+		};
+
+		double get_start_level() {
+			time_mutex.lock();
+			double start = start_level;
+			time_mutex.unlock();
+			
+			return start;
+		};
+		
+		void set_time_next_level(double tNext_level) {
+			time_mutex.lock();
+			time_next_level = tNext_level;
+			time_mutex.unlock();
+		};
+
+		double get_time_next_level() {
+			time_mutex.lock();
+			double tNext_level = time_next_level;
+			time_mutex.unlock();
+			
+			return tNext_level;
+		};
+			
+		//MidGame part (RXMidGame.cpp)
+		
+		
+		//EndGame part (RXEndGame.cpp)
+	
+	
+		//Multithread part
+		void wake_sleeping_threads();
+		bool idle_thread_exists(int master);
+		bool thread_is_available(int slave, int master);
+		bool thread_should_stop(int threadID);
+	
+		bool split(	RXBBPatterns& sBoard, bool pv,
+					int depth, int selectivity, bool* selective_cutoff, bool* child_selective_cutoff,
+					int* alpha, int* beta, int* bestScore, int* bestMove,
+					RXMove* list, int master, RXSplitPoint::t_callBackSearch callback);
+	
+		virtual void idle_loop();
+	
+		int get_THREAD_MAX() { return THREAD_MAX;};
+	
+		void set_activeThreads(int n) { activeThreads = min(n, THREAD_MAX); };
+	
+};
+
+
+inline void RXEngine::MG_get_cut_bounds(const int n_empties, const int selectivity, const int depth, const int pivot, int& lower_bound, int& upper_bound) const {
+
+	int sigma = midcut_coeff[60-n_empties][depth-4][selectivity];
+	
+	lower_bound = pivot - sigma;
+	upper_bound = pivot + sigma;
+	
+}
+
+inline void RXEngine::EG_get_cut_bounds(const int n_empties, const int selectivity, const int pivot, int& lower_bound, int& upper_bound) const {
+	
+	int sigma = endcut_coeff[60-n_empties][selectivity];
+			
+	lower_bound = pivot - sigma;
+	upper_bound = pivot + sigma;
+	
+}
+
+inline bool RXEngine::isPriority() const {
+
+	condition.lock_mutex();
+	bool _priority = priority;
+	condition.unlock_mutex();
+
+	return _priority;
+
+}
+
+inline double RXEngine::time_limit() const {
+	
+	time_mutex.lock();
+	double time = time_for_move;
+	if(extra_time)
+		time += time_extra_move;
+	time_mutex.unlock();
+	
+	return time;
+}
+
+inline void RXEngine::extra_time_on() const {
+	time_mutex.lock();
+	extra_time = true;
+	time_mutex.unlock();
+}	
+
+inline void RXEngine::extra_time_off() const {
+	time_mutex.lock();
+	extra_time = false;
+	time_mutex.unlock();
+}	
+
+inline double RXEngine::get_time_for_move() const {
+	time_mutex.lock();
+	double time = time_for_move;
+	time_mutex.unlock();
+	
+	return time;
+}
+
+inline void RXEngine::set_type_search(t_search ts) {
+	time_mutex.lock();
+	type_search = ts;
+	time_mutex.unlock();
+}	
+
+inline RXEngine::t_search RXEngine::get_type_search() const {
+	time_mutex.lock();
+	t_search ts = type_search;
+	time_mutex.unlock();
+	
+	return ts;
+}	
+
+inline void RXEngine::set_select_search(int selectivity) {
+	time_mutex.lock();
+	select_search = selectivity;
+	time_mutex.unlock();
+}	
+
+inline int RXEngine::get_select_search() const {
+	time_mutex.lock();
+	int select = select_search;
+	time_mutex.unlock();
+	
+	return select;
+}	
+
+inline RXBBPatterns& RXEngine::get_board() {
+	
+	return sBoardSearch;
+}	
+
+// thread_should_stop() checks whether the thread with a given threadID has
+// been asked to stop, directly or indirectly.  This can happen if a beta
+// cutoff has occured in thre thread's currently active split point, or in
+// some ancestor of the current split point.
+
+inline bool RXEngine::thread_should_stop(int threadID) {
+	
+    assert(threadID >= 0 && threadID < activeThreads);
+	
+    if(threads[threadID].stop)
+		return true;
+	
+	if(activeThreads <= 2)
+		return false;
+	
+    for(RXSplitPoint* sp = threads[threadID].splitPoint; sp != NULL; sp = sp->parent)
+		if(sp->finished) {
+			threads[threadID].stop = true;
+			return true;
+		}
+	
+    return false;
+}
+
+#endif

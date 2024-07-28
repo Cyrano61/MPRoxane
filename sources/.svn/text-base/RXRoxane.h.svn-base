@@ -1,0 +1,80 @@
+/*
+ *  RXRoxane.h
+ *  BitBoard
+ *
+ *  Created by Bruno Causse on 01/09/05.
+ *  Copyright 2005 personnel. All rights reserved.
+ *
+ */
+
+#ifndef RXROXANE_H
+#define RXROXANE_H
+
+#include <string>
+
+#include "OsObjects.h"
+#include "ODKStream.h"
+
+#include "RXConstantes.h"
+#include "RXBBPatterns.h"
+#include "RXHashTable.h"
+#include "RXEngine.h"
+#include "POSIXThread.h"
+#include "POSIXMutex.h"
+
+class CODKStream;
+
+class RXRoxane: public Runnable {
+		
+	COsPosition game[2];
+	RXBBPatterns othellier;
+	RXHashTable* hTable;
+
+	RXEngine* engine[2];
+	
+	CODKStream* GGSClient;
+	string idg;
+	COsGame* g;
+	
+	POSIXThread* process;
+	POSIXMutex mutex;
+
+	bool		resume_flag;
+	POSIXMutex 	resume_mutex;
+		
+public :
+
+
+	RXRoxane(CODKStream* client, unsigned int size_hashtable, unsigned int size_gates, int max_thread): GGSClient(client), process(NULL) {
+		
+		/*initialisations*/
+		engine[BLACK] = new RXEngine(this, "_0", max_thread);
+		
+		engine[WHITE] = new RXEngine(this, "_1", max(1, max_thread/2));
+
+		hTable = new RXHashTable(size_hashtable, size_gates);
+		RXEvaluation::load();
+		RXEngine::load_probcut_coeff();
+	}
+	
+	~RXRoxane() {
+		delete engine[BLACK];
+		delete engine[WHITE];
+		delete hTable;
+	}
+	
+	void resume();
+
+	void get_move(const std::string& file_name);
+	void get_move(const std::string& _idg, COsGame* game);
+
+	virtual void run();
+	
+	void sendMsg(std::string msg);
+
+	void flip_Engine();
+};
+
+
+#endif
+

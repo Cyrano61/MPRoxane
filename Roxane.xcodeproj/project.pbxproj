@@ -1,0 +1,688 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 63;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		153F675D10867B6F00C63274 /* RXSearch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 153F675B10867B6F00C63274 /* RXSearch.cpp */; };
+		153F675E10867B6F00C63274 /* RXSearch.h in Headers */ = {isa = PBXBuildFile; fileRef = 153F675C10867B6F00C63274 /* RXSearch.h */; };
+		15F23C400E771D5D00D70E52 /* RXHashShallow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 15F23C3F0E771D5D00D70E52 /* RXHashShallow.cpp */; };
+		4FBA60E708D8BE9E00855FD8 /* GGSMessage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4FBA60BF08D8BE9E00855FD8 /* GGSMessage.cpp */; };
+		4FBA60E808D8BE9E00855FD8 /* GGSMessage.h in Copy Files */ = {isa = PBXBuildFile; fileRef = 4FBA60C008D8BE9E00855FD8 /* GGSMessage.h */; };
+		4FBA60E908D8BE9E00855FD8 /* GGSObjects.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4FBA60C108D8BE9E00855FD8 /* GGSObjects.cpp */; };
+		4FBA60EA08D8BE9E00855FD8 /* GGSObjects.h in Copy Files */ = {isa = PBXBuildFile; fileRef = 4FBA60C208D8BE9E00855FD8 /* GGSObjects.h */; };
+		4FBA60ED08D8BE9E00855FD8 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4FBA60C508D8BE9E00855FD8 /* main.cpp */; };
+		4FBA60EE08D8BE9E00855FD8 /* ODKStream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4FBA60C608D8BE9E00855FD8 /* ODKStream.cpp */; };
+		4FBA60EF08D8BE9E00855FD8 /* ODKStream.h in Copy Files */ = {isa = PBXBuildFile; fileRef = 4FBA60C708D8BE9E00855FD8 /* ODKStream.h */; };
+		4FBA60F008D8BE9E00855FD8 /* OsMessage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4FBA60C808D8BE9E00855FD8 /* OsMessage.cpp */; };
+		4FBA60F108D8BE9E00855FD8 /* OsMessage.h in Copy Files */ = {isa = PBXBuildFile; fileRef = 4FBA60C908D8BE9E00855FD8 /* OsMessage.h */; };
+		4FBA60F608D8BE9E00855FD8 /* RXBBDoFlips.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4FBA60CE08D8BE9E00855FD8 /* RXBBDoFlips.cpp */; };
+		4FBA60F808D8BE9E00855FD8 /* RXBBPatterns.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4FBA60D008D8BE9E00855FD8 /* RXBBPatterns.cpp */; };
+		4FBA60F908D8BE9E00855FD8 /* RXBBPatterns.h in Copy Files */ = {isa = PBXBuildFile; fileRef = 4FBA60D108D8BE9E00855FD8 /* RXBBPatterns.h */; };
+		4FBA60FB08D8BE9E00855FD8 /* RXBBSetDisc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4FBA60D308D8BE9E00855FD8 /* RXBBSetDisc.cpp */; };
+		4FBA60FC08D8BE9E00855FD8 /* RXBitBoard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4FBA60D408D8BE9E00855FD8 /* RXBitBoard.cpp */; };
+		4FBA60FD08D8BE9E00855FD8 /* RXBitBoard.h in Copy Files */ = {isa = PBXBuildFile; fileRef = 4FBA60D508D8BE9E00855FD8 /* RXBitBoard.h */; };
+		4FBA60FE08D8BE9E00855FD8 /* RXConstantes.h in Copy Files */ = {isa = PBXBuildFile; fileRef = 4FBA60D608D8BE9E00855FD8 /* RXConstantes.h */; };
+		4FBA60FF08D8BE9E00855FD8 /* RXEndGame.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4FBA60D708D8BE9E00855FD8 /* RXEndGame.cpp */; };
+		4FBA610008D8BE9E00855FD8 /* RXEngine.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4FBA60D808D8BE9E00855FD8 /* RXEngine.cpp */; };
+		4FBA610108D8BE9E00855FD8 /* RXEngine.h in Copy Files */ = {isa = PBXBuildFile; fileRef = 4FBA60D908D8BE9E00855FD8 /* RXEngine.h */; };
+		4FBA610208D8BE9E00855FD8 /* RXEvaluation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4FBA60DA08D8BE9E00855FD8 /* RXEvaluation.cpp */; };
+		4FBA610308D8BE9E00855FD8 /* RXEvaluation.h in Copy Files */ = {isa = PBXBuildFile; fileRef = 4FBA60DB08D8BE9E00855FD8 /* RXEvaluation.h */; };
+		4FBA610408D8BE9E00855FD8 /* RXHashTable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4FBA60DC08D8BE9E00855FD8 /* RXHashTable.cpp */; };
+		4FBA610508D8BE9E00855FD8 /* RXHashTable.h in Copy Files */ = {isa = PBXBuildFile; fileRef = 4FBA60DD08D8BE9E00855FD8 /* RXHashTable.h */; };
+		4FBA610608D8BE9E00855FD8 /* RXMidGame.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4FBA60DE08D8BE9E00855FD8 /* RXMidGame.cpp */; };
+		4FBA610708D8BE9E00855FD8 /* RXMove.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4FBA60DF08D8BE9E00855FD8 /* RXMove.cpp */; };
+		4FBA610808D8BE9E00855FD8 /* RXMove.h in Copy Files */ = {isa = PBXBuildFile; fileRef = 4FBA60E008D8BE9E00855FD8 /* RXMove.h */; };
+		4FBA610908D8BE9E00855FD8 /* RXSquareList.h in Copy Files */ = {isa = PBXBuildFile; fileRef = 4FBA60E108D8BE9E00855FD8 /* RXSquareList.h */; };
+		4FBA610C08D8BE9E00855FD8 /* sockbuf.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4FBA60E408D8BE9E00855FD8 /* sockbuf.cpp */; };
+		4FBA610D08D8BE9E00855FD8 /* sockbuf.h in Copy Files */ = {isa = PBXBuildFile; fileRef = 4FBA60E508D8BE9E00855FD8 /* sockbuf.h */; };
+		4FBA610E08D8BE9E00855FD8 /* types.h in Copy Files */ = {isa = PBXBuildFile; fileRef = 4FBA60E608D8BE9E00855FD8 /* types.h */; };
+		4FBA611108D8BEEC00855FD8 /* RXRoxane.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4FBA610F08D8BEEC00855FD8 /* RXRoxane.cpp */; };
+		4FBA611208D8BEEC00855FD8 /* RXRoxane.h in Copy Files */ = {isa = PBXBuildFile; fileRef = 4FBA611008D8BEEC00855FD8 /* RXRoxane.h */; };
+		4FBF04940BDE80B800E7D270 /* RXBBPattGeneratePatterns.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4FBA60D208D8BE9E00855FD8 /* RXBBPattGeneratePatterns.cpp */; };
+		4FC6E59B0B445FDC0063CDF9 /* RXBBGenerateFlips.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4FC6E59A0B445FDC0063CDF9 /* RXBBGenerateFlips.cpp */; };
+		4FC71BCE0A13DF7E003F958E /* RXBBCountFlips.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4FBA60CD08D8BE9E00855FD8 /* RXBBCountFlips.cpp */; };
+		4FC7D6810A9A3FBB009124AF /* RXBBGenerateMove.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4FBA60CF08D8BE9E00855FD8 /* RXBBGenerateMove.cpp */; };
+		4FCB59B9097D80AF00D297EB /* ggsstream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4FCB59B5097D80AE00D297EB /* ggsstream.cpp */; };
+		4FCB59BA097D80AF00D297EB /* ggsstream.h in Copy Files */ = {isa = PBXBuildFile; fileRef = 4FCB59B6097D80AE00D297EB /* ggsstream.h */; };
+		4FCB59BB097D80AF00D297EB /* OsObjects.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4FCB59B7097D80AE00D297EB /* OsObjects.cpp */; };
+		4FCB59BC097D80AF00D297EB /* OsObjects.h in Copy Files */ = {isa = PBXBuildFile; fileRef = 4FCB59B8097D80AE00D297EB /* OsObjects.h */; };
+		4FCF5CE808E5508C0025A280 /* RXPattern.h in Copy Files */ = {isa = PBXBuildFile; fileRef = 4FCF5CE608E5508C0025A280 /* RXPattern.h */; };
+		4FD4F16109D961A100F33338 /* RXHashShallow.h in Copy Files */ = {isa = PBXBuildFile; fileRef = 4FD4F15F09D961A100F33338 /* RXHashShallow.h */; };
+		4FDF3AC908D8B8A1003DED7A /* Roxane in Copy Files */ = {isa = PBXBuildFile; fileRef = 8DD76F6C0486A84900D96B5E /* Roxane */; };
+		8DD76F6A0486A84900D96B5E /* Roxane.1 in Copy Files */ = {isa = PBXBuildFile; fileRef = C6859E8B029090EE04C91782 /* Roxane.1 */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		152CD8C70F4B681900CF6897 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 7;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8DD76F690486A84900D96B5E /* Copy Files */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 8;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+				8DD76F6A0486A84900D96B5E /* Roxane.1 in Copy Files */,
+				4FDF3AC908D8B8A1003DED7A /* Roxane in Copy Files */,
+				4FBA60E808D8BE9E00855FD8 /* GGSMessage.h in Copy Files */,
+				4FBA60EA08D8BE9E00855FD8 /* GGSObjects.h in Copy Files */,
+				4FBA60EF08D8BE9E00855FD8 /* ODKStream.h in Copy Files */,
+				4FBA60F108D8BE9E00855FD8 /* OsMessage.h in Copy Files */,
+				4FBA60F908D8BE9E00855FD8 /* RXBBPatterns.h in Copy Files */,
+				4FBA60FD08D8BE9E00855FD8 /* RXBitBoard.h in Copy Files */,
+				4FBA60FE08D8BE9E00855FD8 /* RXConstantes.h in Copy Files */,
+				4FBA610108D8BE9E00855FD8 /* RXEngine.h in Copy Files */,
+				4FBA610308D8BE9E00855FD8 /* RXEvaluation.h in Copy Files */,
+				4FBA610508D8BE9E00855FD8 /* RXHashTable.h in Copy Files */,
+				4FBA610808D8BE9E00855FD8 /* RXMove.h in Copy Files */,
+				4FBA610908D8BE9E00855FD8 /* RXSquareList.h in Copy Files */,
+				4FBA610D08D8BE9E00855FD8 /* sockbuf.h in Copy Files */,
+				4FBA610E08D8BE9E00855FD8 /* types.h in Copy Files */,
+				4FBA611208D8BEEC00855FD8 /* RXRoxane.h in Copy Files */,
+				4FCF5CE808E5508C0025A280 /* RXPattern.h in Copy Files */,
+				4FCB59BA097D80AF00D297EB /* ggsstream.h in Copy Files */,
+				4FCB59BC097D80AF00D297EB /* OsObjects.h in Copy Files */,
+				4FD4F16109D961A100F33338 /* RXHashShallow.h in Copy Files */,
+			);
+			name = "Copy Files";
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		153F675B10867B6F00C63274 /* RXSearch.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = RXSearch.cpp; path = sources/RXSearch.cpp; sourceTree = "<group>"; };
+		153F675C10867B6F00C63274 /* RXSearch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RXSearch.h; path = sources/RXSearch.h; sourceTree = "<group>"; };
+		1548EC110EC09E1E005D69D8 /* RXTools.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RXTools.h; path = sources/RXTools.h; sourceTree = "<group>"; };
+		15E5F6710E7C5C0000B8D972 /* RXHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RXHelper.h; path = sources/RXHelper.h; sourceTree = "<group>"; };
+		15F23C3F0E771D5D00D70E52 /* RXHashShallow.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = RXHashShallow.cpp; path = sources/RXHashShallow.cpp; sourceTree = "<group>"; };
+		4FBA60BF08D8BE9E00855FD8 /* GGSMessage.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = GGSMessage.cpp; path = sources/GGSMessage.cpp; sourceTree = "<group>"; };
+		4FBA60C008D8BE9E00855FD8 /* GGSMessage.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = GGSMessage.h; path = sources/GGSMessage.h; sourceTree = "<group>"; };
+		4FBA60C108D8BE9E00855FD8 /* GGSObjects.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = GGSObjects.cpp; path = sources/GGSObjects.cpp; sourceTree = "<group>"; };
+		4FBA60C208D8BE9E00855FD8 /* GGSObjects.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = GGSObjects.h; path = sources/GGSObjects.h; sourceTree = "<group>"; };
+		4FBA60C508D8BE9E00855FD8 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = sources/main.cpp; sourceTree = "<group>"; };
+		4FBA60C608D8BE9E00855FD8 /* ODKStream.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = ODKStream.cpp; path = sources/ODKStream.cpp; sourceTree = "<group>"; };
+		4FBA60C708D8BE9E00855FD8 /* ODKStream.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = ODKStream.h; path = sources/ODKStream.h; sourceTree = "<group>"; };
+		4FBA60C808D8BE9E00855FD8 /* OsMessage.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = OsMessage.cpp; path = sources/OsMessage.cpp; sourceTree = "<group>"; };
+		4FBA60C908D8BE9E00855FD8 /* OsMessage.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = OsMessage.h; path = sources/OsMessage.h; sourceTree = "<group>"; };
+		4FBA60CD08D8BE9E00855FD8 /* RXBBCountFlips.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = RXBBCountFlips.cpp; path = sources/RXBBCountFlips.cpp; sourceTree = "<group>"; };
+		4FBA60CE08D8BE9E00855FD8 /* RXBBDoFlips.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = RXBBDoFlips.cpp; path = sources/RXBBDoFlips.cpp; sourceTree = "<group>"; };
+		4FBA60CF08D8BE9E00855FD8 /* RXBBGenerateMove.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = RXBBGenerateMove.cpp; path = sources/RXBBGenerateMove.cpp; sourceTree = "<group>"; };
+		4FBA60D008D8BE9E00855FD8 /* RXBBPatterns.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = RXBBPatterns.cpp; path = sources/RXBBPatterns.cpp; sourceTree = "<group>"; };
+		4FBA60D108D8BE9E00855FD8 /* RXBBPatterns.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = RXBBPatterns.h; path = sources/RXBBPatterns.h; sourceTree = "<group>"; };
+		4FBA60D208D8BE9E00855FD8 /* RXBBPattGeneratePatterns.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = RXBBPattGeneratePatterns.cpp; path = sources/RXBBPattGeneratePatterns.cpp; sourceTree = "<group>"; };
+		4FBA60D308D8BE9E00855FD8 /* RXBBSetDisc.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = RXBBSetDisc.cpp; path = sources/RXBBSetDisc.cpp; sourceTree = "<group>"; };
+		4FBA60D408D8BE9E00855FD8 /* RXBitBoard.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = RXBitBoard.cpp; path = sources/RXBitBoard.cpp; sourceTree = "<group>"; };
+		4FBA60D508D8BE9E00855FD8 /* RXBitBoard.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = RXBitBoard.h; path = sources/RXBitBoard.h; sourceTree = "<group>"; };
+		4FBA60D608D8BE9E00855FD8 /* RXConstantes.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = RXConstantes.h; path = sources/RXConstantes.h; sourceTree = "<group>"; };
+		4FBA60D708D8BE9E00855FD8 /* RXEndGame.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = RXEndGame.cpp; path = sources/RXEndGame.cpp; sourceTree = "<group>"; };
+		4FBA60D808D8BE9E00855FD8 /* RXEngine.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = RXEngine.cpp; path = sources/RXEngine.cpp; sourceTree = "<group>"; };
+		4FBA60D908D8BE9E00855FD8 /* RXEngine.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = RXEngine.h; path = sources/RXEngine.h; sourceTree = "<group>"; };
+		4FBA60DA08D8BE9E00855FD8 /* RXEvaluation.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = RXEvaluation.cpp; path = sources/RXEvaluation.cpp; sourceTree = "<group>"; };
+		4FBA60DB08D8BE9E00855FD8 /* RXEvaluation.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = RXEvaluation.h; path = sources/RXEvaluation.h; sourceTree = "<group>"; };
+		4FBA60DC08D8BE9E00855FD8 /* RXHashTable.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = RXHashTable.cpp; path = sources/RXHashTable.cpp; sourceTree = "<group>"; };
+		4FBA60DD08D8BE9E00855FD8 /* RXHashTable.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = RXHashTable.h; path = sources/RXHashTable.h; sourceTree = "<group>"; };
+		4FBA60DE08D8BE9E00855FD8 /* RXMidGame.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = RXMidGame.cpp; path = sources/RXMidGame.cpp; sourceTree = "<group>"; };
+		4FBA60DF08D8BE9E00855FD8 /* RXMove.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = RXMove.cpp; path = sources/RXMove.cpp; sourceTree = "<group>"; };
+		4FBA60E008D8BE9E00855FD8 /* RXMove.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = RXMove.h; path = sources/RXMove.h; sourceTree = "<group>"; };
+		4FBA60E108D8BE9E00855FD8 /* RXSquareList.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = RXSquareList.h; path = sources/RXSquareList.h; sourceTree = "<group>"; };
+		4FBA60E408D8BE9E00855FD8 /* sockbuf.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = sockbuf.cpp; path = sources/sockbuf.cpp; sourceTree = "<group>"; };
+		4FBA60E508D8BE9E00855FD8 /* sockbuf.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = sockbuf.h; path = sources/sockbuf.h; sourceTree = "<group>"; };
+		4FBA60E608D8BE9E00855FD8 /* types.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = types.h; path = sources/types.h; sourceTree = "<group>"; };
+		4FBA610F08D8BEEC00855FD8 /* RXRoxane.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = RXRoxane.cpp; path = sources/RXRoxane.cpp; sourceTree = "<group>"; };
+		4FBA611008D8BEEC00855FD8 /* RXRoxane.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = RXRoxane.h; path = sources/RXRoxane.h; sourceTree = "<group>"; };
+		4FC6E59A0B445FDC0063CDF9 /* RXBBGenerateFlips.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = RXBBGenerateFlips.cpp; path = sources/RXBBGenerateFlips.cpp; sourceTree = "<group>"; };
+		4FCB59B5097D80AE00D297EB /* ggsstream.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = ggsstream.cpp; path = sources/ggsstream.cpp; sourceTree = "<group>"; };
+		4FCB59B6097D80AE00D297EB /* ggsstream.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = ggsstream.h; path = sources/ggsstream.h; sourceTree = "<group>"; };
+		4FCB59B7097D80AE00D297EB /* OsObjects.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = OsObjects.cpp; path = sources/OsObjects.cpp; sourceTree = "<group>"; };
+		4FCB59B8097D80AE00D297EB /* OsObjects.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = OsObjects.h; path = sources/OsObjects.h; sourceTree = "<group>"; };
+		4FCF5CE608E5508C0025A280 /* RXPattern.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = RXPattern.h; path = sources/RXPattern.h; sourceTree = "<group>"; };
+		4FD4F15F09D961A100F33338 /* RXHashShallow.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = RXHashShallow.h; path = sources/RXHashShallow.h; sourceTree = "<group>"; };
+		8DD76F6C0486A84900D96B5E /* Roxane */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Roxane; sourceTree = BUILT_PRODUCTS_DIR; };
+		C6859E8B029090EE04C91782 /* Roxane.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = Roxane.1; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		8DD76F660486A84900D96B5E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		08FB7794FE84155DC02AAC07 /* Roxane */ = {
+			isa = PBXGroup;
+			children = (
+				4FBA611608D8BF7200855FD8 /* sources */,
+				C6859E8C029090F304C91782 /* Documentation */,
+				1AB674ADFE9D54B511CA2CBB /* Products */,
+			);
+			name = Roxane;
+			sourceTree = "<group>";
+		};
+		15094309107E8A1200F11917 /* RXRoxane */ = {
+			isa = PBXGroup;
+			children = (
+				4FBA60D608D8BE9E00855FD8 /* RXConstantes.h */,
+				1548EC110EC09E1E005D69D8 /* RXTools.h */,
+				4FBA611008D8BEEC00855FD8 /* RXRoxane.h */,
+				4FBA610F08D8BEEC00855FD8 /* RXRoxane.cpp */,
+				4FBA60D508D8BE9E00855FD8 /* RXBitBoard.h */,
+				4FBA60D408D8BE9E00855FD8 /* RXBitBoard.cpp */,
+				4FBA60D308D8BE9E00855FD8 /* RXBBSetDisc.cpp */,
+				4FBA60CD08D8BE9E00855FD8 /* RXBBCountFlips.cpp */,
+				4FBA60CE08D8BE9E00855FD8 /* RXBBDoFlips.cpp */,
+				4FC6E59A0B445FDC0063CDF9 /* RXBBGenerateFlips.cpp */,
+				4FBA60CF08D8BE9E00855FD8 /* RXBBGenerateMove.cpp */,
+				4FBA60D108D8BE9E00855FD8 /* RXBBPatterns.h */,
+				4FBA60D008D8BE9E00855FD8 /* RXBBPatterns.cpp */,
+				4FBA60D208D8BE9E00855FD8 /* RXBBPattGeneratePatterns.cpp */,
+				4FCF5CE608E5508C0025A280 /* RXPattern.h */,
+				153F675C10867B6F00C63274 /* RXSearch.h */,
+				153F675B10867B6F00C63274 /* RXSearch.cpp */,
+				15E5F6710E7C5C0000B8D972 /* RXHelper.h */,
+				4FBA60D908D8BE9E00855FD8 /* RXEngine.h */,
+				4FBA60D808D8BE9E00855FD8 /* RXEngine.cpp */,
+				4FBA60DE08D8BE9E00855FD8 /* RXMidGame.cpp */,
+				4FBA60D708D8BE9E00855FD8 /* RXEndGame.cpp */,
+				4FBA60DB08D8BE9E00855FD8 /* RXEvaluation.h */,
+				4FBA60DA08D8BE9E00855FD8 /* RXEvaluation.cpp */,
+				4FBA60DD08D8BE9E00855FD8 /* RXHashTable.h */,
+				4FBA60DC08D8BE9E00855FD8 /* RXHashTable.cpp */,
+				4FD4F15F09D961A100F33338 /* RXHashShallow.h */,
+				4FBA60E008D8BE9E00855FD8 /* RXMove.h */,
+				4FBA60DF08D8BE9E00855FD8 /* RXMove.cpp */,
+				4FBA60E108D8BE9E00855FD8 /* RXSquareList.h */,
+				15F23C3F0E771D5D00D70E52 /* RXHashShallow.cpp */,
+			);
+			name = RXRoxane;
+			sourceTree = "<group>";
+		};
+		1AB674ADFE9D54B511CA2CBB /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				8DD76F6C0486A84900D96B5E /* Roxane */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		4FBA611508D8BF5700855FD8 /* GGS Client */ = {
+			isa = PBXGroup;
+			children = (
+				4FCB59B5097D80AE00D297EB /* ggsstream.cpp */,
+				4FCB59B6097D80AE00D297EB /* ggsstream.h */,
+				4FCB59B7097D80AE00D297EB /* OsObjects.cpp */,
+				4FCB59B8097D80AE00D297EB /* OsObjects.h */,
+				4FBA60C008D8BE9E00855FD8 /* GGSMessage.h */,
+				4FBA60BF08D8BE9E00855FD8 /* GGSMessage.cpp */,
+				4FBA60C208D8BE9E00855FD8 /* GGSObjects.h */,
+				4FBA60C108D8BE9E00855FD8 /* GGSObjects.cpp */,
+				4FBA60C708D8BE9E00855FD8 /* ODKStream.h */,
+				4FBA60C608D8BE9E00855FD8 /* ODKStream.cpp */,
+				4FBA60C908D8BE9E00855FD8 /* OsMessage.h */,
+				4FBA60C808D8BE9E00855FD8 /* OsMessage.cpp */,
+				4FBA60E508D8BE9E00855FD8 /* sockbuf.h */,
+				4FBA60E408D8BE9E00855FD8 /* sockbuf.cpp */,
+				4FBA60E608D8BE9E00855FD8 /* types.h */,
+			);
+			name = "GGS Client";
+			sourceTree = "<group>";
+		};
+		4FBA611608D8BF7200855FD8 /* sources */ = {
+			isa = PBXGroup;
+			children = (
+				4FBA60C508D8BE9E00855FD8 /* main.cpp */,
+				15094309107E8A1200F11917 /* RXRoxane */,
+				4FBA611508D8BF5700855FD8 /* GGS Client */,
+			);
+			name = sources;
+			sourceTree = "<group>";
+		};
+		C6859E8C029090F304C91782 /* Documentation */ = {
+			isa = PBXGroup;
+			children = (
+				C6859E8B029090EE04C91782 /* Roxane.1 */,
+			);
+			name = Documentation;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		152CD8C80F4B681900CF6897 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				153F675E10867B6F00C63274 /* RXSearch.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		8DD76F620486A84900D96B5E /* Roxane */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4FDF39F108D8AEB0003DED7A /* Build configuration list for PBXNativeTarget "Roxane" */;
+			buildPhases = (
+				8DD76F640486A84900D96B5E /* Sources */,
+				8DD76F660486A84900D96B5E /* Frameworks */,
+				8DD76F690486A84900D96B5E /* Copy Files */,
+				152CD8C70F4B681900CF6897 /* CopyFiles */,
+				152CD8C80F4B681900CF6897 /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Roxane;
+			productInstallPath = "$(HOME)/bin";
+			productName = Roxane;
+			productReference = 8DD76F6C0486A84900D96B5E /* Roxane */;
+			productType = "com.apple.product-type.tool";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		08FB7793FE84155DC02AAC07 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1540;
+				ORGANIZATIONNAME = bruno.causse;
+			};
+			buildConfigurationList = 4FDF39F508D8AEB0003DED7A /* Build configuration list for PBXProject "Roxane" */;
+			compatibilityVersion = "Xcode 15.3";
+			developmentRegion = French;
+			hasScannedForEncodings = 1;
+			knownRegions = (
+				English,
+				Japanese,
+				French,
+				German,
+				en,
+				Base,
+			);
+			mainGroup = 08FB7794FE84155DC02AAC07 /* Roxane */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				8DD76F620486A84900D96B5E /* Roxane */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		8DD76F640486A84900D96B5E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4FBA60E708D8BE9E00855FD8 /* GGSMessage.cpp in Sources */,
+				4FBA60E908D8BE9E00855FD8 /* GGSObjects.cpp in Sources */,
+				4FBA60ED08D8BE9E00855FD8 /* main.cpp in Sources */,
+				4FBA60EE08D8BE9E00855FD8 /* ODKStream.cpp in Sources */,
+				4FBA60F008D8BE9E00855FD8 /* OsMessage.cpp in Sources */,
+				4FBA60F608D8BE9E00855FD8 /* RXBBDoFlips.cpp in Sources */,
+				4FBA60F808D8BE9E00855FD8 /* RXBBPatterns.cpp in Sources */,
+				4FBA60FB08D8BE9E00855FD8 /* RXBBSetDisc.cpp in Sources */,
+				4FBA60FC08D8BE9E00855FD8 /* RXBitBoard.cpp in Sources */,
+				4FBA60FF08D8BE9E00855FD8 /* RXEndGame.cpp in Sources */,
+				4FBA610008D8BE9E00855FD8 /* RXEngine.cpp in Sources */,
+				4FBA610208D8BE9E00855FD8 /* RXEvaluation.cpp in Sources */,
+				4FBA610408D8BE9E00855FD8 /* RXHashTable.cpp in Sources */,
+				4FBA610608D8BE9E00855FD8 /* RXMidGame.cpp in Sources */,
+				4FBA610708D8BE9E00855FD8 /* RXMove.cpp in Sources */,
+				4FBA610C08D8BE9E00855FD8 /* sockbuf.cpp in Sources */,
+				4FBA611108D8BEEC00855FD8 /* RXRoxane.cpp in Sources */,
+				4FCB59B9097D80AF00D297EB /* ggsstream.cpp in Sources */,
+				4FCB59BB097D80AF00D297EB /* OsObjects.cpp in Sources */,
+				4FC71BCE0A13DF7E003F958E /* RXBBCountFlips.cpp in Sources */,
+				4FC7D6810A9A3FBB009124AF /* RXBBGenerateMove.cpp in Sources */,
+				4FC6E59B0B445FDC0063CDF9 /* RXBBGenerateFlips.cpp in Sources */,
+				4FBF04940BDE80B800E7D270 /* RXBBPattGeneratePatterns.cpp in Sources */,
+				15F23C400E771D5D00D70E52 /* RXHashShallow.cpp in Sources */,
+				153F675D10867B6F00C63274 /* RXSearch.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		4FDF39F208D8AEB0003DED7A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				COPY_PHASE_STRIP = YES;
+				DEAD_CODE_STRIPPING = YES;
+				GCC_ALTIVEC_EXTENSIONS = YES;
+				GCC_AUTO_VECTORIZATION = YES;
+				GCC_C_LANGUAGE_STANDARD = "compiler-default";
+				GCC_DEBUGGING_SYMBOLS = full;
+				GCC_DYNAMIC_NO_PIC = YES;
+				GCC_ENABLE_CPP_RTTI = YES;
+				GCC_ENABLE_KERNEL_DEVELOPMENT = NO;
+				GCC_FAST_MATH = YES;
+				GCC_FEEDBACK_DIRECTED_OPTIMIZATION = Off;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = YES;
+				GCC_INPUT_FILETYPE = automatic;
+				GCC_INSTRUMENT_PROGRAM_FLOW_ARCS = NO;
+				GCC_MODEL_PPC64 = YES;
+				GCC_MODEL_TUNING = "";
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = NO;
+				GCC_STRICT_ALIASING = YES;
+				GCC_UNROLL_LOOPS = YES;
+				GCC_USE_GCC3_PFE_SUPPORT = NO;
+				GCC_VERSION = "";
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_PEDANTIC = YES;
+				GCC_WARN_SHADOW = NO;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				GENERATE_PROFILING_CODE = YES;
+				ICC_LANG_ANSI = gnu99;
+				INSTALL_PATH = "$(HOME)/bin";
+				MACOSX_DEPLOYMENT_TARGET = 14.5;
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_CPLUSPLUSFLAGS = "";
+				PRODUCT_NAME = Roxane;
+				RUN_CLANG_STATIC_ANALYZER = NO;
+				SDKROOT = macosx;
+				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = dynamic;
+				VALID_ARCHS = "x86_64 x86_64h arm64 arm64e";
+				WARNING_CFLAGS = "-Wno-long-long";
+				ZERO_LINK = YES;
+			};
+			name = Debug;
+		};
+		4FDF39F308D8AEB0003DED7A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				COPY_PHASE_STRIP = YES;
+				DEAD_CODE_STRIPPING = YES;
+				ENABLE_OPENMP_SUPPORT = YES;
+				GCC_ALTIVEC_EXTENSIONS = NO;
+				GCC_AUTO_VECTORIZATION = YES;
+				GCC_C_LANGUAGE_STANDARD = "compiler-default";
+				GCC_DEBUGGING_SYMBOLS = default;
+				GCC_DYNAMIC_NO_PIC = YES;
+				GCC_ENABLE_CPP_EXCEPTIONS = YES;
+				GCC_ENABLE_CPP_RTTI = YES;
+				GCC_ENABLE_SSE41_EXTENSIONS = YES;
+				GCC_FAST_MATH = YES;
+				GCC_FEEDBACK_DIRECTED_OPTIMIZATION = Off;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = YES;
+				GCC_INPUT_FILETYPE = automatic;
+				GCC_MODEL_PPC64 = YES;
+				GCC_MODEL_TUNING = "";
+				GCC_OPTIMIZATION_LEVEL = 3;
+				GCC_PREPROCESSOR_DEFINITIONS = NS_BLOCK_ASSERTIONS;
+				GCC_STRICT_ALIASING = YES;
+				GCC_UNROLL_LOOPS = YES;
+				GCC_VERSION = "";
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_MISSING_FIELD_INITIALIZERS = YES;
+				GCC_WARN_ABOUT_MISSING_NEWLINE = YES;
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_CHECK_SWITCH_STATEMENTS = YES;
+				GCC_WARN_MISSING_PARENTHESES = YES;
+				GCC_WARN_PEDANTIC = YES;
+				GCC_WARN_PROTOTYPE_CONVERSION = YES;
+				GCC_WARN_SIGN_COMPARE = YES;
+				GCC_WARN_UNKNOWN_PRAGMAS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				GENERATE_PROFILING_CODE = NO;
+				ICC_OPTLEVEL = speedHLO;
+				ICC_OPT_IPO_FOR_SINGLE_FILE_COMPILATION = NO;
+				ICC_RT_CHECK_UNINIT = NO;
+				ICC_SOURCE_CHECKER = default;
+				ICC_SOURCE_PARALLELIZATION_CHECKER = default;
+				ICC_WARNLEVEL = warnings;
+				INSTALL_PATH = "$(HOME)/bin";
+				LD_OPENMP_FLAGS = "";
+				MACOSX_DEPLOYMENT_TARGET = 14.5;
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_CPLUSPLUSFLAGS = "-fomit-frame-pointer";
+				OTHER_LDFLAGS = "";
+				PRODUCT_NAME = Roxane;
+				RUN_CLANG_STATIC_ANALYZER = NO;
+				SDKROOT = macosx;
+				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = static;
+				VALID_ARCHS = "x86_64 x86_64h arm64 arm64e";
+				WARNING_CFLAGS = "-Wno-long-long";
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+		4FDF39F408D8AEB0003DED7A /* Default */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				DEAD_CODE_STRIPPING = YES;
+				GCC_ALTIVEC_EXTENSIONS = NO;
+				GCC_AUTO_VECTORIZATION = YES;
+				GCC_C_LANGUAGE_STANDARD = "compiler-default";
+				GCC_DEBUGGING_SYMBOLS = default;
+				GCC_ENABLE_CPP_RTTI = YES;
+				GCC_ENABLE_OBJC_EXCEPTIONS = NO;
+				GCC_ENABLE_SSE41_EXTENSIONS = YES;
+				GCC_FAST_MATH = YES;
+				GCC_FEEDBACK_DIRECTED_OPTIMIZATION = Off;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INPUT_FILETYPE = automatic;
+				GCC_MODEL_PPC64 = YES;
+				GCC_MODEL_TUNING = "";
+				GCC_OPTIMIZATION_LEVEL = 3;
+				GCC_STRICT_ALIASING = YES;
+				GCC_UNROLL_LOOPS = YES;
+				GCC_VERSION = "";
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_MISSING_FIELD_INITIALIZERS = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_CHECK_SWITCH_STATEMENTS = YES;
+				GCC_WARN_MISSING_PARENTHESES = YES;
+				GCC_WARN_SIGN_COMPARE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNKNOWN_PRAGMAS = YES;
+				GCC_WARN_UNUSED_PARAMETER = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				GENERATE_PROFILING_CODE = NO;
+				INSTALL_PATH = "$(HOME)/bin";
+				MACH_O_TYPE = mh_execute;
+				MACOSX_DEPLOYMENT_TARGET = 14.5;
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_CPLUSPLUSFLAGS = (
+					"-fomit-frame-pointer",
+					"-ffast-math",
+				);
+				PRODUCT_NAME = Roxane;
+				SDKROOT = macosx;
+				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = static;
+				VALID_ARCHS = "x86_64 x86_64h arm64 arm64e";
+				WARNING_CFLAGS = "";
+			};
+			name = Default;
+		};
+		4FDF39F608D8AEB0003DED7A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD)";
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "compiler-default";
+				DEAD_CODE_STRIPPING = YES;
+				ENABLE_TESTABILITY = NO;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_ALTIVEC_EXTENSIONS = YES;
+				GCC_AUTO_VECTORIZATION = YES;
+				GCC_C_LANGUAGE_STANDARD = "compiler-default";
+				GCC_ENABLE_CPP_RTTI = YES;
+				GCC_FAST_MATH = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = YES;
+				GCC_INPUT_FILETYPE = automatic;
+				GCC_MODEL_PPC64 = YES;
+				GCC_MODEL_TUNING = "";
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_STRICT_ALIASING = YES;
+				GCC_UNROLL_LOOPS = YES;
+				GCC_VERSION = "";
+				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_CHECK_SWITCH_STATEMENTS = YES;
+				GCC_WARN_FOUR_CHARACTER_CONSTANTS = YES;
+				GCC_WARN_HIDDEN_VIRTUAL_FUNCTIONS = YES;
+				GCC_WARN_INITIALIZER_NOT_FULLY_BRACKETED = YES;
+				GCC_WARN_PROTOTYPE_CONVERSION = NO;
+				GCC_WARN_SHADOW = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_LABEL = YES;
+				GCC_WARN_UNUSED_PARAMETER = YES;
+				GCC_WARN_UNUSED_VALUE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
+				"MACOSX_DEPLOYMENT_TARGET[arch=*]" = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_CPLUSPLUSFLAGS = "";
+				SDKROOT = macosx;
+				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = dynamic;
+				VALID_ARCHS = "x86_64 x86_64h arm64 arm64e";
+				"VALID_ARCHS[sdk=macosx*]" = "x86_64 x86_64h arm64 arm64e";
+			};
+			name = Debug;
+		};
+		4FDF39F708D8AEB0003DED7A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD)";
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "compiler-default";
+				CLANG_X86_VECTOR_INSTRUCTIONS = default;
+				DEAD_CODE_STRIPPING = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_AUTO_VECTORIZATION = YES;
+				GCC_C_LANGUAGE_STANDARD = "compiler-default";
+				GCC_DYNAMIC_NO_PIC = YES;
+				GCC_ENABLE_CPP_EXCEPTIONS = NO;
+				GCC_ENABLE_CPP_RTTI = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = NO;
+				GCC_ENABLE_SSE3_EXTENSIONS = YES;
+				GCC_ENABLE_SUPPLEMENTAL_SSE3_INSTRUCTIONS = YES;
+				GCC_ENABLE_SYMBOL_SEPARATION = YES;
+				GCC_FAST_MATH = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_MODEL_PPC64 = YES;
+				GCC_MODEL_TUNING = "";
+				GCC_OPTIMIZATION_LEVEL = fast;
+				GCC_STRICT_ALIASING = YES;
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_UNROLL_LOOPS = YES;
+				GCC_VERSION = "";
+				GCC_WARN_ALLOW_INCOMPLETE_PROTOCOL = NO;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_LABEL = YES;
+				GCC_WARN_UNUSED_PARAMETER = YES;
+				GCC_WARN_UNUSED_VALUE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
+				"MACOSX_DEPLOYMENT_TARGET[arch=*]" = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_CPLUSPLUSFLAGS = "-fast";
+				SDKROOT = macosx;
+				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = dynamic;
+				VALID_ARCHS = "x86_64 x86_64h arm64 arm64e";
+				"VALID_ARCHS[sdk=macosx*]" = "x86_64 x86_64h arm64 arm64e";
+			};
+			name = Release;
+		};
+		4FDF39F808D8AEB0003DED7A /* Default */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD)";
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "compiler-default";
+				CLANG_X86_VECTOR_INSTRUCTIONS = default;
+				DEAD_CODE_STRIPPING = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_ALTIVEC_EXTENSIONS = NO;
+				GCC_AUTO_VECTORIZATION = YES;
+				GCC_C_LANGUAGE_STANDARD = "compiler-default";
+				GCC_DYNAMIC_NO_PIC = YES;
+				GCC_ENABLE_CPP_EXCEPTIONS = YES;
+				GCC_ENABLE_CPP_RTTI = YES;
+				GCC_ENABLE_SSE3_EXTENSIONS = YES;
+				GCC_ENABLE_SUPPLEMENTAL_SSE3_INSTRUCTIONS = YES;
+				GCC_FAST_MATH = YES;
+				GCC_FEEDBACK_DIRECTED_OPTIMIZATION = UseProfile;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INSTRUMENT_PROGRAM_FLOW_ARCS = NO;
+				GCC_MODEL_PPC64 = YES;
+				GCC_MODEL_TUNING = "";
+				GCC_OPTIMIZATION_LEVEL = 3;
+				GCC_STRICT_ALIASING = YES;
+				GCC_UNROLL_LOOPS = YES;
+				GCC_VERSION = "";
+				GCC_WARN_ALLOW_INCOMPLETE_PROTOCOL = NO;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_LABEL = YES;
+				GCC_WARN_UNUSED_PARAMETER = YES;
+				GCC_WARN_UNUSED_VALUE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				GENERATE_PROFILING_CODE = NO;
+				ICC_DIAG_EFFECTIVE_CPP = NO;
+				ICC_OPTLEVEL = speedHLO;
+				MACOSX_DEPLOYMENT_TARGET = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
+				"MACOSX_DEPLOYMENT_TARGET[arch=*]" = "$(RECOMMENDED_MACOSX_DEPLOYMENT_TARGET)";
+				ONLY_ACTIVE_ARCH = NO;
+				OTHER_CPLUSPLUSFLAGS = "-fast";
+				SDKROOT = macosx;
+				STANDARD_C_PLUS_PLUS_LIBRARY_TYPE = dynamic;
+				VALID_ARCHS = "x86_64 x86_64h arm64 arm64e";
+				"VALID_ARCHS[sdk=macosx*]" = "x86_64 x86_64h arm64 arm64e";
+			};
+			name = Default;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		4FDF39F108D8AEB0003DED7A /* Build configuration list for PBXNativeTarget "Roxane" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4FDF39F208D8AEB0003DED7A /* Debug */,
+				4FDF39F308D8AEB0003DED7A /* Release */,
+				4FDF39F408D8AEB0003DED7A /* Default */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4FDF39F508D8AEB0003DED7A /* Build configuration list for PBXProject "Roxane" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4FDF39F608D8AEB0003DED7A /* Debug */,
+				4FDF39F708D8AEB0003DED7A /* Release */,
+				4FDF39F808D8AEB0003DED7A /* Default */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 08FB7793FE84155DC02AAC07 /* Project object */;
+}

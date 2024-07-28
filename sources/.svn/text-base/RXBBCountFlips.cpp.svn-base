@@ -1,0 +1,1320 @@
+
+/*
+ *  RXBBCountFlips.cpp
+ *  Roxane
+ *
+ *  Created by Bruno Causse on 27/06/05.
+ *  Copyright 2005 personnel. All rights reserved.
+ *
+ */
+
+#include "RXBitBoard.h"
+
+const int RXBitBoard::West_count[128] = {
+  0, 0, 1, 0, 2, 0, 1, 0, 
+  3, 0, 1, 0, 2, 0, 1, 0, 
+  4, 0, 1, 0, 2, 0, 1, 0, 
+  3, 0, 1, 0, 2, 0, 1, 0, 
+  5, 0, 1, 0, 2, 0, 1, 0, 
+  3, 0, 1, 0, 2, 0, 1, 0, 
+  4, 0, 1, 0, 2, 0, 1, 0, 
+  3, 0, 1, 0, 2, 0, 1, 0, 
+  6, 0, 1, 0, 2, 0, 1, 0, 
+  3, 0, 1, 0, 2, 0, 1, 0, 
+  4, 0, 1, 0, 2, 0, 1, 0, 
+  3, 0, 1, 0, 2, 0, 1, 0, 
+  5, 0, 1, 0, 2, 0, 1, 0, 
+  3, 0, 1, 0, 2, 0, 1, 0, 
+  4, 0, 1, 0, 2, 0, 1, 0, 
+  3, 0, 1, 0, 2, 0, 1, 0
+};
+
+const int RXBitBoard::East_count[128] = {
+  0, 6, 5, 5, 4, 4, 4, 4, 
+  3, 3, 3, 3, 3, 3, 3, 3, 
+  2, 2, 2, 2, 2, 2, 2, 2, 
+  2, 2, 2, 2, 2, 2, 2, 2, 
+  1, 1, 1, 1, 1, 1, 1, 1, 
+  1, 1, 1, 1, 1, 1, 1, 1, 
+  1, 1, 1, 1, 1, 1, 1, 1, 
+  1, 1, 1, 1, 1, 1, 1, 1, 
+  0, 0, 0, 0, 0, 0, 0, 0, 
+  0, 0, 0, 0, 0, 0, 0, 0, 
+  0, 0, 0, 0, 0, 0, 0, 0, 
+  0, 0, 0, 0, 0, 0, 0, 0, 
+  0, 0, 0, 0, 0, 0, 0, 0, 
+  0, 0, 0, 0, 0, 0, 0, 0, 
+  0, 0, 0, 0, 0, 0, 0, 0, 
+  0, 0, 0, 0, 0, 0, 0, 0
+};
+
+const int RXBitBoard::Center_count[256] = {
+  0, 3, 2, 2, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0,
+  0, 3, 2, 2, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0,
+  1, 4, 3, 3, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1,
+  0, 3, 2, 2, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0,
+  2, 5, 4, 4, 3, 3, 3, 3, 2, 2, 2, 2, 2, 2, 2, 2,
+  0, 3, 2, 2, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0,
+  1, 4, 3, 3, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1,
+  0, 3, 2, 2, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0,
+  3, 6, 5, 5, 4, 4, 4, 4, 3, 3, 3, 3, 3, 3, 3, 3,
+  0, 3, 2, 2, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0,
+  1, 4, 3, 3, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1,
+  0, 3, 2, 2, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0,
+  2, 5, 4, 4, 3, 3, 3, 3, 2, 2, 2, 2, 2, 2, 2, 2,
+  0, 3, 2, 2, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0,
+  1, 4, 3, 3, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1,
+  0, 3, 2, 2, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0,
+};
+
+
+int RXBitBoard::count_flips_A1(const unsigned long long& discs_player) {
+
+	int n_flips = 0;
+
+	/* direction SE */
+	n_flips += East_count[((discs_player & 0X0040201008040201ULL) * 0X0101010101010101ULL) >> 56];
+
+	/* direction S */
+	n_flips += East_count[((discs_player & 0X0080808080808080ULL) * 0X0002040810204081ULL) >> 56];
+
+	/* direction _E */
+	n_flips += East_count[(discs_player & 0X7F00000000000000ULL) >> 56];
+
+	return n_flips;
+}
+
+int RXBitBoard::count_flips_B1(const unsigned long long& discs_player) {
+
+	int n_flips = 0;
+
+	/* direction SE */
+	n_flips += East_count[((discs_player & 0X0020100804020100ULL) * 0X0101010101010101ULL) >> 55];
+
+	/* direction S */
+	n_flips += East_count[((discs_player & 0X0040404040404040ULL) * 0X0004081020408102ULL) >> 56];
+
+	/* direction _E */
+	n_flips += East_count[(discs_player & 0X3F00000000000000ULL) >> 55];
+
+	return n_flips;
+}
+
+int RXBitBoard::count_flips_C1(const unsigned long long& discs_player) {
+
+	int n_flips = 0;
+
+	/* direction S */
+	n_flips += East_count[((discs_player & 0X0020202020202020ULL) * 0X0008102040810204ULL) >> 56];
+
+	/* direction SE */
+	n_flips += East_count[((discs_player & 0X0010080402010000ULL) * 0X0101010101010101ULL) >> 54];
+
+	/* direction SW */
+	n_flips += static_cast<int> ((discs_player & 0X0040800000000000ULL) == 0X0000800000000000ULL);
+
+	/* direction _E */
+	n_flips += East_count[(discs_player & 0X1F00000000000000ULL) >> 54];
+
+	/* direction _W */
+	n_flips += West_count[(discs_player >> 62) & 0X0000000000000003ULL];
+
+	return n_flips;
+}
+
+int RXBitBoard::count_flips_D1(const unsigned long long& discs_player) {
+
+	int n_flips = 0;
+
+	/* direction S */
+	n_flips += East_count[((discs_player & 0X0010101010101010ULL) * 0X0010204081020408ULL) >> 56];
+
+	/* direction WSE */
+	n_flips += Center_count[(((discs_player & 0X0028448201000000ULL) + (discs_player & 0X0008040201000000ULL)) * 0X0101010101010101ULL) >> 57];
+
+	/* direction WE */
+	n_flips += Center_count[((discs_player & 0XEF00000000000000ULL) + (discs_player & 0X0F00000000000000ULL)) >> 57];
+
+	return n_flips;
+}
+
+int RXBitBoard::count_flips_E1(const unsigned long long& discs_player) {
+
+	int n_flips = 0;
+
+	/* direction S */
+	n_flips += East_count[((discs_player & 0X0008080808080808ULL) * 0X0020408102040810ULL) >> 56];
+
+	/* direction WSE */
+	n_flips += Center_count[(((discs_player & 0X0014224180000000ULL) + (discs_player & 0X0004020100000000ULL)) * 0X0101010101010101ULL) >> 56];
+
+	/* direction WE */
+	n_flips += Center_count[((discs_player & 0XF700000000000000ULL) + (discs_player & 0X0700000000000000ULL)) >> 56];
+
+	return n_flips;
+}
+
+int RXBitBoard::count_flips_F1(const unsigned long long& discs_player) {
+
+	int n_flips = 0;
+
+	/* direction S */
+	n_flips += East_count[((discs_player & 0X0004040404040404ULL) * 0X0040810204081020ULL) >> 56];
+
+	/* direction SE */
+	n_flips += static_cast<int> ((discs_player & 0X0002010000000000ULL) == 0X0000010000000000ULL);
+
+	/* direction SW */
+	n_flips += West_count[((discs_player & 0X0008102040800000ULL) * 0X0101010101010101ULL) >> 59];
+
+	/* direction _E */
+	n_flips += East_count[(discs_player & 0X0300000000000000ULL) >> 51];
+
+	/* direction _W */
+	n_flips += West_count[(discs_player >> 59) & 0X000000000000001FULL];
+
+	return n_flips;
+}
+
+int RXBitBoard::count_flips_G1(const unsigned long long& discs_player) {
+
+	int n_flips = 0;
+
+	/* direction SW */
+	n_flips += West_count[((discs_player & 0X0004081020408000ULL) * 0X0101010101010101ULL) >> 58];
+
+	/* direction _W */
+	n_flips += West_count[(discs_player >> 58) & 0X000000000000003FULL];
+
+	/* direction S */
+	n_flips += East_count[((discs_player & 0X0002020202020202ULL) * 0X0081020408102040ULL) >> 56];
+
+	return n_flips;
+}
+
+int RXBitBoard::count_flips_H1(const unsigned long long& discs_player) {
+
+	int n_flips = 0;
+
+	/* direction SW */
+	n_flips += West_count[((discs_player & 0X0002040810204080ULL) * 0X0101010101010101ULL) >> 57];
+
+	/* direction _W */
+	n_flips += West_count[(discs_player >> 57) & 0X000000000000007FULL];
+
+	/* direction S */
+	n_flips += East_count[((discs_player & 0X0001010101010101ULL) * 0X0102040810204081ULL) >> 56];
+
+	return n_flips;
+}
+
+int RXBitBoard::count_flips_A2(const unsigned long long& discs_player) {
+
+	int n_flips = 0;
+
+	/* direction SE */
+	n_flips += East_count[((discs_player & 0X0000402010080402ULL) * 0X0101010101010101ULL) >> 56];
+
+	/* direction S */
+	n_flips += East_count[((discs_player & 0X0000808080808080ULL) * 0X0004081020408102ULL) >> 56];
+
+	/* direction _E */
+	n_flips += East_count[(discs_player & 0X007F000000000000ULL) >> 48];
+
+	return n_flips;
+}
+
+int RXBitBoard::count_flips_B2(const unsigned long long& discs_player) {
+
+	int n_flips = 0;
+
+	/* direction SE */
+	n_flips += East_count[((discs_player & 0X0000201008040201ULL) * 0X0101010101010101ULL) >> 55];
+
+	/* direction S */
+	n_flips += East_count[((discs_player & 0X0000404040404040ULL) * 0X0008102040810204ULL) >> 56];
+
+	/* direction _E */
+	n_flips += East_count[(discs_player & 0X003F000000000000ULL) >> 47];
+
+	return n_flips;
+}
+
+int RXBitBoard::count_flips_C2(const unsigned long long& discs_player) {
+
+	int n_flips = 0;
+
+	/* direction S */
+	n_flips += East_count[((discs_player & 0X0000202020202020ULL) * 0X0010204081020408ULL) >> 56];
+
+	/* direction SE */
+	n_flips += East_count[((discs_player & 0X0000100804020100ULL) * 0X0101010101010101ULL) >> 54];
+
+	/* direction SW */
+	n_flips += static_cast<int> ((discs_player & 0X0000408000000000ULL) == 0X0000008000000000ULL);
+
+	/* direction _E */
+	n_flips += East_count[(discs_player & 0X001F000000000000ULL) >> 46];
+
+	/* direction _W */
+	n_flips += West_count[(discs_player >> 54) & 0X0000000000000003ULL];
+
+	return n_flips;
+}
+
+int RXBitBoard::count_flips_D2(const unsigned long long& discs_player) {
+
+	int n_flips = 0;
+
+	/* direction S */
+	n_flips += East_count[((discs_player & 0X0000101010101010ULL) * 0X0020408102040810ULL) >> 56];
+
+	/* direction WSE */
+	n_flips += Center_count[(((discs_player & 0X0000284482010000ULL) + (discs_player & 0X0000080402010000ULL)) * 0X0101010101010101ULL) >> 57];
+
+	/* direction WE */
+	n_flips += Center_count[((discs_player & 0X00EF000000000000ULL) + (discs_player & 0X000F000000000000ULL)) >> 49];
+
+	return n_flips;
+}
+
+int RXBitBoard::count_flips_E2(const unsigned long long& discs_player) {
+
+	int n_flips = 0;
+
+	/* direction S */
+	n_flips += East_count[((discs_player & 0X0000080808080808ULL) * 0X0040810204081020ULL) >> 56];
+
+	/* direction WSE */
+	n_flips += Center_count[(((discs_player & 0X0000142241800000ULL) + (discs_player & 0X0000040201000000ULL)) * 0X0101010101010101ULL) >> 56];
+
+	/* direction WE */
+	n_flips += Center_count[((discs_player & 0X00F7000000000000ULL) + (discs_player & 0X0007000000000000ULL)) >> 48];
+
+	return n_flips;
+}
+
+int RXBitBoard::count_flips_F2(const unsigned long long& discs_player) {
+
+	int n_flips = 0;
+
+	/* direction S */
+	n_flips += East_count[((discs_player & 0X0000040404040404ULL) * 0X0081020408102040ULL) >> 56];
+
+	/* direction SE */
+	n_flips += static_cast<int> ((discs_player & 0X0000020100000000ULL) == 0X0000000100000000ULL);
+
+	/* direction SW */
+	n_flips += West_count[((discs_player & 0X0000081020408000ULL) * 0X0101010101010101ULL) >> 59];
+
+	/* direction _E */
+	n_flips += East_count[(discs_player & 0X0003000000000000ULL) >> 43];
+
+	/* direction _W */
+	n_flips += West_count[(discs_player >> 51) & 0X000000000000001FULL];
+
+	return n_flips;
+}
+
+int RXBitBoard::count_flips_G2(const unsigned long long& discs_player) {
+
+	int n_flips = 0;
+
+	/* direction SW */
+	n_flips += West_count[((discs_player & 0X0000040810204080ULL) * 0X0101010101010101ULL) >> 58];
+
+	/* direction _W */
+	n_flips += West_count[(discs_player >> 50) & 0X000000000000003FULL];
+
+	/* direction S */
+	n_flips += East_count[((discs_player & 0X0000020202020202ULL) * 0X0102040810204081ULL) >> 56];
+
+	return n_flips;
+}
+
+int RXBitBoard::count_flips_H2(const unsigned long long& discs_player) {
+
+	int n_flips = 0;
+
+	/* direction SW */
+	n_flips += West_count[((discs_player & 0X0000020408102040ULL) * 0X0101010101010101ULL) >> 57];
+
+	/* direction _W */
+	n_flips += West_count[(discs_player >> 49) & 0X000000000000007FULL];
+
+	/* direction S */
+	n_flips += East_count[((discs_player & 0X0000010101010101ULL) * 0X0204081020408102ULL) >> 56];
+
+	return n_flips;
+}
+
+int RXBitBoard::count_flips_A3(const unsigned long long& discs_player) {
+
+	int n_flips = 0;
+
+	/* direction _E */
+	n_flips += East_count[(discs_player & 0X00007F0000000000ULL) >> 40];
+
+	/* direction NE */
+	n_flips += static_cast<int> ((discs_player & 0X2040000000000000ULL) == 0X2000000000000000ULL);
+
+	/* direction SE */
+	n_flips += East_count[((discs_player & 0X0000004020100804ULL) * 0X0101010101010101ULL) >> 56];
+
+	/* direction N_ */
+	n_flips += static_cast<int> ((discs_player & 0X8080000000000000ULL) == 0X8000000000000000ULL);
+
+	/* direction S */
+	n_flips += East_count[((discs_player & 0X0000008080808080ULL) * 0X0008102040810204ULL) >> 56];
+
+	return n_flips;
+}
+
+int RXBitBoard::count_flips_B3(const unsigned long long& discs_player) {
+
+	int n_flips = 0;
+
+	/* direction _E */
+	n_flips += East_count[(discs_player & 0X00003F0000000000ULL) >> 39];
+
+	/* direction NE */
+	n_flips += static_cast<int> ((discs_player & 0X1020000000000000ULL) == 0X1000000000000000ULL);
+
+	/* direction SE */
+	n_flips += East_count[((discs_player & 0X0000002010080402ULL) * 0X0101010101010101ULL) >> 55];
+
+	/* direction N_ */
+	n_flips += static_cast<int> ((discs_player & 0X4040000000000000ULL) == 0X4000000000000000ULL);
+
+	/* direction S */
+	n_flips += East_count[((discs_player & 0X0000004040404040ULL) * 0X0010204081020408ULL) >> 56];
+
+	return n_flips;
+}
+
+int RXBitBoard::count_flips_C3(const unsigned long long& discs_player) {
+
+	int n_flips = 0;
+
+	/* direction SE */
+	n_flips += East_count[((discs_player & 0X0000001008040201ULL) * 0X0101010101010101ULL) >> 54];
+
+	/* direction S */
+	n_flips += East_count[((discs_player & 0X0000002020202020ULL) * 0X0020408102040810ULL) >> 56];
+
+	/* direction _E */
+	n_flips += East_count[(discs_player & 0X00001F0000000000ULL) >> 38];
+
+	/* direction NE */
+	n_flips += static_cast<int> ((discs_player & 0X0810000000000000ULL) == 0X0800000000000000ULL);
+
+	/* direction N_ */
+	n_flips += static_cast<int> ((discs_player & 0X2020000000000000ULL) == 0X2000000000000000ULL);
+
+	/* direction NW */
+	n_flips += static_cast<int> ((discs_player & 0X8040000000000000ULL) == 0X8000000000000000ULL);
+
+	/* direction SW */
+	n_flips += static_cast<int> ((discs_player & 0X0000004080000000ULL) == 0X0000000080000000ULL);
+
+	/* direction _W */
+	n_flips += West_count[(discs_player >> 46) & 0X0000000000000003ULL];
+
+	return n_flips;
+}
+
+int RXBitBoard::count_flips_D3(const unsigned long long& discs_player) {
+
+	int n_flips = 0;
+
+	/* direction SE */
+	n_flips += East_count[((discs_player & 0X0000000804020100ULL) * 0X0101010101010101ULL) >> 53];
+
+	/* direction S */
+	n_flips += East_count[((discs_player & 0X0000001010101010ULL) * 0X0040810204081020ULL) >> 56];
+
+	/* direction WE */
+	n_flips += Center_count[((discs_player & 0X0000EF0000000000ULL) + (discs_player & 0X00000F0000000000ULL)) >> 41];
+
+	/* direction NE */
+	n_flips += static_cast<int> ((discs_player & 0X0408000000000000ULL) == 0X0400000000000000ULL);
+
+	/* direction N_ */
+	n_flips += static_cast<int> ((discs_player & 0X1010000000000000ULL) == 0X1000000000000000ULL);
+
+	/* direction NW */
+	n_flips += static_cast<int> ((discs_player & 0X4020000000000000ULL) == 0X4000000000000000ULL);
+
+	/* direction SW */
+	n_flips += West_count[((discs_player & 0X0000002040800000ULL) * 0X0101010101010101ULL) >> 61];
+
+	return n_flips;
+}
+
+int RXBitBoard::count_flips_E3(const unsigned long long& discs_player) {
+
+	int n_flips = 0;
+
+	/* direction SE */
+	n_flips += East_count[((discs_player & 0X0000000402010000ULL) * 0X0101010101010101ULL) >> 52];
+
+	/* direction S */
+	n_flips += East_count[((discs_player & 0X0000000808080808ULL) * 0X0081020408102040ULL) >> 56];
+
+	/* direction WE */
+	n_flips += Center_count[((discs_player & 0X0000F70000000000ULL) + (discs_player & 0X0000070000000000ULL)) >> 40];
+
+	/* direction NE */
+	n_flips += static_cast<int> ((discs_player & 0X0204000000000000ULL) == 0X0200000000000000ULL);
+
+	/* direction N_ */
+	n_flips += static_cast<int> ((discs_player & 0X0808000000000000ULL) == 0X0800000000000000ULL);
+
+	/* direction NW */
+	n_flips += static_cast<int> ((discs_player & 0X2010000000000000ULL) == 0X2000000000000000ULL);
+
+	/* direction SW */
+	n_flips += West_count[((discs_player & 0X0000001020408000ULL) * 0X0101010101010101ULL) >> 60];
+
+	return n_flips;
+}
+
+int RXBitBoard::count_flips_F3(const unsigned long long& discs_player) {
+
+	int n_flips = 0;
+
+	/* direction SE */
+	n_flips += static_cast<int> ((discs_player & 0X0000000201000000ULL) == 0X0000000001000000ULL);
+
+	/* direction S */
+	n_flips += East_count[((discs_player & 0X0000000404040404ULL) * 0X0102040810204081ULL) >> 56];
+
+	/* direction _E */
+	n_flips += East_count[(discs_player & 0X0000030000000000ULL) >> 35];
+
+	/* direction NE */
+	n_flips += static_cast<int> ((discs_player & 0X0102000000000000ULL) == 0X0100000000000000ULL);
+
+	/* direction N_ */
+	n_flips += static_cast<int> ((discs_player & 0X0404000000000000ULL) == 0X0400000000000000ULL);
+
+	/* direction NW */
+	n_flips += static_cast<int> ((discs_player & 0X1008000000000000ULL) == 0X1000000000000000ULL);
+
+	/* direction SW */
+	n_flips += West_count[((discs_player & 0X0000000810204080ULL) * 0X0101010101010101ULL) >> 59];
+
+	/* direction _W */
+	n_flips += West_count[(discs_player >> 43) & 0X000000000000001FULL];
+
+	return n_flips;
+}
+
+int RXBitBoard::count_flips_G3(const unsigned long long& discs_player) {
+
+	int n_flips = 0;
+
+	/* direction _W */
+	n_flips += West_count[(discs_player >> 42) & 0X000000000000003FULL];
+
+	/* direction SW */
+	n_flips += West_count[((discs_player & 0X0000000408102040ULL) * 0X0101010101010101ULL) >> 58];
+
+	/* direction NW */
+	n_flips += static_cast<int> ((discs_player & 0X0804000000000000ULL) == 0X0800000000000000ULL);
+
+	/* direction S */
+	n_flips += East_count[((discs_player & 0X0000000202020202ULL) * 0X0204081020408102ULL) >> 56];
+
+	/* direction N_ */
+	n_flips += static_cast<int> ((discs_player & 0X0202000000000000ULL) == 0X0200000000000000ULL);
+
+	return n_flips;
+}
+
+int RXBitBoard::count_flips_H3(const unsigned long long& discs_player) {
+
+	int n_flips = 0;
+
+	/* direction _W */
+	n_flips += West_count[(discs_player >> 41) & 0X000000000000007FULL];
+
+	/* direction SW */
+	n_flips += West_count[((discs_player & 0X0000000204081020ULL) * 0X0101010101010101ULL) >> 57];
+
+	/* direction NW */
+	n_flips += static_cast<int> ((discs_player & 0X0402000000000000ULL) == 0X0400000000000000ULL);
+
+	/* direction S */
+	n_flips += East_count[((discs_player & 0X0000000101010101ULL) * 0X0408102040810204ULL) >> 56];
+
+	/* direction N_ */
+	n_flips += static_cast<int> ((discs_player & 0X0101000000000000ULL) == 0X0100000000000000ULL);
+
+	return n_flips;
+}
+
+int RXBitBoard::count_flips_A4(const unsigned long long& discs_player) {
+
+	int n_flips = 0;
+
+	/* direction _E */
+	n_flips += East_count[(discs_player & 0X0000007F00000000ULL) >> 32];
+
+	/* direction NE */
+	n_flips += East_count[((discs_player & 0X1020400000000000ULL) * 0X0101010101010101ULL) >> 56];
+
+	/* direction SE */
+	n_flips += East_count[((discs_player & 0X0000000040201008ULL) * 0X0101010101010101ULL) >> 56];
+
+	/* direction NS */
+	n_flips += Center_count[(((discs_player & 0X8080800080808080ULL) + (discs_player & 0X0000000080808080ULL)) * 0X0002040810204081ULL) >> 57];
+
+	return n_flips;
+}
+
+int RXBitBoard::count_flips_B4(const unsigned long long& discs_player) {
+
+	int n_flips = 0;
+
+	/* direction _E */
+	n_flips += East_count[(discs_player & 0X0000003F00000000ULL) >> 31];
+
+	/* direction NE */
+	n_flips += East_count[((discs_player & 0X0810200000000000ULL) * 0X0101010101010101ULL) >> 55];
+
+	/* direction SE */
+	n_flips += East_count[((discs_player & 0X0000000020100804ULL) * 0X0101010101010101ULL) >> 55];
+
+	/* direction NS */
+	n_flips += Center_count[(((discs_player & 0X4040400040404040ULL) + (discs_player & 0X0000000040404040ULL)) * 0X0004081020408102ULL) >> 57];
+
+	return n_flips;
+}
+
+int RXBitBoard::count_flips_C4(const unsigned long long& discs_player) {
+
+	int n_flips = 0;
+
+	/* direction SE */
+	n_flips += East_count[((discs_player & 0X0000000010080402ULL) * 0X0101010101010101ULL) >> 54];
+
+	/* direction _E */
+	n_flips += East_count[(discs_player & 0X0000001F00000000ULL) >> 30];
+
+	/* direction NE */
+	n_flips += East_count[((discs_player & 0X0408100000000000ULL) * 0X0101010101010101ULL) >> 54];
+
+	/* direction NW */
+	n_flips += static_cast<int> ((discs_player & 0X0080400000000000ULL) == 0X0080000000000000ULL);
+
+	/* direction SW */
+	n_flips += static_cast<int> ((discs_player & 0X0000000040800000ULL) == 0X0000000000800000ULL);
+
+	/* direction _W */
+	n_flips += West_count[(discs_player >> 38) & 0X0000000000000003ULL];
+
+	/* direction NS */
+	n_flips += Center_count[(((discs_player & 0X2020200020202020ULL) + (discs_player & 0X0000000020202020ULL)) * 0X0008102040810204ULL) >> 57];
+
+	return n_flips;
+}
+
+int RXBitBoard::count_flips_F4(const unsigned long long& discs_player) {
+
+	int n_flips = 0;
+
+	/* direction SE */
+	n_flips += static_cast<int> ((discs_player & 0X0000000002010000ULL) == 0X0000000000010000ULL);
+
+	/* direction NS */
+	n_flips += Center_count[(((discs_player & 0X0404040004040404ULL) + (discs_player & 0X0000000004040404ULL)) * 0X0040810204081020ULL) >> 57];
+
+	/* direction _E */
+	n_flips += East_count[(discs_player & 0X0000000300000000ULL) >> 27];
+
+	/* direction NE */
+	n_flips += static_cast<int> ((discs_player & 0X0001020000000000ULL) == 0X0001000000000000ULL);
+
+	/* direction NW */
+	n_flips += West_count[((discs_player & 0X2010080000000000ULL) * 0X0101010101010101ULL) >> 59];
+
+	/* direction SW */
+	n_flips += West_count[((discs_player & 0X0000000008102040ULL) * 0X0101010101010101ULL) >> 59];
+
+	/* direction _W */
+	n_flips += West_count[(discs_player >> 35) & 0X000000000000001FULL];
+
+	return n_flips;
+}
+
+int RXBitBoard::count_flips_G4(const unsigned long long& discs_player) {
+
+	int n_flips = 0;
+
+	/* direction _W */
+	n_flips += West_count[(discs_player >> 34) & 0X000000000000003FULL];
+
+	/* direction SW */
+	n_flips += West_count[((discs_player & 0X0000000004081020ULL) * 0X0101010101010101ULL) >> 58];
+
+	/* direction NW */
+	n_flips += West_count[((discs_player & 0X1008040000000000ULL) * 0X0101010101010101ULL) >> 58];
+
+	/* direction NS */
+	n_flips += Center_count[(((discs_player & 0X0202020002020202ULL) + (discs_player & 0X0000000002020202ULL)) * 0X0081020408102040ULL) >> 57];
+
+	return n_flips;
+}
+
+int RXBitBoard::count_flips_H4(const unsigned long long& discs_player) {
+
+	int n_flips = 0;
+
+	/* direction _W */
+	n_flips += West_count[(discs_player >> 33) & 0X000000000000007FULL];
+
+	/* direction SW */
+	n_flips += West_count[((discs_player & 0X0000000002040810ULL) * 0X0101010101010101ULL) >> 57];
+
+	/* direction NW */
+	n_flips += West_count[((discs_player & 0X0804020000000000ULL) * 0X0101010101010101ULL) >> 57];
+
+	/* direction NS */
+	n_flips += Center_count[(((discs_player & 0X0101010001010101ULL) + (discs_player & 0X0000000001010101ULL)) * 0X0102040810204080ULL) >> 57];
+
+	return n_flips;
+}
+
+int RXBitBoard::count_flips_A5(const unsigned long long& discs_player) {
+
+	int n_flips = 0;
+
+	/* direction _E */
+	n_flips += East_count[(discs_player & 0X000000007F000000ULL) >> 24];
+
+	/* direction NE */
+	n_flips += East_count[((discs_player & 0X0810204000000000ULL) * 0X0101010101010101ULL) >> 56];
+
+	/* direction SE */
+	n_flips += East_count[((discs_player & 0X0000000000402010ULL) * 0X0101010101010101ULL) >> 56];
+
+	/* direction NS */
+	n_flips += Center_count[(((discs_player & 0X8080808000808080ULL) + (discs_player & 0X0000000000808080ULL)) * 0X0002040810204081ULL) >> 56];
+
+	return n_flips;
+}
+
+int RXBitBoard::count_flips_B5(const unsigned long long& discs_player) {
+
+	int n_flips = 0;
+
+	/* direction _E */
+	n_flips += East_count[(discs_player & 0X000000003F000000ULL) >> 23];
+
+	/* direction NE */
+	n_flips += East_count[((discs_player & 0X0408102000000000ULL) * 0X0101010101010101ULL) >> 55];
+
+	/* direction SE */
+	n_flips += East_count[((discs_player & 0X0000000000201008ULL) * 0X0101010101010101ULL) >> 55];
+
+	/* direction NS */
+	n_flips += Center_count[(((discs_player & 0X4040404000404040ULL) + (discs_player & 0X0000000000404040ULL)) * 0X0004081020408102ULL) >> 56];
+
+	return n_flips;
+}
+
+int RXBitBoard::count_flips_C5(const unsigned long long& discs_player) {
+
+	int n_flips = 0;
+
+	/* direction SE */
+	n_flips += East_count[((discs_player & 0X0000000000100804ULL) * 0X0101010101010101ULL) >> 54];
+
+	/* direction NS */
+	n_flips += Center_count[(((discs_player & 0X2020202000202020ULL) + (discs_player & 0X0000000000202020ULL)) * 0X0008102040810204ULL) >> 56];
+
+	/* direction _E */
+	n_flips += East_count[(discs_player & 0X000000001F000000ULL) >> 22];
+
+	/* direction NE */
+	n_flips += East_count[((discs_player & 0X0204081000000000ULL) * 0X0101010101010101ULL) >> 54];
+
+	/* direction NW */
+	n_flips += static_cast<int> ((discs_player & 0X0000804000000000ULL) == 0X0000800000000000ULL);
+
+	/* direction SW */
+	n_flips += static_cast<int> ((discs_player & 0X0000000000408000ULL) == 0X0000000000008000ULL);
+
+	/* direction _W */
+	n_flips += West_count[(discs_player >> 30) & 0X0000000000000003ULL];
+
+	return n_flips;
+}
+
+int RXBitBoard::count_flips_F5(const unsigned long long& discs_player) {
+
+	int n_flips = 0;
+
+	/* direction SE */
+	n_flips += static_cast<int> ((discs_player & 0X0000000000020100ULL) == 0X0000000000000100ULL);
+
+	/* direction NS */
+	n_flips += Center_count[(((discs_player & 0X0404040400040404ULL) + (discs_player & 0X0000000000040404ULL)) * 0X0040810204081020ULL) >> 56];
+
+	/* direction _E */
+	n_flips += East_count[(discs_player & 0X0000000003000000ULL) >> 19];
+
+	/* direction NE */
+	n_flips += static_cast<int> ((discs_player & 0X0000010200000000ULL) == 0X0000010000000000ULL);
+
+	/* direction NW */
+	n_flips += West_count[((discs_player & 0X4020100800000000ULL) * 0X0101010101010101ULL) >> 59];
+
+	/* direction SW */
+	n_flips += West_count[((discs_player & 0X0000000000081020ULL) * 0X0101010101010101ULL) >> 59];
+
+	/* direction _W */
+	n_flips += West_count[(discs_player >> 27) & 0X000000000000001FULL];
+
+	return n_flips;
+}
+
+int RXBitBoard::count_flips_G5(const unsigned long long& discs_player) {
+
+	int n_flips = 0;
+
+	/* direction _W */
+	n_flips += West_count[(discs_player >> 26) & 0X000000000000003FULL];
+
+	/* direction SW */
+	n_flips += West_count[((discs_player & 0X0000000000040810ULL) * 0X0101010101010101ULL) >> 58];
+
+	/* direction NW */
+	n_flips += West_count[((discs_player & 0X2010080400000000ULL) * 0X0101010101010101ULL) >> 58];
+
+	/* direction NS */
+	n_flips += Center_count[(((discs_player & 0X0202020200020202ULL) + (discs_player & 0X0000000000020202ULL)) * 0X0081020408102040ULL) >> 56];
+
+	return n_flips;
+}
+
+int RXBitBoard::count_flips_H5(const unsigned long long& discs_player) {
+
+	int n_flips = 0;
+
+	/* direction _W */
+	n_flips += West_count[(discs_player >> 25) & 0X000000000000007FULL];
+
+	/* direction SW */
+	n_flips += West_count[((discs_player & 0X0000000000020408ULL) * 0X0101010101010101ULL) >> 57];
+
+	/* direction NW */
+	n_flips += West_count[((discs_player & 0X1008040200000000ULL) * 0X0101010101010101ULL) >> 57];
+
+	/* direction NS */
+	n_flips += Center_count[(((discs_player & 0X0101010100010101ULL) + (discs_player & 0X0000000000010101ULL)) * 0X0102040810204080ULL) >> 56];
+
+	return n_flips;
+}
+
+int RXBitBoard::count_flips_A6(const unsigned long long& discs_player) {
+
+	int n_flips = 0;
+
+	/* direction _E */
+	n_flips += East_count[(discs_player & 0X00000000007F0000ULL) >> 16];
+
+	/* direction NE */
+	n_flips += East_count[((discs_player & 0X0408102040000000ULL) * 0X0101010101010101ULL) >> 56];
+
+	/* direction SE */
+	n_flips += static_cast<int> ((discs_player & 0X0000000000004020ULL) == 0X0000000000000020ULL);
+
+	/* direction N_ */
+	n_flips += West_count[((discs_player & 0X8080808080000000ULL) * 0X0002040810204081ULL) >> 59];
+
+	/* direction S */
+	n_flips += static_cast<int> ((discs_player & 0X0000000000008080ULL) == 0X0000000000000080ULL);
+
+	return n_flips;
+}
+
+int RXBitBoard::count_flips_B6(const unsigned long long& discs_player) {
+
+	int n_flips = 0;
+
+	/* direction _E */
+	n_flips += East_count[(discs_player & 0X00000000003F0000ULL) >> 15];
+
+	/* direction NE */
+	n_flips += East_count[((discs_player & 0X0204081020000000ULL) * 0X0101010101010101ULL) >> 55];
+
+	/* direction SE */
+	n_flips += static_cast<int> ((discs_player & 0X0000000000002010ULL) == 0X0000000000000010ULL);
+
+	/* direction N_ */
+	n_flips += West_count[((discs_player & 0X4040404040000000ULL) * 0X0004081020408102ULL) >> 59];
+
+	/* direction S */
+	n_flips += static_cast<int> ((discs_player & 0X0000000000004040ULL) == 0X0000000000000040ULL);
+
+	return n_flips;
+}
+
+int RXBitBoard::count_flips_C6(const unsigned long long& discs_player) {
+
+	int n_flips = 0;
+
+	/* direction SE */
+	n_flips += static_cast<int> ((discs_player & 0X0000000000001008ULL) == 0X0000000000000008ULL);
+
+	/* direction S */
+	n_flips += static_cast<int> ((discs_player & 0X0000000000002020ULL) == 0X0000000000000020ULL);
+
+	/* direction _E */
+	n_flips += East_count[(discs_player & 0X00000000001F0000ULL) >> 14];
+
+	/* direction NE */
+	n_flips += East_count[((discs_player & 0X0102040810000000ULL) * 0X0101010101010101ULL) >> 54];
+
+	/* direction N_ */
+	n_flips += West_count[((discs_player & 0X2020202020000000ULL) * 0X0008102040810204ULL) >> 59];
+
+	/* direction NW */
+	n_flips += static_cast<int> ((discs_player & 0X0000008040000000ULL) == 0X0000008000000000ULL);
+
+	/* direction SW */
+	n_flips += static_cast<int> ((discs_player & 0X0000000000004080ULL) == 0X0000000000000080ULL);
+
+	/* direction _W */
+	n_flips += West_count[(discs_player >> 22) & 0X0000000000000003ULL];
+
+	return n_flips;
+}
+
+int RXBitBoard::count_flips_D6(const unsigned long long& discs_player) {
+
+	int n_flips = 0;
+
+	/* direction SE */
+	n_flips += static_cast<int> ((discs_player & 0X0000000000000804ULL) == 0X0000000000000004ULL);
+
+	/* direction S */
+	n_flips += static_cast<int> ((discs_player & 0X0000000000001010ULL) == 0X0000000000000010ULL);
+
+	/* direction WE */
+	n_flips += Center_count[((discs_player & 0X0000000000EF0000ULL) + (discs_player & 0X00000000000F0000ULL)) >> 17];
+
+	/* direction NE */
+	n_flips += East_count[((discs_player & 0X0001020408000000ULL) * 0X0101010101010101ULL) >> 53];
+
+	/* direction N_ */
+	n_flips += West_count[((discs_player & 0X1010101010000000ULL) * 0X0010204081020408ULL) >> 59];
+
+	/* direction NW */
+	n_flips += West_count[((discs_player & 0X0000804020000000ULL) * 0X0101010101010101ULL) >> 61];
+
+	/* direction SW */
+	n_flips += static_cast<int> ((discs_player & 0X0000000000002040ULL) == 0X0000000000000040ULL);
+
+	return n_flips;
+}
+
+int RXBitBoard::count_flips_E6(const unsigned long long& discs_player) {
+
+	int n_flips = 0;
+
+	/* direction SE */
+	n_flips += static_cast<int> ((discs_player & 0X0000000000000402ULL) == 0X0000000000000002ULL);
+
+	/* direction S */
+	n_flips += static_cast<int> ((discs_player & 0X0000000000000808ULL) == 0X0000000000000008ULL);
+
+	/* direction WE */
+	n_flips += Center_count[((discs_player & 0X0000000000F70000ULL) + (discs_player & 0X0000000000070000ULL)) >> 16];
+
+	/* direction NE */
+	n_flips += East_count[((discs_player & 0X0000010204000000ULL) * 0X0101010101010101ULL) >> 52];
+
+	/* direction N_ */
+	n_flips += West_count[((discs_player & 0X0808080808000000ULL) * 0X0020408102040810ULL) >> 59];
+
+	/* direction NW */
+	n_flips += West_count[((discs_player & 0X0080402010000000ULL) * 0X0101010101010101ULL) >> 60];
+
+	/* direction SW */
+	n_flips += static_cast<int> ((discs_player & 0X0000000000001020ULL) == 0X0000000000000020ULL);
+
+	return n_flips;
+}
+
+int RXBitBoard::count_flips_F6(const unsigned long long& discs_player) {
+
+	int n_flips = 0;
+
+	/* direction SE */
+	n_flips += static_cast<int> ((discs_player & 0X0000000000000201ULL) == 0X0000000000000001ULL);
+
+	/* direction S */
+	n_flips += static_cast<int> ((discs_player & 0X0000000000000404ULL) == 0X0000000000000004ULL);
+
+	/* direction _E */
+	n_flips += East_count[(discs_player & 0X0000000000030000ULL) >> 11];
+
+	/* direction NE */
+	n_flips += static_cast<int> ((discs_player & 0X0000000102000000ULL) == 0X0000000100000000ULL);
+
+	/* direction N_ */
+	n_flips += West_count[((discs_player & 0X0404040404000000ULL) * 0X0040810204081020ULL) >> 59];
+
+	/* direction NW */
+	n_flips += West_count[((discs_player & 0X8040201008000000ULL) * 0X0101010101010101ULL) >> 59];
+
+	/* direction SW */
+	n_flips += static_cast<int> ((discs_player & 0X0000000000000810ULL) == 0X0000000000000010ULL);
+
+	/* direction _W */
+	n_flips += West_count[(discs_player >> 19) & 0X000000000000001FULL];
+
+	return n_flips;
+}
+
+int RXBitBoard::count_flips_G6(const unsigned long long& discs_player) {
+
+	int n_flips = 0;
+
+	/* direction _W */
+	n_flips += West_count[(discs_player >> 18) & 0X000000000000003FULL];
+
+	/* direction SW */
+	n_flips += static_cast<int> ((discs_player & 0X0000000000000408ULL) == 0X0000000000000008ULL);
+
+	/* direction NW */
+	n_flips += West_count[((discs_player & 0X4020100804000000ULL) * 0X0101010101010101ULL) >> 58];
+
+	/* direction S */
+	n_flips += static_cast<int> ((discs_player & 0X0000000000000202ULL) == 0X0000000000000002ULL);
+
+	/* direction N_ */
+	n_flips += West_count[((discs_player & 0X0202020202000000ULL) * 0X0081020408102040ULL) >> 59];
+
+	return n_flips;
+}
+
+int RXBitBoard::count_flips_H6(const unsigned long long& discs_player) {
+
+	int n_flips = 0;
+
+	/* direction _W */
+	n_flips += West_count[(discs_player >> 17) & 0X000000000000007FULL];
+
+	/* direction SW */
+	n_flips += static_cast<int> ((discs_player & 0X0000000000000204ULL) == 0X0000000000000004ULL);
+
+	/* direction NW */
+	n_flips += West_count[((discs_player & 0X2010080402000000ULL) * 0X0101010101010101ULL) >> 57];
+
+	/* direction S */
+	n_flips += static_cast<int> ((discs_player & 0X0000000000000101ULL) == 0X0000000000000001ULL);
+
+	/* direction N_ */
+	n_flips += West_count[((discs_player & 0X0101010101000000ULL) * 0X0102040810204081ULL) >> 59];
+
+	return n_flips;
+}
+
+int RXBitBoard::count_flips_A7(const unsigned long long& discs_player) {
+
+	int n_flips = 0;
+
+	/* direction NE */
+	n_flips += East_count[((discs_player & 0X0204081020400000ULL) * 0X0101010101010101ULL) >> 56];
+
+	/* direction N_ */
+	n_flips += West_count[((discs_player & 0X8080808080800000ULL) * 0X0002040810204081ULL) >> 58];
+
+	/* direction _E */
+	n_flips += East_count[(discs_player & 0X0000000000007F00ULL) >> 8];
+
+	return n_flips;
+}
+
+int RXBitBoard::count_flips_B7(const unsigned long long& discs_player) {
+
+	int n_flips = 0;
+
+	/* direction NE */
+	n_flips += East_count[((discs_player & 0X0102040810200000ULL) * 0X0101010101010101ULL) >> 55];
+
+	/* direction N_ */
+	n_flips += West_count[((discs_player & 0X4040404040400000ULL) * 0X0004081020408102ULL) >> 58];
+
+	/* direction _E */
+	n_flips += East_count[(discs_player & 0X0000000000003F00ULL) >> 7];
+
+	return n_flips;
+}
+
+int RXBitBoard::count_flips_C7(const unsigned long long& discs_player) {
+
+	int n_flips = 0;
+
+	/* direction N_ */
+	n_flips += West_count[((discs_player & 0X2020202020200000ULL) * 0X0008102040810204ULL) >> 58];
+
+	/* direction NE */
+	n_flips += East_count[((discs_player & 0X0001020408100000ULL) * 0X0101010101010101ULL) >> 54];
+
+	/* direction NW */
+	n_flips += static_cast<int> ((discs_player & 0X0000000080400000ULL) == 0X0000000080000000ULL);
+
+	/* direction _E */
+	n_flips += East_count[(discs_player & 0X0000000000001F00ULL) >> 6];
+
+	/* direction _W */
+	n_flips += West_count[(discs_player >> 14) & 0X0000000000000003ULL];
+
+	return n_flips;
+}
+
+int RXBitBoard::count_flips_D7(const unsigned long long& discs_player) {
+
+	int n_flips = 0;
+
+	/* direction N_ */
+	n_flips += West_count[((discs_player & 0X1010101010100000ULL) * 0X0010204081020408ULL) >> 58];
+
+	/* direction WNE */
+	n_flips += Center_count[(((discs_player & 0X0000018244280000ULL) + (discs_player & 0X0000010204080000ULL)) * 0X0101010101010101ULL) >> 57];
+	
+	/* direction WE */
+	n_flips += Center_count[((discs_player & 0X000000000000EF00ULL) + (discs_player & 0X0000000000000F00ULL)) >> 9];
+
+	return n_flips;
+}
+
+int RXBitBoard::count_flips_E7(const unsigned long long& discs_player) {
+
+	int n_flips = 0;
+
+	/* direction N_ */
+	n_flips += West_count[((discs_player & 0X0808080808080000ULL) * 0X0020408102040810ULL) >> 58];
+
+	/* direction WNE */
+	n_flips += Center_count[(((discs_player & 0X0000804122140000ULL) + (discs_player & 0X0000000102040000ULL)) * 0X0101010101010101ULL) >> 56];
+
+	/* direction WE */
+	n_flips += Center_count[((discs_player & 0X000000000000F700ULL) + (discs_player & 0X0000000000000700ULL)) >> 8];
+
+	return n_flips;
+}
+
+int RXBitBoard::count_flips_F7(const unsigned long long& discs_player) {
+
+	int n_flips = 0;
+
+	/* direction N_ */
+	n_flips += West_count[((discs_player & 0X0404040404040000ULL) * 0X0040810204081020ULL) >> 58];
+
+	/* direction NE */
+	n_flips += static_cast<int> ((discs_player & 0X0000000001020000ULL) == 0X0000000001000000ULL);
+
+	/* direction NW */
+	n_flips += West_count[((discs_player & 0X0080402010080000ULL) * 0X0101010101010101ULL) >> 59];
+
+	/* direction _E */
+	n_flips += East_count[(discs_player & 0X0000000000000300ULL) >> 3];
+
+	/* direction _W */
+	n_flips += West_count[(discs_player >> 11) & 0X000000000000001FULL];
+
+	return n_flips;
+}
+
+int RXBitBoard::count_flips_G7(const unsigned long long& discs_player) {
+
+	int n_flips = 0;
+
+	/* direction NW */
+	n_flips += West_count[((discs_player & 0X8040201008040000ULL) * 0X0101010101010101ULL) >> 58];
+
+	/* direction N_ */
+	n_flips += West_count[((discs_player & 0X0202020202020000ULL) * 0X0081020408102040ULL) >> 58];
+
+	/* direction _W */
+	n_flips += West_count[(discs_player >> 10) & 0X000000000000003FULL];
+
+	return n_flips;
+}
+
+int RXBitBoard::count_flips_H7(const unsigned long long& discs_player) {
+
+	int n_flips = 0;
+
+	/* direction NW */
+	n_flips += West_count[((discs_player & 0X4020100804020000ULL) * 0X0101010101010101ULL) >> 57];
+
+	/* direction N_ */
+	n_flips += West_count[((discs_player & 0X0101010101010000ULL) * 0X0102040810204081ULL) >> 58];
+
+	/* direction _W */
+	n_flips += West_count[(discs_player >> 9) & 0X000000000000007FULL];
+
+	return n_flips;
+}
+
+int RXBitBoard::count_flips_A8(const unsigned long long& discs_player) {
+
+	int n_flips = 0;
+
+	/* direction NE */
+	n_flips += East_count[((discs_player & 0X0102040810204000ULL) * 0X0101010101010101ULL) >> 56];
+
+	/* direction N_ */
+	n_flips += West_count[((discs_player & 0X8080808080808000ULL) * 0X0002040810204081ULL) >> 57];
+
+	/* direction _E */
+	n_flips += East_count[(discs_player & 0X000000000000007FULL) << 0];
+
+	return n_flips;
+}
+
+int RXBitBoard::count_flips_B8(const unsigned long long& discs_player) {
+
+	int n_flips = 0;
+
+	/* direction NE */
+	n_flips += East_count[((discs_player & 0X0001020408102000ULL) * 0X0101010101010101ULL) >> 55];
+
+	/* direction N_ */
+	n_flips += West_count[((discs_player & 0X4040404040404000ULL) * 0X0004081020408102ULL) >> 57];
+
+	/* direction _E */
+	n_flips += East_count[(discs_player & 0X000000000000003FULL) << 1];
+
+	return n_flips;
+}
+
+int RXBitBoard::count_flips_C8(const unsigned long long& discs_player) {
+
+	int n_flips = 0;
+
+	/* direction N_ */
+	n_flips += West_count[((discs_player & 0X2020202020202000ULL) * 0X0008102040810204ULL) >> 57];
+
+	/* direction NE */
+	n_flips += East_count[((discs_player & 0X0000010204081000ULL) * 0X0101010101010101ULL) >> 54];
+
+	/* direction NW */
+	n_flips += static_cast<int> ((discs_player & 0X0000000000804000ULL) == 0X0000000000800000ULL);
+
+	/* direction _E */
+	n_flips += East_count[(discs_player & 0X000000000000001FULL) << 2];
+
+	/* direction _W */
+	n_flips += West_count[(discs_player >> 6) & 0X0000000000000003ULL];
+
+	return n_flips;
+}
+
+int RXBitBoard::count_flips_D8(const unsigned long long& discs_player) {
+
+	int n_flips = 0;
+
+	/* direction N_ */
+	n_flips += West_count[((discs_player & 0X1010101010101000ULL) * 0X0010204081020408ULL) >> 57];
+
+	/* direction WNE */
+	n_flips += Center_count[(((discs_player & 0X0000000182442800ULL) + (discs_player & 0X0000000102040800ULL)) * 0X0101010101010101ULL) >> 57];
+
+	/* direction WE */
+	n_flips += Center_count[((discs_player & 0X00000000000000EFULL) + (discs_player & 0X000000000000000FULL)) >> 1];
+
+	return n_flips;
+}
+
+int RXBitBoard::count_flips_E8(const unsigned long long& discs_player) {
+
+	int n_flips = 0;
+
+	/* direction N_ */
+	n_flips += West_count[((discs_player & 0X0808080808080800ULL) * 0X0020408102040810ULL) >> 57];
+
+	/* direction WNE */
+	n_flips += Center_count[(((discs_player & 0X0000008041221400ULL) + (discs_player & 0X0000000001020400ULL)) * 0X0101010101010101ULL) >> 56];
+
+	/* direction WE */
+	n_flips += Center_count[((discs_player & 0X00000000000000F7ULL) + (discs_player & 0X0000000000000007ULL)) >> 0];
+
+	return n_flips;
+}
+
+int RXBitBoard::count_flips_F8(const unsigned long long& discs_player) {
+
+	int n_flips = 0;
+
+	/* direction N_ */
+	n_flips += West_count[((discs_player & 0X0404040404040400ULL) * 0X0040810204081020ULL) >> 57];
+
+	/* direction NE */
+	n_flips += static_cast<int> ((discs_player & 0X0000000000010200ULL) == 0X0000000000010000ULL);
+
+	/* direction NW */
+	n_flips += West_count[((discs_player & 0X0000804020100800ULL) * 0X0101010101010101ULL) >> 59];
+
+	/* direction _E */
+	n_flips += East_count[(discs_player & 0X0000000000000003ULL) << 5];
+
+	/* direction _W */
+	n_flips += West_count[(discs_player >> 3) & 0X000000000000001FULL];
+
+	return n_flips;
+}
+
+int RXBitBoard::count_flips_G8(const unsigned long long& discs_player) {
+
+	int n_flips = 0;
+
+	/* direction NW */
+	n_flips += West_count[((discs_player & 0X0080402010080400ULL) * 0X0101010101010101ULL) >> 58];
+
+	/* direction N_ */
+	n_flips += West_count[((discs_player & 0X0202020202020200ULL) * 0X0081020408102040ULL) >> 57];
+
+	/* direction _W */
+	n_flips += West_count[(discs_player >> 2) & 0X000000000000003FULL];
+
+	return n_flips;
+}
+
+int RXBitBoard::count_flips_H8(const unsigned long long& discs_player) {
+
+	int n_flips = 0;
+
+	/* direction NW */
+	n_flips += West_count[((discs_player & 0X8040201008040200ULL) * 0X0101010101010101ULL) >> 57];
+
+	/* direction N_ */
+	n_flips += West_count[((discs_player & 0X0101010101010100ULL) * 0X0102040810204081ULL) >> 57];
+
+	/* direction _W */
+	n_flips += West_count[(discs_player >> 1) & 0X000000000000007FULL];
+
+	return n_flips;
+}
+
+
+
+RXBitBoard::type_count_flips const RXBitBoard::count_flips[] = {
+RXBitBoard::count_flips_H8, RXBitBoard::count_flips_G8, RXBitBoard::count_flips_F8, RXBitBoard::count_flips_E8, RXBitBoard::count_flips_D8, RXBitBoard::count_flips_C8, RXBitBoard::count_flips_B8, RXBitBoard::count_flips_A8,
+RXBitBoard::count_flips_H7, RXBitBoard::count_flips_G7, RXBitBoard::count_flips_F7, RXBitBoard::count_flips_E7, RXBitBoard::count_flips_D7, RXBitBoard::count_flips_C7, RXBitBoard::count_flips_B7, RXBitBoard::count_flips_A7,
+RXBitBoard::count_flips_H6, RXBitBoard::count_flips_G6, RXBitBoard::count_flips_F6, RXBitBoard::count_flips_E6, RXBitBoard::count_flips_D6, RXBitBoard::count_flips_C6, RXBitBoard::count_flips_B6, RXBitBoard::count_flips_A6,
+RXBitBoard::count_flips_H5, RXBitBoard::count_flips_G5, RXBitBoard::count_flips_F5,                       NULL,                       NULL, RXBitBoard::count_flips_C5, RXBitBoard::count_flips_B5, RXBitBoard::count_flips_A5,
+RXBitBoard::count_flips_H4, RXBitBoard::count_flips_G4, RXBitBoard::count_flips_F4,                       NULL,                       NULL, RXBitBoard::count_flips_C4, RXBitBoard::count_flips_B4, RXBitBoard::count_flips_A4,
+RXBitBoard::count_flips_H3, RXBitBoard::count_flips_G3, RXBitBoard::count_flips_F3, RXBitBoard::count_flips_E3, RXBitBoard::count_flips_D3, RXBitBoard::count_flips_C3, RXBitBoard::count_flips_B3, RXBitBoard::count_flips_A3,
+RXBitBoard::count_flips_H2, RXBitBoard::count_flips_G2, RXBitBoard::count_flips_F2, RXBitBoard::count_flips_E2, RXBitBoard::count_flips_D2, RXBitBoard::count_flips_C2, RXBitBoard::count_flips_B2, RXBitBoard::count_flips_A2,
+RXBitBoard::count_flips_H1, RXBitBoard::count_flips_G1, RXBitBoard::count_flips_F1, RXBitBoard::count_flips_E1, RXBitBoard::count_flips_D1, RXBitBoard::count_flips_C1, RXBitBoard::count_flips_B1, RXBitBoard::count_flips_A1
+};
+
+ 

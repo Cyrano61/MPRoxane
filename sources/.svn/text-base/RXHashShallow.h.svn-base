@@ -1,0 +1,129 @@
+/*
+ *  RXHashShallow.h
+ *  Roxane
+ *
+ *  Created by Bruno Causse on 28/03/06.
+ *  Copyright 2006 personnel. All rights reserved.
+ *
+ */
+
+/*
+ *  RXHashTable.h
+ *  learn_01
+ *
+ *  Created by Bruno Causse on 18/05/05.
+ *  Copyright 2005 personnel. All rights reserved.
+ *
+ */
+
+
+#ifndef RXHASHSHALLOW_H
+#define RXHASHSHALLOW_H
+
+#include <string>
+
+#include "RXHashTable.h"
+#include "RXConstantes.h"
+#include "RXBitBoard.h"
+#include "RXMove.h"
+
+
+
+class RXHashShallow {
+	
+	std::vector<RXHashEntry> table;
+	unsigned long _maskTable;
+
+	mutable std::vector<POSIXMutex> gates;
+	unsigned long _maskGates;
+	
+	
+	unsigned char date;
+	
+
+	public : 
+	
+		RXHashShallow(unsigned int nBT, unsigned int nBG);
+		~RXHashShallow() {};
+
+		void reset();
+		
+		const RXHash* get(const RXBitBoard& board) const;
+		const RXHash* get(const unsigned long long hash_code) const;
+	
+		bool get_sync(const RXBitBoard& board, RXHash& entry) const;
+		bool get_sync(const unsigned long long hash_code, RXHash& entry) const;
+		
+		void update(const unsigned long long hash_code, const unsigned char depth, const int alpha, const int beta, const int score, const char move);
+		void update(const unsigned long long hash_code, const unsigned char depth, const int alpha, const int score, const char move);
+			
+		void succ_date() { date++;};
+
+};
+
+inline const RXHash* RXHashShallow::get(const RXBitBoard& board) const {
+
+	const RXHashEntry& entry = table[(board.hash_code>>32) & _maskTable];
+	if (board.hash_code == entry.deepest.lock)
+		return &(entry.deepest);
+	if (board.hash_code == entry.newest.lock)
+		return &(entry.newest);
+		
+	return NULL;
+}
+
+inline const RXHash* RXHashShallow::get(const unsigned long long hash_code) const {
+
+	const RXHashEntry& entry = table[(hash_code>>32) & _maskTable];
+	if (hash_code == entry.deepest.lock)
+		return &(entry.deepest);
+	if (hash_code == entry.newest.lock)
+		return &(entry.newest);
+		
+	return NULL;
+}
+
+inline bool RXHashShallow::get_sync(const RXBitBoard& board, RXHash& entry) const {
+
+	POSIXMutex& mutex = gates[(board.hash_code>>32) & _maskGates];
+	mutex.lock();
+
+	const RXHashEntry& hashEntry = table[(board.hash_code>>32) & _maskTable];
+	if (board.hash_code == hashEntry.deepest.lock) {
+		entry = hashEntry.deepest;
+		mutex.unlock();
+		return true;
+	}
+	if (board.hash_code == hashEntry.newest.lock) {
+		entry = hashEntry.newest;
+		mutex.unlock();
+		return true;
+	}
+	
+	mutex.unlock();
+	return false;
+}
+
+inline bool RXHashShallow::get_sync(const unsigned long long hash_code, RXHash& entry) const {
+		
+	POSIXMutex& mutex = gates[(hash_code>>32) & _maskGates];
+	mutex.lock();
+								  
+	const RXHashEntry& hashEntry = table[(hash_code>>32) & _maskTable];
+		if (hash_code == hashEntry.deepest.lock) {
+		entry = hashEntry.deepest;
+		mutex.unlock();
+		return true;
+	}
+	if (hash_code == hashEntry.newest.lock) {
+		entry = hashEntry.newest;
+		mutex.unlock();
+		return true;
+	}
+	
+	mutex.unlock();
+	return false;
+}
+								  
+
+#endif

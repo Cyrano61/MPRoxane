@@ -1,0 +1,105 @@
+/*
+ *  main.cpp
+ *  Roxane
+ *
+ *  Created by Bruno Causse on 10/08/05.
+ *  Copyright 2005 personnel. All rights reserved.
+ *
+ */
+#include <iostream>
+#include <string>
+#include <sstream>
+#include <locale>
+
+#include "types.h"
+
+#include "ODKStream.h"
+#include "RXRoxane.h"
+#include "RXBBPatterns.h"
+
+#include "RXEngine.h"
+
+
+int main (int argc, char * const argv[]) {
+	
+
+	std::string login, password, file_name;
+	unsigned int nBitsTable = 20;
+	unsigned int nBitsGates = 10;
+	unsigned int nThreads = 1;
+	
+	for(int i = 1; i<argc; i++) {
+	
+		std::string arg(argv[i]);
+		if(arg == "-login" && i+1<argc) {
+			login = argv[++i];
+		} else if(arg == "-passw" && i+1<argc) {
+			password =  argv[++i];
+		} else if(arg == "-h" && i+1<argc) {
+			std::istringstream iss(argv[++i]);
+			iss >> nBitsTable;
+		} else if(arg == "-g" && i+1<argc) {
+				std::istringstream iss(argv[++i]);
+				iss >> nBitsGates;
+		} else if(arg == "-t" && i+1<argc) {
+			std::istringstream iss(argv[++i]);
+			iss >> nThreads;
+		}else if(file_name.empty()) {
+			file_name = argv[i];
+		}
+	}
+	
+	int err;
+	CODKStream gs;
+	
+	RXRoxane roxane(&gs, nBitsTable, nBitsGates, nThreads);
+	
+
+	//preparation: test fforum-20-39.src 31,41s 190 268 109 Nodes
+	if(!file_name.empty())
+		roxane.get_move(file_name);
+
+	if(!login.empty() && !password.empty()) {
+		gs.pComputer = &roxane;
+
+		// Connect(server, port)
+		if (err = gs.Connect("bodo1.cs.ualberta.ca",5000)) {
+			cerr << gs.ErrText(err) << "\n";
+			return err;
+		}
+
+		// Login(name, password)
+		if (err = gs.Login(login.c_str(), password.c_str())) {
+			cerr << gs.ErrText(err) << "\n";
+			gs.Disconnect();
+			return err;
+		}
+		
+		gs.Process();			// receive, parse, and pass on messages
+	}
+
+	
+ /*
+	//test assembleur
+	
+	unsigned long long max = 250000000;
+	unsigned long long number;
+	unsigned position;
+	volatile unsigned result;
+	
+	// RŽpte l'opŽration pour un nombre important de valeurs.
+	for (number = 1; number <= max; ++number) {
+		// Calcule la position du bit non nul le plus significatif
+		// en utilisant l'instruction assembleur bsrl.
+		
+		//__asm__ ("bsr %1, %0" : "=r" (position) : "r" (number));
+		//result = position;
+
+		
+		result = __builtin_clzll(number);
+	}
+*/
+	
+	return 0;
+}
+

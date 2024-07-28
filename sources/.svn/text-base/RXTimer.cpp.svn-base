@@ -1,0 +1,154 @@
+/*
+ *  RXTimer.cpp
+ *  learn_01
+ *
+ *  Created by Bruno Causse on 01/06/05.
+ *  Copyright 2005 personnel. All rights reserved.
+ *
+ */
+ 
+#include <cmath>
+ 
+#include "RXTimer.h"
+
+#include <iomanip>
+#include <sstream>
+
+
+std::string RXTimer::toHMS(double t) {
+
+	std::ostringstream buffer;
+	buffer.fill('0');
+	
+	buffer << std::setw(2) << static_cast<int>(t/3600) << ':';
+	buffer << std::setw(2) << static_cast<int>(t/60) %60 << ':';
+	buffer << std::setw(2) << static_cast<int>(t) %60 << '.';
+	buffer << std::setw(2) << static_cast<int>(t*100)%100;
+	
+	return buffer.str();
+}
+
+
+// __________________________________________________________________________
+// Start a timer.  If it is already running, let it continue running.
+// Print an optional message.
+
+void RXTimer::start(std::string msg)
+{
+
+  mutex.lock();
+  
+  // Report the timer message
+  if (!msg.empty())
+    std::cout << msg << std::endl;
+
+  // Return immediately if the timer is already running
+  if (!running) {
+
+	// Change timer status to running
+	running = true;
+
+	// Set the start time;
+	start_dependent = start_wait = start_time = get_current_time();
+  }
+  
+  mutex.unlock();
+
+} // RXTimer::start
+
+// __________________________________________________________________________
+// Turn the timer off and start it again from 0.  Print an optional message.
+
+
+double RXTimer::stop(std::string msg)
+{
+
+  mutex.lock();
+  
+  // Report the timer message
+  if (!msg.empty())
+    std::cout << msg << std::endl;
+
+  running = false;
+  stop_time = get_current_time();
+  
+  double tElapsed = elapsed();
+  
+  mutex.unlock();
+  
+  return tElapsed;
+
+} // RXTimer::stop
+
+// __________________________________________________________________________
+
+void RXTimer::wait(std::string msg)
+{
+  mutex.lock();
+  
+  // Report the timer message
+  if (!msg.empty())
+    std::cout << msg << std::endl;
+
+  // Set the start time;
+  start_wait = get_current_time();
+  
+  mutex.unlock();
+  
+} // RXTimer::start
+
+double RXTimer::restart(std::string msg)
+{
+  mutex.lock();
+  
+  // Report the timer message
+  if (!msg.empty())
+    std::cout << msg << std::endl;
+
+  double cTime = get_current_time();
+  double eTime = cTime - start_wait;
+  
+  start_time +=  eTime;
+  start_dependent += eTime;
+  
+  if(start_dependent > cTime)
+	start_dependent = cTime;
+
+  mutex.unlock();
+  
+  return eTime;
+
+} // RXTimer::start
+
+// __________________________________________________________________________
+
+void  RXTimer::start_tDependent(std::string msg) {
+
+  mutex.lock();
+  
+  // Report the timer message
+  if (!msg.empty())
+    std::cout << msg << std::endl;
+
+  // Set the start time;
+  start_dependent = get_current_time();
+  
+  mutex.unlock();
+}
+
+
+// __________________________________________________________________________
+// Allow timers to be printed to ostreams using the syntax 'os << t'
+// for an ostream 'os' and a timer 't'.
+
+std::ostream& operator<<(std::ostream& os, RXTimer& t)
+{
+  os << std::setprecision(2) << std::setiosflags(std::ios::fixed)
+    << t.elapsed();
+  return os;
+}
+
+// __________________________________________________________________________
+// RXtimer.cpp
+
+

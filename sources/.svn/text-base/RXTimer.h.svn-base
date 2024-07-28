@@ -1,0 +1,110 @@
+/*
+ *  RXTimer.h
+ *  learn_01
+ *
+ *  Created by Bruno Causse on 01/06/05.
+ *  Copyright 2005 personnel. All rights reserved.
+ *
+ */
+
+#ifndef RXTIMER_H
+#define RXTIMER_H
+
+#include <sys/time.h>
+//#include <unistd.h>
+
+#include <iostream>
+#include <string>
+#include "POSIXMutex.h"
+
+class RXTimer {
+
+	friend std::ostream& operator<<(std::ostream& os, RXTimer& t);
+
+	private:
+		bool running;
+		double start_time;
+		double stop_time;
+		double start_wait;
+		double start_dependent;
+		double stop_dependent;
+		
+		mutable POSIXMutex mutex;
+
+	public:
+	// 'running' is initially 0.  A timer needs to be explicitly started
+	// using 'start'
+	RXTimer() : running(false), start_time(0), start_wait(0), start_dependent(0) { };
+ 
+	double get_start_time() const{
+		return start_time;
+	}
+
+	double get_current_time() const{
+		struct timeval tv;
+		gettimeofday(&tv, NULL);
+		return 0.000001 * tv.tv_usec + tv.tv_sec;
+	}
+
+	static std::string toHMS(double t = 0.0);
+
+	void start(std::string msg = "");
+	double stop(std::string msg = "");
+	
+	void wait(std::string msg = "");
+	double restart(std::string msg = "");
+	
+	void start_tDependent(std::string msg = "");
+	
+	inline double elapsed(std::string msg = "") const;
+	inline double elapsed_dependent(std::string msg = "") const;
+
+
+
+}; // class RXTimer
+
+// __________________________________________________________________________
+// Return the time that has passed since the timer was started.
+// Print an optional message.
+
+inline double RXTimer::elapsed(std::string msg) const
+{
+	
+	mutex.lock();
+	
+	// Report the timer message
+	if (!msg.empty())
+		std::cout << msg << std::endl;
+
+    double tElapsed;
+	if(running)
+		tElapsed = get_current_time() - start_time;
+	else
+		tElapsed = stop_time - start_time;
+	
+	
+	mutex.unlock();
+	
+	return tElapsed;
+
+} // RXTimer::elapsed
+
+inline double RXTimer::elapsed_dependent(std::string msg) const
+{
+	mutex.lock();
+	
+	// Report the timer message
+	if (!msg.empty())
+		std::cout << msg << std::endl;
+
+    double tElapsed = get_current_time() - start_dependent;
+
+	mutex.unlock();
+	
+	return tElapsed;
+
+} // RXTimer::elapsed
+
+#endif // RXTIMER_H
+
+

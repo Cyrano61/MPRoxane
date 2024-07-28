@@ -1,0 +1,53 @@
+/*
+ *  POSIXThread.h
+ *  Roxane
+ *
+ *  Created by Bruno Causse on 08/03/06.
+ *  Copyright 2006 personnel. All rights reserved.
+ *
+ */
+
+#ifndef INCLUDE_POSIXTHREAD_H
+#define INCLUDE_POSIXTHREAD_H
+
+#include <pthread.h>
+#include "POSIXMutex.h"
+
+// Interface
+class Runnable {
+	public :
+	virtual void run() = 0;
+};
+
+class POSIXThread {
+
+	public :
+	
+		POSIXThread(Runnable *ptr);
+ 		virtual~POSIXThread() {};
+
+		static void yield();
+
+		void start();
+
+		void  join();
+
+	protected :
+
+		static void* threadFunction(void* pt);
+
+		Runnable*	_threadObj;
+
+   	private:
+	
+		pthread_t   _threadID;
+
+};
+
+inline void POSIXThread::yield() {
+	pthread_yield_np();
+}
+
+
+
+#endif

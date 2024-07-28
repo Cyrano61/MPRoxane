@@ -1,0 +1,80 @@
+/*
+ *  RXEvaluation.h
+ *  Roxane
+ *
+ *  Created by Bruno Causse on 06/08/05.
+ *  Copyright 2005 personnel. All rights reserved.
+ *
+ */
+
+#ifndef RXEVALUATION_H
+#define RXEVALUATION_H
+
+#include <iostream>
+
+#include "RXConstantes.h"
+
+class RXEvaluation {
+
+	friend class RXBBPatterns;
+
+	public :
+	
+	static short* DIAG_5[61];
+
+	static short* DIAG_6[61];
+	
+	static short* DIAG_7[61];
+
+	static short* DIAG_8[61];
+	
+	static short* HV_4[61];
+
+	static short* HV_3[61];
+
+	static short* HV_2[61];
+	
+	static short* EDGE_6_4[61];
+
+	static short* CORNER_2x5[61];
+	
+	static short* CORNER_11[61];
+	
+	static short* EDGE_2XC[61];
+	
+	//public :
+	
+	static void load();
+	
+	~RXEvaluation() {
+		
+		const unsigned int START = 16;
+		const unsigned int END = 57;
+
+		for(int iStage = START; iStage<END; iStage++) {
+
+			delete	DIAG_5[iStage];
+			delete	DIAG_6[iStage];
+			delete	DIAG_7[iStage];
+			delete	DIAG_8[iStage];
+			
+			delete	HV_4[iStage];
+			delete	HV_3[iStage];
+			delete	HV_2[iStage];
+			
+			delete	EDGE_6_4[iStage];
+			delete	CORNER_2x5[iStage];
+			delete	CORNER_11[iStage];
+			delete	EDGE_2XC[iStage];
+		}
+		
+	};
+
+
+		
+};
+
+
+
+
+#endif
