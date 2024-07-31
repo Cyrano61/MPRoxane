@@ -4,10 +4,10 @@
 #ifndef ODK_GGSMESSAGE_H
 #define ODK_GGSMESSAGE_H
 
-#include "types.h"
+#include "types.hpp"
 
 #include <map>
-#include "GGSObjects.h"
+#include "GGSObjects.hpp"
 
 // base message class
 

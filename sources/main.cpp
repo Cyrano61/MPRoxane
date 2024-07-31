@@ -14,14 +14,14 @@
 #include <pthread.h>
 
 
-#include "types.h"
+#include "types.hpp"
 
-#include "ODKStream.h"
-#include "RXRoxane.h"
-#include "RXBBPatterns.h"
+#include "ODKStream.hpp"
+#include "RXRoxane.hpp"
+#include "RXBBPatterns.hpp"
 
-#include "RXEngine.h"
-#include "RXTools.h"
+#include "RXEngine.hpp"
+#include "RXTools.hpp"
 
 
 /*******************************************************************/

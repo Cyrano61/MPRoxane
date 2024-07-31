@@ -1,11 +1,11 @@
 // Copyright 2001 Chris Welty
 //	All Rights Reserved
 
-#include "types.h"
+#include "types.hpp"
 
-#include "ggsstream.h"
-#include "GGSMessage.h"
-#include "OsMessage.h"
+#include "ggsstream.hpp"
+#include "GGSMessage.hpp"
+#include "OsMessage.hpp"
 #include <string>
 #include <sstream>
 using namespace std;

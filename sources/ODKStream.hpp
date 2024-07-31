@@ -4,8 +4,8 @@
 #ifndef ODK_ODKSTREAM_H
 #define ODK_ODKSTREAM_H
 
-#include "ggsstream.h"
-#include "RXRoxane.h"
+#include "ggsstream.hpp"
+#include "RXRoxane.hpp"
 
 class RXRoxane;
 

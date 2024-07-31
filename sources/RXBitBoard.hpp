@@ -7,16 +7,16 @@
  *
  */
 
-#ifndef RXBITBOARD_H
-#define RXBITBOARD_H
+#ifndef RXBITBOARD_HPP
+#define RXBITBOARD_HPP
 
 #include <iostream>
 #include <string>
 
-#include "RXConstantes.h"
-#include "RXMove.h"
-#include "RXSquareList.h"
-#include "RXTools.h"
+#include "RXConstantes.hpp"
+#include "RXMove.hpp"
+#include "RXSquareList.hpp"
+#include "RXTools.hpp"
 
 
 class RXBitBoard {

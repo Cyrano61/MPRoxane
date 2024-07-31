@@ -8,17 +8,17 @@
  */
 
 
-#ifndef RXHASHTABLE_H
-#define RXHASHTABLE_H
+#ifndef RXHASHTABLE_HPP
+#define RXHASHTABLE_HPP
 
 #include <string>
 #include <map>
 #include <list>
 #include <vector>
 
-#include "RXConstantes.h"
-#include "RXBitBoard.h"
-#include "RXMove.h"
+#include "RXConstantes.hpp"
+#include "RXBitBoard.hpp"
+#include "RXMove.hpp"
 
 class RXHashValue {
 	

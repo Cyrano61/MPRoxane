@@ -8,10 +8,10 @@
  */
 
 
-#ifndef RXSQUARELIST_H
-#define RXSQUARELIST_H
+#ifndef RXSQUARELIST_HPP
+#define RXSQUARELIST_HPP
 
-#include "RXConstantes.h"
+#include "RXConstantes.hpp"
 
 class RXSquareList {
 

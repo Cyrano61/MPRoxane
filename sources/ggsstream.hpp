@@ -5,16 +5,16 @@
 #define ODK_GGSSTREAM_H
 
 
-#include "sockbuf.h"
+#include "sockbuf.hpp"
 #include <set>
 using namespace std;
 
 class CMsg;
 class COs;
 
-#include "GGSMessage.h"
-#include "OsMessage.h"
-#include "OsObjects.h"
+#include "GGSMessage.hpp"
+#include "OsMessage.hpp"
+#include "OsObjects.hpp"
 
 class ggsstream : public iostream {
 public:

@@ -10,7 +10,7 @@
 #include <fstream>
 #include <cmath>
 
-#include "RXEvaluation.h"
+#include "RXEvaluation.hpp"
 
 
 short* RXEvaluation::DIAG_5[61];

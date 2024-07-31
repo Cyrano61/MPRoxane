@@ -6,8 +6,8 @@
  *  Copyright 2008 personnel. All rights reserved.
  *
  */
-#ifndef RXHELPER_H
-#define RXHELPER_H
+#ifndef RXHELPER_HPP
+#define RXHELPER_HPP
 
 #include <pthread.h>
 

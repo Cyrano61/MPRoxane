@@ -7,15 +7,15 @@
  *
  */
 
-#ifndef RXBBPATTERN_H
-#define RXBBPATTERN_H
+#ifndef RXBBPATTERN_HPP
+#define RXBBPATTERN_HPP
 
 #include <cmath>
 
-#include "RXConstantes.h"
-#include "RXBitBoard.h"
-#include "RXPattern.h"
-#include "RXEvaluation.h"
+#include "RXConstantes.hpp"
+#include "RXBitBoard.hpp"
+#include "RXPattern.hpp"
+#include "RXEvaluation.hpp"
 
 
 class RXBBPatterns {

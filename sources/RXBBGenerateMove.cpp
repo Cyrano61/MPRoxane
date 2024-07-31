@@ -8,8 +8,8 @@
  *
  */
 
-#include "RXBitBoard.h"
-#include "RXTools.h"
+#include "RXBitBoard.hpp"
+#include "RXTools.hpp"
 
 bool RXBitBoard::generate_move_A1(RXMove& move) const {
 	

@@ -7,7 +7,7 @@
  *
  */
 
-#include "RXBitBoard.h"
+#include "RXBitBoard.hpp"
 
 void RXBitBoard::set_disc(const int position, const int color) {
 

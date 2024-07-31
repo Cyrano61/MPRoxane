@@ -13,8 +13,8 @@
 #include <sys/time.h>
 
 
-#include "RXEngine.h"
-#include "RXRoxane.h"
+#include "RXEngine.hpp"
+#include "RXRoxane.hpp"
 
 const int RXEngine::CHECK_TO_LAST_THREE = 4; // DO NOT CHANGE
 

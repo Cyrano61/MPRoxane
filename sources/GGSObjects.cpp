@@ -1,9 +1,9 @@
 // Copyright 2001 Chris Welty
 //	All Rights Reserved
 
-#include "types.h"
+#include "types.hpp"
 
-#include "GGSObjects.h"
+#include "GGSObjects.hpp"
 #include <sstream>
 using namespace std;
 

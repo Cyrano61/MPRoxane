@@ -7,10 +7,10 @@
  *
  */
 
-#include "RXBBPatterns.h"
+#include "RXBBPatterns.hpp"
 #include <string>
 
-#include "RXEvaluation.h"
+#include "RXEvaluation.hpp"
 
 
 std::ostream& operator<<(std::ostream& os, RXBBPatterns& sBoard) {

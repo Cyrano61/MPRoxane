@@ -8,8 +8,8 @@
  */
 #include <cmath>
 
-#include "RXMove.h"
-#include "RXConstantes.h"
+#include "RXMove.hpp"
+#include "RXConstantes.hpp"
 
 /*
 void RXMove::index_to_COsMove(int index, COsMove& move) {

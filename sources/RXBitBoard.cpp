@@ -7,8 +7,8 @@
  *
  */
 
-#include "RXBitBoard.h"
-#include "RXEvaluation.h"
+#include "RXBitBoard.hpp"
+#include "RXEvaluation.hpp"
 #include <cstddef> // define NULL
 #include <iomanip>
 

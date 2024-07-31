@@ -17,15 +17,15 @@
  */
 
 
-#ifndef RXHASHSHALLOW_H
-#define RXHASHSHALLOW_H
+#ifndef RXHASHSHALLOW_HPP
+#define RXHASHSHALLOW_HPP
 
 #include <string>
 
-#include "RXHashTable.h"
-#include "RXConstantes.h"
-#include "RXBitBoard.h"
-#include "RXMove.h"
+#include "RXHashTable.hpp"
+#include "RXConstantes.hpp"
+#include "RXBitBoard.hpp"
+#include "RXMove.hpp"
 
 
 

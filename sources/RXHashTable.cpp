@@ -11,7 +11,7 @@
 #include <sstream>
 #include <algorithm> 
 
-#include "RXHashTable.h"
+#include "RXHashTable.hpp"
 
 RXHashValue::RXHashValue(unsigned long long packed) {
 	

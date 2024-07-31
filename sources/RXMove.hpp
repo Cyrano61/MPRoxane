@@ -7,8 +7,8 @@
  *
  */
 
-#ifndef RXMOVE_H
-#define RXMOVE_H
+#ifndef RXMOVE_HPP
+#define RXMOVE_HPP
 
 #include <iostream>
 #include <iomanip>
@@ -16,9 +16,9 @@
 #include <string>
 #include <vector>
 
-#include "RXConstantes.h"
-#include "OsObjects.h"
-#include "RXPattern.h"
+#include "RXConstantes.hpp"
+#include "OsObjects.hpp"
+#include "RXPattern.hpp"
 
 
 class RXMove {

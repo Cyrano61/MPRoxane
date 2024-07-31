@@ -11,8 +11,8 @@
 #include <cmath>
 #include <sstream>
 
-#include "RXEngine.h"
-#include "RXRoxane.h"
+#include "RXEngine.hpp"
+#include "RXRoxane.hpp"
 
 
 

@@ -1,12 +1,12 @@
 // Copyright 2001 Chris Welty
 //	All Rights Reserved
 
-#include "types.h"
+#include "types.hpp"
 
-#include "ODKStream.h"
-#include "GGSMessage.h"
-#include "OsMessage.h"
-#include "RXRoxane.h"
+#include "ODKStream.hpp"
+#include "GGSMessage.hpp"
+#include "OsMessage.hpp"
+#include "RXRoxane.hpp"
 
 #include <iostream>
 using namespace std;

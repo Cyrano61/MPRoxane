@@ -1,13 +1,13 @@
 // Copyright 2001 Chris Welty
 //	All Rights Reserved
 
-#ifndef ODK_OSMESSAGE_H
-#define ODK_OSMESSAGE_H
+#ifndef ODK_OSMESSAGE_HPP
+#define ODK_OSMESSAGE_HPP
 
-#include "types.h"
+#include "types.hpp"
 
-#include "GGSMessage.h"
-#include "OsObjects.h"
+#include "GGSMessage.hpp"
+#include "OsObjects.hpp"
 
 class CMsgOs : public CMsg {
 public:

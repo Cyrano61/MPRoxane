@@ -8,7 +8,7 @@
  *
  */
 
-#include "RXBitBoard.h"
+#include "RXBitBoard.hpp"
 
 
 const unsigned char RXBitBoard::COUNT_H[256] = {

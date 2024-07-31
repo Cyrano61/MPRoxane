@@ -1,9 +1,9 @@
 // Copyright 2001 Chris Welty
 //	All Rights Reserved
 
-#include "types.h"
+#include "types.hpp"
 
-#include "OsObjects.h"
+#include "OsObjects.hpp"
 #include <sstream>
 #include <iomanip>
 #include "time.h"

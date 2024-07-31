@@ -11,8 +11,8 @@
 #include <cmath>
 
 
-#include "RXEngine.h"
-#include "RXRoxane.h"
+#include "RXEngine.hpp"
+#include "RXRoxane.hpp"
 
 const bool RXEngine::USE_STABILITY = true;
 const int RXEngine::HIGH_STABILITY_THRESOLD = 2400;

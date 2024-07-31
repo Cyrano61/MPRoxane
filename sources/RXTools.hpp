@@ -7,8 +7,8 @@
  *
  */
 
-#ifndef RXTOOLS_H
-#define RXTOOLS_H
+#ifndef RXTOOLS_HPP
+#define RXTOOLS_HPP
 
 #include <string>
 #include <sys/time.h>

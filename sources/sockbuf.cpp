@@ -8,8 +8,8 @@
 #include <netinet/in.h>
 #include <netdb.h>
 
-#include "sockbuf.h"
-#include "types.h"
+#include "sockbuf.hpp"
+#include "types.hpp"
 
 using namespace std;
 

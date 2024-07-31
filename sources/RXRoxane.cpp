@@ -13,8 +13,8 @@
 #include <sstream>
 #include <cmath>
 
-#include "RXRoxane.h"
-#include "RXEvaluation.h"
+#include "RXRoxane.hpp"
+#include "RXEvaluation.hpp"
 
 
 extern "C"

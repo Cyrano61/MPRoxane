@@ -7,8 +7,8 @@
  *
  */
 
-#ifndef RXCONSTANTES_H
-#define RXCONSTANTES_H
+#ifndef RXCONSTANTES_HPP
+#define RXCONSTANTES_HPP
 
 #include <limits>
 

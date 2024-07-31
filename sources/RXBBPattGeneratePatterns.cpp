@@ -7,8 +7,8 @@
  *
  */
 
-#include "RXBBPatterns.h"
-#include "RXTools.h"
+#include "RXBBPatterns.hpp"
+#include "RXTools.hpp"
 
 
 bool RXBBPatterns::generate_patterns_BLACK_A1(RXMove& move) const {

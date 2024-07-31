@@ -4,7 +4,7 @@
 #ifndef ODK_OSOBJECTS_H
 #define ODK_OSOBJECTS_H
 
-#include "types.h"
+#include "types.hpp"
 
 #include "time.h"
 #include <string>

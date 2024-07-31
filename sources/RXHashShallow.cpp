@@ -7,14 +7,14 @@
  *
  */
 
-#include "RXHashShallow.h"
+#include "RXHashShallow.hpp"
 
 #include <iostream>
 #include <new>
 #include <sstream>
  
 
-#include "RXHashTable.h"
+#include "RXHashTable.hpp"
 
 
 

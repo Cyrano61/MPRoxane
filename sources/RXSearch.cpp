@@ -7,7 +7,7 @@
  *
  */
 
-#include "RXSearch.h"
+#include "RXSearch.hpp"
 
 void RXBestMove::to_COsMoveListItem(COsMoveListItem& mli) {
 	

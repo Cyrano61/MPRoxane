@@ -7,13 +7,13 @@
  *
  */
 
-#ifndef RXSEARCH_H
-#define RXSEARCH_H
+#ifndef RXSEARCH_HPP
+#define RXSEARCH_HPP
 
 #include <string>
-#include "RXBBPatterns.h"
-#include "RXHashTable.h"
-#include "OsObjects.h"
+#include "RXBBPatterns.hpp"
+#include "RXHashTable.hpp"
+#include "OsObjects.hpp"
 
 class RXBestMove {
 

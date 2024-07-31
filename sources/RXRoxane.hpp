@@ -7,21 +7,21 @@
  *
  */
 
-#ifndef RXROXANE_H
-#define RXROXANE_H
+#ifndef RXROXANE_HPP
+#define RXROXANE_HPP
 
 #include <string>
 #include<atomic>
 
-#include "OsObjects.h"
-#include "ODKStream.h"
+#include "OsObjects.hpp"
+#include "ODKStream.hpp"
 
-#include "RXConstantes.h"
-#include "RXBBPatterns.h"
-#include "RXHashTable.h"
-#include "RXEngine.h"
-#include "RXHelper.h"
-#include "RXSearch.h"
+#include "RXConstantes.hpp"
+#include "RXBBPatterns.hpp"
+#include "RXHashTable.hpp"
+#include "RXEngine.hpp"
+#include "RXHelper.hpp"
+#include "RXSearch.hpp"
 
 extern "C"
 void* init_process(void* pt);

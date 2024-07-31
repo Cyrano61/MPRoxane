@@ -7,12 +7,12 @@
  *
  */
 
-#ifndef RXEVALUATION_H
-#define RXEVALUATION_H
+#ifndef RXEVALUATION_HPP
+#define RXEVALUATION_HPP
 
 #include <iostream>
 
-#include "RXConstantes.h"
+#include "RXConstantes.hpp"
 
 class RXEvaluation {
 	

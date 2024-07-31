@@ -8,8 +8,8 @@
  *
  */
 
-#include "RXBitBoard.h"
-#include "RXTools.h"
+#include "RXBitBoard.hpp"
+#include "RXTools.hpp"
 
 bool RXBitBoard::do_flips_A1(unsigned long long& discs_player, unsigned long long& discs_opponent) {
 

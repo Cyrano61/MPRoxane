@@ -8,7 +8,7 @@
 #include <iostream>
 #include <fstream>
 
-#include "types.h"
+#include "types.hpp"
 
 
 using namespace std;

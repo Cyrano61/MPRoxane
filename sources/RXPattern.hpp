@@ -7,8 +7,8 @@
  *
  */
 
-#ifndef RXPATTERN_H
-#define RXPATTERN_H
+#ifndef RXPATTERN_HPP
+#define RXPATTERN_HPP
 
 class RXPattern {
 

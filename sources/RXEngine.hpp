@@ -7,8 +7,8 @@
  *
  */
 
-#ifndef RXENGINE_H
-#define RXENGINE_H
+#ifndef RXENGINE_HPP
+#define RXENGINE_HPP
 
 #include <string>
 #include <cstddef> // define NULL
@@ -20,17 +20,17 @@
 #include <assert.h>
 #include <atomic>
 
-#include "RXBBPatterns.h"
-#include "RXBitBoard.h"
-#include "RXMove.h"
-#include "RXHashTable.h"
-#include "RXHashShallow.h"
-#include "RXEvaluation.h"
-#include "RXSearch.h"
+#include "RXBBPatterns.hpp"
+#include "RXBitBoard.hpp"
+#include "RXMove.hpp"
+#include "RXHashTable.hpp"
+#include "RXHashShallow.hpp"
+#include "RXEvaluation.hpp"
+#include "RXSearch.hpp"
 
-#include "RXHelper.h"
+#include "RXHelper.hpp"
 
-#include "RXTools.h"
+#include "RXTools.hpp"
 
 
 
