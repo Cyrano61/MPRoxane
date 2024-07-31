@@ -1,8 +1,8 @@
 // Copyright 2001 Chris Welty
 //	All Rights Reserved
 
-#ifndef ODK_TYPES_H
-#define ODK_TYPES_H
+#ifndef ODK_TYPES_HPP
+#define ODK_TYPES_HPP
 
 
 ////////////////////////////////////////////////////////////
@@ -38,4 +38,4 @@ typedef unsigned long u4;
 const int kErrMem=0x8100;
 const int SOCKET_ERROR = -1;
 
-#endif // ODK_TYPES_H
+#endif // ODK_TYPES_HPP

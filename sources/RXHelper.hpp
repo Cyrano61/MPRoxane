@@ -1,5 +1,5 @@
 /*
- *  RXThreadHelper.h
+ *  RXThreadHelper.hpp
  *  Roxane
  *
  *  Created by BrunoCausse on 10/09/08.

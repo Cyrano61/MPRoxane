@@ -1,5 +1,5 @@
 /*
- *  RXRoxane.h
+ *  RXRoxane.hpp
  *  BitBoard
  *
  *  Created by Bruno Causse on 01/09/05.

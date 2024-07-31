@@ -1,5 +1,5 @@
 /*
- *  RXConstantes.h
+ *  RXConstantes.hpp
  *  learn_01
  *
  *  Created by Bruno Causse on 11/05/05.

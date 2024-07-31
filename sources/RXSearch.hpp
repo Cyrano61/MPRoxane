@@ -1,5 +1,5 @@
 /*
- *  RXSearch.h
+ *  RXSearch.hpp
  *  Roxane
  *
  *  Created by BrunoCausse on 07/10/09.

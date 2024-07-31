@@ -1,8 +1,8 @@
 // Copyright 2001 Chris Welty
 //	All Rights Reserved
 
-#ifndef ODK_GGSMESSAGE_H
-#define ODK_GGSMESSAGE_H
+#ifndef ODK_GGSMESSAGE_HPP
+#define ODK_GGSMESSAGE_HPP
 
 #include "types.hpp"
 
@@ -106,4 +106,4 @@ public:
 	virtual void Handle();
 };
 
-#endif // ODK_GGSMESSAGE_H
+#endif // ODK_GGSMESSAGE_HPP

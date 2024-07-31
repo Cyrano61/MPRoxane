@@ -1,8 +1,8 @@
 // Copyright 2001 Chris Welty
 //	All Rights Reserved
 
-#ifndef ODK_GGSOBJECTS_H
-#define ODK_GGSOBJECTS_H
+#ifndef ODK_GGSOBJECTS_HPP
+#define ODK_GGSOBJECTS_HPP
 
 
 #include "types.hpp"
@@ -40,4 +40,4 @@ private:
 
 inline istream& operator>>(istream& is, CGGSWhoUser& wu) { wu.In(is); return is; }
 
-#endif	//ODK_GGSOBJECTS_H
+#endif	//ODK_GGSOBJECTS_HPP

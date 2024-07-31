@@ -1,5 +1,5 @@
 /*
- *  RXTools.h
+ *  RXTools.hpp
  *  Roxane
  *
  *  Created by BrunoCausse on 04/11/08.

@@ -1,8 +1,8 @@
 // Copyright 2001 Chris Welty
 //	All Rights Reserved
 
-#ifndef ODK_ODKSTREAM_H
-#define ODK_ODKSTREAM_H
+#ifndef ODK_ODKSTREAM_HPP
+#define ODK_ODKSTREAM_HPP
 
 #include "ggsstream.hpp"
 #include "RXRoxane.hpp"
@@ -34,4 +34,4 @@ public:
 	RXRoxane* pComputer;
 };
 
-#endif // ODK_GGSSTREAM_H
+#endif // ODK_GGSSTREAM_HPP

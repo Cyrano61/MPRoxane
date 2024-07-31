@@ -1,5 +1,5 @@
 /*
- *  RXHashTable.h
+ *  RXHashTable.hpp
  *  learn_01
  *
  *  Created by Bruno Causse on 18/05/05.

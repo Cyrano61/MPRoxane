@@ -35,7 +35,7 @@
       selectedDebuggerIdentifier = ""
       selectedLauncherIdentifier = "Xcode.IDEFoundation.Launcher.PosixSpawn"
       launchStyle = "0"
-      useCustomWorkingDirectory = "NO"
+      useCustomWorkingDirectory = "YES"
       customWorkingDirectory = "/Users/caussebruno/Documents/othello/MPRoxane[2011-02-21]/build/Release"
       ignoresPersistentStateOnLaunch = "NO"
       debugDocumentVersioning = "YES"

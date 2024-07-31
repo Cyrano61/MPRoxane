@@ -1,5 +1,5 @@
 /*
- *  RXBitBoard.h
+ *  RXBitBoard.hpp
  *  Roxane
  *
  *  Created by Bruno Causse on 27/06/05.

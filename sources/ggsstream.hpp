@@ -1,8 +1,8 @@
 // Copyright 2001 Chris Welty
 //	All Rights Reserved
 
-#ifndef ODK_GGSSTREAM_H
-#define ODK_GGSSTREAM_H
+#ifndef ODK_GGSSTREAM_HPP
+#define ODK_GGSSTREAM_HPP
 
 
 #include "sockbuf.hpp"
@@ -137,4 +137,4 @@ private:
 	sockbuf *psockbuf;
 };
 
-#endif	//ODK_GGSSTREAM_H
+#endif	//ODK_GGSSTREAM_HPP

@@ -1,8 +1,8 @@
 // Copyright 2001 Chris Welty
 //	All Rights Reserved
 
-#ifndef ODK_OSOBJECTS_H
-#define ODK_OSOBJECTS_H
+#ifndef ODK_OSOBJECTS_HPP
+#define ODK_OSOBJECTS_HPP
 
 #include "types.hpp"
 
@@ -451,4 +451,4 @@ public:
 
 inline istream& operator>>(istream& is, COsHistoryItem& hi) {hi.In(is); return is; }
 
-#endif //ODK_OSOBJECTS_H
+#endif //ODK_OSOBJECTS_HPP

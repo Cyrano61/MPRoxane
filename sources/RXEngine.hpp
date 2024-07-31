@@ -1,5 +1,5 @@
 /*
- *  RXEngine.h
+ *  RXEngine.hpp
  *  BitBoard
  *
  *  Created by Bruno Causse on 10/08/05.

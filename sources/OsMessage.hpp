@@ -291,4 +291,4 @@ public:
 	vector<COsWhoItem> wis;
 };
 
-#endif //ODK_OSMESSAGE_H
+#endif //ODK_OSMESSAGE_HPP

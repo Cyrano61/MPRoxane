@@ -1,5 +1,5 @@
 /*
- *  RXEvaluation.h
+ *  RXEvaluation.hpp
  *  Roxane
  *
  *  Created by Bruno Causse on 06/08/05.

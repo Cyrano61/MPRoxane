@@ -1,8 +1,8 @@
 // Copyright 2001 Chris Welty
 //	All Rights Reserved
 
-#ifndef SOCKBUF_H
-#define SOCKBUF_H
+#ifndef SOCKBUF_HPP
+#define SOCKBUF_HPP
 
 #include <sys/socket.h>
 #include <iostream>

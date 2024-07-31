@@ -1,5 +1,5 @@
 /*
- *  RXBBPatterns.h
+ *  RXBBPatterns.hpp
  *  Roxane
  *
  *  Created by Bruno Causse on 31/07/05.

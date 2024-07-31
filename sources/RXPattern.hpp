@@ -1,5 +1,5 @@
 /*
- *  RXPattern.h
+ *  RXPattern.hpp
  *  Roxane
  *
  *  Created by Bruno Causse on 20/09/05.

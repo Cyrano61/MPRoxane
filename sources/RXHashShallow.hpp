@@ -1,5 +1,5 @@
 /*
- *  RXHashShallow.h
+ *  RXHashShallow.hpp
  *  Roxane
  *
  *  Created by Bruno Causse on 28/03/06.
