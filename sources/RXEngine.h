@@ -111,7 +111,7 @@ class RXThread {
 public:
 
 	enum thread_state {
-        NON_INITIALISED,
+        UNINITIALISED,
 		INITIALIZING,
 		SEARCHING,
 		AVAILABLE,
@@ -136,7 +136,7 @@ public:
 	pthread_cond_t  cond;
 
 
-    volatile thread_state state = NON_INITIALISED;
+    volatile thread_state state = UNINITIALISED;
 	
 	
 	//le parametre maxThread est utile pour splitPointStack

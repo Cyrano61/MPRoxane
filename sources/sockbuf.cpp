@@ -117,7 +117,8 @@ int sockbuf::underflow() {
 		nGetSize=nBufSize;
 	} else {
 		_ASSERT(0);
-        return *p0;
+        return EOF;
+        //return *p0;
 	}
 	
 	long nrecv=recv(sock, p0, nGetSize,0);

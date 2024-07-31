@@ -11,16 +11,14 @@
 cd ${0%/*}
 
 #visualisation des log
-open tail_a.command
+open ../build/log/tail_a.command
 
 #attente du lancement des tails
 sleep 1
 
 
 # lancement du prog
-./Roxane -h 24 -t 2 ../../fforum-20-39.src
-
-
+../build/Release/Roxane -h 24 -t 1 /Users/caussebruno/Documents/othello/MPRoxane[2024-07-21]/scripts/fforum-20-39.src
 
 # fin du script
 

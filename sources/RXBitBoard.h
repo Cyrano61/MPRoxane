@@ -323,15 +323,18 @@ inline int RXBitBoard::get_mobility(const unsigned long long p_discs, const unsi
 	legals &= ~(p_discs | o_discs);
 
     if(legals == 0)
-        return 0;	
+        return 0;
+    
+    return __builtin_popcountll(legals);
 
-	unsigned long long b;
-	b  = legals - ((legals >> 1) & 0x1555555555555515ULL) + (legals & 0x0100000000000001ULL);
-	b  = ((b >> 2) & 0x3333333333333333ULL) + (b & 0x3333333333333333ULL);
-	b  = ((b >> 4) + b) & 0x0f0f0f0f0f0f0f0fULL;
-	b *= 0x0101010101010101ULL;
-	
-	return  static_cast<int>(b >> 56);
+
+//	unsigned long long b;
+//	b  = legals - ((legals >> 1) & 0x1555555555555515ULL) + (legals & 0x0100000000000001ULL);
+//	b  = ((b >> 2) & 0x3333333333333333ULL) + (b & 0x3333333333333333ULL);
+//	b  = ((b >> 4) + b) & 0x0f0f0f0f0f0f0f0fULL;
+//	b *= 0x0101010101010101ULL;
+//	
+//	return  static_cast<int>(b >> 56);
 	
 //	/* bonus corners */
 //
