@@ -115,6 +115,8 @@ class RXBitBoard {
 
 		int moves_producing(RXMove* start) const;
 
+        static uint64_t calc_legal(const uint64_t P, const uint64_t O);
+    
 		static int get_mobility(const unsigned long long discs_player, const unsigned long long discs_opponent);
 		static int get_corner_stability(const unsigned long long& discs_player);
 		int get_stability(const int color, const int n_stables_cut) const;
@@ -211,8 +213,39 @@ inline void RXBitBoard::do_pass() {
 	player ^= 1;
 }
 
+/*
+    @brief Get a bitboard representing all legal moves
+
+    @param P                    a bitboard representing player
+    @param O                    a bitboard representing opponent
+    @return all legal moves as a bitboard
+*/
+// original code from http://www.amy.hi-ho.ne.jp/okuhara/bitboard.htm
+// modified by Nyanyan
+inline uint64_t RXBitBoard::calc_legal(const uint64_t P, const uint64_t O){
+    uint64_t moves, mO;
+    uint64_t flip1, flip7, flip9, flip8, pre1, pre7, pre9, pre8;
+    mO = O & 0x7e7e7e7e7e7e7e7eULL;
+    flip1 = mO & (P << 1);         flip7  = mO & (P << 7);        flip9  = mO & (P << 9);        flip8  = O & (P << 8);
+    flip1 |= mO & (flip1 << 1);    flip7 |= mO & (flip7 << 7);    flip9 |= mO & (flip9 << 9);    flip8 |= O & (flip8 << 8);
+    pre1 = mO & (mO << 1);         pre7 = mO & (mO << 7);         pre9 = mO & (mO << 9);         pre8 = O & (O << 8);
+    flip1 |= pre1 & (flip1 << 2);  flip7 |= pre7 & (flip7 << 14); flip9 |= pre9 & (flip9 << 18); flip8 |= pre8 & (flip8 << 16);
+    flip1 |= pre1 & (flip1 << 2);  flip7 |= pre7 & (flip7 << 14); flip9 |= pre9 & (flip9 << 18); flip8 |= pre8 & (flip8 << 16);
+    moves = flip1 << 1;            moves |= flip7 << 7;           moves |= flip9 << 9;           moves |= flip8 << 8;
+    flip1 = mO & (P >> 1);         flip7  = mO & (P >> 7);        flip9  = mO & (P >> 9);        flip8  = O & (P >> 8);
+    flip1 |= mO & (flip1 >> 1);    flip7 |= mO & (flip7 >> 7);    flip9 |= mO & (flip9 >> 9);    flip8 |= O & (flip8 >> 8);
+    pre1 >>= 1;                    pre7 >>= 7;                    pre9 >>= 9;                    pre8 >>= 8;
+    flip1 |= pre1 & (flip1 >> 2);  flip7 |= pre7 & (flip7 >> 14); flip9 |= pre9 & (flip9 >> 18); flip8 |= pre8 & (flip8 >> 16);
+    flip1 |= pre1 & (flip1 >> 2);  flip7 |= pre7 & (flip7 >> 14); flip9 |= pre9 & (flip9 >> 18); flip8 |= pre8 & (flip8 >> 16);
+    moves |= flip1 >> 1;           moves |= flip7 >> 7;           moves |= flip9 >> 9;           moves |= flip8 >> 8;
+    return moves & ~(P | O);
+}
+
+
 
 inline int RXBitBoard::get_mobility(const unsigned long long p_discs, const unsigned long long o_discs) {
+    
+    //return __builtin_popcountll(calc_legal(p_discs, o_discs));
 
 
 	const unsigned long long inner_o_discs = o_discs & 0x7E7E7E7E7E7E7E7EULL;
@@ -322,60 +355,54 @@ inline int RXBitBoard::get_mobility(const unsigned long long p_discs, const unsi
 
 	legals &= ~(p_discs | o_discs);
 
-    if(legals == 0)
-        return 0;
+//    if(legals == 0)
+//        return 0;
     
     return __builtin_popcountll(legals);
 
 
-//	unsigned long long b;
-//	b  = legals - ((legals >> 1) & 0x1555555555555515ULL) + (legals & 0x0100000000000001ULL);
-//	b  = ((b >> 2) & 0x3333333333333333ULL) + (b & 0x3333333333333333ULL);
-//	b  = ((b >> 4) + b) & 0x0f0f0f0f0f0f0f0fULL;
-//	b *= 0x0101010101010101ULL;
-//	
-//	return  static_cast<int>(b >> 56);
-	
-//	/* bonus corners */
-//
-//	legals |= (legals & 0x8000000000000000ULL) >> 27;
-//	legals |= (legals & 0x0000000000000001ULL) << 27;
-//	legals |= (legals & 0x0100000000000000ULL) >> 21;
-//	legals |= (legals & 0x0000000000000080ULL) << 21;
-//
-//	return __builtin_popcountll(legals);
-
 }
 
 
+
+//inline int RXBitBoard::get_corner_stability(const unsigned long long& discs_player) {
+//	unsigned long long nStables = 0ULL;
+//	
+//	if(discs_player & 0X8000000000000000ULL) {
+//		nStables++;
+//		nStables += ((discs_player >> 62) & 0x0000000000000001ULL);
+//		nStables += ((discs_player >> 55) & 0x0000000000000001ULL);
+//	}
+//	if(discs_player & 0X0000000000000080ULL) {
+//		nStables++;
+//		nStables += ((discs_player >> 15) & 0x0000000000000001ULL);
+//		nStables += ((discs_player >> 6)  & 0x0000000000000001ULL);
+//	}
+//	if(discs_player & 0X0100000000000000ULL) {
+//		nStables++;
+//		nStables += ((discs_player >> 57) & 0x0000000000000001ULL);
+//		nStables += ((discs_player >> 48) & 0x0000000000000001ULL);
+//	}
+//	if(discs_player & 0X0000000000000001ULL) {
+//		nStables++;
+//		nStables += ((discs_player >> 8) & 0x0000000000000001ULL);
+//		nStables += ((discs_player >> 1) & 0x0000000000000001ULL);
+//	}
+//
+//	return static_cast<unsigned int>(nStables);
+//}
 
 inline int RXBitBoard::get_corner_stability(const unsigned long long& discs_player) {
-	unsigned long long nStables = 0ULL;
-	
-	if(discs_player & 0X8000000000000000ULL) {
-		nStables++;
-		nStables += ((discs_player >> 62) & 0x0000000000000001ULL);
-		nStables += ((discs_player >> 55) & 0x0000000000000001ULL);
-	}
-	if(discs_player & 0X0000000000000080ULL) {
-		nStables++;
-		nStables += ((discs_player >> 15) & 0x0000000000000001ULL);
-		nStables += ((discs_player >> 6)  & 0x0000000000000001ULL);
-	}
-	if(discs_player & 0X0100000000000000ULL) {
-		nStables++;
-		nStables += ((discs_player >> 57) & 0x0000000000000001ULL);
-		nStables += ((discs_player >> 48) & 0x0000000000000001ULL);
-	}
-	if(discs_player & 0X0000000000000001ULL) {
-		nStables++;
-		nStables += ((discs_player >> 8) & 0x0000000000000001ULL);
-		nStables += ((discs_player >> 1) & 0x0000000000000001ULL);
-	}
-
-	return static_cast<unsigned int>(nStables);
+    
+    unsigned long long stables = discs_player & 0x8100000000000081ULL;
+ 
+    stables |= (discs_player & (stables << 1)) & 0x0200000000000002ULL;
+    stables |= (discs_player & (stables >> 1)) & 0x4000000000000040ULL;
+    stables |= (discs_player & (stables << 8)) & 0x0000000000008100ULL;
+    stables |= (discs_player & (stables >> 8)) & 0x0081000000000000ULL;
+        
+    return static_cast<unsigned int>(__builtin_popcountll(stables));
 }
-
 
 inline int RXBitBoard::get_stability(const int color, const int n_stables_cut) const {
 

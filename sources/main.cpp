@@ -34,18 +34,6 @@
 
 int main (int argc, char * const argv[]) {
     
-//        unsigned long long legals = 0x01ULL;
-//
-//        unsigned long long b;
-//        b  = legals - ((legals >> 1) & 0x1555555555555515ULL) + (legals & 0x0100000000000001ULL);
-//        b  = ((b >> 2) & 0x3333333333333333ULL) + (b & 0x3333333333333333ULL);
-//        b  = ((b >> 4) + b) & 0x0f0f0f0f0f0f0f0fULL;
-//        b *= 0x0101010101010101ULL;
-//    
-//        std::cout << "population count :" << static_cast<int>(b >> 56) << std::endl;
-//    
-//    
-//        std::cout << "population count :" << __builtin_popcountll(legals) << std::endl;
 
 	
 	std::string login, password, file_name, mode, imposed_opening = "";
@@ -95,7 +83,9 @@ int main (int argc, char * const argv[]) {
 	
 	
 	if(mode == "ggs" && !login.empty() && !password.empty()) {
-		
+
+        std::cout << "tentative conection" << std::endl;
+
 		int err;
 		CODKStream gs;
 		
@@ -104,6 +94,8 @@ int main (int argc, char * const argv[]) {
 		
 		// Connect(server, port)
 		if ((err = gs.Connect("www.skatgame.net",5000))) {
+            std::cout << "erreur conection" << std::endl;
+
 			cerr << gs.ErrText(err) << "\n";
 			return err;
 		}
@@ -114,6 +106,8 @@ int main (int argc, char * const argv[]) {
 			gs.Disconnect();
 			return err;
 		}
+        
+        std::cout << "lance le process" <<std::endl;
 		
 		gs.Process();			// receive, parse, and pass on messages
 	}

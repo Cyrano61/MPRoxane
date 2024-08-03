@@ -12,7 +12,8 @@ case "$0" in
   *) cd .;;
 esac
 
-resize -s 28 98
+#resize window
+printf "\e[8;30;100t"
 
 # lancement du prog
-tail -f ./log/engine_1.txt
+tail -f engine_1.txt

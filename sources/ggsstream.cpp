@@ -23,6 +23,7 @@ ggsstream::~ggsstream() {
 }
 
 int ggsstream::Connect(const string& sServer, int nPort) {
+    
 	if(IsConnected()) {
 		_ASSERT(0);
 		return kErrConnected;
@@ -33,9 +34,10 @@ int ggsstream::Connect(const string& sServer, int nPort) {
 	psockbuf=new sockbuf();
 	if (psockbuf) {
 		err=psockbuf->connect(sServer, nPort);
-		if (!err)
-			init(psockbuf);
-		else {
+        if (!err) {
+            std::cout << "sockbut ok" << std::endl;
+            init(psockbuf);
+        } else {
 			delete psockbuf;
 			psockbuf=NULL;
 		}

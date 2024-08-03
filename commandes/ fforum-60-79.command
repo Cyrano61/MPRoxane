@@ -18,7 +18,7 @@ sleep 1
 
 
 # lancement du prog
-../build/Release/Roxane -h 26 -t 12 /Users/caussebruno/Documents/othello/MPRoxane[2024-07-21]/scripts/fforum-60-79.src
+../build/Release/Roxane -h 28 -t 12 /Users/caussebruno/Documents/othello/MPRoxane[2024-07-21]/scripts/fforum-60-79.src
 
 # fin du script
 

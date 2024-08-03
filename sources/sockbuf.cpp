@@ -50,6 +50,7 @@ sockbuf::~sockbuf() {
 }
 
 int sockbuf::connect(const string& sServer, int nPort) {
+    
 	hostent *hostent;
 	protoent *protoent;
 	sockaddr_in sa;
@@ -68,10 +69,13 @@ int sockbuf::connect(const string& sServer, int nPort) {
 		return kErrNoHost;
 	if (!(protoent=getprotobyname(sProtocol.c_str())))
 		return kErrNoProtocol;
+    
+    std::cout << "jusque la sa passe" << std::endl;
+    
 	sa.sin_family=AF_INET;
 	sa.sin_port=htons(nPort);
 	sa.sin_addr.s_addr=*(u2*)hostent->h_addr_list[0];
-//	sa.sin_addr.s_addr=* reinterpret_cast< u4* > (hostent->h_addr_list[0]);
+	//sa.sin_addr.s_addr=* reinterpret_cast< u4* > (hostent->h_addr_list[0]);
 
 	// get socket
 	if (!(sock=socket(AF_INET, SOCK_STREAM, protoent->p_proto)))
@@ -106,6 +110,7 @@ bool sockbuf::IsConnected() const {
 }
 
 int sockbuf::underflow() {
+    
 	char* p0 = NULL;
 	int nGetSize = 0;
 
@@ -117,8 +122,7 @@ int sockbuf::underflow() {
 		nGetSize=nBufSize;
 	} else {
 		_ASSERT(0);
-        return EOF;
-        //return *p0;
+        return *p0;
 	}
 	
 	long nrecv=recv(sock, p0, nGetSize,0);
