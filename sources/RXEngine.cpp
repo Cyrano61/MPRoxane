@@ -1790,6 +1790,7 @@ void RXEngine::run() {
 		if (!abort.load() && search_depth > (search_sBoard.board.n_empties-10)) {
 			//coherence selectivty et end_selectivity
 			int end_selectivity = search_depth < search_sBoard.board.n_empties? 0:search_selectivity;
+                        
 			EG_driver(search_sBoard, std::min(selectivity, end_selectivity), end_selectivity, list);
 		}
 		

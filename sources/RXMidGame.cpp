@@ -1166,8 +1166,10 @@ int RXEngine::MG_PVS_shallow(int threadID, RXBBPatterns& sBoard, const bool pv, 
 							board.n_nodes++;
 
 							const unsigned long long p_discs = board.discs[p] | (iter->flipped | iter->square);
+                            const unsigned long long o_discs = board.discs[o] ^ iter->flipped;
 								
-							iter->score = (RXBitBoard::get_mobility(board.discs[o] ^ iter->flipped, p_discs)<<4) - (RXBitBoard::get_corner_stability(p_discs)<<2) - (board.parity[RXBitBoard::QUADRANT_ID[iter->position]]);
+							iter->score = (RXBitBoard::get_mobility(o_discs, p_discs)<<4) - //(RXBitBoard::get_corner_stability(p_discs)<<2) - (board.parity[RXBitBoard::QUADRANT_ID[iter->position]]);
+                                (RXBitBoard::get_corner_stability(p_discs)<<2) - (RXBitBoard::local_Parity(o_discs, p_discs, iter->position)^1);
 						}
 								
 						list->sort_by_score();		
@@ -1303,8 +1305,9 @@ int RXEngine::MG_PVS_shallow(int threadID, RXBBPatterns& sBoard, const bool pv, 
 									board.n_nodes++;
 
 									const unsigned long long p_discs = board.discs[p] | (iter->flipped | iter->square);
+                                    const unsigned long long o_discs = board.discs[o] ^ iter->flipped;
 									
-									iter->score = (RXBitBoard::get_mobility(board.discs[o] ^ iter->flipped, p_discs)<<4) - (RXBitBoard::get_corner_stability(p_discs)<<2) - (board.parity[RXBitBoard::QUADRANT_ID[iter->position]]);
+									iter->score = (RXBitBoard::get_mobility(o_discs, p_discs)<<4) - (RXBitBoard::get_corner_stability(p_discs)<<2) - (RXBitBoard::local_Parity(o_discs, p_discs, iter->position)^1);
 								}
 									
 								list->sort_by_score();

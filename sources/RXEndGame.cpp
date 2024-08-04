@@ -67,8 +67,9 @@ int RXEngine::EG_alphabeta_parity(int threadID, RXBitBoard& board, int alpha, in
 	const unsigned long long discs_opponent = board.discs[opponent];
 	
 	for (int parity = 1; parity >= 0; parity--) {
-		for(RXSquareList* empties = board.empties_list->next; empties->position != NOMOVE; empties = empties->next) {				
-			if (board.parity[RXBitBoard::QUADRANT_ID[empties->position]] == parity && (discs_opponent & RXBitBoard::NEIGHBOR[empties->position]) && ((board).*(board.generate_flips[empties->position]))(move) ){ 
+		for(RXSquareList* empties = board.empties_list->next; empties->position != NOMOVE; empties = empties->next) {	
+                        
+			if (board.parity_Local(empties->position) == parity && (discs_opponent & RXBitBoard::NEIGHBOR[empties->position]) && ((board).*(board.generate_flips[empties->position]))(move) ){
 				board.n_nodes++;
 				
 				board.discs[board.player] |= (move.flipped | move.square);
@@ -81,8 +82,6 @@ int RXEngine::EG_alphabeta_parity(int threadID, RXBitBoard& board, int alpha, in
 				empties->previous->next = empties->next;
 				empties->next->previous = empties->previous;
 				
-				//update/restore parity
-				board.parity[RXBitBoard::QUADRANT_ID[empties->position]] ^= 1;
 				
 				if (board.n_empties == 4) {
 					
@@ -94,8 +93,6 @@ int RXEngine::EG_alphabeta_parity(int threadID, RXBitBoard& board, int alpha, in
 					
 				}
 				
-				//update/restore player
-				board.parity[RXBitBoard::QUADRANT_ID[empties->position]] ^= 1;
 				
 				//restore empties
 				empties->previous->next = empties;
@@ -214,7 +211,7 @@ int RXEngine::EG_alphabeta_hash_parity(int threadID, RXBitBoard& board, const bo
 	
 			for (int parity = 1; lower < upper && parity >= 0; parity--) {
 				for(RXSquareList* empties = board.empties_list->next; lower < upper && empties->position != NOMOVE; empties = empties->next) {
-					if (empties->position != hashmove && board.parity[RXBitBoard::QUADRANT_ID[empties->position]] == parity && (discs_opponent & RXBitBoard::NEIGHBOR[empties->position]) && ((board).*(board.generate_flips[empties->position]))(move) ){ 
+					if (empties->position != hashmove && board.parity_Local(empties->position) == parity && (discs_opponent & RXBitBoard::NEIGHBOR[empties->position]) && ((board).*(board.generate_flips[empties->position]))(move) ){
 						board.n_nodes++;
 						
 						board.discs[board.player] |= (move.flipped | move.square);
@@ -226,18 +223,14 @@ int RXEngine::EG_alphabeta_hash_parity(int threadID, RXBitBoard& board, const bo
 						//update empties
 						empties->previous->next = empties->next;
 						empties->next->previous = empties->previous;
-						//update/restore parity
-						board.parity[RXBitBoard::QUADRANT_ID[empties->position]] ^= 1;
 
 						score = -EG_alphabeta_parity(threadID, board, -upper, -lower, false);
 						
-						//update/restore parity
-						board.parity[RXBitBoard::QUADRANT_ID[empties->position]] ^= 1;
 						//restore empties
 						empties->previous->next = empties;
 						empties->next->previous = empties;
-						//update/restore parity
-						board.player ^= 1;
+
+                        board.player ^= 1;
 						board.n_empties++;
 												
 						
@@ -409,7 +402,7 @@ int RXEngine::EG_PVS_hash_mobility(int threadID, RXBitBoard& board, const bool p
 						const unsigned long long p_discs = board.discs[p] | (iter->flipped | iter->square);
 						const unsigned long long o_discs = board.discs[o] ^ iter->flipped;
 						
-						iter->score = (RXBitBoard::get_mobility(o_discs, p_discs)<<5) - (RXBitBoard::get_corner_stability(p_discs)<<2) - (board.parity[RXBitBoard::QUADRANT_ID[iter->position]]);
+						iter->score = (RXBitBoard::get_mobility(o_discs, p_discs)<<5) - (RXBitBoard::get_corner_stability(p_discs)<<2) - (RXBitBoard::local_Parity(o_discs, p_discs, iter->position)^1);
 						
 					}
 						
@@ -706,7 +699,7 @@ int RXEngine::EG_PVS_ETC_mobility(int threadID, RXBitBoard& board, const bool pv
 					const unsigned long long p_discs = board.discs[p] | (iter->flipped | iter->square);
 					const unsigned long long o_discs = board.discs[o] ^ iter->flipped;
 																					
-					iter->score = (RXBitBoard::get_mobility(o_discs, p_discs)<<5) - (RXBitBoard::get_corner_stability(p_discs)<<2) - (board.parity[RXBitBoard::QUADRANT_ID[iter->position]]);
+                    iter->score = (RXBitBoard::get_mobility(o_discs, p_discs)<<5) - (RXBitBoard::get_corner_stability(p_discs)<<2) - (RXBitBoard::local_Parity(o_discs, p_discs, iter->position)^1);
 					
 				}
 									
@@ -2363,7 +2356,15 @@ void RXEngine::EG_driver(RXBBPatterns& sBoard, int selectivity, int end_selectiv
 			if(beta%(2*VALUE_DISC) != 0)
 				beta  += 2*VALUE_DISC - beta%(2*VALUE_DISC);
 		}
-		
+		 
+        //high score >= 56 skip selectivity stage
+        if (selectivity != 0 && abs(alpha) > 55*VALUE_DISC ) {
+            selectivity = std::max(EG_HIGH_SELECT, ++selectivity);
+            if (abs(alpha) > 61*VALUE_DISC )
+                selectivity = NO_SELECT;
+        }
+
+        
 		EG_PVS_root(sBoard, selectivity, alpha, beta, list);
 		
 		int left = 2;

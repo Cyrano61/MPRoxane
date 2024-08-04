@@ -32,9 +32,13 @@ class RXBitBoard {
 	
 	//neighborhood for each square
 	static const unsigned long long NEIGHBOR[];
-	// presorted squares
+    
+    // presorted squares
+    static const unsigned long long PRESORTED_POSITION_BITS[];
 	static const int PRESORTED_POSITION[];
+    
 	/*! a quadrant id for each square */
+    static const unsigned long long QUADRANT_MASK[];
 	static const int QUADRANT_ID[];
 			
 	static const unsigned char COUNT_A[];
@@ -51,7 +55,6 @@ class RXBitBoard {
 	unsigned long long hash_code;
 	int player;
 	int n_empties;
-	int parity[4];
 	RXSquareList empties_list[62];
 	RXSquareList *position_to_empties[64];
 	mutable unsigned long long n_nodes;
@@ -116,16 +119,22 @@ class RXBitBoard {
 		int moves_producing(RXMove* start) const;
 
         static uint64_t calc_legal(const uint64_t P, const uint64_t O);
-    
+        static unsigned long long get_legal_moves(const unsigned long long discs_player, const unsigned long long discs_opponent);
+
 		static int get_mobility(const unsigned long long discs_player, const unsigned long long discs_opponent);
 		static int get_corner_stability(const unsigned long long& discs_player);
 		int get_stability(const int color, const int n_stables_cut) const;
 		static int	get_border(const unsigned long long  p_discs, const unsigned long long  o_discs);
-		
+    
+        static int local_Parity(const unsigned long long p_discs, const unsigned long long o_discs, const int position);
+        int parity_Local(const int position) const;
+
+    
 		void do_move(const RXMove& move);
 		void undo_move(const RXMove& move);
 		void do_pass();
-
+    
+        
 		int final_score() const;
 		int final_score_1() const;
 		int final_score_2(int alpha, const int beta, const bool passed);
@@ -180,7 +189,6 @@ inline void RXBitBoard::do_move(const RXMove& move) {
 
 	hash_code ^= move.hash_code;
 
-	parity[QUADRANT_ID[move.position]] ^= 1;
 	
 	const RXSquareList *remove = position_to_empties[move.position];
 	remove->previous->next = remove->next;
@@ -195,7 +203,6 @@ inline void RXBitBoard::undo_move(const RXMove& move) {
 	insert->previous->next = insert;
 	insert->next->previous = insert;
 
-	parity[QUADRANT_ID[move.position]] ^= 1;
 
 	hash_code ^= move.hash_code;
 	
@@ -214,6 +221,35 @@ inline void RXBitBoard::do_pass() {
 }
 
 /*
+    @brief local parity
+
+    @param p_discs                    a bitboard representing player
+    @param o_discs                    a bitboard representing opponent
+    @param position                   square posistion
+    @return local parity (0:1)
+*/
+inline int RXBitBoard::local_Parity(const unsigned long long p_discs, const unsigned long long o_discs, const int position) {
+    
+    const unsigned long long quadrant_Filled = (p_discs | o_discs) & QUADRANT_MASK[QUADRANT_ID[position]];
+    
+    return static_cast<int>(__builtin_popcountll(quadrant_Filled) & 0x00000000000001ULL);
+}
+
+
+/*
+    @brief count all legal moves
+
+    @param P                    a bitboard representing player
+    @param O                    a bitboard representing opponent
+    @return count all legal moves
+*/
+
+inline int RXBitBoard::get_mobility(const unsigned long long p_discs, const unsigned long long o_discs) {
+    return __builtin_popcountll(get_legal_moves(p_discs, o_discs));
+}
+
+
+/*
     @brief Get a bitboard representing all legal moves
 
     @param P                    a bitboard representing player
@@ -222,6 +258,7 @@ inline void RXBitBoard::do_pass() {
 */
 // original code from http://www.amy.hi-ho.ne.jp/okuhara/bitboard.htm
 // modified by Nyanyan
+// version EDAX version identique a Roxane (presentation pour la vectorisation)
 inline uint64_t RXBitBoard::calc_legal(const uint64_t P, const uint64_t O){
     uint64_t moves, mO;
     uint64_t flip1, flip7, flip9, flip8, pre1, pre7, pre9, pre8;
@@ -243,10 +280,17 @@ inline uint64_t RXBitBoard::calc_legal(const uint64_t P, const uint64_t O){
 
 
 
-inline int RXBitBoard::get_mobility(const unsigned long long p_discs, const unsigned long long o_discs) {
-    
-    //return __builtin_popcountll(calc_legal(p_discs, o_discs));
 
+/*
+    @brief Get a bitboard representing all legal moves
+
+    @param P                    a bitboard representing player
+    @param O                    a bitboard representing opponent
+    @return all legal moves as a bitboard
+*/
+
+inline unsigned long long RXBitBoard::get_legal_moves(const unsigned long long p_discs, const unsigned long long o_discs) {
+    
 
 	const unsigned long long inner_o_discs = o_discs & 0x7E7E7E7E7E7E7E7EULL;
 
@@ -275,6 +319,7 @@ inline int RXBitBoard::get_mobility(const unsigned long long p_discs, const unsi
 //
 //	legals |= flipped << 1;
 	
+    // trick
 	/* direction _E */
     flipped = (p_discs << 1);
     legals |= ((flipped + inner_o_discs) & ~flipped);
@@ -351,48 +396,43 @@ inline int RXBitBoard::get_mobility(const unsigned long long p_discs, const unsi
 
 	legals |= flipped << 9;
 
-
-
-	legals &= ~(p_discs | o_discs);
-
-//    if(legals == 0)
-//        return 0;
+    //Removes existing discs
+    legals &= ~(p_discs | o_discs);
     
-    return __builtin_popcountll(legals);
-
+    return legals;
 
 }
 
 
 
-//inline int RXBitBoard::get_corner_stability(const unsigned long long& discs_player) {
-//	unsigned long long nStables = 0ULL;
-//	
-//	if(discs_player & 0X8000000000000000ULL) {
-//		nStables++;
-//		nStables += ((discs_player >> 62) & 0x0000000000000001ULL);
-//		nStables += ((discs_player >> 55) & 0x0000000000000001ULL);
-//	}
-//	if(discs_player & 0X0000000000000080ULL) {
-//		nStables++;
-//		nStables += ((discs_player >> 15) & 0x0000000000000001ULL);
-//		nStables += ((discs_player >> 6)  & 0x0000000000000001ULL);
-//	}
-//	if(discs_player & 0X0100000000000000ULL) {
-//		nStables++;
-//		nStables += ((discs_player >> 57) & 0x0000000000000001ULL);
-//		nStables += ((discs_player >> 48) & 0x0000000000000001ULL);
-//	}
-//	if(discs_player & 0X0000000000000001ULL) {
-//		nStables++;
-//		nStables += ((discs_player >> 8) & 0x0000000000000001ULL);
-//		nStables += ((discs_player >> 1) & 0x0000000000000001ULL);
-//	}
-//
-//	return static_cast<unsigned int>(nStables);
-//}
-
 inline int RXBitBoard::get_corner_stability(const unsigned long long& discs_player) {
+
+//    // Old version
+//    unsigned long long nStables = 0ULL;
+//
+//    if(discs_player & 0X8000000000000000ULL) {
+//        nStables++;
+//        nStables += ((discs_player >> 62) & 0x0000000000000001ULL);
+//        nStables += ((discs_player >> 55) & 0x0000000000000001ULL);
+//    }
+//    if(discs_player & 0X0000000000000080ULL) {
+//        nStables++;
+//        nStables += ((discs_player >> 15) & 0x0000000000000001ULL);
+//        nStables += ((discs_player >> 6)  & 0x0000000000000001ULL);
+//    }
+//    if(discs_player & 0X0100000000000000ULL) {
+//        nStables++;
+//        nStables += ((discs_player >> 57) & 0x0000000000000001ULL);
+//        nStables += ((discs_player >> 48) & 0x0000000000000001ULL);
+//    }
+//    if(discs_player & 0X0000000000000001ULL) {
+//        nStables++;
+//        nStables += ((discs_player >> 8) & 0x0000000000000001ULL);
+//        nStables += ((discs_player >> 1) & 0x0000000000000001ULL);
+//    }
+//
+//    return static_cast<unsigned int>(nStables);
+//
     
     unsigned long long stables = discs_player & 0x8100000000000081ULL;
  
@@ -402,6 +442,33 @@ inline int RXBitBoard::get_corner_stability(const unsigned long long& discs_play
     stables |= (discs_player & (stables >> 8)) & 0x0081000000000000ULL;
         
     return static_cast<unsigned int>(__builtin_popcountll(stables));
+    
+    
+//    // version EDAX : identique
+//    return static_cast<unsigned int>(__builtin_popcountll(((  (0x0100000000000001 & discs_player) << 1)
+//                                                           | ((0x8000000000000080 & discs_player) >> 1)
+//                                                           | ((0x0000000000000081 & discs_player) << 8)
+//                                                           | ((0x8100000000000000 & discs_player) >> 8)
+//                                                           |   0x8100000000000081) & discs_player));
+   
+//    //version kindergarten EDAX (multipication)
+//    static const char n_stable_h2a2h1g1b1a1[64] = {
+//        0, 1, 0, 2, 0, 1, 0, 2, 1, 2, 1, 3, 2, 3, 2, 4,
+//        0, 2, 0, 3, 0, 2, 0, 3, 1, 3, 1, 4, 2, 4, 2, 5,
+//        0, 1, 0, 2, 0, 1, 0, 2, 2, 3, 2, 4, 3, 4, 3, 5,
+//        0, 2, 0, 3, 0, 2, 0, 3, 2, 4, 2, 5, 3, 5, 3, 6
+//    };
+//
+//    static const char n_stable_h8g8b8a8h7a7[64] = {
+//        0, 0, 0, 0, 1, 2, 1, 2, 0, 0, 0, 0, 2, 3, 2, 3,
+//        0, 0, 0, 0, 1, 2, 1, 2, 0, 0, 0, 0, 2, 3, 2, 3,
+//        1, 1, 2, 2, 2, 3, 3, 4, 1, 1, 2, 2, 3, 4, 4, 5,
+//        2, 2, 3, 3, 3, 4, 4, 5, 2, 2, 3, 3, 4, 5, 5, 6
+//    };
+//
+//    return (n_stable_h8g8b8a8h7a7[(((unsigned int) (discs_player >> 32) & 0xc3810000) * 0x00000411) >> 26]
+//        + n_stable_h2a2h1g1b1a1[(((unsigned int) discs_player & 0x000081c3) * 0x04410000) >> 26]);
+
 }
 
 inline int RXBitBoard::get_stability(const int color, const int n_stables_cut) const {
