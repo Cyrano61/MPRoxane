@@ -69,7 +69,7 @@ int RXEngine::EG_alphabeta_parity(int threadID, RXBitBoard& board, int alpha, in
 	for (int parity = 1; parity >= 0; parity--) {
 		for(RXSquareList* empties = board.empties_list->next; empties->position != NOMOVE; empties = empties->next) {	
                         
-			if (board.parity_Local(empties->position) == parity && (discs_opponent & RXBitBoard::NEIGHBOR[empties->position]) && ((board).*(board.generate_flips[empties->position]))(move) ){
+			if (board.local_Parity(empties->position) == parity && (discs_opponent & RXBitBoard::NEIGHBOR[empties->position]) && ((board).*(board.generate_flips[empties->position]))(move) ){
 				board.n_nodes++;
 				
 				board.discs[board.player] |= (move.flipped | move.square);
@@ -211,7 +211,7 @@ int RXEngine::EG_alphabeta_hash_parity(int threadID, RXBitBoard& board, const bo
 	
 			for (int parity = 1; lower < upper && parity >= 0; parity--) {
 				for(RXSquareList* empties = board.empties_list->next; lower < upper && empties->position != NOMOVE; empties = empties->next) {
-					if (empties->position != hashmove && board.parity_Local(empties->position) == parity && (discs_opponent & RXBitBoard::NEIGHBOR[empties->position]) && ((board).*(board.generate_flips[empties->position]))(move) ){
+					if (empties->position != hashmove && board.local_Parity(empties->position) == parity && (discs_opponent & RXBitBoard::NEIGHBOR[empties->position]) && ((board).*(board.generate_flips[empties->position]))(move) ){
 						board.n_nodes++;
 						
 						board.discs[board.player] |= (move.flipped | move.square);
@@ -698,7 +698,8 @@ int RXEngine::EG_PVS_ETC_mobility(int threadID, RXBitBoard& board, const bool pv
 
 					const unsigned long long p_discs = board.discs[p] | (iter->flipped | iter->square);
 					const unsigned long long o_discs = board.discs[o] ^ iter->flipped;
-																					
+					
+                    //score for try : mobility * 32 - corner_stability * 2 - local_parity
                     iter->score = (RXBitBoard::get_mobility(o_discs, p_discs)<<5) - (RXBitBoard::get_corner_stability(p_discs)<<2) - (RXBitBoard::local_Parity(o_discs, p_discs, iter->position)^1);
 					
 				}

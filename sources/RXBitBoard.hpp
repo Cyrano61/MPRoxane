@@ -127,7 +127,7 @@ class RXBitBoard {
 		static int	get_border(const unsigned long long  p_discs, const unsigned long long  o_discs);
     
         static int local_Parity(const unsigned long long p_discs, const unsigned long long o_discs, const int position);
-        int parity_Local(const int position) const;
+        int local_Parity(const int position) const;
 
     
 		void do_move(const RXMove& move);

@@ -350,7 +350,7 @@ bool RXBitBoard::isEndGame() {
 	return false;
 }
 
-int RXBitBoard::parity_Local(const int position) const {
+int RXBitBoard::local_Parity(const int position) const {
     
     const unsigned long long quadrant_Filled = (discs[BLACK] | discs[WHITE]) & QUADRANT_MASK[QUADRANT_ID[position]];
     
