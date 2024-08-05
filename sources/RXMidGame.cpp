@@ -406,9 +406,10 @@ int RXEngine::MG_PVS_deep(int threadID, RXBBPatterns& sBoard, const bool pv, con
 		}
 			
 		//for all empty square
-		const unsigned long long discs_opponent = board.discs[board.player^1];
+        const unsigned long long legal_movesBB = RXBitBoard::get_legal_moves(board.discs[board.player], board.discs[board.player^1]);
 		for(RXSquareList* empties = board.empties_list->next; empties->position != NOMOVE; empties = empties->next) {
-			if(bestmove != empties->position && (discs_opponent & RXBitBoard::NEIGHBOR[empties->position]) && ((board).*(board.generate_move[empties->position]))(*move)) {
+            if(bestmove != empties->position && (legal_movesBB & 1ULL<<empties->position)) {
+                ((board).*(board.generate_move[empties->position]))(*move);
 					
 				board.n_nodes++;
 				
@@ -685,11 +686,10 @@ int RXEngine::MG_PVS_deep(int threadID, RXBBPatterns& sBoard, const bool pv, con
 									} else {
 										
 										RXMove& lastMove = threads[threadID]._move[board.n_empties][1];
-										const unsigned long long discs_opponent = board.discs[board.player^1];
-
+                                        const unsigned long long legal_movesBB = RXBitBoard::get_legal_moves(board.discs[board.player], board.discs[board.player^1]);
 										int bestscore1 = UNDEF_SCORE; //masquage
 										for(RXSquareList* empties = board.empties_list->next; bestscore1<-_lower && empties->position != NOMOVE; empties = empties->next)
-											if ((discs_opponent & RXBitBoard::NEIGHBOR[empties->position]) && ((sBoard).*(sBoard.generate_patterns[empties->position][board.player]))(lastMove)) {
+                                            if(legal_movesBB & 1ULL<<empties->position) { ((sBoard).*(sBoard.generate_patterns[empties->position][board.player]))(lastMove);
 												board.n_nodes++;
 
 												int score= -sBoard.get_score(lastMove);	
@@ -1141,10 +1141,10 @@ int RXEngine::MG_PVS_shallow(int threadID, RXBBPatterns& sBoard, const bool pv, 
 				//list moves
 				RXMove* previous = list;
 				int n_Moves = 0;
-				const unsigned long long discs_opponent = board.discs[board.player^1];
+                const unsigned long long legal_movesBB = RXBitBoard::get_legal_moves(board.discs[board.player], board.discs[board.player^1]);
 
 				for(RXSquareList* empties = board.empties_list->next; empties->position != NOMOVE; empties = empties->next)
-					if(bestmove != empties->position && (discs_opponent & RXBitBoard::NEIGHBOR[empties->position]) && ((board).*(board.generate_move[empties->position]))(*move)) {
+                    if(bestmove != empties->position && (legal_movesBB & 1ULL<<empties->position)) { ((board).*(board.generate_move[empties->position]))(*move);
 						previous = previous->next = move++;
 						n_Moves++;
 					}
@@ -1237,9 +1237,10 @@ int RXEngine::MG_PVS_shallow(int threadID, RXBBPatterns& sBoard, const bool pv, 
 						lower = bestscore;
 				}
 				
-				const unsigned long long discs_opponent = board.discs[board.player^1];
+                const unsigned long long legal_movesBB = RXBitBoard::get_legal_moves(board.discs[board.player], board.discs[board.player^1]);
+
 				for(RXSquareList* empties = board.empties_list->next; lower < upper &&  empties->position != NOMOVE; empties = empties->next) {
-					if(empties->position != hashmove && (discs_opponent & RXBitBoard::NEIGHBOR[empties->position]) && ((sBoard).*(sBoard.generate_patterns[empties->position][board.player]))(*move)) {
+                    if(empties->position != hashmove && (legal_movesBB & 1ULL<<empties->position)) { ((sBoard).*(sBoard.generate_patterns[empties->position][board.player]))(*move);
 						board.n_nodes++;
 						int score= -sBoard.get_score(*move);
 				
@@ -1280,9 +1281,10 @@ int RXEngine::MG_PVS_shallow(int threadID, RXBBPatterns& sBoard, const bool pv, 
 						RXMove *move = list + 1, *previous = list;
 						int nMoves = 0;
 						
-						const unsigned long long discs_opponent = board.discs[board.player^1];
+                        const unsigned long long legal_movesBB = RXBitBoard::get_legal_moves(board.discs[board.player], board.discs[board.player^1]);
+
 						for(RXSquareList* empties = board.empties_list->next; empties->position != NOMOVE; empties = empties->next)
-							if(empties->position != hashmove && (discs_opponent & RXBitBoard::NEIGHBOR[empties->position]) && ((board).*(board.generate_move[empties->position]))(*move)) {
+                            if(empties->position != hashmove && (legal_movesBB & 1ULL<<empties->position)) { ((board).*(board.generate_move[empties->position]))(*move);
 								previous = previous->next = move++;
 								nMoves++;
 							}
@@ -1350,9 +1352,10 @@ int RXEngine::MG_PVS_shallow(int threadID, RXBBPatterns& sBoard, const bool pv, 
 					
 
 						int score = UNDEF_SCORE;
-						const unsigned long long discs_opponent = board.discs[board.player^1];
+                        const unsigned long long legal_movesBB = RXBitBoard::get_legal_moves(board.discs[board.player], board.discs[board.player^1]);
+
 						for(RXSquareList* empties = board.empties_list->next; lower < upper && empties->position != NOMOVE; empties = empties->next) {
-							if (empties->position != hashmove && (discs_opponent & RXBitBoard::NEIGHBOR[empties->position]) && ((board).*(board.generate_move[empties->position]))(*move)) {
+                            if (empties->position != hashmove && (legal_movesBB & 1ULL<<empties->position)) { ((board).*(board.generate_move[empties->position]))(*move);
 	
 								((sBoard).*(sBoard.update_patterns[move->position][board.player]))(*move);
 								sBoard.do_move(*move);
@@ -1530,9 +1533,11 @@ int RXEngine::MG_NWS_XProbCut(int threadID, RXBBPatterns& sBoard, const int pvDe
 			}
 				
 			//for all empty square
-			const unsigned long long discs_opponent = board.discs[board.player^1];
+            const unsigned long long legal_movesBB = RXBitBoard::get_legal_moves(board.discs[board.player], board.discs[board.player^1]);
 			for(RXSquareList* empties = board.empties_list->next; empties->position != NOMOVE; empties = empties->next)
-				if(bestmove != empties->position && (discs_opponent & RXBitBoard::NEIGHBOR[empties->position]) && ((board).*(board.generate_move[empties->position]))(*move)) {
+                if(bestmove != empties->position && (legal_movesBB & 1ULL<<empties->position)) {
+                    
+                    ((board).*(board.generate_move[empties->position]))(*move);
 						
 					board.n_nodes++;
 

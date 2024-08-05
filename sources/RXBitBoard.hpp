@@ -191,7 +191,7 @@ inline int RXBitBoard::moves_producing(RXMove* start) const {
 	RXMove *list = start + 1, *previous = start;
 	int nMoves = 0;
     
-    unsigned long long legal_movesBB = get_legal_moves(discs[player], discs[player^1]);
+    const unsigned long long legal_movesBB = get_legal_moves(discs[player], discs[player^1]);
     
     for(RXSquareList* empties = empties_list->next; empties->position != NOMOVE; empties = empties->next)
         if((legal_movesBB & 1ULL<<empties->position) && ((this)->*(generate_move[empties->position]))(*list)) {
