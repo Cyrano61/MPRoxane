@@ -553,8 +553,6 @@ int RXEngine::EG_PVS_ETC_mobility(int threadID, RXBitBoard& board, const bool pv
 			&
 			score_max<=score_max_calculŽ< beta  ==> diminution de la fenetre de recherche
 		*/
-			
-			
 		if ( alpha >= stability_threshold[board.n_empties] ) {
 				int stability_bound = 6400 - 2 * board.get_stability(board.player^1, (6500-alpha)/2);
 				if ( stability_bound <= alpha )
@@ -691,7 +689,7 @@ int RXEngine::EG_PVS_ETC_mobility(int threadID, RXBitBoard& board, const bool pv
 				const int p = board.player;
 				const int o = p^1;
 			
-				//sort list by mobility
+				//calc answer move->score
 				for(RXMove* iter = list->next; iter != NULL; iter = iter->next) {
 							
 					board.n_nodes++;
@@ -699,7 +697,7 @@ int RXEngine::EG_PVS_ETC_mobility(int threadID, RXBitBoard& board, const bool pv
 					const unsigned long long p_discs = board.discs[p] | (iter->flipped | iter->square);
 					const unsigned long long o_discs = board.discs[o] ^ iter->flipped;
 					
-                    //score for try : mobility * 32 - corner_stability * 2 - local_parity
+                    //score for try : mobility * 32 - corner_stability * 2 - reserve local_parity
                     iter->score = (RXBitBoard::get_mobility(o_discs, p_discs)<<5) - (RXBitBoard::get_corner_stability(p_discs)<<2) - (RXBitBoard::local_Parity(o_discs, p_discs, iter->position)^1);
 					
 				}
@@ -707,6 +705,8 @@ int RXEngine::EG_PVS_ETC_mobility(int threadID, RXBitBoard& board, const bool pv
 			}
 			
 			if(bestmove == NOMOVE) {
+                
+                //find moves with worst answer
 
 				RXMove* previous_move = list;
 				RXMove* move = previous_move->next;
@@ -753,6 +753,8 @@ int RXEngine::EG_PVS_ETC_mobility(int threadID, RXBitBoard& board, const bool pv
 //			for(;!abort.load() && lower < upper && list->next != NULL; list = list->next) {
 			for(;lower < upper && list->next != NULL; list = list->next) {
 
+                //find moves with worst answer
+                
 				RXMove* previous_move = list;
 				RXMove* move = previous_move->next;
 				

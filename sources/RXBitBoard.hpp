@@ -149,6 +149,9 @@ class RXBitBoard {
 		/* DEBUG */
 		void print_empties_list() const;
 		static void print_64bits(unsigned long long n);
+        void print_Board();
+        void print_moves_list(RXMove* MovesList) const;
+
 		
 		/* test */
 		//static unsigned long long cntbset(unsigned long long n);
@@ -157,21 +160,48 @@ class RXBitBoard {
 		
 };
 
+
+//inline int RXBitBoard::moves_producing(RXMove* start) {
+//    
+//    RXMove *list = start + 1, *previous = start;
+//    int nMoves = 0;
+//    
+//    unsigned long long legal_movesBB = get_legal_moves(discs[player], discs[player^1]);
+//    
+//    const unsigned long long discs_opponent = discs[player^1];
+//    for(RXSquareList* empties = empties_list->next; empties->position != NOMOVE; empties = empties->next)
+//        if((discs_opponent & NEIGHBOR[empties->position]) && ((this)->*(generate_move[empties->position]))(*list)) {
+//            if (!(legal_movesBB & 1ULL<< empties->position)) {
+//                std::cout << "Erreur legal moves" << std::endl;
+//                std::cout << RXMove::index_to_coord(empties->position) << std::endl;
+//                print_64bits(legal_movesBB);
+//                
+//            }
+//            list->score = 0;
+//            previous = previous->next = list++;
+//            nMoves++;
+//        }
+//    
+//    previous->next = NULL;
+//    return nMoves;
+//}
+
 inline int RXBitBoard::moves_producing(RXMove* start) const {
 	
 	RXMove *list = start + 1, *previous = start;
 	int nMoves = 0;
-	
-	const unsigned long long discs_opponent = discs[player^1];
-	for(RXSquareList* empties = empties_list->next; empties->position != NOMOVE; empties = empties->next)
-		if((discs_opponent & NEIGHBOR[empties->position]) && ((this)->*(generate_move[empties->position]))(*list)) {
-			list->score = 0;
-			previous = previous->next = list++;
-			nMoves++;
-		}
-	
-	previous->next = NULL;	
-	return nMoves;
+    
+    unsigned long long legal_movesBB = get_legal_moves(discs[player], discs[player^1]);
+    
+    for(RXSquareList* empties = empties_list->next; empties->position != NOMOVE; empties = empties->next)
+        if((legal_movesBB & 1ULL<<empties->position) && ((this)->*(generate_move[empties->position]))(*list)) {
+            list->score = 0;
+            previous = previous->next = list++;
+            nMoves++;
+        }
+        
+	previous->next = NULL;
+ 	return nMoves;
 }
 
 

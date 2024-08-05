@@ -33,9 +33,7 @@
 
 
 int main (int argc, char * const argv[]) {
-    
-
-	
+    	
 	std::string login, password, file_name, mode, imposed_opening = "";
 	unsigned int nBitsTable = 20;
 	unsigned int nThreads = 1;
@@ -69,6 +67,8 @@ int main (int argc, char * const argv[]) {
     
 	
 	RXRoxane roxane(nBitsTable, nThreads);
+    
+ 
 	
 	//warm up
 	if(!file_name.empty())

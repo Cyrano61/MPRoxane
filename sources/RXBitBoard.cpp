@@ -36,9 +36,10 @@ const unsigned long long RXBitBoard::PRESORTED_POSITION_BITS[] = {
     0X0008000000000000ULL, 0X0000000000000800ULL, 0X0000000200000000ULL, 0X0000000002000000ULL, //G
     0X0000400000000000ULL, 0X0000000000400000ULL, 0X0020000000000000ULL, 0X0000000000002000ULL, //F
     0X0004000000000000ULL, 0X0000000000000400ULL, 0X0000020000000000ULL, 0X0000000000020000ULL, //F
-    0X4000000000000000ULL, 0X0000000000008000ULL, 0X4000000000000000ULL, 0X0000000000000040ULL, //C
+    0X0080000000000000ULL, 0X0000000000008000ULL, 0X4000000000000000ULL, 0X0000000000000040ULL, //C
     0X0200000000000000ULL, 0X0000000000000002ULL, 0X0001000000000000ULL, 0X0000000000000100ULL, //C
-    0X0040000000000000ULL, 0X0000000000004000ULL, 0X0002000000000000ULL, 0X0000000000000200ULL  //X
+    0X0040000000000000ULL, 0X0000000000004000ULL, 0X0002000000000000ULL, 0X0000000000000200ULL, //X
+    0x0000000000000000ULL, 0x0000000000000000ULL                                                // PASS & NOMOVE
 };
 
 
@@ -419,6 +420,13 @@ void RXBitBoard::print_empties_list() const {
 	std::cout << std::endl;
 }
 
+void RXBitBoard::print_moves_list(RXMove* Moves) const {
+    std::cout << "MovesList";
+    for(; Moves->position != NULL; Moves = Moves->next)
+        std::cout << " : " << RXMove::index_to_coord(Moves->position);
+    std::cout << std::endl;
+}
+
 void RXBitBoard::print_64bits(unsigned long long n) {
 
 	std::cout << "\n  A B C D E F G H " << std::endl;
@@ -427,7 +435,7 @@ void RXBitBoard::print_64bits(unsigned long long n) {
 		for(int iPosition = (9-iLine)*8 - 1; iPosition>(8-iLine)*8-1; iPosition--) {
 			unsigned long long _mask = 1ULL<<iPosition;
 			if((n & _mask) != 0) {
-					std::cout  << "# ";
+					std::cout  << "@ ";
 			} else {
 					std::cout  << ". ";
 			}
@@ -438,6 +446,36 @@ void RXBitBoard::print_64bits(unsigned long long n) {
 	std::cout << "  A B C D E F G H \n" << std::endl;
 		
 }
+
+void RXBitBoard::print_Board() {
+
+    std::cout << "\n  A B C D E F G H " << std::endl;
+    for(int iLine = 1; iLine<=8; iLine++) {
+        std::cout << iLine << " ";
+        for(int iPosition = (9-iLine)*8 - 1; iPosition>(8-iLine)*8-1; iPosition--) {
+            unsigned long long _mask = 1ULL<<iPosition;
+            if((discs[BLACK] & _mask) != 0) {
+                std::cout << "# ";
+            } else if((discs[WHITE] & _mask) !=0) {
+                std::cout << "O ";
+            } else {
+                std::cout << ". ";
+            }
+            
+        }
+        std::cout << iLine;
+        if(iLine == 4)
+            std::cout << "\tNoirs: " << __builtin_popcountll(discs[BLACK]) << "\tBlancs: " << __builtin_popcountll(discs[WHITE]);
+        if(iLine == 5)
+            std::cout << "\t" << (player == WHITE ? "BLANCS" : "NOIRS") << " au trait";
+
+        std::cout << std::endl;
+    }
+    std::cout << "  A B C D E F G H \n" << std::endl;
+    
+
+}
+
 
 
 /*
