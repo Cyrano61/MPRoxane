@@ -1358,7 +1358,7 @@ std::string RXEngine::display(RXBitBoard& board, const int type, const int allow
 			} else {
 				buffer << toHMS(time/1000.0) << " | ";
 				
-				buffer << std::noshowpos << std::setprecision(0) << std::setw(11) << board.n_nodes << " | ";
+				buffer << std::noshowpos << std::setprecision(0) << std::setw(12) << board.n_nodes << " | ";
 				
 				buffer << std::setw(11) << (board.n_nodes/max(1, time_level)) * 1000 << " |";
 			}
@@ -1624,7 +1624,7 @@ void RXEngine::run() {
 	
 
 
-	*log	<< "------------------------------------------------------------------------------------------------\n"
+	*log	<< "-------------------------------------------------------------------------------------------------\n"
 			<< search_sBoard
 			<< std::endl;
 						
@@ -1652,7 +1652,7 @@ void RXEngine::run() {
 		
 	} else {
 
-		*log << " depth |  score  | principal variation                 | time        |   nodes (N) |  speed(N/s) |" << std::endl;
+		*log << " depth |  score  | principal variation                 | time        |    nodes (N) |  speed(N/s) |" << std::endl;
 
 		int depth = 2;
 		int selectivity = MG_SELECT;
