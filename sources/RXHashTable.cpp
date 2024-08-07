@@ -43,8 +43,8 @@ RXHashTable::RXHashTable(unsigned int nBT) : table(0), nBitsTable(nBT),  _shared
 	table.resize(1UL<<nBitsTable);
 		 
 	date[0] = date[1] = 0;
-	
-	
+    
+    
 }
 
 

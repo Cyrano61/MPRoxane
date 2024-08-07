@@ -20,6 +20,11 @@
 #include "RXBitBoard.hpp"
 #include "RXMove.hpp"
 
+
+
+
+
+
 class RXHashValue {
 	
 	public:
@@ -38,6 +43,7 @@ class RXHashValue {
 		void compact_2_wide(unsigned long long packed);
 	
 };
+
 
 inline unsigned long long RXHashValue::wide_2_compact() const {
 	
@@ -101,70 +107,75 @@ class RXHashEntry {
 
 
 class RXHashTable {
-	
-	public :
-		enum t_hash {HASH_SHARED, HASH_BLACK, HASH_WHITE};
-	
-	private :
-		mutable RXMove _move[61][2];
-	
-		mutable std::vector<RXHashEntry> table;
-		unsigned int nBitsTable;
-		unsigned int _offsetTable[3];
-		unsigned int _maskTable[3];
-	
-		unsigned char date[2];
-	
-		bool _shared;
-	
-		void mainVariation(std::ostringstream& buffer, RXBitBoard& board, const t_hash type_hashtable, int depth, const bool myTurn) const;
+    
+    public :
+    enum t_hash {HASH_SHARED, HASH_BLACK, HASH_WHITE};
+    
+    private :
+    mutable RXMove _move[61][2];
+    
+    mutable std::vector<RXHashEntry> table;
+    unsigned int nBitsTable;
+    unsigned int _offsetTable[3];
+    unsigned int _maskTable[3];
+    
+    unsigned char date[2];
+    
+    bool _shared;
+    
+    void mainVariation(std::ostringstream& buffer, RXBitBoard& board, const t_hash type_hashtable, int depth, const bool myTurn) const;
+    
+    
+    void copyPV(RXBitBoard& board, const t_hash from_hashtable, const t_hash to_hashtable);
+    void protectPV(RXBitBoard& board, const t_hash type_hashtable, const bool passed = false);
+ 
 
-
-		void copyPV(RXBitBoard& board, const t_hash from_hashtable, const t_hash to_hashtable);
-		void protectPV(RXBitBoard& board, const t_hash type_hashtable, const bool passed = false);
-
-
-	public :
-	
-	
-		RXHashTable(unsigned int nBTable);
-		~RXHashTable() {};
-
-		void reset();
-
-		void shared(const bool flag);
-		
-		bool is_shared() const;
-	
-		bool get(const RXBitBoard& board, const t_hash type_hashtable, RXHashValue& entry) const;
-		bool get(const unsigned long long hash_code, const t_hash type_hashtable, RXHashValue& entry) const;
-
-		RXHashRecord* get_record(const RXBitBoard& board, const t_hash type_hashtable) const;
-
-		void copyPV(RXHashTable* from_hashtable, const t_hash from_type_hash, RXBitBoard&board, const t_hash to_type_hash);
-
-		void copyPV_shared_to_color(RXBitBoard& board, const int color);
-		void copyPV_color_to_shared(RXBitBoard& board, const int color);
-		void mergePV(RXBitBoard& board);
-		void protectPV(RXBitBoard& board);
-		
-		void update(const unsigned long long hash_code, const bool pv, const t_hash type_hashtable, const unsigned char selectivity, const unsigned char depth, const int alpha, const int beta, const int score, const char move);
-		void update(const unsigned long long hash_code, const t_hash type_hashtable, const unsigned char selectivity, const unsigned char depth, const int alpha, const int score, const char move);
-	
-		std::string line2String(RXBitBoard& board, int depth, const t_hash type_hashtable) const;
-		
-		void new_search(const unsigned int color, const int n_empties);
-		int get_date(const unsigned int color) { return date[_shared ? 0:color];};
-		
-		//void update(const unsigned long offset, const RXHash* entry) { entry->date = date[offset == 0 ? 0:1] ;};
-
-
-		int bestmove(RXBitBoard& board, const t_hash type_hashtable) const;
-		void mainline(std::ostringstream& buffer, RXBitBoard& board, const int move, const t_hash type_hashtable) const;
-		void mainline(std::ostringstream& buffer, RXBitBoard& board, const t_hash type_hashtable) const;
-		void printVariation(RXBitBoard& board, const t_hash type_hashtable, const bool myTurn) const;
-
+    
+    public :
+    
+    
+    
+    RXHashTable(unsigned int nBTable);
+    ~RXHashTable() {};
+    
+    void reset();
+    
+    void shared(const bool flag);
+    
+    bool is_shared() const;
+    
+    bool get(const RXBitBoard& board, const t_hash type_hashtable, RXHashValue& entry) const;
+    bool get(const unsigned long long hash_code, const t_hash type_hashtable, RXHashValue& entry) const;
+    
+    RXHashRecord* get_record(const RXBitBoard& board, const t_hash type_hashtable) const;
+    
+    void copyPV(RXHashTable* from_hashtable, const t_hash from_type_hash, RXBitBoard&board, const t_hash to_type_hash);
+    
+    void copyPV_shared_to_color(RXBitBoard& board, const int color);
+    void copyPV_color_to_shared(RXBitBoard& board, const int color);
+    void mergePV(RXBitBoard& board);
+    void protectPV(RXBitBoard& board);
+    
+    void update(const unsigned long long hash_code, const bool pv, const t_hash type_hashtable, const unsigned char selectivity, const unsigned char depth, const int alpha, const int beta, const int score, const char move);
+    void update(const unsigned long long hash_code, const t_hash type_hashtable, const unsigned char selectivity, const unsigned char depth, const int alpha, const int score, const char move);
+    
+    std::string line2String(RXBitBoard& board, int depth, const t_hash type_hashtable) const;
+    
+    void new_search(const unsigned int color, const int n_empties);
+    int get_date(const unsigned int color) { return date[_shared ? 0:color];};
+    
+    //void update(const unsigned long offset, const RXHash* entry) { entry->date = date[offset == 0 ? 0:1] ;};
+    
+    
+    int bestmove(RXBitBoard& board, const t_hash type_hashtable) const;
+    void mainline(std::ostringstream& buffer, RXBitBoard& board, const int move, const t_hash type_hashtable) const;
+    void mainline(std::ostringstream& buffer, RXBitBoard& board, const t_hash type_hashtable) const;
+    void printVariation(RXBitBoard& board, const t_hash type_hashtable, const bool myTurn) const;
+    
+   
+    
 };
+
 
 inline void RXHashTable::new_search(const unsigned int color, const int n_empties) {
 	

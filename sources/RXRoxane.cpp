@@ -15,6 +15,7 @@
 
 #include "RXRoxane.hpp"
 #include "RXEvaluation.hpp"
+#include "RXBitBoard.hpp"
 
 
 extern "C"
@@ -45,6 +46,7 @@ RXRoxane::RXRoxane(unsigned int size_hashtable, int max_thread): GGSClient(NULL)
 	main_PV = new RXHashTable(19);
 	expected_PV = new RXHashTable(19);
 	
+    RXBitBoard::init_hashcodeTable();
 	RXEvaluation::load();
 	RXEngine::probcut_coefficients();
 	

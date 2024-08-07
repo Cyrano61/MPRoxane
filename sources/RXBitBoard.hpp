@@ -12,6 +12,7 @@
 
 #include <iostream>
 #include <string>
+#include <vector>
 
 #include "RXConstantes.hpp"
 #include "RXMove.hpp"
@@ -27,8 +28,18 @@ class RXBitBoard {
 	friend class RXEngine;
 	friend class RXBBPatterns;
 	friend class RXEvaluation;
+    
+    private :
+    static const unsigned long long hashSquare[64][2];
+    
+    static unsigned long long hashcodeTable_lines1_2[65536][2];
+    static unsigned long long hashcodeTable_lines3_4[65536][2];
+    static unsigned long long hashcodeTable_lines5_6[65536][2];
+    static unsigned long long hashcodeTable_lines7_8[65536][2];
 
 	public :
+    
+    static void init_hashcodeTable();
 	
 	//neighborhood for each square
 	static const unsigned long long NEIGHBOR[];
@@ -50,6 +61,9 @@ class RXBitBoard {
 	static const unsigned char COUNT_G[];
 	static const unsigned char COUNT_H[];
 
+    //initialisation hashcodeTable
+    
+
 
 	unsigned long long discs[2];
 	unsigned long long hash_code;
@@ -59,105 +73,107 @@ class RXBitBoard {
 	RXSquareList *position_to_empties[64];
 	mutable unsigned long long n_nodes;
 	
-	void set_disc(const int position, const int color);
-	
-	//public :
-		
-		unsigned long long get_n_nodes() const {
-			return n_nodes;
-		}
-	
-		RXBitBoard();
-	
-		//constructeur par copie
-		RXBitBoard(const RXBitBoard& src);
-		
-		RXBitBoard& operator=(const RXBitBoard& src);
-	
-		void build(const std::string& init);
-	
-		friend std::ostream& operator<<(std::ostream& os, RXBitBoard& board);
-
-		bool squareIsEmpty(const int position) const;
-		bool isPassed();
-		bool isEndGame();
-
-		// move functions
-		#define func(pos)	static bool do_flips_##pos(unsigned long long& discs_player, unsigned long long& discs_opponent); \
-							static int count_flips_##pos(const unsigned long long& discs_player); \
-							bool generate_flips_##pos(RXMove& move) const; \
-							bool generate_move_##pos(RXMove& move) const
-
-
-	
-		func(A1); func(B1); func(C1); func(D1); func(E1); func(F1); func(G1); func(H1);
-		func(A2); func(B2); func(C2); func(D2); func(E2); func(F2); func(G2); func(H2);
-		func(A3); func(B3); func(C3); func(D3); func(E3); func(F3); func(G3); func(H3);
-		func(A4); func(B4); func(C4);					  func(F4); func(G4); func(H4);
-		func(A5); func(B5); func(C5);					  func(F5); func(G5); func(H5);
-		func(A6); func(B6); func(C6); func(D6); func(E6); func(F6); func(G6); func(H6);
-		func(A7); func(B7); func(C7); func(D7); func(E7); func(F7); func(G7); func(H7);
-		func(A8); func(B8); func(C8); func(D8); func(E8); func(F8); func(G8); func(H8);
-		#undef func
-
-	
-		typedef bool (*type_do_flips)(unsigned long long& discs_player, unsigned long long& discs_opponent);
-		static type_do_flips const do_flips[];
-
-		typedef int (*type_count_flips)(const unsigned long long& discs_player);
-		static type_count_flips const count_flips[];
-	
-
-		bool (RXBitBoard::*generate_flips[64])(RXMove& move) const;
-		void init_generate_flips();
-		
-		bool (RXBitBoard::*generate_move[64])(RXMove& move) const;
-		void init_generate_move();
-		
-		/* bool check_move(const int position, const int color) const; */
-
-		int moves_producing(RXMove* start) const;
-
-        static uint64_t calc_legal(const uint64_t P, const uint64_t O);
-        static unsigned long long get_legal_moves(const unsigned long long discs_player, const unsigned long long discs_opponent);
-
-		static int get_mobility(const unsigned long long discs_player, const unsigned long long discs_opponent);
-		static int get_corner_stability(const unsigned long long& discs_player);
-		int get_stability(const int color, const int n_stables_cut) const;
-		static int	get_border(const unsigned long long  p_discs, const unsigned long long  o_discs);
+    void set_disc(const int position, const int color);
     
-        static int local_Parity(const unsigned long long p_discs, const unsigned long long o_discs, const int position);
-        int local_Parity(const int position) const;
-
+    //public :
     
-		void do_move(const RXMove& move);
-		void undo_move(const RXMove& move);
-		void do_pass();
+    unsigned long long get_n_nodes() const {
+        return n_nodes;
+    }
     
-        
-		int final_score() const;
-		int final_score_1() const;
-		int final_score_2(int alpha, const int beta, const bool passed);
-		int final_score_2(const unsigned long long discs_player, const unsigned long long discs_opponent, const int alpha, const int beta, const bool passed, const int idSquare1, const int idSquare2);
-		int final_score_3(int alpha, const int beta, const bool passed);
-		int final_score_3(const unsigned long long discs_player, const unsigned long long discs_opponent, int alpha, const int beta, const bool passed, const int idSquare1, const int idSquare2, const int idSquare3);
-		int	final_score_4(int alpha, const int beta, const bool passed);
-		int	final_score_4(const unsigned long long discs_player, const unsigned long long discs_opponent, int alpha, const int beta, const bool passed, const int idSquare1, const int idSquare2, const int idSquare3, const int idSquare4);
-
-		std::string cassio_script() const;
-
-		/* DEBUG */
-		void print_empties_list() const;
-		static void print_64bits(unsigned long long n);
-        void print_Board();
-        void print_moves_list(RXMove* MovesList) const;
-
-		
-		/* test */
-		//static unsigned long long cntbset(unsigned long long n);
-		//void build(const unsigned long long disc_player, const unsigned long long disc_opp, const int color);
-
-		
+    RXBitBoard();
+    
+    //constructeur par copie
+    RXBitBoard(const RXBitBoard& src);
+    
+    RXBitBoard& operator=(const RXBitBoard& src);
+    
+    void build(const std::string& init);
+    
+    friend std::ostream& operator<<(std::ostream& os, RXBitBoard& board);
+    
+    bool squareIsEmpty(const int position) const;
+    bool isPassed();
+    bool isEndGame();
+    
+    // move functions
+#define func(pos)	static bool do_flips_##pos(unsigned long long& discs_player, unsigned long long& discs_opponent); \
+static int count_flips_##pos(const unsigned long long& discs_player); \
+bool generate_flips_##pos(RXMove& move) const; \
+bool generate_move_##pos(RXMove& move) const
+    
+    
+    
+    func(A1); func(B1); func(C1); func(D1); func(E1); func(F1); func(G1); func(H1);
+    func(A2); func(B2); func(C2); func(D2); func(E2); func(F2); func(G2); func(H2);
+    func(A3); func(B3); func(C3); func(D3); func(E3); func(F3); func(G3); func(H3);
+    func(A4); func(B4); func(C4);					  func(F4); func(G4); func(H4);
+    func(A5); func(B5); func(C5);					  func(F5); func(G5); func(H5);
+    func(A6); func(B6); func(C6); func(D6); func(E6); func(F6); func(G6); func(H6);
+    func(A7); func(B7); func(C7); func(D7); func(E7); func(F7); func(G7); func(H7);
+    func(A8); func(B8); func(C8); func(D8); func(E8); func(F8); func(G8); func(H8);
+#undef func
+    
+    
+    typedef bool (*type_do_flips)(unsigned long long& discs_player, unsigned long long& discs_opponent);
+    static type_do_flips const do_flips[];
+    
+    typedef int (*type_count_flips)(const unsigned long long& discs_player);
+    static type_count_flips const count_flips[];
+    
+    
+    bool (RXBitBoard::*generate_flips[64])(RXMove& move) const;
+    void init_generate_flips();
+    
+    bool (RXBitBoard::*generate_move[64])(RXMove& move) const;
+    void init_generate_move();
+    
+    /* bool check_move(const int position, const int color) const; */
+    
+    int moves_producing(RXMove* start) const;
+    
+    static uint64_t calc_legal(const uint64_t P, const uint64_t O);
+    static unsigned long long get_legal_moves(const unsigned long long discs_player, const unsigned long long discs_opponent);
+    
+    static int get_mobility(const unsigned long long discs_player, const unsigned long long discs_opponent);
+    static int get_corner_stability(const unsigned long long& discs_player);
+    int get_stability(const int color, const int n_stables_cut) const;
+    static int	get_border(const unsigned long long  p_discs, const unsigned long long  o_discs);
+    
+    static int local_Parity(const unsigned long long p_discs, const unsigned long long o_discs, const int position);
+    int local_Parity(const int position) const;
+    
+    
+    void do_move(const RXMove& move);
+    void undo_move(const RXMove& move);
+    void do_pass();
+    
+    
+    int final_score() const;
+    int final_score_1() const;
+    int final_score_2(int alpha, const int beta, const bool passed);
+    int final_score_2(const unsigned long long discs_player, const unsigned long long discs_opponent, const int alpha, const int beta, const bool passed, const int idSquare1, const int idSquare2);
+    int final_score_3(int alpha, const int beta, const bool passed);
+    int final_score_3(const unsigned long long discs_player, const unsigned long long discs_opponent, int alpha, const int beta, const bool passed, const int idSquare1, const int idSquare2, const int idSquare3);
+    int	final_score_4(int alpha, const int beta, const bool passed);
+    int	final_score_4(const unsigned long long discs_player, const unsigned long long discs_opponent, int alpha, const int beta, const bool passed, const int idSquare1, const int idSquare2, const int idSquare3, const int idSquare4);
+    
+    std::string cassio_script() const;
+    
+    /* DEBUG */
+    void print_empties_list() const;
+    static void print_64bits(unsigned long long n);
+    void print_Board();
+    void print_moves_list(RXMove* MovesList) const;
+    
+    unsigned long long hashcode();
+    
+    
+    /* test */
+    //static unsigned long long cntbset(unsigned long long n);
+    //void build(const unsigned long long disc_player, const unsigned long long disc_opp, const int color);
+    
+    
 };
 
 
