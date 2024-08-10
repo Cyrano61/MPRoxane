@@ -325,7 +325,8 @@ int RXEngine::MG_PVS_deep(int threadID, RXBBPatterns& sBoard, const bool pv, con
 	
 	//synchronized acces
 	RXHashValue entry;
-	if(hTable->get(board, type_hashtable, entry)) {
+    unsigned long long hash_code = board.hashcode();
+	if(hTable->get(hash_code, type_hashtable, entry)) {
 		
 		if(!pv && entry.depth >= depth) {
 			
@@ -367,7 +368,7 @@ int RXEngine::MG_PVS_deep(int threadID, RXBBPatterns& sBoard, const bool pv, con
 		if(abort.load() || thread_should_stop(threadID))
 			return INTERRUPT_SEARCH;
 
-		if(hTable->get(board, type_hashtable, entry))
+		if(hTable->get(hash_code, type_hashtable, entry))
 			bestmove = entry.move;
 	}
 	
@@ -574,7 +575,7 @@ int RXEngine::MG_PVS_deep(int threadID, RXBBPatterns& sBoard, const bool pv, con
 						
 						if(n_Moves>1) {
 							
-							if(hTable->get(board, type_hashtable, entry)) { //retrieve hash entry
+							if(hTable->get(hash_code, type_hashtable, entry)) { //retrieve hash entry
 								
 								if (entry.lower > -MAX_SCORE && entry.depth >= (depth-2)) { //enough good?
 									
@@ -889,11 +890,11 @@ int RXEngine::MG_PVS_deep(int threadID, RXBBPatterns& sBoard, const bool pv, con
 		selective_cutoff = child_selective_cutoff;
 	
 	if(pv_ext_flag) {
-		hTable->update(   board.hashcode(), pv, type_hashtable, NO_SELECT, DEPTH_BOOSTER+board.n_empties, alpha, beta,  bestscore, bestmove);
-		hTable_PV->update(board.hashcode(), pv, type_hashtable, NO_SELECT, DEPTH_BOOSTER+board.n_empties, alpha, beta,  bestscore, bestmove);
+		hTable->update(   hash_code, pv, type_hashtable, NO_SELECT, DEPTH_BOOSTER+board.n_empties, alpha, beta,  bestscore, bestmove);
+		hTable_PV->update(hash_code, pv, type_hashtable, NO_SELECT, DEPTH_BOOSTER+board.n_empties, alpha, beta,  bestscore, bestmove);
 	} else {
-		hTable->update(   board.hashcode(), pv, type_hashtable, selective_cutoff? MG_SELECT : NO_SELECT, depth, alpha, beta,  bestscore, bestmove);
-		hTable_PV->update(board.hashcode(), pv, type_hashtable, selective_cutoff? MG_SELECT : NO_SELECT, depth, alpha, beta,  bestscore, bestmove);
+		hTable->update(   hash_code, pv, type_hashtable, selective_cutoff? MG_SELECT : NO_SELECT, depth, alpha, beta,  bestscore, bestmove);
+		hTable_PV->update(hash_code, pv, type_hashtable, selective_cutoff? MG_SELECT : NO_SELECT, depth, alpha, beta,  bestscore, bestmove);
 	}
 		
 	return bestscore;
@@ -1068,7 +1069,8 @@ int RXEngine::MG_PVS_shallow(int threadID, RXBBPatterns& sBoard, const bool pv, 
 	
 	//synchronized acces
 	RXHashValue entry;
-	if(hTable->get(board, type_hashtable, entry)) {
+    unsigned long long hash_code = board.hashcode();
+	if(hTable->get(hash_code, type_hashtable, entry)) {
 
 		if(!pv && entry.depth >= depth) {
 			
@@ -1415,9 +1417,9 @@ int RXEngine::MG_PVS_shallow(int threadID, RXBBPatterns& sBoard, const bool pv, 
 
 	
 	if(pv_ext_flag)
-		hTable->update(board.hashcode(), pv, type_hashtable, NO_SELECT, DEPTH_BOOSTER+board.n_empties, alpha, beta,  bestscore, bestmove);
+		hTable->update(hash_code, pv, type_hashtable, NO_SELECT, DEPTH_BOOSTER+board.n_empties, alpha, beta,  bestscore, bestmove);
 	else
-		hTable->update(board.hashcode(), pv, type_hashtable, NO_SELECT, depth, alpha, beta,  bestscore, bestmove);
+		hTable->update(hash_code, pv, type_hashtable, NO_SELECT, depth, alpha, beta,  bestscore, bestmove);
 
 	return bestscore;
 
@@ -1448,7 +1450,8 @@ int RXEngine::MG_NWS_XProbCut(int threadID, RXBBPatterns& sBoard, const int pvDe
 
 	//synchronized acces
 	RXHashValue entry;
-	if(hTable->get(board, type_hashtable, entry)) {
+    unsigned long long hash_code = board.hashcode();
+	if(hTable->get(hash_code, type_hashtable, entry)) {
 	
 		if(entry.depth >= depth) {
 			
@@ -1697,9 +1700,9 @@ int RXEngine::MG_NWS_XProbCut(int threadID, RXBBPatterns& sBoard, const int pvDe
 	if(bestscore>alpha)
 		selective_cutoff = child_selective_cutoff;
 		
-	hTable->update(board.hashcode(), type_hashtable, selective_cutoff? MG_SELECT : NO_SELECT, depth, alpha, bestscore, bestmove);
+	hTable->update(hash_code, type_hashtable, selective_cutoff? MG_SELECT : NO_SELECT, depth, alpha, bestscore, bestmove);
 	if(pvDev < 3)
-		hTable_PV->update(board.hashcode(), type_hashtable, selective_cutoff? MG_SELECT : NO_SELECT, depth, alpha, bestscore, bestmove);
+		hTable_PV->update(hash_code, type_hashtable, selective_cutoff? MG_SELECT : NO_SELECT, depth, alpha, bestscore, bestmove);
 	
 	return bestscore;
 

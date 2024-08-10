@@ -1661,7 +1661,8 @@ void RXEngine::run() {
 		
 
 		RXHashValue entry_PV;
-		if(expected_PV->get(board, type_hashtable, entry_PV)) {
+        unsigned long long hash_code = board.hashcode();
+		if(expected_PV->get(hash_code, type_hashtable, entry_PV)) {
 			RXHashValue entry;
 			if(!hTable->get(board, type_hashtable, entry)) {
 				*log << "        expected_PV -> hash :-)" << std::endl;
@@ -1669,7 +1670,7 @@ void RXEngine::run() {
 			}
 		}
 
-		if(main_PV->get(board, type_hashtable, entry_PV)) {
+		if(main_PV->get(hash_code, type_hashtable, entry_PV)) {
 			RXHashValue entry;
 			if(!hTable->get(board, type_hashtable, entry)) {
 				*log << "        main_PV -> hash :-)" << std::endl;
@@ -1678,7 +1679,7 @@ void RXEngine::run() {
 		}
 		
 		RXHashValue entry;
-		if(hTable->get(board, type_hashtable, entry)) {
+		if(hTable->get(hash_code, type_hashtable, entry)) {
 	
 			best_answer.position = entry.move;
 			list->sort_bestmove(entry.move);

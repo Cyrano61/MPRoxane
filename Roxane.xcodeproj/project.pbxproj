@@ -469,6 +469,7 @@
 				OTHER_CPLUSPLUSFLAGS = (
 					"-fomit-frame-pointer",
 					"-ffast-math",
+					"-mfpu=neon",
 				);
 				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = Roxane;
