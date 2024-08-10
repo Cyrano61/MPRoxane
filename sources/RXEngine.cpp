@@ -510,7 +510,7 @@ bool RXEngine::probcut(int threadID, const bool endgame, RXBBPatterns& sBoard, c
 				
 				selectif_cutoff=child_selective_cutoff;
 				
-				hTable->update(board.hash_code, type_hashtable, selectif_cutoff? MG_SELECT:NO_SELECT, depth, upper_probcut-1, bestscore, list1->position);
+				hTable->update(board.hashcode(), type_hashtable, selectif_cutoff? MG_SELECT:NO_SELECT, depth, upper_probcut-1, bestscore, list1->position);
 				return true;
 			}
 		}
@@ -598,7 +598,7 @@ bool RXEngine::probcut(int threadID, const bool endgame, RXBBPatterns& sBoard, c
 				
 				selectif_cutoff=child_selective_cutoff;
 				
-				hTable->update(board.hash_code, type_hashtable, selectif_cutoff? MG_SELECT:NO_SELECT, depth, upper_probcut-1, bestscore, iter->position);
+				hTable->update(board.hashcode(), type_hashtable, selectif_cutoff? MG_SELECT:NO_SELECT, depth, upper_probcut-1, bestscore, iter->position);
 				return true;
 			}
 			
@@ -890,7 +890,7 @@ int RXEngine::PVS_check(int threadID, RXBBPatterns& sBoard, int depth, int alpha
 		}
 	}
 			
-	hTable_shallow->update(board.hash_code, depth, alpha, beta, bestscore, bestmove);
+	hTable_shallow->update(board.hashcode(), depth, alpha, beta, bestscore, bestmove);
 	
 	return bestscore;
 					
@@ -1034,7 +1034,7 @@ int RXEngine::PVS_last_three_ply(int threadID, RXBBPatterns& sBoard, int alpha, 
 		}
 	}
 		
-	hTable_shallow->update(board.hash_code, 3, alpha, beta, bestscore, bestmove);
+	hTable_shallow->update(board.hashcode(), 3, alpha, beta, bestscore, bestmove);
 	
 	return bestscore;
 						
@@ -1419,7 +1419,7 @@ void RXEngine::get_move(RXSearch& s) {
 	time_remaining = s.tRemaining;
 
 		
-	if(board.hash_code == hash_code_search) {
+	if(board.hashcode() == hash_code_search) {
 		//continuation search
 		new_search = false;
 
@@ -1582,7 +1582,7 @@ void RXEngine::get_move(RXSearch& s) {
 		} 
 
 		
-		hash_code_search = search_sBoard.board.hash_code;
+		hash_code_search = search_sBoard.board.hashcode();
 
 		hTable_PV = expected_PV;
 

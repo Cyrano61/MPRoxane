@@ -19,6 +19,12 @@ enum {
 	UNDEF
 };
 
+enum {
+    PLAYER = 0,
+    OPPONENT,
+};
+
+
 /*! constants for square coordinates */
 enum {
 

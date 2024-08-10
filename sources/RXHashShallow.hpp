@@ -67,12 +67,13 @@ inline void RXHashShallow::new_search(const int n_empties) {
 //implementation LockFree
 inline bool RXHashShallow::get(const RXBitBoard& board, RXHashValue& value) const {
 	
-	
-	const RXHashEntry& entry = table[static_cast<unsigned int>(board.hash_code>>32) & _maskTable];
+    const unsigned long long hash_code = board.hashcode();
+    
+	const RXHashEntry& entry = table[static_cast<unsigned int>(hash_code>>32) & _maskTable];
 	
 	unsigned long long packed = entry.deepest.packed;
 	unsigned long long lock = entry.deepest.lock ^ packed;
-	if (board.hash_code == lock) {
+	if (hash_code == lock) {
 		
 		value.compact_2_wide(packed);
 		
@@ -82,7 +83,7 @@ inline bool RXHashShallow::get(const RXBitBoard& board, RXHashValue& value) cons
 	
 	packed = entry.newest.packed;
 	lock = entry.newest.lock ^ packed;
-	if (board.hash_code == lock) {
+	if (hash_code == lock) {
 		
 		value.compact_2_wide(packed);
 		

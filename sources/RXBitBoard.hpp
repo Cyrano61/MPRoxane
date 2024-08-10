@@ -72,9 +72,7 @@ class RXBitBoard {
 	RXSquareList empties_list[62];
 	RXSquareList *position_to_empties[64];
 	mutable unsigned long long n_nodes;
-	
-    void set_disc(const int position, const int color);
-    
+	    
     //public :
     
     unsigned long long get_n_nodes() const {
@@ -166,8 +164,8 @@ bool generate_move_##pos(RXMove& move) const
     void print_Board();
     void print_moves_list(RXMove* MovesList) const;
     
-    unsigned long long hashcode();
-    
+    unsigned long long hashcode() const ;
+    unsigned long long hashcode_after_move(RXMove* move)  const;
     
     /* test */
     //static unsigned long long cntbset(unsigned long long n);
@@ -209,9 +207,6 @@ inline void RXBitBoard::do_move(const RXMove& move) {
 	
 	n_empties--;
 
-	hash_code ^= move.hash_code;
-
-	
 	const RXSquareList *remove = position_to_empties[move.position];
 	remove->previous->next = remove->next;
 	remove->next->previous = remove->previous;
@@ -224,9 +219,6 @@ inline void RXBitBoard::undo_move(const RXMove& move) {
 	RXSquareList *insert = position_to_empties[move.position];
 	insert->previous->next = insert;
 	insert->next->previous = insert;
-
-
-	hash_code ^= move.hash_code;
 	
 	n_empties++;
 	
@@ -237,8 +229,6 @@ inline void RXBitBoard::undo_move(const RXMove& move) {
 }
 
 inline void RXBitBoard::do_pass() {
-
-	hash_code ^= 0xBB20B460D4D95138ULL;
 	player ^= 1;
 }
 

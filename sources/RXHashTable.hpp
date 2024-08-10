@@ -188,12 +188,14 @@ inline void RXHashTable::new_search(const unsigned int color, const int n_emptie
 
 
 inline bool RXHashTable::get(const RXBitBoard& board, const t_hash type_hashtable, RXHashValue& hValue) const {
+    
+    const unsigned long long hash_code = board.hashcode();
 	
-	const RXHashEntry& entry = table[_offsetTable[type_hashtable] | (static_cast<unsigned int>(board.hash_code>>32) & _maskTable[type_hashtable])];
+	const RXHashEntry& entry = table[_offsetTable[type_hashtable] | (static_cast<unsigned int>(hash_code>>32) & _maskTable[type_hashtable])];
 	
 	unsigned long long packed = entry.deepest.packed;
 	unsigned long long lock = entry.deepest.lock ^ packed;
-	if (board.hash_code == lock) {
+	if (hash_code == lock) {
 		
 		hValue.compact_2_wide(packed);
 		
@@ -203,7 +205,7 @@ inline bool RXHashTable::get(const RXBitBoard& board, const t_hash type_hashtabl
 	
 	packed = entry.newest.packed;
 	lock = entry.newest.lock ^ packed;
-	if (board.hash_code == lock) {
+	if (hash_code == lock) {
 		
 		hValue.compact_2_wide(packed);
 		
@@ -244,13 +246,15 @@ inline bool RXHashTable::get(const unsigned long long hash_code, const t_hash ty
 //*********** Attention **********
 
 inline RXHashRecord* RXHashTable::get_record(const RXBitBoard& board, const t_hash type_hashtable) const {
+    
+    const unsigned long long hash_code = board.hashcode();
 	
-	RXHashEntry& entry = table[_offsetTable[type_hashtable] |(static_cast<unsigned int>(board.hash_code>>32) & _maskTable[type_hashtable])];
+	RXHashEntry& entry = table[_offsetTable[type_hashtable] |(static_cast<unsigned int>(hash_code>>32) & _maskTable[type_hashtable])];
 	
-	if((entry.deepest.lock ^ entry.deepest.packed) == board.hash_code)
+	if((entry.deepest.lock ^ entry.deepest.packed) == hash_code)
 		return &(entry.deepest);
 	
-	if((entry.newest.lock ^ entry.newest.packed) == board.hash_code)
+	if((entry.newest.lock ^ entry.newest.packed) == hash_code)
 		return &(entry.newest);
 	
 	return NULL;

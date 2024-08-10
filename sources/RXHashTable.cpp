@@ -494,7 +494,7 @@ void RXHashTable::copyPV(RXHashTable* from_hash, const t_hash from_type_hash, RX
 		
 		if(square != NOMOVE) {
 			
-			RXHashRecord& to_Record = table[_offsetTable[to_type_hash] |(static_cast<unsigned int>(board.hash_code>>32) & _maskTable[to_type_hash])].deepest;	//dest
+			RXHashRecord& to_Record = table[_offsetTable[to_type_hash] |(static_cast<unsigned int>(board.hashcode()>>32) & _maskTable[to_type_hash])].deepest;	//dest
 			
 			if( to_Record.lock  != from_Record->lock) {
 				to_Record.lock   = from_Record->lock;
@@ -565,7 +565,7 @@ void RXHashTable::copyPV(RXBitBoard& board, const t_hash from_hashtable, const t
 		
 		if(square != NOMOVE) {
 			
-			RXHashRecord& to_Record = table[_offsetTable[to_hashtable] |(static_cast<unsigned int>(board.hash_code>>32) & _maskTable[to_hashtable])].deepest;	//dest
+			RXHashRecord& to_Record = table[_offsetTable[to_hashtable] |(static_cast<unsigned int>(board.hashcode()>>32) & _maskTable[to_hashtable])].deepest;	//dest
 			
 			if( to_Record.lock  != from_Record->lock) {
 				to_Record.lock   = from_Record->lock;
@@ -619,7 +619,7 @@ void RXHashTable::mergePV(RXBitBoard& board) {
 	
 	if(from_Record != NULL) {
 		
-		RXHashRecord& to_Record = table[(static_cast<unsigned int>(board.hash_code>>32) & _maskTable[HASH_SHARED])].deepest; 		//dest
+		RXHashRecord& to_Record = table[(static_cast<unsigned int>(board.hashcode()>>32) & _maskTable[HASH_SHARED])].deepest; 		//dest
 		
 		if( to_Record.lock  != from_Record->lock) {
 			to_Record.lock   = from_Record->lock;
@@ -666,14 +666,14 @@ void RXHashTable::protectPV(RXBitBoard& board) {
 
 void RXHashTable::protectPV(RXBitBoard& board, const t_hash	type_hashtable, const bool passed) {
 	
-	//	std::cout << "protect PV" << std::endl;
+    const unsigned long long hash_code = board.hashcode();
 	
-	RXHashEntry& entry = table[_offsetTable[type_hashtable] | (static_cast<unsigned int>(board.hash_code>>32) & _maskTable[type_hashtable])];	
+	RXHashEntry& entry = table[_offsetTable[type_hashtable] | (static_cast<unsigned int>(hash_code>>32) & _maskTable[type_hashtable])];
 	RXHashRecord& deepest = entry.deepest;
 	RXHashRecord& newest  = entry.newest;
 	
 	
-	if(board.hash_code == (newest.lock ^ newest.packed)) { //si newest
+	if(hash_code == (newest.lock ^ newest.packed)) { //si newest
 		//Swap deepest/newest
 		const unsigned long long lock   = deepest.lock;
 		const unsigned long long packed = deepest.packed;
@@ -686,7 +686,7 @@ void RXHashTable::protectPV(RXBitBoard& board, const t_hash	type_hashtable, cons
 		
 	}
 	
-	if(board.hash_code == (deepest.lock ^ deepest.packed)) {
+	if(hash_code == (deepest.lock ^ deepest.packed)) {
 		
 		int square = deepest.get_move();
 		
@@ -694,7 +694,7 @@ void RXHashTable::protectPV(RXBitBoard& board, const t_hash	type_hashtable, cons
 			
 			//update date
 			deepest.packed = ((static_cast<unsigned long long>(date[type_hashtable == HASH_WHITE? WHITE:BLACK]) + 1)<<56) | (deepest.packed & 0x00FFFFFFFFFFFFFFULL);
-			deepest.lock   = board.hash_code ^ deepest.packed;
+			deepest.lock   = hash_code ^ deepest.packed;
 			
 			if(square == PASS) {
 				if(!passed) {

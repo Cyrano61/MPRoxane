@@ -497,7 +497,7 @@ void RXRoxane::run() {
 	RXSearch s(search); //copy
 	RXBitBoard& board = s.sBoard.board;
 	
-	if(board.hash_code == hash_opening[60-board.n_empties])
+	if(board.hashcode() == hash_opening[60-board.n_empties])
 		s.bestMove.position = move_opening[60-board.n_empties];
 	else
 		engine[s.idEngine]->get_move(s);
@@ -551,7 +551,7 @@ void RXRoxane::imposed_opening(const std::string& line) {
 				
 				
 				if(((board).*(board.generate_move[square]))(move)) {
-					hash_opening[60-board.n_empties] = board.hash_code;
+					hash_opening[60-board.n_empties] = board.hashcode();
 					move_opening[60-board.n_empties] = square;
 					
 					board.do_move(move);

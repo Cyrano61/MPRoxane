@@ -290,7 +290,7 @@ void RXEngine::MG_PVS_root(RXBBPatterns& sBoard, const int depth,  int alpha, in
 		list->next->selectivity = selective_cutoff? MG_SELECT: NO_SELECT;
 		list->next->depth = depth;
 		
-		hTable->update(sBoard.board.hash_code, true, type_hashtable, selective_cutoff? MG_SELECT: NO_SELECT, depth, alpha, beta, bestscore, bestmove);
+		hTable->update(sBoard.board.hashcode(), true, type_hashtable, selective_cutoff? MG_SELECT: NO_SELECT, depth, alpha, beta, bestscore, bestmove);
 		
 		
 	}
@@ -388,7 +388,7 @@ int RXEngine::MG_PVS_deep(int threadID, RXBBPatterns& sBoard, const bool pv, con
 			((board).*(board.generate_move[bestmove]))(*move);
 			
 			//synchronized acces
-			if(hTable->get(board.hash_code ^ move->hash_code, type_hashtable, entry) && !pv && entry.depth>=depth-1) {
+			if(hTable->get(board.hashcode_after_move(move), type_hashtable, entry) && !pv && entry.depth>=depth-1) {
 				
 				/*
 				BE CARREFUL : (board.n_empties-1)-(depth-1) == board.n_empties-depth
@@ -416,7 +416,7 @@ int RXEngine::MG_PVS_deep(int threadID, RXBBPatterns& sBoard, const bool pv, con
 				move->score = 0;
 				
 				//synchronized acces
-				if(hTable->get(board.hash_code ^ move->hash_code, type_hashtable, entry) && !pv && entry.depth>=depth-1) {
+				if(hTable->get(board.hashcode_after_move(move), type_hashtable, entry) && !pv && entry.depth>=depth-1) {
 					
 					move->score = -3*VALUE_DISC;
 
@@ -889,11 +889,11 @@ int RXEngine::MG_PVS_deep(int threadID, RXBBPatterns& sBoard, const bool pv, con
 		selective_cutoff = child_selective_cutoff;
 	
 	if(pv_ext_flag) {
-		hTable->update(   board.hash_code, pv, type_hashtable, NO_SELECT, DEPTH_BOOSTER+board.n_empties, alpha, beta,  bestscore, bestmove);
-		hTable_PV->update(board.hash_code, pv, type_hashtable, NO_SELECT, DEPTH_BOOSTER+board.n_empties, alpha, beta,  bestscore, bestmove);
-	} else {	
-		hTable->update(   board.hash_code, pv, type_hashtable, selective_cutoff? MG_SELECT : NO_SELECT, depth, alpha, beta,  bestscore, bestmove);
-		hTable_PV->update(board.hash_code, pv, type_hashtable, selective_cutoff? MG_SELECT : NO_SELECT, depth, alpha, beta,  bestscore, bestmove);
+		hTable->update(   board.hashcode(), pv, type_hashtable, NO_SELECT, DEPTH_BOOSTER+board.n_empties, alpha, beta,  bestscore, bestmove);
+		hTable_PV->update(board.hashcode(), pv, type_hashtable, NO_SELECT, DEPTH_BOOSTER+board.n_empties, alpha, beta,  bestscore, bestmove);
+	} else {
+		hTable->update(   board.hashcode(), pv, type_hashtable, selective_cutoff? MG_SELECT : NO_SELECT, depth, alpha, beta,  bestscore, bestmove);
+		hTable_PV->update(board.hashcode(), pv, type_hashtable, selective_cutoff? MG_SELECT : NO_SELECT, depth, alpha, beta,  bestscore, bestmove);
 	}
 		
 	return bestscore;
@@ -1415,9 +1415,9 @@ int RXEngine::MG_PVS_shallow(int threadID, RXBBPatterns& sBoard, const bool pv, 
 
 	
 	if(pv_ext_flag)
-		hTable->update(board.hash_code, pv, type_hashtable, NO_SELECT, DEPTH_BOOSTER+board.n_empties, alpha, beta,  bestscore, bestmove);
-	else		
-		hTable->update(board.hash_code, pv, type_hashtable, NO_SELECT, depth, alpha, beta,  bestscore, bestmove);
+		hTable->update(board.hashcode(), pv, type_hashtable, NO_SELECT, DEPTH_BOOSTER+board.n_empties, alpha, beta,  bestscore, bestmove);
+	else
+		hTable->update(board.hashcode(), pv, type_hashtable, NO_SELECT, depth, alpha, beta,  bestscore, bestmove);
 
 	return bestscore;
 
@@ -1514,7 +1514,7 @@ int RXEngine::MG_NWS_XProbCut(int threadID, RXBBPatterns& sBoard, const int pvDe
 				((board).*(board.generate_move[bestmove]))(*move);
 								
 				//synchronized acces
-				if(hTable->get(board.hash_code ^ move->hash_code, type_hashtable, entry) && entry.depth >= depth-1) {
+				if(hTable->get(board.hashcode_after_move(move), type_hashtable, entry) && entry.depth >= depth-1) {
 					
 					/*
 					BE CARREFUL : (board.n_empties-1)-(depth-1) == board.n_empties-depth
@@ -1544,7 +1544,7 @@ int RXEngine::MG_NWS_XProbCut(int threadID, RXBBPatterns& sBoard, const int pvDe
 					move->score = 0;
 					
 					//synchronized acces
-					if( hTable->get(board.hash_code ^ move->hash_code, type_hashtable, entry) && entry.depth>=depth-1) {
+					if( hTable->get(board.hashcode_after_move(move), type_hashtable, entry) && entry.depth>=depth-1) {
 
 						move->score = -3*VALUE_DISC;
 						
@@ -1584,7 +1584,7 @@ int RXEngine::MG_NWS_XProbCut(int threadID, RXBBPatterns& sBoard, const int pvDe
 		if(passed) {
 			board.n_nodes--;
 			bestscore = sBoard.final_score();
-			hTable->update(board.hash_code, false, type_hashtable, NO_SELECT, DEPTH_BOOSTER+board.n_empties, -MAX_SCORE, MAX_SCORE,  bestscore, bestmove);
+			hTable->update(board.hashcode(), false, type_hashtable, NO_SELECT, DEPTH_BOOSTER+board.n_empties, -MAX_SCORE, MAX_SCORE,  bestscore, bestmove);
 			return bestscore;
 		} else {
 			board.n_nodes++;
@@ -1697,9 +1697,9 @@ int RXEngine::MG_NWS_XProbCut(int threadID, RXBBPatterns& sBoard, const int pvDe
 	if(bestscore>alpha)
 		selective_cutoff = child_selective_cutoff;
 		
-	hTable->update(board.hash_code, type_hashtable, selective_cutoff? MG_SELECT : NO_SELECT, depth, alpha, bestscore, bestmove);
+	hTable->update(board.hashcode(), type_hashtable, selective_cutoff? MG_SELECT : NO_SELECT, depth, alpha, bestscore, bestmove);
 	if(pvDev < 3)
-		hTable_PV->update(board.hash_code, type_hashtable, selective_cutoff? MG_SELECT : NO_SELECT, depth, alpha, bestscore, bestmove);
+		hTable_PV->update(board.hashcode(), type_hashtable, selective_cutoff? MG_SELECT : NO_SELECT, depth, alpha, bestscore, bestmove);
 	
 	return bestscore;
 

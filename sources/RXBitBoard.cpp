@@ -214,51 +214,76 @@ void RXBitBoard::init_hashcodeTable() {
     }
 }
 
-RXBitBoard::RXBitBoard(): player(BLACK), n_empties(64), hash_code(0), n_nodes(0) {
+RXBitBoard::RXBitBoard(): player(BLACK), n_empties(60), n_nodes(0) {
     
-	discs[BLACK] = 0;
-	discs[WHITE] = 0;
+    //start position
+    discs[BLACK] = 0X000000810000000ULL;
+    discs[WHITE] = 0X000001008000000ULL;
 
-			
-	set_disc(D4, WHITE);
-	set_disc(E4, BLACK);
-	set_disc(D5, BLACK);
-	set_disc(E5, WHITE);
-	
-	/* create emptiesList */
-	RXSquareList* iEmpties = empties_list;	//empties[0]
-	iEmpties->position = NOMOVE;			//sentinel
-	iEmpties->previous = NULL;				//NULL
-	iEmpties->next = iEmpties + 1;
-	iEmpties = iEmpties->next;
-	
-	for(int i = 0; i<60; i++) {
-		if(((discs[BLACK] | discs[WHITE]) & (1LL<<PRESORTED_POSITION[i])) == 0) {
-			iEmpties->position = PRESORTED_POSITION[i];
-			iEmpties->previous = iEmpties - 1;
-			iEmpties->next = iEmpties + 1 ;
-		
-			position_to_empties[PRESORTED_POSITION[i]] = iEmpties;
-			iEmpties = iEmpties->next;
-		}
-	}
-	iEmpties->position = NOMOVE;			//sentinel
-	iEmpties->previous = iEmpties - 1; 
-	iEmpties->next = 0;						//NULL
-		
-	init_generate_flips();
-	init_generate_move();
+    /* create emptiesList */
+    RXSquareList* iEmpties = empties_list;      //empties[0]
+    iEmpties->position = NOMOVE;                //sentinel
+    iEmpties->previous = NULL;                  //NULL
+    iEmpties->next = iEmpties + 1;
+    iEmpties = iEmpties->next;
+    
+    for(int i = 0; i<60; i++) {
+        if(((discs[BLACK] | discs[WHITE]) & (1LL<<PRESORTED_POSITION[i])) == 0) {
+            iEmpties->position = PRESORTED_POSITION[i];
+            iEmpties->previous = iEmpties - 1;
+            iEmpties->next = iEmpties + 1 ;
+        
+            position_to_empties[PRESORTED_POSITION[i]] = iEmpties;
+            iEmpties = iEmpties->next;
+        }
+    }
+    iEmpties->position = NOMOVE;                //sentinel
+    iEmpties->previous = iEmpties - 1;
+    iEmpties->next = 0;                         //NULL
+    
+        
+    init_generate_flips();
+    init_generate_move();
+    
 
 }
+
+RXBitBoard& RXBitBoard::operator=(const RXBitBoard& src) {
+
+    if(this != &src) {
+    
+        discs[BLACK] = src.discs[BLACK];
+        discs[WHITE] = src.discs[WHITE];
+        
+        player = src.player;
+                
+        n_empties = src.n_empties;
+        
+
+        RXSquareList* previous = empties_list;
+        for(RXSquareList* empties = src.empties_list->next; empties->position != NOMOVE; empties = empties->next) {
+            RXSquareList* empty = position_to_empties[empties->position];
+            empty->previous = previous;
+            previous->next = empty;
+            previous = previous->next;
+        }
+        empties_list[61].previous = previous;
+        previous->next = &empties_list[61];
+        
+        
+        n_nodes = src.n_nodes;
+        
+    }
+    
+    return *this;
+}
+
 
 RXBitBoard::RXBitBoard(const RXBitBoard& src) {
 	
 	discs[BLACK] = src.discs[BLACK];
 	discs[WHITE] = src.discs[WHITE];
 	
-	//n_discs[BLACK] = src.n_discs[BLACK]; 
-	//n_discs[WHITE] = src.n_discs[WHITE];
-
 	player = src.player;
 	n_empties = src.n_empties;
 	hash_code = src.hash_code;
@@ -297,118 +322,86 @@ RXBitBoard::RXBitBoard(const RXBitBoard& src) {
 	empties_list[61].previous = previous;
 	previous->next = &empties_list[61];
 	
-		
-	
 	init_generate_flips();
 	init_generate_move();
 }
 
 
-
-
-RXBitBoard& RXBitBoard::operator=(const RXBitBoard& src) {
-
-	if(this != &src) {
-	
-		discs[BLACK] = src.discs[BLACK];
-		discs[WHITE] = src.discs[WHITE];
-		
-		player = src.player;
-				
-		n_empties = src.n_empties;
-		
-		hash_code = src.hash_code;
-
-		RXSquareList* previous = empties_list;
-		for(RXSquareList* empties = src.empties_list->next; empties->position != NOMOVE; empties = empties->next) {
-			RXSquareList* empty = position_to_empties[empties->position];
-			empty->previous = previous;
-			previous->next = empty;
-			previous = previous->next;
-		}
-		empties_list[61].previous = previous;
-		previous->next = &empties_list[61];
-		
-		
-		n_nodes = src.n_nodes;
-		
-	}
-	
-	return *this;
-}
-
 void RXBitBoard::build(const std::string& init) {
     
-	discs[BLACK] = discs[WHITE] = 0LL;
-	//n_discs[BLACK] = n_discs[WHITE] = 0;
-	hash_code = 0;
-	
-	n_empties = 64;
-	
-	player = UNDEF;
+    discs[BLACK] = discs[WHITE] = 0ULL;
 
-	int id = 0;
-	for (int i = A1; i >= H8; i--) {
-		
-		switch (std::tolower(init[id])) {
-			case 'b':
-			case 'x':
-			case '*':
-				set_disc(i, BLACK);
-				break;
-			case 'o':
-			case 'w':
-				set_disc(i, WHITE);
-				break;
-			case '-':
-			case '.':
-				break;
-			case ' ':
-			case '[':
-				i++;
-				break;
-			default:
-				std::cerr << "RXBoard::build incorrect board" << std::endl;
-				exit(EXIT_FAILURE);
-			}
-		id++;
-	}
+    n_empties = 64;
+    
+    player = UNDEF;
 
-	for(;id<init.length() && player == UNDEF; id++)
-		switch (std::tolower(init[id])) {
-			case 'b':
-			case 'x':
-			case '*':
-				player = BLACK;
-				break;
-			case 'o':
-			case 'w':
-				player = WHITE;
-				break;
-			default:
-				break;
-		}
-	
-	if((n_empties%2 == BLACK && player == WHITE) || (n_empties%2 == WHITE && player == BLACK))
-		hash_code ^= 0xBB20B460D4D95138ULL;
-		
-	if(player == UNDEF) {
-		std::cerr<< "RXBoard::build incorrect player value" << std::endl;
-		exit(EXIT_FAILURE);
-	}
+    int id = 0;
+    for (int i = A1; i >= H8; i--) {
+        
+        switch (std::tolower(init[id])) {
+            case 'b':
+            case 'x':
+            case '*':
+                discs[BLACK] |= 1ULL<<i;
+                n_empties--;
+                break;
+            case 'o':
+            case 'w':
+                discs[WHITE] |= 1ULL<<i;
+                n_empties--;
+                break;
+            case '-':
+            case '.':
+                break;
+            case ' ':
+            case '[':
+                i++;
+                break;
+            default:
+                std::cerr << "RXBoard::build incorrect board" << std::endl;
+                exit(EXIT_FAILURE);
+            }
+        id++;
+    }
+    
+    if(((discs[BLACK] | discs[WHITE]) & 0x0000001818000000ULL) != 0x0000001818000000ULL) {
+        std::cerr << "RXBoard::build incorrect board" << std::endl;
+        exit(EXIT_FAILURE);
+    }
 
-	RXSquareList* previous = empties_list;
-	for(int id = 0; id<60; id++) {
-		if(((discs[BLACK] | discs[WHITE]) & (1ULL<<PRESORTED_POSITION[id])) == 0) {
-			RXSquareList* empty = position_to_empties[PRESORTED_POSITION[id]];
-			empty->previous = previous;
-			previous->next = empty;
-			previous = previous->next;
-		}
-	}
-	empties_list[61].previous = previous;
-	previous->next = &empties_list[61];
+    for(;id<init.length() && player == UNDEF; id++)
+        switch (std::tolower(init[id])) {
+            case 'b':
+            case 'x':
+            case '*':
+                player = BLACK;
+                break;
+            case 'o':
+            case 'w':
+                player = WHITE;
+                break;
+            default:
+                break;
+        }
+            
+    if(player == UNDEF) {
+        std::cerr<< "RXBoard::build incorrect player value" << std::endl;
+        exit(EXIT_FAILURE);
+    }
 
+    RXSquareList* previous = empties_list;
+    for(int id = 0; id<60; id++) {
+        if(((discs[BLACK] | discs[WHITE]) & (1ULL<<PRESORTED_POSITION[id])) == 0) {
+            RXSquareList* empty = position_to_empties[PRESORTED_POSITION[id]];
+            empty->previous = previous;
+            previous->next = empty;
+            previous = previous->next;
+        }
+    }
+    empties_list[61].previous = previous;
+    previous->next = &empties_list[61];
+    
+    
 }
 
 std::ostream& operator<<(std::ostream& os, RXBitBoard& board) {
@@ -595,10 +588,12 @@ void RXBitBoard::print_Board() {
 
 }
 
-unsigned long long RXBitBoard::hashcode() {
+unsigned long long RXBitBoard::hashcode() const {
     
-    unsigned long long p = discs[player];
-    unsigned long long o = discs[player^1];
+    const int opponent = player^1;
+
+    const unsigned long long p = discs[player];
+    const unsigned long long o = discs[opponent];
     
     unsigned int lines1_2 = static_cast<unsigned int> ((p & 0xFFFF000000000000ULL) >> 48);
     unsigned int lines3_4 = static_cast<unsigned int> ((p & 0x0000FFFF00000000ULL) >> 32);
@@ -612,7 +607,6 @@ unsigned long long RXBitBoard::hashcode() {
     hashcode ^= hashcodeTable_lines5_6[lines5_6][player];
     hashcode ^= hashcodeTable_lines7_8[lines7_8][player];
     
-    int opponent = player^1;
 
     lines1_2 = static_cast<unsigned int> ((o & 0xFFFF000000000000ULL) >> 48);
     lines3_4 = static_cast<unsigned int> ((o & 0x0000FFFF00000000ULL) >> 32);
@@ -631,6 +625,42 @@ unsigned long long RXBitBoard::hashcode() {
     
 }
 
+unsigned long long RXBitBoard::hashcode_after_move(RXMove* move)  const {
+        
+    const int opponent = player^1;
+
+    const unsigned long long o = discs[player] | (move->flipped | move->square);
+    const unsigned long long p = discs[opponent] ^ move->flipped;
+    
+    unsigned int lines1_2 = static_cast<unsigned int> ((p & 0xFFFF000000000000ULL) >> 48);
+    unsigned int lines3_4 = static_cast<unsigned int> ((p & 0x0000FFFF00000000ULL) >> 32);
+    unsigned int lines5_6 = static_cast<unsigned int> ((p & 0x00000000FFFF0000ULL) >> 16);
+    unsigned int lines7_8 = static_cast<unsigned int> ((p & 0x000000000000FFFFULL));
+
+    
+    unsigned long long
+    hashcode  = hashcodeTable_lines1_2[lines1_2][opponent];
+    hashcode ^= hashcodeTable_lines3_4[lines3_4][opponent];
+    hashcode ^= hashcodeTable_lines5_6[lines5_6][opponent];
+    hashcode ^= hashcodeTable_lines7_8[lines7_8][opponent];
+    
+
+    lines1_2 = static_cast<unsigned int> ((o & 0xFFFF000000000000ULL) >> 48);
+    lines3_4 = static_cast<unsigned int> ((o & 0x0000FFFF00000000ULL) >> 32);
+    lines5_6 = static_cast<unsigned int> ((o & 0x00000000FFFF0000ULL) >> 16);
+    lines7_8 = static_cast<unsigned int> ((o & 0x000000000000FFFFULL));
+
+    hashcode ^= hashcodeTable_lines1_2[lines1_2][player];
+    hashcode ^= hashcodeTable_lines3_4[lines3_4][player];
+    hashcode ^= hashcodeTable_lines5_6[lines5_6][player];
+    hashcode ^= hashcodeTable_lines7_8[lines7_8][player];
+    
+    if((n_empties%2 == BLACK && player == WHITE) || (n_empties%2 == WHITE && player == BLACK))
+        hashcode ^= 0xBB20B460D4D95138ULL;
+
+    return hashcode;
+    
+}
 
 
 
