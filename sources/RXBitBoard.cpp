@@ -286,7 +286,6 @@ RXBitBoard::RXBitBoard(const RXBitBoard& src) {
 	
 	player = src.player;
 	n_empties = src.n_empties;
-	hash_code = src.hash_code;
 	n_nodes = src.n_nodes;
 	
 	/* create emptiesList */
@@ -602,10 +601,10 @@ unsigned long long RXBitBoard::hashcode() const {
 
     
     unsigned long long
-    hashcode  = hashcodeTable_lines1_2[lines1_2][player];
-    hashcode ^= hashcodeTable_lines3_4[lines3_4][player];
-    hashcode ^= hashcodeTable_lines5_6[lines5_6][player];
-    hashcode ^= hashcodeTable_lines7_8[lines7_8][player];
+    hashcode  = hashcodeTable_lines1_2[lines1_2][PLAYER];
+    hashcode ^= hashcodeTable_lines3_4[lines3_4][PLAYER];
+    hashcode ^= hashcodeTable_lines5_6[lines5_6][PLAYER];
+    hashcode ^= hashcodeTable_lines7_8[lines7_8][PLAYER];
     
 
     lines1_2 = static_cast<unsigned int> ((o & 0xFFFF000000000000ULL) >> 48);
@@ -613,14 +612,12 @@ unsigned long long RXBitBoard::hashcode() const {
     lines5_6 = static_cast<unsigned int> ((o & 0x00000000FFFF0000ULL) >> 16);
     lines7_8 = static_cast<unsigned int> ((o & 0x000000000000FFFFULL));
 
-    hashcode ^= hashcodeTable_lines1_2[lines1_2][opponent];
-    hashcode ^= hashcodeTable_lines3_4[lines3_4][opponent];
-    hashcode ^= hashcodeTable_lines5_6[lines5_6][opponent];
-    hashcode ^= hashcodeTable_lines7_8[lines7_8][opponent];
+    hashcode ^= hashcodeTable_lines1_2[lines1_2][OPPONENT];
+    hashcode ^= hashcodeTable_lines3_4[lines3_4][OPPONENT];
+    hashcode ^= hashcodeTable_lines5_6[lines5_6][OPPONENT];
+    hashcode ^= hashcodeTable_lines7_8[lines7_8][OPPONENT];
 
-    if((n_empties%2 == BLACK && player == WHITE) || (n_empties%2 == WHITE && player == BLACK))
-        hashcode ^= 0xBB20B460D4D95138ULL;
-
+ 
     return hashcode;
     
 }
@@ -639,10 +636,10 @@ unsigned long long RXBitBoard::hashcode_after_move(RXMove* move)  const {
 
     
     unsigned long long
-    hashcode  = hashcodeTable_lines1_2[lines1_2][opponent];
-    hashcode ^= hashcodeTable_lines3_4[lines3_4][opponent];
-    hashcode ^= hashcodeTable_lines5_6[lines5_6][opponent];
-    hashcode ^= hashcodeTable_lines7_8[lines7_8][opponent];
+    hashcode  = hashcodeTable_lines1_2[lines1_2][PLAYER];
+    hashcode ^= hashcodeTable_lines3_4[lines3_4][PLAYER];
+    hashcode ^= hashcodeTable_lines5_6[lines5_6][PLAYER];
+    hashcode ^= hashcodeTable_lines7_8[lines7_8][PLAYER];
     
 
     lines1_2 = static_cast<unsigned int> ((o & 0xFFFF000000000000ULL) >> 48);
@@ -650,13 +647,11 @@ unsigned long long RXBitBoard::hashcode_after_move(RXMove* move)  const {
     lines5_6 = static_cast<unsigned int> ((o & 0x00000000FFFF0000ULL) >> 16);
     lines7_8 = static_cast<unsigned int> ((o & 0x000000000000FFFFULL));
 
-    hashcode ^= hashcodeTable_lines1_2[lines1_2][player];
-    hashcode ^= hashcodeTable_lines3_4[lines3_4][player];
-    hashcode ^= hashcodeTable_lines5_6[lines5_6][player];
-    hashcode ^= hashcodeTable_lines7_8[lines7_8][player];
+    hashcode ^= hashcodeTable_lines1_2[lines1_2][OPPONENT];
+    hashcode ^= hashcodeTable_lines3_4[lines3_4][OPPONENT];
+    hashcode ^= hashcodeTable_lines5_6[lines5_6][OPPONENT];
+    hashcode ^= hashcodeTable_lines7_8[lines7_8][OPPONENT];
     
-    if((n_empties%2 == BLACK && player == WHITE) || (n_empties%2 == WHITE && player == BLACK))
-        hashcode ^= 0xBB20B460D4D95138ULL;
 
     return hashcode;
     

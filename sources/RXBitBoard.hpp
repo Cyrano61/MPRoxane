@@ -66,7 +66,6 @@ class RXBitBoard {
 
 
 	unsigned long long discs[2];
-	unsigned long long hash_code;
 	int player;
 	int n_empties;
 	RXSquareList empties_list[62];
