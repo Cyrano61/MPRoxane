@@ -33,7 +33,6 @@ class RXMove {
 	char position;
 	unsigned long long square;
 	unsigned long long flipped;
-	unsigned long long hash_code;
 	int score;
 	char selectivity;
 	char depth;
@@ -46,7 +45,7 @@ class RXMove {
 	public :
 
 	
-		RXMove() : position(static_cast<char>(NOMOVE)), square(0ULL), flipped(0ULL), hash_code(0ULL), score(0), next(NULL), pattern(NULL), undo_pattern(NULL) {
+		RXMove() : position(static_cast<char>(NOMOVE)), square(0ULL), flipped(0ULL), score(0), next(NULL), pattern(NULL), undo_pattern(NULL) {
 			pattern = new RXPattern();
 		};
 		
