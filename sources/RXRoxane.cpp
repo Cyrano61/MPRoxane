@@ -196,7 +196,7 @@ void RXRoxane::resume() {
 //					
 //					int position = wthor2BitBoard[moves[iMove++]];
 //					
-//					if(board.squareIsEmpty(position) && ((board).*(board.generate_move[position]))(move)) {
+//					if(board.squareIsEmpty(position) && ((board).*(board.generate_flips[position]))(move)) {
 //						((sBoard).*(sBoard.update_patterns[position][board.player]))(move);
 //						
 //						board.do_move(move);
@@ -550,7 +550,7 @@ void RXRoxane::imposed_opening(const std::string& line) {
 				int square = (('8' - ordonne)*8 + ('H' - abscise));
 				
 				
-				if(((board).*(board.generate_move[square]))(move)) {
+				if(((board).*(board.generate_flips[square]))(move)) {
 					hash_opening[60-board.n_empties] = board.hashcode();
 					move_opening[60-board.n_empties] = square;
 					

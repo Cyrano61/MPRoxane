@@ -96,8 +96,8 @@ class RXBitBoard {
     // move functions
 #define func(pos)	static bool do_flips_##pos(unsigned long long& discs_player, unsigned long long& discs_opponent); \
 static int count_flips_##pos(const unsigned long long& discs_player); \
-bool generate_flips_##pos(RXMove& move) const; \
-bool generate_move_##pos(RXMove& move) const
+bool generate_flips_##pos(RXMove& move) const
+
     
     
     
@@ -121,10 +121,7 @@ bool generate_move_##pos(RXMove& move) const
     
     bool (RXBitBoard::*generate_flips[64])(RXMove& move) const;
     void init_generate_flips();
-    
-    bool (RXBitBoard::*generate_move[64])(RXMove& move) const;
-    void init_generate_move();
-    
+        
     /* bool check_move(const int position, const int color) const; */
     
     int moves_producing(RXMove* start) const;
@@ -183,7 +180,7 @@ inline int RXBitBoard::moves_producing(RXMove* start) const {
     const unsigned long long legal_movesBB = get_legal_moves(discs[player], discs[player^1]);
     
     for(RXSquareList* empties = empties_list->next; empties->position != NOMOVE; empties = empties->next)
-        if((legal_movesBB & 1ULL<<empties->position) && ((this)->*(generate_move[empties->position]))(*list)) {
+        if((legal_movesBB & 1ULL<<empties->position) && ((this)->*(generate_flips[empties->position]))(*list)) {
             list->score = 0;
             previous = previous->next = list++;
             nMoves++;

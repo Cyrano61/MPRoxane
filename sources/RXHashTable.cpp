@@ -395,7 +395,7 @@ void RXHashTable::mainVariation(std::ostringstream& buffer, RXBitBoard& board, c
 				board.do_pass();
 			} else {
 				RXMove& move = _move[board.n_empties][type_hashtable==HASH_WHITE? WHITE:BLACK]; //multithread, for shared use BLACK
-				((board).*(board.generate_move[entry.move]))(move);
+				((board).*(board.generate_flips[entry.move]))(move);
 				board.do_move(move);
 				mainVariation(buffer, board, type_hashtable, depth-1, !myTurn);
 				board.undo_move(move);
@@ -410,7 +410,7 @@ void RXHashTable::mainVariation(std::ostringstream& buffer, RXBitBoard& board, c
 void RXHashTable::mainline(std::ostringstream& buffer, RXBitBoard& board, const int pos, const t_hash type_hashtable) const {
 
 	RXMove& move = _move[board.n_empties][type_hashtable==HASH_WHITE? WHITE:BLACK]; //multithread, for shared use BLACK
-	((board).*(board.generate_move[pos]))(move);
+	((board).*(board.generate_flips[pos]))(move);
 	board.do_move(move);
 	mainline(buffer, board, type_hashtable);
 	board.undo_move(move);	
@@ -441,7 +441,7 @@ void RXHashTable::mainline(std::ostringstream& buffer, RXBitBoard& board, const 
 			board.do_pass();
 		} else {
 			RXMove& move = _move[board.n_empties][type_hashtable==HASH_WHITE? WHITE:BLACK]; //multithread, for shared use BLACK
-			((board).*(board.generate_move[entry.move]))(move);
+			((board).*(board.generate_flips[entry.move]))(move);
 			board.do_move(move);
 			mainline(buffer, board, type_hashtable);
 			board.undo_move(move);
@@ -472,7 +472,7 @@ void RXHashTable::printVariation(RXBitBoard& board, const t_hash type_hashtable,
 				board.do_pass();
 			} else {
 				RXMove& move = _move[board.n_empties][type_hashtable==HASH_WHITE? WHITE:BLACK]; //multithread, for shared use BLACK
-				((board).*(board.generate_move[entry.move]))(move);
+				((board).*(board.generate_flips[entry.move]))(move);
 				board.do_move(move);
 				printVariation(board, type_hashtable, !myTurn);
 				board.undo_move(move);
@@ -508,7 +508,7 @@ void RXHashTable::copyPV(RXHashTable* from_hash, const t_hash from_type_hash, RX
 				board.do_pass();
 			} else {
 				RXMove& move = _move[board.n_empties][SHARED];
-				((board).*(board.generate_move[square]))(move);
+				((board).*(board.generate_flips[square]))(move);
 				board.do_move(move);
 				copyPV(from_hash, from_type_hash, board, to_type_hash);
 				board.undo_move(move);
@@ -579,7 +579,7 @@ void RXHashTable::copyPV(RXBitBoard& board, const t_hash from_hashtable, const t
 				board.do_pass();
 			} else {
 				RXMove& move = _move[board.n_empties][SHARED];
-				((board).*(board.generate_move[square]))(move);
+				((board).*(board.generate_flips[square]))(move);
 				board.do_move(move);
 				copyPV(board, from_hashtable, to_hashtable);
 				board.undo_move(move);
@@ -634,7 +634,7 @@ void RXHashTable::mergePV(RXBitBoard& board) {
 			board.do_pass();
 		} else {
 			RXMove& move = _move[board.n_empties][SHARED];						//shared
-			((board).*(board.generate_move[square]))(move);
+			((board).*(board.generate_flips[square]))(move);
 			board.do_move(move);
 			mergePV(board);
 			board.undo_move(move);
@@ -704,7 +704,7 @@ void RXHashTable::protectPV(RXBitBoard& board, const t_hash	type_hashtable, cons
 				}
 			} else {
 				RXMove& move = _move[board.n_empties][type_hashtable == HASH_WHITE? WHITE:BLACK]; //multithread BLACK or SHARED
-				((board).*(board.generate_move[square]))(move);
+				((board).*(board.generate_flips[square]))(move);
 				board.do_move(move);
 				protectPV(board, type_hashtable, false);
 				board.undo_move(move);

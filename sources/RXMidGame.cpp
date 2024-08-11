@@ -386,7 +386,7 @@ int RXEngine::MG_PVS_deep(int threadID, RXBBPatterns& sBoard, const bool pv, con
 		if(bestmove != NOMOVE) {
 			board.n_nodes++;
 
-			((board).*(board.generate_move[bestmove]))(*move);
+			((board).*(board.generate_flips[bestmove]))(*move);
 			
 			//synchronized acces
 			if(hTable->get(board.hashcode_after_move(move), type_hashtable, entry) && !pv && entry.depth>=depth-1) {
@@ -410,7 +410,7 @@ int RXEngine::MG_PVS_deep(int threadID, RXBBPatterns& sBoard, const bool pv, con
         const unsigned long long legal_movesBB = RXBitBoard::get_legal_moves(board.discs[board.player], board.discs[board.player^1]);
 		for(RXSquareList* empties = board.empties_list->next; empties->position != NOMOVE; empties = empties->next) {
             if(bestmove != empties->position && (legal_movesBB & 1ULL<<empties->position)) {
-                ((board).*(board.generate_move[empties->position]))(*move);
+                ((board).*(board.generate_flips[empties->position]))(*move);
 					
 				board.n_nodes++;
 				
@@ -485,7 +485,7 @@ int RXEngine::MG_PVS_deep(int threadID, RXBBPatterns& sBoard, const bool pv, con
 			if(bestmove != NOMOVE) {
 				list = list->next;
 
-				((board).*(board.generate_move[bestmove]))(*list);
+				((board).*(board.generate_flips[bestmove]))(*list);
 						
 				board.do_move(*list);
 				bestscore = -EG_pv_extension(threadID, board, pv, -upper, -lower, false);						
@@ -1123,7 +1123,7 @@ int RXEngine::MG_PVS_shallow(int threadID, RXBBPatterns& sBoard, const bool pv, 
 
 				bestmove = hashmove;
 
-				((board).*(board.generate_move[bestmove]))(*move);
+				((board).*(board.generate_flips[bestmove]))(*move);
 						
 				board.do_move(*move);
 				bestscore = -EG_pv_extension(threadID, board, pv, -upper, -lower, false);						
@@ -1146,7 +1146,7 @@ int RXEngine::MG_PVS_shallow(int threadID, RXBBPatterns& sBoard, const bool pv, 
                 const unsigned long long legal_movesBB = RXBitBoard::get_legal_moves(board.discs[board.player], board.discs[board.player^1]);
 
 				for(RXSquareList* empties = board.empties_list->next; empties->position != NOMOVE; empties = empties->next)
-                    if(bestmove != empties->position && (legal_movesBB & 1ULL<<empties->position)) { ((board).*(board.generate_move[empties->position]))(*move);
+                    if(bestmove != empties->position && (legal_movesBB & 1ULL<<empties->position)) { ((board).*(board.generate_flips[empties->position]))(*move);
 						previous = previous->next = move++;
 						n_Moves++;
 					}
@@ -1261,7 +1261,7 @@ int RXEngine::MG_PVS_shallow(int threadID, RXBBPatterns& sBoard, const bool pv, 
 					
 					bestmove = hashmove;
 
-					((board).*(board.generate_move[bestmove]))(*move);
+					((board).*(board.generate_flips[bestmove]))(*move);
 					((sBoard).*(sBoard.update_patterns[bestmove][board.player]))(*move);
 
 					sBoard.do_move(*move);
@@ -1286,7 +1286,7 @@ int RXEngine::MG_PVS_shallow(int threadID, RXBBPatterns& sBoard, const bool pv, 
                         const unsigned long long legal_movesBB = RXBitBoard::get_legal_moves(board.discs[board.player], board.discs[board.player^1]);
 
 						for(RXSquareList* empties = board.empties_list->next; empties->position != NOMOVE; empties = empties->next)
-                            if(empties->position != hashmove && (legal_movesBB & 1ULL<<empties->position)) { ((board).*(board.generate_move[empties->position]))(*move);
+                            if(empties->position != hashmove && (legal_movesBB & 1ULL<<empties->position)) { ((board).*(board.generate_flips[empties->position]))(*move);
 								previous = previous->next = move++;
 								nMoves++;
 							}
@@ -1357,7 +1357,7 @@ int RXEngine::MG_PVS_shallow(int threadID, RXBBPatterns& sBoard, const bool pv, 
                         const unsigned long long legal_movesBB = RXBitBoard::get_legal_moves(board.discs[board.player], board.discs[board.player^1]);
 
 						for(RXSquareList* empties = board.empties_list->next; lower < upper && empties->position != NOMOVE; empties = empties->next) {
-                            if (empties->position != hashmove && (legal_movesBB & 1ULL<<empties->position)) { ((board).*(board.generate_move[empties->position]))(*move);
+                            if (empties->position != hashmove && (legal_movesBB & 1ULL<<empties->position)) { ((board).*(board.generate_flips[empties->position]))(*move);
 	
 								((sBoard).*(sBoard.update_patterns[move->position][board.player]))(*move);
 								sBoard.do_move(*move);
@@ -1514,7 +1514,7 @@ int RXEngine::MG_NWS_XProbCut(int threadID, RXBBPatterns& sBoard, const int pvDe
 						
 				board.n_nodes++;
 									
-				((board).*(board.generate_move[bestmove]))(*move);
+				((board).*(board.generate_flips[bestmove]))(*move);
 								
 				//synchronized acces
 				if(hTable->get(board.hashcode_after_move(move), type_hashtable, entry) && entry.depth >= depth-1) {
@@ -1540,7 +1540,7 @@ int RXEngine::MG_NWS_XProbCut(int threadID, RXBBPatterns& sBoard, const int pvDe
 			for(RXSquareList* empties = board.empties_list->next; empties->position != NOMOVE; empties = empties->next)
                 if(bestmove != empties->position && (legal_movesBB & 1ULL<<empties->position)) {
                     
-                    ((board).*(board.generate_move[empties->position]))(*move);
+                    ((board).*(board.generate_flips[empties->position]))(*move);
 						
 					board.n_nodes++;
 

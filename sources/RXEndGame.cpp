@@ -192,7 +192,7 @@ int RXEngine::EG_alphabeta_hash_parity(int threadID, RXBitBoard& board, const bo
 
 		if(hashmove != NOMOVE) {
 
-			((board).*(board.generate_move[hashmove]))(move);
+			((board).*(board.generate_flips[hashmove]))(move);
 												
 			// first move
 			board.do_move(move);
@@ -355,7 +355,7 @@ int RXEngine::EG_PVS_hash_mobility(int threadID, RXBitBoard& board, const bool p
 
 		if(bestmove != NOMOVE) {
 
-			((board).*(board.generate_move[bestmove]))(*move);
+			((board).*(board.generate_flips[bestmove]))(*move);
 												
 			/* first move */
 			board.do_move(*move);
@@ -383,7 +383,7 @@ int RXEngine::EG_PVS_hash_mobility(int threadID, RXBitBoard& board, const bool p
 			for(RXSquareList* empties = board.empties_list->next; empties->position != NOMOVE; empties = empties->next)
                 if(bestmove != empties->position && (legal_movesBB & 1ULL<<empties->position)) {
                     
-                ((board).*(board.generate_move[empties->position]))(*move);
+                ((board).*(board.generate_flips[empties->position]))(*move);
 					previous = previous->next = move++;
 					n_Moves++;
 				}
@@ -609,7 +609,7 @@ int RXEngine::EG_PVS_ETC_mobility(int threadID, RXBitBoard& board, const bool pv
 		if(bestmove != NOMOVE) {
 			board.n_nodes++;
 									
-			((board).*(board.generate_move[bestmove]))(*move);
+			((board).*(board.generate_flips[bestmove]))(*move);
 
 			//synchronized acces				
 			if(hTable->get(board.hashcode_after_move(move), type_hashtable, entry) && !pv && entry.selectivity == NO_SELECT && entry.depth>=board.n_empties)
@@ -627,7 +627,7 @@ int RXEngine::EG_PVS_ETC_mobility(int threadID, RXBitBoard& board, const bool pv
 		for(RXSquareList* empties = board.empties_list->next; empties->position != NOMOVE; empties = empties->next)
             if(bestmove != empties->position && (legal_movesBB & 1ULL<<empties->position)){
                 
-                ((board).*(board.generate_move[empties->position]))(*move);
+                ((board).*(board.generate_flips[empties->position]))(*move);
 				board.n_nodes++;
 								
 				//synchronized acces
@@ -951,7 +951,7 @@ int RXEngine::EG_PVS_deep(int threadID, RXBBPatterns& sBoard, const bool pv, con
 		if(bestmove != NOMOVE) {
 			board.n_nodes++;
 								
-			((board).*(board.generate_move[bestmove]))(*move);
+			((board).*(board.generate_flips[bestmove]))(*move);
 			
 			//synchronized acces
 			if(hTable->get(board.hashcode_after_move(move), type_hashtable, entry) && !pv && entry.selectivity >= selectivity && entry.depth>=board.n_empties) {
@@ -975,7 +975,7 @@ int RXEngine::EG_PVS_deep(int threadID, RXBBPatterns& sBoard, const bool pv, con
 		for(RXSquareList* empties = board.empties_list->next; empties->position != NOMOVE; empties = empties->next)
             if(bestmove != empties->position && (legal_movesBB & 1ULL<<empties->position)){
                 
-                ((board).*(board.generate_move[empties->position]))(*move);
+                ((board).*(board.generate_flips[empties->position]))(*move);
 				board.n_nodes++;
 
 				move->score = 0;
@@ -1688,7 +1688,7 @@ int RXEngine::EG_NWS_XEndCut(int threadID, RXBBPatterns& sBoard, const int pvDev
 					
 			board.n_nodes++;
 								
-			((board).*(board.generate_move[bestmove]))(*move);
+			((board).*(board.generate_flips[bestmove]))(*move);
 			
 			//synchronized acces
 			if(hTable->get(board.hashcode_after_move(move), type_hashtable, entry) && entry.selectivity >= selectivity && entry.depth >= board.n_empties) {
@@ -1712,7 +1712,7 @@ int RXEngine::EG_NWS_XEndCut(int threadID, RXBBPatterns& sBoard, const int pvDev
 		for(RXSquareList* empties = board.empties_list->next; empties->position != NOMOVE; empties = empties->next)
             if(bestmove != empties->position && (legal_movesBB & 1ULL<<empties->position)){
                 
-                ((board).*(board.generate_move[empties->position]))(*move);
+                ((board).*(board.generate_flips[empties->position]))(*move);
 					
 				board.n_nodes++;
 
@@ -2651,7 +2651,7 @@ void RXEngine::check_PV(RXBBPatterns& sBoard, const int score, const int alpha, 
 			if(movePV == PASS)
 				board.do_pass();
 			else {
-				((board).*(board.generate_move[movePV]))(move);
+				((board).*(board.generate_flips[movePV]))(move);
 				((sBoard).*(sBoard.update_patterns[movePV][board.player]))(move);
 				sBoard.do_move(move);
 			}

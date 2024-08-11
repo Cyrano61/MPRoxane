@@ -247,7 +247,7 @@ RXBitBoard::RXBitBoard(): player(BLACK), n_empties(60), n_nodes(0) {
     
         
     init_generate_flips();
-    init_generate_move();
+    init_generate_flips();
     
 
 }
@@ -326,7 +326,7 @@ RXBitBoard::RXBitBoard(const RXBitBoard& src) {
 	previous->next = &empties_list[61];
 	
 	init_generate_flips();
-	init_generate_move();
+	init_generate_flips();
 }
 
 
@@ -603,23 +603,23 @@ void RXBitBoard::print_Board() {
 //    uint64x2_t line = vshrq_n_u64(vandq_u64(mask, board), 48);
 //
 //    unsigned long long
-//    hashcode  = hashcodeTable_lines1_2[vgetq_lane_u64(line,1)][PLAYER];
-//    hashcode ^= hashcodeTable_lines1_2[vgetq_lane_u64(line,0)][OPPONENT];
+//    hashcode  = hashcodeTable_lines1_2[vgetq_lane_u64(line,0)][PLAYER];
+//    hashcode ^= hashcodeTable_lines1_2[vgetq_lane_u64(line,1)][OPPONENT];
 //
 //    line = vshrq_n_u64(vandq_u64(vshrq_n_u64(mask, 16), board), 32);
 //
-//    hashcode  = hashcodeTable_lines3_4[vgetq_lane_u64(line,1)][PLAYER];
-//    hashcode ^= hashcodeTable_lines3_4[vgetq_lane_u64(line,0)][OPPONENT];
+//    hashcode ^= hashcodeTable_lines3_4[vgetq_lane_u64(line,0)][PLAYER];
+//    hashcode ^= hashcodeTable_lines3_4[vgetq_lane_u64(line,1)][OPPONENT];
 //
 //    line = vshrq_n_u64(vandq_u64(vshrq_n_u64(mask, 32), board), 16);
 //
-//    hashcode  = hashcodeTable_lines5_6[vgetq_lane_u64(line,1)][PLAYER];
-//    hashcode ^= hashcodeTable_lines5_6[vgetq_lane_u64(line,0)][OPPONENT];
+//    hashcode ^= hashcodeTable_lines5_6[vgetq_lane_u64(line,0)][PLAYER];
+//    hashcode ^= hashcodeTable_lines5_6[vgetq_lane_u64(line,1)][OPPONENT];
 //
 //    line = vandq_u64(vshrq_n_u64(mask, 48), board);
 //
-//    hashcode  = hashcodeTable_lines7_8[vgetq_lane_u64(line,1)][PLAYER];
-//    hashcode ^= hashcodeTable_lines7_8[vgetq_lane_u64(line,0)][OPPONENT];
+//    hashcode ^= hashcodeTable_lines7_8[vgetq_lane_u64(line,0)][PLAYER];
+//    hashcode ^= hashcodeTable_lines7_8[vgetq_lane_u64(line,1)][OPPONENT];
 //
 //    return hashcode;
 //    
@@ -635,23 +635,23 @@ void RXBitBoard::print_Board() {
 //    uint64x2_t line = vshrq_n_u64(vandq_u64(mask, board), 48);
 //
 //    unsigned long long
-//    hashcode  = hashcodeTable_lines1_2[vgetq_lane_u64(line,1)][PLAYER];
-//    hashcode ^= hashcodeTable_lines1_2[vgetq_lane_u64(line,0)][OPPONENT];
+//    hashcode  = hashcodeTable_lines1_2[vgetq_lane_u64(line,0)][PLAYER];
+//    hashcode ^= hashcodeTable_lines1_2[vgetq_lane_u64(line,1)][OPPONENT];
 //
 //    line = vshrq_n_u64(vandq_u64(vshrq_n_u64(mask, 16), board), 32);
 //
-//    hashcode  = hashcodeTable_lines3_4[vgetq_lane_u64(line,1)][PLAYER];
-//    hashcode ^= hashcodeTable_lines3_4[vgetq_lane_u64(line,0)][OPPONENT];
+//    hashcode ^= hashcodeTable_lines3_4[vgetq_lane_u64(line,0)][PLAYER];
+//    hashcode ^= hashcodeTable_lines3_4[vgetq_lane_u64(line,1)][OPPONENT];
 //
 //    line = vshrq_n_u64(vandq_u64(vshrq_n_u64(mask, 32), board), 16);
 //
-//    hashcode  = hashcodeTable_lines5_6[vgetq_lane_u64(line,1)][PLAYER];
-//    hashcode ^= hashcodeTable_lines5_6[vgetq_lane_u64(line,0)][OPPONENT];
+//    hashcode ^= hashcodeTable_lines5_6[vgetq_lane_u64(line,0)][PLAYER];
+//    hashcode ^= hashcodeTable_lines5_6[vgetq_lane_u64(line,1)][OPPONENT];
 //
 //    line = vandq_u64(vshrq_n_u64(mask, 48), board);
 //
-//    hashcode  = hashcodeTable_lines7_8[vgetq_lane_u64(line,1)][PLAYER];
-//    hashcode ^= hashcodeTable_lines7_8[vgetq_lane_u64(line,0)][OPPONENT];
+//    hashcode = hashcodeTable_lines7_8[vgetq_lane_u64(line,0)][PLAYER];
+//    hashcode ^= hashcodeTable_lines7_8[vgetq_lane_u64(line,1)][OPPONENT];
 //
 //    return hashcode;
 //                                                      

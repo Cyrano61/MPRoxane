@@ -659,7 +659,7 @@ int RXEngine::PVS_check(int threadID, RXBBPatterns& sBoard, int depth, int alpha
 		if(hashmove != NOMOVE) {
 
 			RXMove& move = list[1];
-			((board).*(board.generate_move[hashmove]))(move);
+			((board).*(board.generate_flips[hashmove]))(move);
 			((sBoard).*(sBoard.update_patterns[hashmove][board.player]))(move);
 
 			//first move
@@ -957,7 +957,7 @@ int RXEngine::PVS_last_three_ply(int threadID, RXBBPatterns& sBoard, int alpha, 
 		if(hashmove != NOMOVE) {
 			
 			bestmove = hashmove;
-			((board).*(board.generate_move[bestmove]))(move);
+			((board).*(board.generate_flips[bestmove]))(move);
 			((sBoard).*(sBoard.update_patterns[bestmove][board.player]))(move);
 			
 			sBoard.do_move(move);
@@ -972,7 +972,7 @@ int RXEngine::PVS_last_three_ply(int threadID, RXBBPatterns& sBoard, int alpha, 
             
             do {
                 if(legal_movesBB & 1ULL<<empties->position) {
-                    ((board).*(board.generate_move[empties->position]))(move);
+                    ((board).*(board.generate_flips[empties->position]))(move);
                     ((sBoard).*(sBoard.update_patterns[move.position][board.player]))(move);
                     
                     sBoard.do_move(move);
@@ -995,7 +995,7 @@ int RXEngine::PVS_last_three_ply(int threadID, RXBBPatterns& sBoard, int alpha, 
 		for(; lower<upper && empties->position != NOMOVE; empties = empties->next) {
             if(empties->position != hashmove && (legal_movesBB & 1ULL<<empties->position)) {
                 
-                ((board).*(board.generate_move[empties->position]))(move);
+                ((board).*(board.generate_flips[empties->position]))(move);
 				((sBoard).*(sBoard.update_patterns[move.position][board.player]))(move);
 			
 				sBoard.do_move(move);
@@ -1546,7 +1546,7 @@ void RXEngine::get_move(RXSearch& s) {
 			sBoard.board.do_pass();
 		} else {
 			
-			((sBoard.board).*(sBoard.board.generate_move[s.bestMove.position]))(move);
+			((sBoard.board).*(sBoard.board.generate_flips[s.bestMove.position]))(move);
 			((sBoard).*(sBoard.update_patterns[move.position][board.player]))(move);
 		
 			sBoard.do_move(move);
@@ -1569,7 +1569,7 @@ void RXEngine::get_move(RXSearch& s) {
 					search_sBoard.board.do_pass();
 				} else {
 					RXMove& answer = threads[0]._move[board.n_empties][1];
-					((sBoard.board).*(sBoard.board.generate_move[entry.move]))(answer);
+					((sBoard.board).*(sBoard.board.generate_flips[entry.move]))(answer);
 					((sBoard).*(sBoard.update_patterns[answer.position][board.player]))(answer);
 			
 					sBoard.do_move(answer);

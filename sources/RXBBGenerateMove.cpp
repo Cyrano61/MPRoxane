@@ -11,7 +11,7 @@
 #include "RXBitBoard.hpp"
 #include "RXTools.hpp"
 
-bool RXBitBoard::generate_move_A1(RXMove& move) const {
+bool RXBitBoard::generate_flips_A1(RXMove& move) const {
 	
 	static const unsigned long long HASH[]    = {    0XC79BFEF60AF9617CULL, 0X0429197C2FC669EEULL};
 	static const unsigned long long HASH_SE[] = { 0, 0X41739819832B7B0BULL, 0X557FEB282D28CDD0ULL, 0X81026BA6A77A15CCULL, 0X4F7359C01D5C0470ULL, 0X160117C5132DCB5AULL, 0XDE2AB12F804E65DFULL};
@@ -72,7 +72,7 @@ bool RXBitBoard::generate_move_A1(RXMove& move) const {
 
 }
 
-bool RXBitBoard::generate_move_B1(RXMove& move) const {
+bool RXBitBoard::generate_flips_B1(RXMove& move) const {
 	
 	static const unsigned long long HASH[]    = {    0X008F6EF4453495A8ULL, 0X6A1AD5C0D79E1AE4ULL};
 	static const unsigned long long HASH_SE[] = { 0, 0X1A6099F17BA4C4A4ULL, 0XA68D1A018194A9A5ULL, 0XFE81DA6061B26CE5ULL, 0XAEDAFCDBD3E19A29ULL, 0XB8623EEED9A87475ULL};
@@ -133,7 +133,7 @@ bool RXBitBoard::generate_move_B1(RXMove& move) const {
 
 }
 
-bool RXBitBoard::generate_move_C1(RXMove& move) const {
+bool RXBitBoard::generate_flips_C1(RXMove& move) const {
 	
 	static const unsigned long long HASH[]    = {    0X6DE130CFBD5E4B03ULL, 0X3DF572416D1530A5ULL};
 	static const unsigned long long HASH_S_[] = { 0, 0X1A6099F17BA4C4A4ULL, 0X0E6CEAC0D5A7727FULL, 0X00220C073DD78D33ULL, 0XFEBBB60D753B3D73ULL, 0XDF5A762C121018ECULL, 0XC346FE5F2A5BA3F9ULL};
@@ -206,7 +206,7 @@ bool RXBitBoard::generate_move_C1(RXMove& move) const {
 
 }
 
-bool RXBitBoard::generate_move_D1(RXMove& move) const {
+bool RXBitBoard::generate_flips_D1(RXMove& move) const {
 	
 	static const unsigned long long HASH[]    = {    0X5D1A65EE28CACBF8ULL, 0X996955F15F1650CBULL};
 	static const unsigned long long HASH_S_[] = { 0, 0XD8C65D867F1FC5ACULL, 0X642BDE76852FA8ADULL, 0XB0565EF80F7D70B1ULL, 0X68D453435CCF4598ULL, 0XB04409E393BA617BULL, 0X20CFCA9A5C33B47FULL};
@@ -291,7 +291,7 @@ bool RXBitBoard::generate_move_D1(RXMove& move) const {
 
 }
 
-bool RXBitBoard::generate_move_E1(RXMove& move) const {
+bool RXBitBoard::generate_flips_E1(RXMove& move) const {
 	
 	static const unsigned long long HASH[]    = {    0XAE6327AFFB44559EULL, 0X41A36D679A564A91ULL};
 	static const unsigned long long HASH_S_[] = { 0, 0X744ED952B2CF378BULL, 0XD85759D9D2E03CE3ULL, 0X805B99B832C6F9A3ULL, 0X4E2AABDE88E0E81FULL, 0XBFB35360FBBBAB93ULL, 0X905D51D77FFD11B3ULL};
@@ -376,7 +376,7 @@ bool RXBitBoard::generate_move_E1(RXMove& move) const {
 
 }
 
-bool RXBitBoard::generate_move_F1(RXMove& move) const {
+bool RXBitBoard::generate_flips_F1(RXMove& move) const {
 	
 	static const unsigned long long HASH[]    = {    0X03CCD1127F12F62DULL, 0X0C2CF1A1C4AD6D13ULL};
 	static const unsigned long long HASH_S_[] = { 0, 0X80612B4ABCCBF81CULL, 0XFDF6ED6B9B25014DULL, 0X326C9D13A3CAF8B6ULL, 0X6237BBA811990E7AULL, 0X3B45F5AD1FE8C150ULL, 0X630404288D3022A8ULL};
@@ -449,7 +449,7 @@ bool RXBitBoard::generate_move_F1(RXMove& move) const {
 
 }
 
-bool RXBitBoard::generate_move_G1(RXMove& move) const {
+bool RXBitBoard::generate_flips_G1(RXMove& move) const {
 	
 	static const unsigned long long HASH[]    = {    0X9F8AA3178F2B1394ULL, 0XCDA4D30C92EC5F45ULL};
 	static const unsigned long long HASH_SW[] = { 0, 0X80612B4ABCCBF81CULL, 0X2C78ABC1DCE4F374ULL, 0XF8052B4F56B62B68ULL, 0X069C91451E5A9B28ULL, 0XA1C30135D06CFD62ULL};
@@ -510,7 +510,7 @@ bool RXBitBoard::generate_move_G1(RXMove& move) const {
 
 }
 
-bool RXBitBoard::generate_move_H1(RXMove& move) const {
+bool RXBitBoard::generate_flips_H1(RXMove& move) const {
 	
 	static const unsigned long long HASH[]    = {    0XBA0543A47E6FF2A9ULL, 0XA96D02C2645A0456ULL};
 	static const unsigned long long HASH_SW[] = { 0, 0X3A79E438A1B1438DULL, 0X47EE2219865FBADCULL, 0X1FE2E27866797F9CULL, 0XC760EFC335CB4AB5ULL, 0XE6812FE252E06F2AULL, 0X968640CDE7AE40ABULL};
@@ -571,7 +571,7 @@ bool RXBitBoard::generate_move_H1(RXMove& move) const {
 
 }
 
-bool RXBitBoard::generate_move_A2(RXMove& move) const {
+bool RXBitBoard::generate_flips_A2(RXMove& move) const {
 	
 	static const unsigned long long HASH[]    = {    0X60DE7E0E3A76FDF0ULL, 0X4397F9C76A4D8E62ULL};
 	static const unsigned long long HASH_SE[] = { 0, 0XDDD21FEA14003A03ULL, 0XD39CF92DFC70C54FULL, 0X0B1EF496AFC2F066ULL, 0XFA870C28DC99B3EAULL, 0XA2C6FDAD4E415012ULL};
@@ -632,7 +632,7 @@ bool RXBitBoard::generate_move_A2(RXMove& move) const {
 
 }
 
-bool RXBitBoard::generate_move_B2(RXMove& move) const {
+bool RXBitBoard::generate_flips_B2(RXMove& move) const {
 	
 	static const unsigned long long HASH[]    = {    0X668131FA5C735273ULL, 0X27F2A9E3DF582978ULL};
 	static const unsigned long long HASH_SE[] = { 0, 0X140C7331AE03B6DBULL, 0XC071F3BF24516EC7ULL, 0X0E00C1D99E777F7BULL, 0X57728FDC9006B051ULL, 0X9F59293603651ED4ULL};
@@ -693,7 +693,7 @@ bool RXBitBoard::generate_move_B2(RXMove& move) const {
 
 }
 
-bool RXBitBoard::generate_move_C2(RXMove& move) const {
+bool RXBitBoard::generate_flips_C2(RXMove& move) const {
 	
 	static const unsigned long long HASH[]    = {    0X96F29C5A9B6FD15EULL, 0X8C9205ABE0CB15FAULL};
 	static const unsigned long long HASH_S_[] = { 0, 0X140C7331AE03B6DBULL, 0X1A4295F646734997ULL, 0XE4DB2FFC0E9FF9D7ULL, 0XC53AEFDD69B4DC48ULL, 0XD92667AE51FF675DULL};
@@ -766,7 +766,7 @@ bool RXBitBoard::generate_move_C2(RXMove& move) const {
 
 }
 
-bool RXBitBoard::generate_move_D2(RXMove& move) const {
+bool RXBitBoard::generate_flips_D2(RXMove& move) const {
 	
 	static const unsigned long long HASH[]    = {    0X619F1FAEC1E82DE0ULL, 0XB9594228BEF7E84CULL};
 	static const unsigned long long HASH_S_[] = { 0, 0XBCED83F0FA306D01ULL, 0X6890037E7062B51DULL, 0XB0120EC523D08034ULL, 0X68825465ECA5A4D7ULL, 0XF809971C232C71D3ULL};
@@ -851,7 +851,7 @@ bool RXBitBoard::generate_move_D2(RXMove& move) const {
 
 }
 
-bool RXBitBoard::generate_move_E2(RXMove& move) const {
+bool RXBitBoard::generate_flips_E2(RXMove& move) const {
 	
 	static const unsigned long long HASH[]    = {    0X0A1AA93994AA5A9EULL, 0X7E54706B26656D15ULL};
 	static const unsigned long long HASH_S_[] = { 0, 0XAC19808B602F0B68ULL, 0XF41540EA8009CE28ULL, 0X3A64728C3A2FDF94ULL, 0XCBFD8A3249749C18ULL, 0XE4138885CD322638ULL};
@@ -936,7 +936,7 @@ bool RXBitBoard::generate_move_E2(RXMove& move) const {
 
 }
 
-bool RXBitBoard::generate_move_F2(RXMove& move) const {
+bool RXBitBoard::generate_flips_F2(RXMove& move) const {
 	
 	static const unsigned long long HASH[]    = {    0X0D521A9B644685DEULL, 0X8D3331D1D88D7DC2ULL};
 	static const unsigned long long HASH_S_[] = { 0, 0X7D97C62127EEF951ULL, 0XB20DB6591F0100AAULL, 0XE25690E2AD52F666ULL, 0XBB24DEE7A323394CULL, 0XE3652F6231FBDAB4ULL};
@@ -1009,7 +1009,7 @@ bool RXBitBoard::generate_move_F2(RXMove& move) const {
 
 }
 
-bool RXBitBoard::generate_move_G2(RXMove& move) const {
+bool RXBitBoard::generate_flips_G2(RXMove& move) const {
 	
 	static const unsigned long long HASH[]    = {    0X73580BBFB1F518E3ULL, 0X4921EF8710445B6EULL};
 	static const unsigned long long HASH_SW[] = { 0, 0X7D97C62127EEF951ULL, 0X259B0640C7C83C11ULL, 0XFD190BFB947A0938ULL, 0XDCF8CBDAF3512CA7ULL, 0XACFFA4F5461F0326ULL};
@@ -1070,7 +1070,7 @@ bool RXBitBoard::generate_move_G2(RXMove& move) const {
 
 }
 
-bool RXBitBoard::generate_move_H2(RXMove& move) const {
+bool RXBitBoard::generate_flips_H2(RXMove& move) const {
 	
 	static const unsigned long long HASH[]    = {    0XB8844A364A8FD77AULL, 0XDFCA3250484C75AFULL};
 	static const unsigned long long HASH_SW[] = { 0, 0XA2473A67F0DE8B09ULL, 0X6DDD4A1FC83172F2ULL, 0XA3AC78797217634EULL, 0X7B3C22D9BD6247ADULL, 0X6720AAAA8529FCB8ULL};
@@ -1131,7 +1131,7 @@ bool RXBitBoard::generate_move_H2(RXMove& move) const {
 
 }
 
-bool RXBitBoard::generate_move_A3(RXMove& move) const {
+bool RXBitBoard::generate_flips_A3(RXMove& move) const {
 	
 	static const unsigned long long HASH[]    = {    0X457499DA8421ACB2ULL, 0X5933951DAE4A3B3AULL};
 	static const unsigned long long HASH__E[] = { 0, 0XDDD21FEA14003A03ULL, 0XC9DE6CDBBA038CD8ULL, 0X7533EF2B4033E1D9ULL, 0XD92A6FA0201CEAB1ULL, 0XA4BDA98107F213E0ULL, 0X06FA93E6F72C98E9ULL};
@@ -1204,7 +1204,7 @@ bool RXBitBoard::generate_move_A3(RXMove& move) const {
 
 }
 
-bool RXBitBoard::generate_move_B3(RXMove& move) const {
+bool RXBitBoard::generate_flips_B3(RXMove& move) const {
 	
 	static const unsigned long long HASH[]    = {    0X90B88D84F01528F6ULL, 0X4D6A926EE41512F5ULL};
 	static const unsigned long long HASH__E[] = { 0, 0X140C7331AE03B6DBULL, 0XA8E1F0C15433DBDAULL, 0X04F8704A341CD0B2ULL, 0X796FB66B13F229E3ULL, 0XDB288C0CE32CA2EAULL};
@@ -1277,7 +1277,7 @@ bool RXBitBoard::generate_move_B3(RXMove& move) const {
 
 }
 
-bool RXBitBoard::generate_move_C3(RXMove& move) const {
+bool RXBitBoard::generate_flips_C3(RXMove& move) const {
 	
 	static const unsigned long long HASH[]    = {    0X024BD24533582E8BULL, 0X1647A1749D5B9850ULL};
 	static const unsigned long long HASH_SE[] = { 0, 0XD47D808E8A52D81CULL, 0X1A0CB2E83074C9A0ULL, 0X437EFCED3E05068AULL, 0X8B555A07AD66A80FULL};
@@ -1368,7 +1368,7 @@ bool RXBitBoard::generate_move_C3(RXMove& move) const {
 
 }
 
-bool RXBitBoard::generate_move_D3(RXMove& move) const {
+bool RXBitBoard::generate_flips_D3(RXMove& move) const {
 	
 	static const unsigned long long HASH[]    = {    0X76CC6FE07CF98A2CULL, 0XCA21EC1086C9E72DULL};
 	static const unsigned long long HASH_SE[] = { 0, 0X580CC061E026C540ULL, 0X0857E6DA5275338CULL, 0X1EEF24EF583CDDD0ULL};
@@ -1471,7 +1471,7 @@ bool RXBitBoard::generate_move_D3(RXMove& move) const {
 
 }
 
-bool RXBitBoard::generate_move_E3(RXMove& move) const {
+bool RXBitBoard::generate_flips_E3(RXMove& move) const {
 	
 	static const unsigned long long HASH[]    = {    0XCD6BD259CC4531BBULL, 0X617252D2AC6A3AD3ULL};
 	static const unsigned long long HASH_SE[] = { 0, 0XCF9A707838EFF9FBULL, 0XC22248194740A606ULL};
@@ -1574,7 +1574,7 @@ bool RXBitBoard::generate_move_E3(RXMove& move) const {
 
 }
 
-bool RXBitBoard::generate_move_F3(RXMove& move) const {
+bool RXBitBoard::generate_flips_F3(RXMove& move) const {
 	
 	static const unsigned long long HASH[]    = {    0X3B588BDB6258EA64ULL, 0X46CF4DFA45B61335ULL};
 	static const unsigned long long HASH_S_[] = { 0, 0XCF9A707838EFF9FBULL, 0X9FC156C38ABC0F37ULL, 0XC6B318C684CDC01DULL, 0X9EF2E943161523E5ULL};
@@ -1665,7 +1665,7 @@ bool RXBitBoard::generate_move_F3(RXMove& move) const {
 
 }
 
-bool RXBitBoard::generate_move_G3(RXMove& move) const {
+bool RXBitBoard::generate_flips_G3(RXMove& move) const {
 	
 	static const unsigned long long HASH[]    = {    0X4302A6DC441AD82FULL, 0XE1459CBBB4C45326ULL};
 	static const unsigned long long HASH__W[] = { 0, 0X7D97C62127EEF951ULL, 0XD18E46AA47C1F239ULL, 0X6D63C55ABDF19F38ULL, 0X796FB66B13F229E3ULL, 0XA4BDA98107F213E0ULL};
@@ -1738,7 +1738,7 @@ bool RXBitBoard::generate_move_G3(RXMove& move) const {
 
 }
 
-bool RXBitBoard::generate_move_H3(RXMove& move) const {
+bool RXBitBoard::generate_flips_H3(RXMove& move) const {
 	
 	static const unsigned long long HASH[]    = {    0XB73929FE1D7104E6ULL, 0XA9755943D41419CCULL};
 	static const unsigned long long HASH__W[] = { 0, 0XA2473A67F0DE8B09ULL, 0XDFD0FC46D7307258ULL, 0X73C97CCDB71F7930ULL, 0XCF24FF3D4D2F1431ULL, 0XDB288C0CE32CA2EAULL, 0X06FA93E6F72C98E9ULL};
@@ -1811,7 +1811,7 @@ bool RXBitBoard::generate_move_H3(RXMove& move) const {
 
 }
 
-bool RXBitBoard::generate_move_A4(RXMove& move) const {
+bool RXBitBoard::generate_flips_A4(RXMove& move) const {
 	
 	static const unsigned long long HASH[]    = {    0X43F10D75AF82EBDAULL, 0X46167C438D560803ULL};
 	static const unsigned long long HASH__E[] = { 0, 0X442C866D1B81B7B0ULL, 0X4A6260AAF3F148FCULL, 0X9E1FE02479A390E0ULL, 0XC6132045998555A0ULL, 0X0989503DA16AAC5BULL, 0X47ABBE1CAA88098FULL};
@@ -1896,7 +1896,7 @@ bool RXBitBoard::generate_move_A4(RXMove& move) const {
 
 }
 
-bool RXBitBoard::generate_move_B4(RXMove& move) const {
+bool RXBitBoard::generate_flips_B4(RXMove& move) const {
 	
 	static const unsigned long long HASH[]    = {    0X7F57A1BC6CC0C6A5ULL, 0X3B7B27D177417115ULL};
 	static const unsigned long long HASH__E[] = { 0, 0X0E4EE6C7E870FF4CULL, 0XDA33664962222750ULL, 0X823FA6288204E210ULL, 0X4DA5D650BAEB1BEBULL, 0X03873871B109BE3FULL};
@@ -1981,7 +1981,7 @@ bool RXBitBoard::generate_move_B4(RXMove& move) const {
 
 }
 
-bool RXBitBoard::generate_move_C4(RXMove& move) const {
+bool RXBitBoard::generate_flips_C4(RXMove& move) const {
 	
 	static const unsigned long long HASH[]    = {    0XFA4AAF1082BF8F7FULL, 0XF40449D76ACF7033ULL};
 	static const unsigned long long HASH_SE[] = { 0, 0XD8820DBB53B23529ULL, 0X291BF50520E976A5ULL, 0X715A0480B231955DULL};
@@ -2084,7 +2084,7 @@ bool RXBitBoard::generate_move_C4(RXMove& move) const {
 
 }
 
-bool RXBitBoard::generate_move_F4(RXMove& move) const {
+bool RXBitBoard::generate_flips_F4(RXMove& move) const {
 	
 	static const unsigned long long HASH[]    = {    0XAD14C7E539D51489ULL, 0X628EB79D013AED72ULL};
 	static const unsigned long long HASH_S_[] = { 0, 0X505B26BBB253F6CCULL, 0X092968BEBC2239E6ULL, 0X5168993B2EFADA1EULL};
@@ -2187,7 +2187,7 @@ bool RXBitBoard::generate_move_F4(RXMove& move) const {
 
 }
 
-bool RXBitBoard::generate_move_G4(RXMove& move) const {
+bool RXBitBoard::generate_flips_G4(RXMove& move) const {
 	
 	static const unsigned long long HASH[]    = {    0XBBD04C6669A079B3ULL, 0XF5F2A2476242DC67ULL};
 	static const unsigned long long HASH__W[] = { 0, 0XCF9A707838EFF9FBULL, 0X9796B019D8C93CBBULL, 0X43EB3097529BE4A7ULL, 0X4DA5D650BAEB1BEBULL, 0X0989503DA16AAC5BULL};
@@ -2272,7 +2272,7 @@ bool RXBitBoard::generate_move_G4(RXMove& move) const {
 
 }
 
-bool RXBitBoard::generate_move_H4(RXMove& move) const {
+bool RXBitBoard::generate_flips_H4(RXMove& move) const {
 	
 	static const unsigned long long HASH[]    = {    0X3337CBDC99AA5E0AULL, 0X5017DC3A9B25A0BAULL};
 	static const unsigned long long HASH__W[] = { 0, 0X4E22EE210BE2A5D4ULL, 0X81B89E59330D5C2FULL, 0XD9B45E38D32B996FULL, 0X0DC9DEB659794173ULL, 0X03873871B109BE3FULL, 0X47ABBE1CAA88098FULL};
@@ -2357,7 +2357,7 @@ bool RXBitBoard::generate_move_H4(RXMove& move) const {
 
 }
 
-bool RXBitBoard::generate_move_A5(RXMove& move) const {
+bool RXBitBoard::generate_flips_A5(RXMove& move) const {
 	
 	static const unsigned long long HASH[]    = {    0X2701859A5F3AF238ULL, 0X53BC2008F2D25753ULL};
 	static const unsigned long long HASH__E[] = { 0, 0XAEEC0E1BA836DA11ULL, 0X5075B411E0DA6A51ULL, 0X88F7B9AAB3685F78ULL, 0X46868BCC094E4EC4ULL, 0X16DDAD77BB1DB808ULL, 0X1B659516C4B2E7F5ULL};
@@ -2442,7 +2442,7 @@ bool RXBitBoard::generate_move_A5(RXMove& move) const {
 
 }
 
-bool RXBitBoard::generate_move_B5(RXMove& move) const {
+bool RXBitBoard::generate_flips_B5(RXMove& move) const {
 	
 	static const unsigned long long HASH[]    = {    0XB04308D12EEC231FULL, 0X1EAF06CA86DAF90EULL};
 	static const unsigned long long HASH__E[] = { 0, 0XFE99BA0A48ECB040ULL, 0X261BB7B11B5E8569ULL, 0XE86A85D7A17894D5ULL, 0XB831A36C132B6219ULL, 0XB5899B0D6C843DE4ULL};
@@ -2527,7 +2527,7 @@ bool RXBitBoard::generate_move_B5(RXMove& move) const {
 
 }
 
-bool RXBitBoard::generate_move_C5(RXMove& move) const {
+bool RXBitBoard::generate_flips_C5(RXMove& move) const {
 	
 	static const unsigned long long HASH[]    = {    0XC40E3C62E1FEA4BCULL, 0X3A978668A91214FCULL};
 	static const unsigned long long HASH_SE[] = { 0, 0XD8905AA0CF7524E3ULL, 0XF77E58174B339EC3ULL};
@@ -2630,7 +2630,7 @@ bool RXBitBoard::generate_move_C5(RXMove& move) const {
 
 }
 
-bool RXBitBoard::generate_move_F5(RXMove& move) const {
+bool RXBitBoard::generate_flips_F5(RXMove& move) const {
 	
 	static const unsigned long long HASH[]    = {    0XE9805D61927900E1ULL, 0XB9DB7BDA202AF62DULL};
 	static const unsigned long long HASH_S_[] = { 0, 0X59724E050E71CF2AULL, 0X0133BF809CA92CD2ULL};
@@ -2733,7 +2733,7 @@ bool RXBitBoard::generate_move_F5(RXMove& move) const {
 
 }
 
-bool RXBitBoard::generate_move_G5(RXMove& move) const {
+bool RXBitBoard::generate_flips_G5(RXMove& move) const {
 	
 	static const unsigned long long HASH[]    = {    0X0857FDCD16047C54ULL, 0X05EFC5AC69AB23A9ULL};
 	static const unsigned long long HASH__W[] = { 0, 0X505B26BBB253F6CCULL, 0X9E2A14DD0875E770ULL, 0X46A819665BC7D259ULL, 0XB831A36C132B6219ULL, 0X16DDAD77BB1DB808ULL};
@@ -2818,7 +2818,7 @@ bool RXBitBoard::generate_move_G5(RXMove& move) const {
 
 }
 
-bool RXBitBoard::generate_move_H5(RXMove& move) const {
+bool RXBitBoard::generate_flips_H5(RXMove& move) const {
 	
 	static const unsigned long long HASH[]    = {    0X20578A4BAF901694ULL, 0X870EE4BE453C62DCULL};
 	static const unsigned long long HASH__W[] = { 0, 0X0DB838617FAF5FFDULL, 0X5DE31EDACDFCA931ULL, 0X93922CBC77DAB88DULL, 0X4B10210724688DA4ULL, 0XB5899B0D6C843DE4ULL, 0X1B659516C4B2E7F5ULL};
@@ -2903,7 +2903,7 @@ bool RXBitBoard::generate_move_H5(RXMove& move) const {
 
 }
 
-bool RXBitBoard::generate_move_A6(RXMove& move) const {
+bool RXBitBoard::generate_flips_A6(RXMove& move) const {
 	
 	static const unsigned long long HASH[]    = {    0X91FAB6AA406CD6A5ULL, 0XBA20CE704CD47BF8ULL};
 	static const unsigned long long HASH__E[] = { 0, 0XA75F9070CE36664AULL, 0X86BE5051A91D43D5ULL, 0X5E2E0AF166686736ULL, 0XAFB7F24F153324BAULL, 0XF6C5BC4A1B42EB90ULL, 0XE07D7E7F110B05CCULL};
@@ -2974,7 +2974,7 @@ bool RXBitBoard::generate_move_A6(RXMove& move) const {
 
 }
 
-bool RXBitBoard::generate_move_B6(RXMove& move) const {
+bool RXBitBoard::generate_flips_B6(RXMove& move) const {
 	
 	static const unsigned long long HASH[]    = {    0XF8F082FDDBDC088FULL, 0X5FAF128D15EA6EC5ULL};
 	static const unsigned long long HASH__E[] = { 0, 0X21E1C021672B259FULL, 0XF9719A81A85E017CULL, 0X08E8623FDB0542F0ULL, 0X519A2C3AD5748DDAULL, 0X4722EE0FDF3D6386ULL};
@@ -3045,7 +3045,7 @@ bool RXBitBoard::generate_move_B6(RXMove& move) const {
 
 }
 
-bool RXBitBoard::generate_move_C6(RXMove& move) const {
+bool RXBitBoard::generate_flips_C6(RXMove& move) const {
 	
 	static const unsigned long long HASH[]    = {    0XF70DDB51ECA37304ULL, 0XD6EC1B708B88569BULL};
 	static const unsigned long long HASH__E[] = { 0, 0XD8905AA0CF7524E3ULL, 0X2909A21EBC2E676FULL, 0X707BEC1BB25FA845ULL, 0X66C32E2EB8164619ULL};
@@ -3134,7 +3134,7 @@ bool RXBitBoard::generate_move_C6(RXMove& move) const {
 
 }
 
-bool RXBitBoard::generate_move_D6(RXMove& move) const {
+bool RXBitBoard::generate_flips_D6(RXMove& move) const {
 	
 	static const unsigned long long HASH[]    = {    0X0B23D602B5E730EAULL, 0XD3B38CA27A921409ULL};
 	static const unsigned long long HASH__E[] = { 0, 0XF199F8BE735B438CULL, 0XA8EBB6BB7D2A8CA6ULL, 0XBE53748E776362FAULL};
@@ -3234,7 +3234,7 @@ bool RXBitBoard::generate_move_D6(RXMove& move) const {
 
 }
 
-bool RXBitBoard::generate_move_E6(RXMove& move) const {
+bool RXBitBoard::generate_flips_E6(RXMove& move) const {
 	
 	static const unsigned long long HASH[]    = {    0XE141127AFF5D9D88ULL, 0X10D8EAC48C06DE04ULL};
 	static const unsigned long long HASH__E[] = { 0, 0X59724E050E71CF2AULL, 0X4FCA8C3004382176ULL};
@@ -3334,7 +3334,7 @@ bool RXBitBoard::generate_move_E6(RXMove& move) const {
 
 }
 
-bool RXBitBoard::generate_move_F6(RXMove& move) const {
+bool RXBitBoard::generate_flips_F6(RXMove& move) const {
 	
 	static const unsigned long long HASH[]    = {    0X06AB4E930C3C3B4CULL, 0X5FD90096024DF466ULL};
 	static const unsigned long long HASH_N_[] = { 0, 0X505B26BBB253F6CCULL, 0X9FC156C38ABC0F37ULL, 0XE25690E2AD52F666ULL, 0X6237BBA811990E7AULL};
@@ -3423,7 +3423,7 @@ bool RXBitBoard::generate_move_F6(RXMove& move) const {
 
 }
 
-bool RXBitBoard::generate_move_G6(RXMove& move) const {
+bool RXBitBoard::generate_flips_G6(RXMove& move) const {
 	
 	static const unsigned long long HASH[]    = {    0X2F58A940D4150E0AULL, 0X39E06B75DE5CE056ULL};
 	static const unsigned long long HASH__W[] = { 0, 0X59724E050E71CF2AULL, 0XA8EBB6BB7D2A8CA6ULL, 0X707BEC1BB25FA845ULL, 0X519A2C3AD5748DDAULL, 0XF6C5BC4A1B42EB90ULL};
@@ -3494,7 +3494,7 @@ bool RXBitBoard::generate_move_G6(RXMove& move) const {
 
 }
 
-bool RXBitBoard::generate_move_H6(RXMove& move) const {
+bool RXBitBoard::generate_flips_H6(RXMove& move) const {
 	
 	static const unsigned long long HASH[]    = {    0XF4FD8BED713AE0E8ULL, 0X316CCD2549DAB6C9ULL};
 	static const unsigned long long HASH__W[] = { 0, 0X16B8C2350A49EE5CULL, 0X4FCA8C3004382176ULL, 0XBE53748E776362FAULL, 0X66C32E2EB8164619ULL, 0X4722EE0FDF3D6386ULL, 0XE07D7E7F110B05CCULL};
@@ -3565,7 +3565,7 @@ bool RXBitBoard::generate_move_H6(RXMove& move) const {
 
 }
 
-bool RXBitBoard::generate_move_A7(RXMove& move) const {
+bool RXBitBoard::generate_flips_A7(RXMove& move) const {
 	
 	static const unsigned long long HASH[]    = {    0XBDD43971341B3DD5ULL, 0X0B43C7CF79974871ULL};
 	static const unsigned long long HASH_NE[] = { 0, 0XA75F9070CE36664AULL, 0X59C62A7A86DAD60AULL, 0X8DBBAAF40C880E16ULL, 0X21A22A7F6CA7057EULL, 0XA1C30135D06CFD62ULL};
@@ -3624,7 +3624,7 @@ bool RXBitBoard::generate_move_A7(RXMove& move) const {
 
 }
 
-bool RXBitBoard::generate_move_B7(RXMove& move) const {
+bool RXBitBoard::generate_flips_B7(RXMove& move) const {
 	
 	static const unsigned long long HASH[]    = {    0X1A7A170899D82293ULL, 0X6A7D78272C960D12ULL};
 	static const unsigned long long HASH_NE[] = { 0, 0X21E1C021672B259FULL, 0XF963CD9A349910B6ULL, 0XA16F0DFBD4BFD5F6ULL, 0XDCF8CBDAF3512CA7ULL, 0XE6812FE252E06F2AULL};
@@ -3683,7 +3683,7 @@ bool RXBitBoard::generate_move_B7(RXMove& move) const {
 
 }
 
-bool RXBitBoard::generate_move_C7(RXMove& move) const {
+bool RXBitBoard::generate_flips_C7(RXMove& move) const {
 	
 	static const unsigned long long HASH[]    = {    0X06995AE685421F11ULL, 0X1A85D295BD09A404ULL};
 	static const unsigned long long HASH_N_[] = { 0, 0X21E1C021672B259FULL, 0XDF787A2B2FC795DFULL, 0XD1369CECC7B76A93ULL, 0XC53AEFDD69B4DC48ULL, 0XDF5A762C121018ECULL};
@@ -3754,7 +3754,7 @@ bool RXBitBoard::generate_move_C7(RXMove& move) const {
 
 }
 
-bool RXBitBoard::generate_move_D7(RXMove& move) const {
+bool RXBitBoard::generate_flips_D7(RXMove& move) const {
 	
 	static const unsigned long long HASH[]    = {    0XEBBC7CB71EB476C1ULL, 0X7B37BFCED13DA3C5ULL};
 	static const unsigned long long HASH_N_[] = { 0, 0XD8905AA0CF7524E3ULL, 0X0012571B9CC711CAULL, 0XD46FD7951695C9D6ULL, 0X68825465ECA5A4D7ULL, 0XB04409E393BA617BULL};
@@ -3836,7 +3836,7 @@ bool RXBitBoard::generate_move_D7(RXMove& move) const {
 
 }
 
-bool RXBitBoard::generate_move_E7(RXMove& move) const {
+bool RXBitBoard::generate_flips_E7(RXMove& move) const {
 	
 	static const unsigned long long HASH[]    = {    0X8B9289F7BDFA0A8AULL, 0XA47C8B4039BCB0AAULL};
 	static const unsigned long long HASH_N_[] = { 0, 0XF199F8BE735B438CULL, 0X3FE8CAD8C97D5230ULL, 0X67E40AB9295B9770ULL, 0XCBFD8A3249749C18ULL, 0XBFB35360FBBBAB93ULL};
@@ -3918,7 +3918,7 @@ bool RXBitBoard::generate_move_E7(RXMove& move) const {
 
 }
 
-bool RXBitBoard::generate_move_F7(RXMove& move) const {
+bool RXBitBoard::generate_flips_F7(RXMove& move) const {
 	
 	static const unsigned long long HASH[]    = {    0X0DBAAFDBEE9F073CULL, 0X55FB5E5E7C47E4C4ULL};
 	static const unsigned long long HASH_N_[] = { 0, 0X59724E050E71CF2AULL, 0X092968BEBC2239E6ULL, 0XC6B318C684CDC01DULL, 0XBB24DEE7A323394CULL, 0X3B45F5AD1FE8C150ULL};
@@ -3989,7 +3989,7 @@ bool RXBitBoard::generate_move_F7(RXMove& move) const {
 
 }
 
-bool RXBitBoard::generate_move_G7(RXMove& move) const {
+bool RXBitBoard::generate_flips_G7(RXMove& move) const {
 	
 	static const unsigned long long HASH[]    = {    0XF484677142134734ULL, 0X3CAFC19BD170E9B1ULL};
 	static const unsigned long long HASH_NW[] = { 0, 0X59724E050E71CF2AULL, 0X97037C63B457DE96ULL, 0X437EFCED3E05068AULL, 0X57728FDC9006B051ULL, 0X160117C5132DCB5AULL};
@@ -4048,7 +4048,7 @@ bool RXBitBoard::generate_move_G7(RXMove& move) const {
 
 }
 
-bool RXBitBoard::generate_move_H7(RXMove& move) const {
+bool RXBitBoard::generate_flips_H7(RXMove& move) const {
 	
 	static const unsigned long long HASH[]    = {    0X96F1CBC65D7D8FD0ULL, 0XA607EB34997673B4ULL};
 	static const unsigned long long HASH_NW[] = { 0, 0X16B8C2350A49EE5CULL, 0X46E3E48EB81A1890ULL, 0X1EEF24EF583CDDD0ULL, 0XA202A71FA20CB0D1ULL, 0XB8623EEED9A87475ULL};
@@ -4107,7 +4107,7 @@ bool RXBitBoard::generate_move_H7(RXMove& move) const {
 
 }
 
-bool RXBitBoard::generate_move_A8(RXMove& move) const {
+bool RXBitBoard::generate_flips_A8(RXMove& move) const {
 	
 	static const unsigned long long HASH[]    = {    0X2C89DA6AD9CF1CE1ULL, 0X4BEB70B395691171ULL};
 	static const unsigned long long HASH_NE[] = { 0, 0X70076F2FB54E2F81ULL, 0X51E6AF0ED2650A1EULL, 0X8964A2B581D73F37ULL, 0XD16862D461F1FA77ULL, 0XACFFA4F5461F0326ULL, 0X968640CDE7AE40ABULL};
@@ -4166,7 +4166,7 @@ bool RXBitBoard::generate_move_A8(RXMove& move) const {
 
 }
 
-bool RXBitBoard::generate_move_B8(RXMove& move) const {
+bool RXBitBoard::generate_flips_B8(RXMove& move) const {
 	
 	static const unsigned long long HASH[]    = {    0X339D774EDFF65CDCULL, 0X8DF5C2DF4A2A15B4ULL};
 	static const unsigned long long HASH_NE[] = { 0, 0X1C1C8873384BBB15ULL, 0XC48CD2D3F73E9FF6ULL, 0X0AFDE0B54D188E4AULL, 0XC56790CD75F777B1ULL, 0X6720AAAA8529FCB8ULL};
@@ -4225,7 +4225,7 @@ bool RXBitBoard::generate_move_B8(RXMove& move) const {
 
 }
 
-bool RXBitBoard::generate_move_C8(RXMove& move) const {
+bool RXBitBoard::generate_flips_C8(RXMove& move) const {
 	
 	static const unsigned long long HASH[]    = {    0XEE4FFAA05000D7A3ULL, 0XFB0397FEE53662B8ULL};
 	static const unsigned long long HASH_N_[] = { 0, 0X1C1C8873384BBB15ULL, 0X3DFD48525F609E8AULL, 0XC364F258178C2ECAULL, 0XCD2A149FFFFCD186ULL, 0XD92667AE51FF675DULL, 0XC346FE5F2A5BA3F9ULL};
@@ -4296,7 +4296,7 @@ bool RXBitBoard::generate_move_C8(RXMove& move) const {
 
 }
 
-bool RXBitBoard::generate_move_D8(RXMove& move) const {
+bool RXBitBoard::generate_flips_D8(RXMove& move) const {
 	
 	static const unsigned long long HASH[]    = {    0X076CEBC185343BB6ULL, 0XAC75D5F3EEAC23EDULL};
 	static const unsigned long long HASH_N_[] = { 0, 0X908BC379CF89D504ULL, 0X481B99D900FCF1E7ULL, 0X90999462534EC4CEULL, 0X44E414ECD91C1CD2ULL, 0XF809971C232C71D3ULL, 0X20CFCA9A5C33B47FULL};
@@ -4378,7 +4378,7 @@ bool RXBitBoard::generate_move_D8(RXMove& move) const {
 
 }
 
-bool RXBitBoard::generate_move_E8(RXMove& move) const {
+bool RXBitBoard::generate_flips_E8(RXMove& move) const {
 	
 	static const unsigned long long HASH[]    = {    0XF899D4E5A6A89530ULL, 0X8B6C247FA77ECE8DULL};
 	static const unsigned long long HASH_N_[] = { 0, 0X2FEE02B78446BA20ULL, 0XDE77FA09F71DF9ACULL, 0X1006C86F4D3BE810ULL, 0X480A080EAD1D2D50ULL, 0XE4138885CD322638ULL, 0X905D51D77FFD11B3ULL};
@@ -4460,7 +4460,7 @@ bool RXBitBoard::generate_move_E8(RXMove& move) const {
 
 }
 
-bool RXBitBoard::generate_move_F8(RXMove& move) const {
+bool RXBitBoard::generate_flips_F8(RXMove& move) const {
 	
 	static const unsigned long long HASH[]    = {    0XF71AA37EC76E7E58ULL, 0X790B918AF5599202ULL};
 	static const unsigned long long HASH_N_[] = { 0, 0X5841F18592D8E3F8ULL, 0X0133BF809CA92CD2ULL, 0X5168993B2EFADA1EULL, 0X9EF2E943161523E5ULL, 0XE3652F6231FBDAB4ULL, 0X630404288D3022A8ULL};
@@ -4531,7 +4531,7 @@ bool RXBitBoard::generate_move_F8(RXMove& move) const {
 
 }
 
-bool RXBitBoard::generate_move_G8(RXMove& move) const {
+bool RXBitBoard::generate_flips_G8(RXMove& move) const {
 	
 	static const unsigned long long HASH[]    = {    0XB0CD851861F3B7B6ULL, 0XAD2822A305818B27ULL};
 	static const unsigned long long HASH_NW[] = { 0, 0X5841F18592D8E3F8ULL, 0XA9D8093BE183A074ULL, 0X715A0480B231955DULL, 0X7F14E2475A416A11ULL, 0XA2C6FDAD4E415012ULL};
@@ -4590,7 +4590,7 @@ bool RXBitBoard::generate_move_G8(RXMove& move) const {
 
 }
 
-bool RXBitBoard::generate_move_H8(RXMove& move) const {
+bool RXBitBoard::generate_flips_H8(RXMove& move) const {
 	
 	static const unsigned long long HASH[]    = {    0X5F4871C661CF2338ULL, 0X33FEA1852435F281ULL};
 	static const unsigned long long HASH_NW[] = { 0, 0XC82BA6EA9363AE85ULL, 0X9159E8EF9D1261AFULL, 0X5F28DA8927347013ULL, 0X8B555A07AD66A80FULL, 0X9F59293603651ED4ULL, 0XDE2AB12F804E65DFULL};
@@ -4651,74 +4651,74 @@ bool RXBitBoard::generate_move_H8(RXMove& move) const {
 
 
 
-void RXBitBoard::init_generate_move() {
+void RXBitBoard::init_generate_flips() {
 
-	generate_move[A1] = &RXBitBoard::generate_move_A1;
-	generate_move[A2] = &RXBitBoard::generate_move_A2;
-	generate_move[A3] = &RXBitBoard::generate_move_A3;
-	generate_move[A4] = &RXBitBoard::generate_move_A4;
-	generate_move[A5] = &RXBitBoard::generate_move_A5;
-	generate_move[A6] = &RXBitBoard::generate_move_A6;
-	generate_move[A7] = &RXBitBoard::generate_move_A7;
-	generate_move[A8] = &RXBitBoard::generate_move_A8;
+	generate_flips[A1] = &RXBitBoard::generate_flips_A1;
+	generate_flips[A2] = &RXBitBoard::generate_flips_A2;
+	generate_flips[A3] = &RXBitBoard::generate_flips_A3;
+	generate_flips[A4] = &RXBitBoard::generate_flips_A4;
+	generate_flips[A5] = &RXBitBoard::generate_flips_A5;
+	generate_flips[A6] = &RXBitBoard::generate_flips_A6;
+	generate_flips[A7] = &RXBitBoard::generate_flips_A7;
+	generate_flips[A8] = &RXBitBoard::generate_flips_A8;
 
-	generate_move[B1] = &RXBitBoard::generate_move_B1;
-	generate_move[B2] = &RXBitBoard::generate_move_B2;
-	generate_move[B3] = &RXBitBoard::generate_move_B3;
-	generate_move[B4] = &RXBitBoard::generate_move_B4;
-	generate_move[B5] = &RXBitBoard::generate_move_B5;
-	generate_move[B6] = &RXBitBoard::generate_move_B6;
-	generate_move[B7] = &RXBitBoard::generate_move_B7;
-	generate_move[B8] = &RXBitBoard::generate_move_B8;
+	generate_flips[B1] = &RXBitBoard::generate_flips_B1;
+	generate_flips[B2] = &RXBitBoard::generate_flips_B2;
+	generate_flips[B3] = &RXBitBoard::generate_flips_B3;
+	generate_flips[B4] = &RXBitBoard::generate_flips_B4;
+	generate_flips[B5] = &RXBitBoard::generate_flips_B5;
+	generate_flips[B6] = &RXBitBoard::generate_flips_B6;
+	generate_flips[B7] = &RXBitBoard::generate_flips_B7;
+	generate_flips[B8] = &RXBitBoard::generate_flips_B8;
 	
-	generate_move[C1] = &RXBitBoard::generate_move_C1;
-	generate_move[C2] = &RXBitBoard::generate_move_C2;
-	generate_move[C3] = &RXBitBoard::generate_move_C3;
-	generate_move[C4] = &RXBitBoard::generate_move_C4;
-	generate_move[C5] = &RXBitBoard::generate_move_C5;
-	generate_move[C6] = &RXBitBoard::generate_move_C6;
-	generate_move[C7] = &RXBitBoard::generate_move_C7;
-	generate_move[C8] = &RXBitBoard::generate_move_C8;
+	generate_flips[C1] = &RXBitBoard::generate_flips_C1;
+	generate_flips[C2] = &RXBitBoard::generate_flips_C2;
+	generate_flips[C3] = &RXBitBoard::generate_flips_C3;
+	generate_flips[C4] = &RXBitBoard::generate_flips_C4;
+	generate_flips[C5] = &RXBitBoard::generate_flips_C5;
+	generate_flips[C6] = &RXBitBoard::generate_flips_C6;
+	generate_flips[C7] = &RXBitBoard::generate_flips_C7;
+	generate_flips[C8] = &RXBitBoard::generate_flips_C8;
 	
-	generate_move[D1] = &RXBitBoard::generate_move_D1;
-	generate_move[D2] = &RXBitBoard::generate_move_D2;
-	generate_move[D3] = &RXBitBoard::generate_move_D3;
-	generate_move[D6] = &RXBitBoard::generate_move_D6;
-	generate_move[D7] = &RXBitBoard::generate_move_D7;
-	generate_move[D8] = &RXBitBoard::generate_move_D8;
+	generate_flips[D1] = &RXBitBoard::generate_flips_D1;
+	generate_flips[D2] = &RXBitBoard::generate_flips_D2;
+	generate_flips[D3] = &RXBitBoard::generate_flips_D3;
+	generate_flips[D6] = &RXBitBoard::generate_flips_D6;
+	generate_flips[D7] = &RXBitBoard::generate_flips_D7;
+	generate_flips[D8] = &RXBitBoard::generate_flips_D8;
 
-	generate_move[E1] = &RXBitBoard::generate_move_E1;
-	generate_move[E2] = &RXBitBoard::generate_move_E2;
-	generate_move[E3] = &RXBitBoard::generate_move_E3;
-	generate_move[E6] = &RXBitBoard::generate_move_E6;
-	generate_move[E7] = &RXBitBoard::generate_move_E7;
-	generate_move[E8] = &RXBitBoard::generate_move_E8;
+	generate_flips[E1] = &RXBitBoard::generate_flips_E1;
+	generate_flips[E2] = &RXBitBoard::generate_flips_E2;
+	generate_flips[E3] = &RXBitBoard::generate_flips_E3;
+	generate_flips[E6] = &RXBitBoard::generate_flips_E6;
+	generate_flips[E7] = &RXBitBoard::generate_flips_E7;
+	generate_flips[E8] = &RXBitBoard::generate_flips_E8;
 
-	generate_move[F1] = &RXBitBoard::generate_move_F1;
-	generate_move[F2] = &RXBitBoard::generate_move_F2;
-	generate_move[F3] = &RXBitBoard::generate_move_F3;
-	generate_move[F4] = &RXBitBoard::generate_move_F4;
-	generate_move[F5] = &RXBitBoard::generate_move_F5;
-	generate_move[F6] = &RXBitBoard::generate_move_F6;
-	generate_move[F7] = &RXBitBoard::generate_move_F7;
-	generate_move[F8] = &RXBitBoard::generate_move_F8;
+	generate_flips[F1] = &RXBitBoard::generate_flips_F1;
+	generate_flips[F2] = &RXBitBoard::generate_flips_F2;
+	generate_flips[F3] = &RXBitBoard::generate_flips_F3;
+	generate_flips[F4] = &RXBitBoard::generate_flips_F4;
+	generate_flips[F5] = &RXBitBoard::generate_flips_F5;
+	generate_flips[F6] = &RXBitBoard::generate_flips_F6;
+	generate_flips[F7] = &RXBitBoard::generate_flips_F7;
+	generate_flips[F8] = &RXBitBoard::generate_flips_F8;
 
-	generate_move[G1] = &RXBitBoard::generate_move_G1;
-	generate_move[G2] = &RXBitBoard::generate_move_G2;
-	generate_move[G3] = &RXBitBoard::generate_move_G3;
-	generate_move[G4] = &RXBitBoard::generate_move_G4;
-	generate_move[G5] = &RXBitBoard::generate_move_G5;
-	generate_move[G6] = &RXBitBoard::generate_move_G6;
-	generate_move[G7] = &RXBitBoard::generate_move_G7;
-	generate_move[G8] = &RXBitBoard::generate_move_G8;
+	generate_flips[G1] = &RXBitBoard::generate_flips_G1;
+	generate_flips[G2] = &RXBitBoard::generate_flips_G2;
+	generate_flips[G3] = &RXBitBoard::generate_flips_G3;
+	generate_flips[G4] = &RXBitBoard::generate_flips_G4;
+	generate_flips[G5] = &RXBitBoard::generate_flips_G5;
+	generate_flips[G6] = &RXBitBoard::generate_flips_G6;
+	generate_flips[G7] = &RXBitBoard::generate_flips_G7;
+	generate_flips[G8] = &RXBitBoard::generate_flips_G8;
 
-	generate_move[H1] = &RXBitBoard::generate_move_H1;
-	generate_move[H2] = &RXBitBoard::generate_move_H2;
-	generate_move[H3] = &RXBitBoard::generate_move_H3;
-	generate_move[H4] = &RXBitBoard::generate_move_H4;
-	generate_move[H5] = &RXBitBoard::generate_move_H5;
-	generate_move[H6] = &RXBitBoard::generate_move_H6;
-	generate_move[H7] = &RXBitBoard::generate_move_H7;
-	generate_move[H8] = &RXBitBoard::generate_move_H8;
+	generate_flips[H1] = &RXBitBoard::generate_flips_H1;
+	generate_flips[H2] = &RXBitBoard::generate_flips_H2;
+	generate_flips[H3] = &RXBitBoard::generate_flips_H3;
+	generate_flips[H4] = &RXBitBoard::generate_flips_H4;
+	generate_flips[H5] = &RXBitBoard::generate_flips_H5;
+	generate_flips[H6] = &RXBitBoard::generate_flips_H6;
+	generate_flips[H7] = &RXBitBoard::generate_flips_H7;
+	generate_flips[H8] = &RXBitBoard::generate_flips_H8;
 
 }

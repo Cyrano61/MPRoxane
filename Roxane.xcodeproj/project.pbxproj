@@ -50,7 +50,6 @@
 		4FBF04940BDE80B800E7D270 /* RXBBPattGeneratePatterns.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4FBA60D208D8BE9E00855FD8 /* RXBBPattGeneratePatterns.cpp */; };
 		4FC6E59B0B445FDC0063CDF9 /* RXBBGenerateFlips.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4FC6E59A0B445FDC0063CDF9 /* RXBBGenerateFlips.cpp */; };
 		4FC71BCE0A13DF7E003F958E /* RXBBCountFlips.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4FBA60CD08D8BE9E00855FD8 /* RXBBCountFlips.cpp */; };
-		4FC7D6810A9A3FBB009124AF /* RXBBGenerateMove.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4FBA60CF08D8BE9E00855FD8 /* RXBBGenerateMove.cpp */; };
 		4FCB59B9097D80AF00D297EB /* ggsstream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4FCB59B5097D80AE00D297EB /* ggsstream.cpp */; };
 		4FCB59BB097D80AF00D297EB /* OsObjects.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4FCB59B7097D80AE00D297EB /* OsObjects.cpp */; };
 		4FDF3AC908D8B8A1003DED7A /* Roxane in Copy Files */ = {isa = PBXBuildFile; fileRef = 8DD76F6C0486A84900D96B5E /* Roxane */; };
@@ -113,7 +112,6 @@
 		4FBA60C808D8BE9E00855FD8 /* OsMessage.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = OsMessage.cpp; path = sources/OsMessage.cpp; sourceTree = "<group>"; };
 		4FBA60CD08D8BE9E00855FD8 /* RXBBCountFlips.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = RXBBCountFlips.cpp; path = sources/RXBBCountFlips.cpp; sourceTree = "<group>"; };
 		4FBA60CE08D8BE9E00855FD8 /* RXBBDoFlips.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = RXBBDoFlips.cpp; path = sources/RXBBDoFlips.cpp; sourceTree = "<group>"; };
-		4FBA60CF08D8BE9E00855FD8 /* RXBBGenerateMove.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = RXBBGenerateMove.cpp; path = sources/RXBBGenerateMove.cpp; sourceTree = "<group>"; };
 		4FBA60D008D8BE9E00855FD8 /* RXBBPatterns.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = RXBBPatterns.cpp; path = sources/RXBBPatterns.cpp; sourceTree = "<group>"; };
 		4FBA60D208D8BE9E00855FD8 /* RXBBPattGeneratePatterns.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = RXBBPattGeneratePatterns.cpp; path = sources/RXBBPattGeneratePatterns.cpp; sourceTree = "<group>"; };
 		4FBA60D408D8BE9E00855FD8 /* RXBitBoard.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = RXBitBoard.cpp; path = sources/RXBitBoard.cpp; sourceTree = "<group>"; };
@@ -175,7 +173,6 @@
 				4FBA60CD08D8BE9E00855FD8 /* RXBBCountFlips.cpp */,
 				4FBA60CE08D8BE9E00855FD8 /* RXBBDoFlips.cpp */,
 				4FC6E59A0B445FDC0063CDF9 /* RXBBGenerateFlips.cpp */,
-				4FBA60CF08D8BE9E00855FD8 /* RXBBGenerateMove.cpp */,
 				4FBA60D008D8BE9E00855FD8 /* RXBBPatterns.cpp */,
 				4FBA60D208D8BE9E00855FD8 /* RXBBPattGeneratePatterns.cpp */,
 				153F675B10867B6F00C63274 /* RXSearch.cpp */,
@@ -348,7 +345,6 @@
 				4FCB59B9097D80AF00D297EB /* ggsstream.cpp in Sources */,
 				4FCB59BB097D80AF00D297EB /* OsObjects.cpp in Sources */,
 				4FC71BCE0A13DF7E003F958E /* RXBBCountFlips.cpp in Sources */,
-				4FC7D6810A9A3FBB009124AF /* RXBBGenerateMove.cpp in Sources */,
 				4FC6E59B0B445FDC0063CDF9 /* RXBBGenerateFlips.cpp in Sources */,
 				4FBF04940BDE80B800E7D270 /* RXBBPattGeneratePatterns.cpp in Sources */,
 				15F23C400E771D5D00D70E52 /* RXHashShallow.cpp in Sources */,
