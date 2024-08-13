@@ -79,7 +79,7 @@ int main (int argc, char * const argv[]) {
 	
 	
 //	if(mode == "wthor")
-//		roxane.check_allWTHOR(); //test solidité endgame
+//		roxane.check_allWTHOR(); //try for robust endgame
 	
 	
 	if(mode == "ggs" && !login.empty() && !password.empty()) {

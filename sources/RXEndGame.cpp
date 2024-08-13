@@ -1547,12 +1547,14 @@ void RXEngine::EG_SP_search_DEEP(RXSplitPoint* sp, const unsigned int threadID) 
 		
 		//assert(score != -INTERRUPT_SEARCH);
 		
-		//update      
-     	pthread_mutex_lock(&(sp->lock));
 		
-      	if(!abort.load()  && !thread_should_stop(threadID)) {
-			
-			sp->child_selective_cutoff = child_selective_cutoff;
+        //first control without mutex
+        if((score > sp->bestscore) || (!sp->selective_cutoff && child_selective_cutoff)) {
+
+            //update
+             pthread_mutex_lock(&(sp->lock));
+
+            sp->child_selective_cutoff = child_selective_cutoff;
 			
       		if(sp->child_selective_cutoff)
 				sp->selective_cutoff = true;
@@ -1568,16 +1570,12 @@ void RXEngine::EG_SP_search_DEEP(RXSplitPoint* sp, const unsigned int threadID) 
           			} else {
 						sp->alpha = score;
 					}
-					
-					
-					
-					
 				}
       		}
-			
+            
+            pthread_mutex_unlock(&(sp->lock));
 		}
 		
-		pthread_mutex_unlock(&(sp->lock));
     }
 	
     pthread_mutex_lock(&(sp->lock));
@@ -1931,31 +1929,31 @@ void RXEngine::EG_SP_search_XEndcut(RXSplitPoint* sp, const unsigned int threadI
 		
       	if(abort.load() || thread_should_stop(threadID))
 			break;
-		
-		//assert(score != -INTERRUPT_SEARCH);
-		
-		//update      
-     	pthread_mutex_lock(&(sp->lock));
-		
-      	if(!abort.load() && !thread_should_stop(threadID)) {
-			
-			sp->child_selective_cutoff = child_selective_cutoff;
-			
-      		if(sp->child_selective_cutoff)
-				sp->selective_cutoff = true;
-			
-      		// New best move?
-     		if(score > sp->bestscore) {
-        		sp->bestscore = score;
-				sp->bestmove = move->position;
-       			if(score > sp->alpha) {
-					sp->explored = true;
-				}
-      		}
-			
-		}
-		
-		pthread_mutex_unlock(&(sp->lock));
+		        
+        //first control without mutex
+        if((score > sp->bestscore) || (!sp->selective_cutoff && child_selective_cutoff)) {
+            
+            pthread_mutex_lock(&(sp->lock));
+            
+            //update SplitPoint
+            
+            sp->child_selective_cutoff = child_selective_cutoff;
+            
+            if(sp->child_selective_cutoff)
+                sp->selective_cutoff = true;
+            
+            // New best move?
+            if(score > sp->bestscore) {
+                sp->bestscore = score;
+                sp->bestmove = move->position;
+                if(score > sp->alpha) {
+                    sp->explored = true;
+                }
+            }
+                
+            
+            pthread_mutex_unlock(&(sp->lock));
+        }
     }
 	
     pthread_mutex_lock(&(sp->lock));
@@ -2200,7 +2198,6 @@ void RXEngine::EG_SP_search_root(RXSplitPoint* sp, const unsigned int threadID) 
 		RXMove* move;
 		if(sp->list != NULL) {
 			
-			
 			move = sp->list;
 			sp->list = sp->list->next;
 			
@@ -2245,11 +2242,14 @@ void RXEngine::EG_SP_search_root(RXSplitPoint* sp, const unsigned int threadID) 
 		
 		//assert(score != -INTERRUPT_SEARCH);
 		
-		//update      
-     	pthread_mutex_lock(&(sp->lock));
 		
-      	if(!abort.load() && !thread_should_stop(threadID)) {
-			
+        //first control without mutex
+        if((score > sp->bestscore) || (!sp->selective_cutoff && child_selective_cutoff)) {
+            
+            //update
+             pthread_mutex_lock(&(sp->lock));
+
+
 			sp->child_selective_cutoff = child_selective_cutoff;
 			
       		if(sp->child_selective_cutoff)
@@ -2273,10 +2273,10 @@ void RXEngine::EG_SP_search_root(RXSplitPoint* sp, const unsigned int threadID) 
 					
 				}
       		}
-			
+            
+            pthread_mutex_unlock(&(sp->lock));
 		}
 		
-		pthread_mutex_unlock(&(sp->lock));
     }
 	
     pthread_mutex_lock(&(sp->lock));

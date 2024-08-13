@@ -171,8 +171,8 @@ void RXEngine::aspiration_search(RXBBPatterns& sBoard, const int depth, RXMove* 
 }
 
 
- // avec la selectivitŽ et de l'extension de recherche, on ne peut faire totalement confiance a
- // un coup etudiŽ en null window (pas d'extension de recherche)
+ // avec la selectivite et de l'extension de recherche, on ne peut faire totalement confiance a
+ // un coup etudie en null window (pas d'extension de recherche)
  // c.a.d. on ne profite pas de la recherche NWS pour trouver un meilleur coup sauf si score>beta.
  //
  // root
@@ -901,11 +901,11 @@ int RXEngine::MG_PVS_deep(int threadID, RXBBPatterns& sBoard, const bool pv, con
 
 }
 
-// EG_SP_search_DEEP() is used to search from a PV split point.  This function
+// MG_SP_search_DEEP() is used to search from a PV split point.  This function
 // is called by each thread working at the split point.  It is similar to
 // the normal EG_PVS_deep() function, but simpler.  Because we have already
 // probed the hash table and searched the first move before splitting, we
-// don't have to repeat all this work in EG_SP_search_DEEP().  We also don't
+// don't have to repeat all this work in MG_SP_search_DEEP().  We also don't
 // need to store anything to the hash table here:  This is taken care of
 // after we return from the split point.
 
@@ -922,54 +922,54 @@ void RXEngine::MG_SP_search_DEEP(RXSplitPoint* sp, const unsigned int threadID) 
 	
 	//here sp->beta is const
     while(sp->alpha < sp->beta && !abort.load()  && !thread_should_stop(threadID)) {
-		
-		pthread_mutex_lock(&(sp->lock));
-
-		
-		
-		RXMove* move;
-		if(sp->list != NULL && sp->list->next != NULL) {
-			
-			RXMove* previous_move = sp->list;
-			move = previous_move->next;
-			
-			RXMove* previous_iter = move;
-			for(RXMove* iter = previous_iter->next ; iter != NULL; iter = (previous_iter = iter)->next) {
-				if(iter->score < move->score) {
-					move = iter;
-					previous_move = previous_iter;
-				}
-			}
-			
-			if(previous_move != sp->list) {
-				//move to front
-				previous_move->next = move->next;
-				move->next = sp->list->next;
-				sp->list->next = move;
-			}
-			
-			sp->list = sp->list->next;
-			
-		} else {
-			pthread_mutex_unlock(&(sp->lock));
-			break;
-		}	
-		
-		
-		bool child_selective_cutoff = sp->child_selective_cutoff;
-		
-      	pthread_mutex_unlock(&(sp->lock));
-		
-		
-		sBoard.do_move(*move);
-		
-		int score;
-		int alpha = sp->alpha; //local copy
-		
-		if(sp->depth <= MG_DEEP_TO_SHALLOW) {
-			
-			score = -MG_PVS_shallow(threadID, sBoard, false, sp->depth-1, -alpha-1, -alpha, false);
-			
+        
+        pthread_mutex_lock(&(sp->lock));
+        
+        
+        
+        RXMove* move;
+        if(sp->list != NULL && sp->list->next != NULL) {
+            
+            RXMove* previous_move = sp->list;
+            move = previous_move->next;
+            
+            RXMove* previous_iter = move;
+            for(RXMove* iter = previous_iter->next ; iter != NULL; iter = (previous_iter = iter)->next) {
+                if(iter->score < move->score) {
+                    move = iter;
+                    previous_move = previous_iter;
+                }
+            }
+            
+            if(previous_move != sp->list) {
+                //move to front
+                previous_move->next = move->next;
+                move->next = sp->list->next;
+                sp->list->next = move;
+            }
+            
+            sp->list = sp->list->next;
+            
+        } else {
+            pthread_mutex_unlock(&(sp->lock));
+            break;
+        }
+        
+        
+        bool child_selective_cutoff = sp->child_selective_cutoff;
+        
+        pthread_mutex_unlock(&(sp->lock));
+        
+        
+        sBoard.do_move(*move);
+        
+        int score;
+        int alpha = sp->alpha; //local copy
+        
+        if(sp->depth <= MG_DEEP_TO_SHALLOW) {
+            
+            score = -MG_PVS_shallow(threadID, sBoard, false, sp->depth-1, -alpha-1, -alpha, false);
+            
             if(alpha < score && score < sp->beta) {
                 if(sp->pv && use_pv_extension && board.n_empties-(sp->depth-1)<=pv_extension) {
                     score = -MG_PVS_shallow(threadID, sBoard, sp->pv, sp->depth-1, -sp->beta, -sp->alpha, false);
@@ -977,69 +977,68 @@ void RXEngine::MG_SP_search_DEEP(RXSplitPoint* sp, const unsigned int threadID) 
                     score = -MG_PVS_shallow(threadID, sBoard, sp->pv, sp->depth-1, -sp->beta, -score, false);
                 }
             }
-		} else {
-			
-//			if(sp->depth <=  MAX_DEPTH_USE_PROBCUT)
-//				score = -MG_NWS_XProbCut(threadID, sBoard, sp->pvDev+1, sp->selectivity, sp->depth-1, child_selective_cutoff, -alpha-1, false);
-//			else
-//				score = -MG_PVS_deep(threadID, sBoard, false, sp->selectivity, sp->depth-1, child_selective_cutoff, -alpha-1, -alpha, false);
-//			
-//			if(alpha < score && score < sp->beta)
-//				if(sp->depth <=  MAX_DEPTH_USE_PROBCUT)
-//					score = -MG_PVS_deep(threadID, sBoard, sp->pv, sp->selectivity, sp->depth-1, child_selective_cutoff, -sp->beta, -sp->alpha, false);
-//				else
-//					score = -MG_PVS_deep(threadID, sBoard, sp->pv, sp->selectivity, sp->depth-1, child_selective_cutoff, -sp->beta, child_selective_cutoff? -sp->alpha : -score, false);
-
-			score = -MG_NWS_XProbCut(threadID, sBoard, sp->pvDev+1, sp->selectivity, sp->depth-1, child_selective_cutoff, -alpha-1, false);
-
-			if(alpha < score && score < sp->beta)
-				score = -MG_PVS_deep(threadID, sBoard, sp->pv, sp->selectivity, sp->depth-1, child_selective_cutoff, -sp->beta, -sp->alpha, false);
-			
-//			do {
-//				alpha = sp->alpha;		
-//				score = -MG_NWS_XProbCut(threadID, sBoard, sp->pvDev+1, sp->selectivity, sp->depth-1, child_selective_cutoff, -alpha-1, false);
-//			} while (sp->alpha>alpha && score>alpha);
-//			
-//			if(alpha < score && score < sp->beta)
-//					score = -MG_PVS_deep(threadID, sBoard, sp->pv, sp->selectivity, sp->depth-1, child_selective_cutoff, -sp->beta, -sp->alpha, false);
-			
-		}
-		
-		sBoard.undo_move(*move);
-		
-		
-      	if(abort.load()  || thread_should_stop(threadID))
-			break;
-		
-		//assert(score != -INTERRUPT_SEARCH);
-		
-		//update      
-     	pthread_mutex_lock(&(sp->lock));
-		
-      	if(!abort.load()  && !thread_should_stop(threadID)) {
-			
-			sp->child_selective_cutoff = child_selective_cutoff;
-			
-      		if(sp->child_selective_cutoff)
-				sp->selective_cutoff = true;
-			
-      		// New best move?
-     		if(score > sp->bestscore) {
-        		sp->bestscore = score;
-				sp->bestmove = move->position;
-       			if(score > sp->alpha) {
-          			
-          			if(score >= sp->beta) {
-						sp->explored =true;
-          			} else {
-						sp->alpha = score;
-					}
-				}
-      		}
-			
-		}
-		
-		pthread_mutex_unlock(&(sp->lock));
+        } else {
+            
+            //			if(sp->depth <=  MAX_DEPTH_USE_PROBCUT)
+            //				score = -MG_NWS_XProbCut(threadID, sBoard, sp->pvDev+1, sp->selectivity, sp->depth-1, child_selective_cutoff, -alpha-1, false);
+            //			else
+            //				score = -MG_PVS_deep(threadID, sBoard, false, sp->selectivity, sp->depth-1, child_selective_cutoff, -alpha-1, -alpha, false);
+            //
+            //			if(alpha < score && score < sp->beta)
+            //				if(sp->depth <=  MAX_DEPTH_USE_PROBCUT)
+            //					score = -MG_PVS_deep(threadID, sBoard, sp->pv, sp->selectivity, sp->depth-1, child_selective_cutoff, -sp->beta, -sp->alpha, false);
+            //				else
+            //					score = -MG_PVS_deep(threadID, sBoard, sp->pv, sp->selectivity, sp->depth-1, child_selective_cutoff, -sp->beta, child_selective_cutoff? -sp->alpha : -score, false);
+            
+            score = -MG_NWS_XProbCut(threadID, sBoard, sp->pvDev+1, sp->selectivity, sp->depth-1, child_selective_cutoff, -alpha-1, false);
+            
+            if(alpha < score && score < sp->beta)
+                score = -MG_PVS_deep(threadID, sBoard, sp->pv, sp->selectivity, sp->depth-1, child_selective_cutoff, -sp->beta, -sp->alpha, false);
+            
+            //			do {
+            //				alpha = sp->alpha;
+            //				score = -MG_NWS_XProbCut(threadID, sBoard, sp->pvDev+1, sp->selectivity, sp->depth-1, child_selective_cutoff, -alpha-1, false);
+            //			} while (sp->alpha>alpha && score>alpha);
+            //
+            //			if(alpha < score && score < sp->beta)
+            //					score = -MG_PVS_deep(threadID, sBoard, sp->pv, sp->selectivity, sp->depth-1, child_selective_cutoff, -sp->beta, -sp->alpha, false);
+            
+        }
+        
+        sBoard.undo_move(*move);
+        
+        
+        if(abort.load()  || thread_should_stop(threadID))
+            break;
+        
+        
+        //first control without mutex
+        if((score > sp->bestscore) || (!sp->selective_cutoff && child_selective_cutoff)) {
+            
+            //update
+            pthread_mutex_lock(&(sp->lock));
+            
+            sp->child_selective_cutoff = child_selective_cutoff;
+            
+            if(sp->child_selective_cutoff)
+                sp->selective_cutoff = true;
+            
+            // New best move?
+            if(score > sp->bestscore) {
+                sp->bestscore = score;
+                sp->bestmove = move->position;
+                if(score > sp->alpha) {
+                    
+                    if(score >= sp->beta) {
+                        sp->explored =true;
+                    } else {
+                        sp->alpha = score;
+                    }
+                }
+            }
+            
+            pthread_mutex_unlock(&(sp->lock));
+        }
     }
 	
     pthread_mutex_lock(&(sp->lock));
@@ -1709,11 +1708,11 @@ int RXEngine::MG_NWS_XProbCut(int threadID, RXBBPatterns& sBoard, const int pvDe
 
 }
 
-// EG_SP_search_XEndcut() is used to search from a PV split point.  This function
+// MG_SP_search_XEndcut() is used to search from a PV split point.  This function
 // is called by each thread working at the split point.  It is similar to
 // the normal EG_NWS_XEndCut() function, but simpler.  Because we have already
 // probed the hash table and searched the first move before splitting, we
-// don't have to repeat all this work in EG_SP_search_XEndcut().  We also don't
+// don't have to repeat all this work in MG_SP_search_XEndcut().  We also don't
 // need to store anything to the hash table here:  This is taken care of
 // after we return from the split point.
 
@@ -1723,15 +1722,18 @@ void RXEngine::MG_SP_search_XEndcut(RXSplitPoint* sp, const unsigned int threadI
 	//    assert(activeThreads > 1);	
 	
 	RXBBPatterns& sBoard = sp->sBoardStack[threadID];
-	sBoard = *(sp->sBoard); //operator=
+	sBoard = *(sp->sBoard);                                 //operator=
 	RXBitBoard& board = sBoard.board;
 	board.n_nodes = 0;
 	
 	//here sp->alpha is const	
     while(sp->bestscore <= sp->alpha && !abort.load()  && !thread_should_stop(threadID)) {
 		
+        
+        //verouillage du splitpoint
 		pthread_mutex_lock(&(sp->lock));
 		
+        //attribution de move au thread
 		RXMove* move;
 		if(sp->list != NULL && sp->list->next != NULL) {
 			
@@ -1747,6 +1749,8 @@ void RXEngine::MG_SP_search_XEndcut(RXSplitPoint* sp, const unsigned int threadI
 		bool child_selective_cutoff = sp->child_selective_cutoff;
 		
       	pthread_mutex_unlock(&(sp->lock));
+        
+        //deverouillage de splitpoint
 		
 		int alpha = sp->alpha; //local copy
 		
@@ -1766,30 +1770,29 @@ void RXEngine::MG_SP_search_XEndcut(RXSplitPoint* sp, const unsigned int threadI
       	if(abort.load()  || thread_should_stop(threadID))
 			break;
 		
-		//assert(score != -INTERRUPT_SEARCH);
-		
-		//update      
-     	pthread_mutex_lock(&(sp->lock));
-		
-      	if(!abort.load()  && !thread_should_stop(threadID)) {
-			
-			sp->child_selective_cutoff = child_selective_cutoff;
-			
-      		if(sp->child_selective_cutoff)
-				sp->selective_cutoff = true;
-			
-      		// New best move?
-     		if(score > sp->bestscore) {
-        		sp->bestscore = score;
-				sp->bestmove = move->position;
-       			if(score > sp->alpha) {
-					sp->explored =true;
-				}
-      		}
-			
-		}
-		
-		pthread_mutex_unlock(&(sp->lock));
+        //first control without mutex
+        if((score > sp->bestscore) || (!sp->selective_cutoff && child_selective_cutoff)) {
+            
+            //update
+            pthread_mutex_lock(&(sp->lock));
+            
+            sp->child_selective_cutoff = child_selective_cutoff;
+            
+            if(sp->child_selective_cutoff)
+                sp->selective_cutoff = true;
+            
+            // New best move?
+            if(score > sp->bestscore) {
+                sp->bestscore = score;
+                sp->bestmove = move->position;
+                if(score > sp->alpha) {
+                    sp->explored =true;
+                }
+            }
+            
+            
+            pthread_mutex_unlock(&(sp->lock));
+        }
     }
 	
     pthread_mutex_lock(&(sp->lock));

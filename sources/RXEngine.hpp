@@ -344,7 +344,7 @@ class RXEngine: public Runnable, public RXHelper {
 	
 	/*--------------------------------------------     Multithreads part (RXEngine.cpp)    --------------------------------------------*/ 
 	
-	const int THREAD_MAX;
+	const unsigned int THREAD_MAX;
 	static const unsigned int ACTIVE_SPLITPOINT_MAX = 8;
 	static const unsigned int THREAD_PER_SPLITPOINT_MAX = 4; //4
 

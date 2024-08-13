@@ -174,40 +174,40 @@ const int RXBitBoard::QUADRANT_ID[] = {
 	2, 2, 2, 2, 3, 3, 3, 3
 };
 
-unsigned long long RXBitBoard::hashcodeTable_lines1_2[65536][2];
-unsigned long long RXBitBoard::hashcodeTable_lines3_4[65536][2];
-unsigned long long RXBitBoard::hashcodeTable_lines5_6[65536][2];
-unsigned long long RXBitBoard::hashcodeTable_lines7_8[65536][2];
+unsigned long long RXBitBoard::hashcodeTable_lines1_2[2][65536];
+unsigned long long RXBitBoard::hashcodeTable_lines3_4[2][65536];
+unsigned long long RXBitBoard::hashcodeTable_lines5_6[2][65536];
+unsigned long long RXBitBoard::hashcodeTable_lines7_8[2][65536];
 
 
 void RXBitBoard::init_hashcodeTable() {
     
     for(unsigned int row = 0; row < 65536; row++) {
         
-        hashcodeTable_lines1_2[row][BLACK] = 0;
-        hashcodeTable_lines3_4[row][BLACK] = 0;
-        hashcodeTable_lines5_6[row][BLACK] = 0;
-        hashcodeTable_lines7_8[row][BLACK] = 0;
+        hashcodeTable_lines1_2[BLACK][row] = 0;
+        hashcodeTable_lines3_4[BLACK][row] = 0;
+        hashcodeTable_lines5_6[BLACK][row] = 0;
+        hashcodeTable_lines7_8[BLACK][row] = 0;
         
-        hashcodeTable_lines1_2[row][WHITE] = 0;
-        hashcodeTable_lines3_4[row][WHITE] = 0;
-        hashcodeTable_lines5_6[row][WHITE] = 0;
-        hashcodeTable_lines7_8[row][WHITE] = 0;
+        hashcodeTable_lines1_2[WHITE][row] = 0;
+        hashcodeTable_lines3_4[WHITE][row] = 0;
+        hashcodeTable_lines5_6[WHITE][row] = 0;
+        hashcodeTable_lines7_8[WHITE][row] = 0;
 
         for (unsigned int bit = 0; bit<16; bit++) {
             
             if(row & 1<<bit) {
                 
                
-                hashcodeTable_lines1_2[row][BLACK] ^= hashSquare[bit+48][BLACK];
-                hashcodeTable_lines3_4[row][BLACK] ^= hashSquare[bit+32][BLACK];
-                hashcodeTable_lines5_6[row][BLACK] ^= hashSquare[bit+16][BLACK];
-                hashcodeTable_lines7_8[row][BLACK] ^= hashSquare[bit   ][BLACK];
+                hashcodeTable_lines1_2[BLACK][row] ^= hashSquare[bit+48][BLACK];
+                hashcodeTable_lines3_4[BLACK][row] ^= hashSquare[bit+32][BLACK];
+                hashcodeTable_lines5_6[BLACK][row] ^= hashSquare[bit+16][BLACK];
+                hashcodeTable_lines7_8[BLACK][row] ^= hashSquare[bit   ][BLACK];
                 
-                hashcodeTable_lines1_2[row][WHITE] ^= hashSquare[bit+48][WHITE];
-                hashcodeTable_lines3_4[row][WHITE] ^= hashSquare[bit+32][WHITE];
-                hashcodeTable_lines5_6[row][WHITE] ^= hashSquare[bit+16][WHITE];
-                hashcodeTable_lines7_8[row][WHITE] ^= hashSquare[bit   ][WHITE];
+                hashcodeTable_lines1_2[WHITE][row] ^= hashSquare[bit+48][WHITE];
+                hashcodeTable_lines3_4[WHITE][row] ^= hashSquare[bit+32][WHITE];
+                hashcodeTable_lines5_6[WHITE][row] ^= hashSquare[bit+16][WHITE];
+                hashcodeTable_lines7_8[WHITE][row] ^= hashSquare[bit   ][WHITE];
                 
             }
         }
@@ -215,12 +215,295 @@ void RXBitBoard::init_hashcodeTable() {
     }
 }
 
+#ifdef __ARM_NEON
+
+unsigned long long RXBitBoard::get_legal_moves(const unsigned long long p_discs, const unsigned long long o_discs ){
+    
+    unsigned int  mO, movesL, movesH, flip1, pre1;
+    uint64x1_t    rP, rO;
+    uint64x2_t    PP, OO, MM, flip, pre;
+
+        /* vertical_mirror in PP[1], OO[1] */                               mO = (unsigned int) o_discs & 0x7e7e7e7e;
+    rP = vreinterpret_u64_u8(vrev64_u8(vcreate_u8(p_discs)));               flip1  = mO & ((unsigned int) p_discs << 1);
+    PP = vcombine_u64(vcreate_u64(p_discs), rP);                            flip1 |= mO & (flip1 << 1);
+                                                                            pre1   = mO & (mO << 1);
+    rO = vreinterpret_u64_u8(vrev64_u8(vcreate_u8(o_discs)));               flip1 |= pre1 & (flip1 << 2);
+    OO = vcombine_u64(vcreate_u64(o_discs), rO);                            flip1 |= pre1 & (flip1 << 2);
+                                                                            movesL = flip1 << 1;
+
+    flip = vandq_u64(OO, vshlq_n_u64(PP, 8));                               flip1  = mO & ((unsigned int) p_discs >> 1);
+    flip = vorrq_u64(flip, vandq_u64(OO, vshlq_n_u64(flip, 8)));            flip1 |= mO & (flip1 >> 1);
+    pre  = vandq_u64(OO, vshlq_n_u64(OO, 8));                pre1 >>= 1;
+    flip = vorrq_u64(flip, vandq_u64(pre, vshlq_n_u64(flip, 16)));          flip1 |= pre1 & (flip1 >> 2);
+    flip = vorrq_u64(flip, vandq_u64(pre, vshlq_n_u64(flip, 16)));          flip1 |= pre1 & (flip1 >> 2);
+    MM   = vshlq_n_u64(flip, 8);                                            movesL |= flip1 >> 1;
+
+    OO   = vandq_u64(OO, vdupq_n_u64(0x7e7e7e7e7e7e7e7e));                  mO = (unsigned int) (o_discs >> 32) & 0x7e7e7e7e;
+    flip = vandq_u64(OO, vshlq_n_u64(PP, 7));                               flip1  = mO & ((unsigned int) (p_discs >> 32) << 1);
+    flip = vorrq_u64(flip, vandq_u64(OO, vshlq_n_u64(flip, 7)));            flip1 |= mO & (flip1 << 1);
+    pre  = vandq_u64(OO, vshlq_n_u64(OO, 7));                               pre1   = mO & (mO << 1);
+    flip = vorrq_u64(flip, vandq_u64(pre, vshlq_n_u64(flip, 14)));          flip1 |= pre1 & (flip1 << 2);
+    flip = vorrq_u64(flip, vandq_u64(pre, vshlq_n_u64(flip, 14)));          flip1 |= pre1 & (flip1 << 2);
+    MM   = vorrq_u64(MM, vshlq_n_u64(flip, 7));                             movesH = flip1 << 1;
+
+    flip = vandq_u64(OO, vshlq_n_u64(PP, 9));                               flip1  = mO & ((unsigned int) (p_discs >> 32) >> 1);
+    flip = vorrq_u64(flip, vandq_u64(OO, vshlq_n_u64(flip, 9)));            flip1 |= mO & (flip1 >> 1);
+    pre  = vandq_u64(OO, vshlq_n_u64(OO, 9));                               pre1 >>= 1;
+    flip = vorrq_u64(flip, vandq_u64(pre, vshlq_n_u64(flip, 18)));          flip1 |= pre1 & (flip1 >> 2);
+    flip = vorrq_u64(flip, vandq_u64(pre, vshlq_n_u64(flip, 18)));          flip1 |= pre1 & (flip1 >> 2);
+    MM   = vorrq_u64(MM, vshlq_n_u64(flip, 9));                             movesH |= flip1 >> 1;
+
+    movesL |= vgetq_lane_u32(vreinterpretq_u32_u64(MM), 0) | __builtin_bswap32(vgetq_lane_u32(vreinterpretq_u32_u64(MM), 3));
+    movesH |= vgetq_lane_u32(vreinterpretq_u32_u64(MM), 1) | __builtin_bswap32(vgetq_lane_u32(vreinterpretq_u32_u64(MM), 2));
+    return (movesL | ((unsigned long long) movesH << 32)) & ~(p_discs|o_discs);    // mask with empties
+}
+
+
+
+unsigned long long RXBitBoard::hashcode() const {
+    
+    const int opponent = player^1;
+        
+    const uint16x4_t p_lines = vcreate_u16(discs[player]);
+    const uint16x4_t o_lines = vcreate_u16(discs[opponent]);
+    
+    unsigned long long
+    hashcode  = hashcodeTable_lines1_2[PLAYER][vget_lane_u16(p_lines,3)];
+    hashcode ^= hashcodeTable_lines3_4[PLAYER][vget_lane_u16(p_lines,2)];
+    hashcode ^= hashcodeTable_lines5_6[PLAYER][vget_lane_u16(p_lines,1)];
+    hashcode ^= hashcodeTable_lines7_8[PLAYER][vget_lane_u16(p_lines,0)];
+    
+    hashcode ^= hashcodeTable_lines1_2[OPPONENT][vget_lane_u16(o_lines,3)];
+    hashcode ^= hashcodeTable_lines3_4[OPPONENT][vget_lane_u16(o_lines,2)];
+    hashcode ^= hashcodeTable_lines5_6[OPPONENT][vget_lane_u16(o_lines,1)];
+    hashcode ^= hashcodeTable_lines7_8[OPPONENT][vget_lane_u16(o_lines,0)];
+    
+    return hashcode;
+    
+}
+
+unsigned long long RXBitBoard::hashcode_after_move(RXMove* move) const {
+    
+    const int opponent = player^1;
+    
+    const uint16x4_t p_lines = vcreate_u16(discs[opponent] ^ move->flipped);
+    const uint16x4_t o_lines = vcreate_u16(discs[player] | (move->flipped | move->square));
+
+    unsigned long long
+    hashcode  = hashcodeTable_lines1_2[PLAYER][vget_lane_u16(p_lines,3)];
+    hashcode ^= hashcodeTable_lines3_4[PLAYER][vget_lane_u16(p_lines,2)];
+    hashcode ^= hashcodeTable_lines5_6[PLAYER][vget_lane_u16(p_lines,1)];
+    hashcode ^= hashcodeTable_lines7_8[PLAYER][vget_lane_u16(p_lines,0)];
+    
+    hashcode ^= hashcodeTable_lines1_2[OPPONENT][vget_lane_u16(o_lines,3)];
+    hashcode ^= hashcodeTable_lines3_4[OPPONENT][vget_lane_u16(o_lines,2)];
+    hashcode ^= hashcodeTable_lines5_6[OPPONENT][vget_lane_u16(o_lines,1)];
+    hashcode ^= hashcodeTable_lines7_8[OPPONENT][vget_lane_u16(o_lines,0)];
+
+    return hashcode;
+    
+}
+
+
+#else
+
+unsigned long long RXBitBoard::get_legal_moves(const unsigned long long p_discs, const unsigned long long o_discs) {
+    
+    
+    const unsigned long long inner_o_discs = o_discs & 0x7E7E7E7E7E7E7E7EULL;
+    
+    
+    /* direction W */
+    unsigned long long
+    flipped  = (p_discs >> 1) & inner_o_discs;
+    flipped |= (flipped >> 1) & inner_o_discs;
+    
+    unsigned long long adjacent_o_discs = inner_o_discs & (inner_o_discs >> 1);
+    
+    flipped |= (flipped >> 2) & adjacent_o_discs;
+    flipped |= (flipped >> 2) & adjacent_o_discs;
+    
+    unsigned long long legals = flipped >> 1;
+    
+    
+    //    /* direction _E*/
+    //    flipped  = (p_discs << 1) & inner_o_discs;
+    //    flipped |= (flipped << 1) & inner_o_discs;
+    //
+    //    adjacent_o_discs = inner_o_discs & (inner_o_discs << 1);
+    //
+    //    flipped |= (flipped << 2) & adjacent_o_discs;
+    //    flipped |= (flipped << 2) & adjacent_o_discs;
+    //
+    //    legals |= flipped << 1;
+    
+    // trick
+    /* direction _E */
+    flipped = (p_discs << 1);
+    legals |= ((flipped + inner_o_discs) & ~flipped);
+    
+    
+    /* direction S */
+    flipped  = (p_discs >>  8) & o_discs;
+    flipped |= (flipped >>  8) & o_discs;
+    
+    adjacent_o_discs = o_discs & (o_discs >> 8);
+    
+    flipped |= (flipped >> 16) & adjacent_o_discs;
+    flipped |= (flipped >> 16) & adjacent_o_discs;
+    
+    legals |= flipped >> 8;
+    
+    
+    /* direction N */
+    flipped  = (p_discs <<  8) & o_discs;
+    flipped |= (flipped <<  8) & o_discs;
+    
+    adjacent_o_discs = o_discs & (o_discs << 8);
+    
+    flipped |= (flipped << 16) & adjacent_o_discs;
+    flipped |= (flipped << 16) & adjacent_o_discs;
+    
+    legals |= flipped << 8;
+    
+    
+    /* direction NE */
+    flipped  = (p_discs >>  7) & inner_o_discs;
+    flipped |= (flipped >>  7) & inner_o_discs;
+    
+    adjacent_o_discs = inner_o_discs & (inner_o_discs >> 7);
+    
+    flipped |= (flipped >> 14) & adjacent_o_discs;
+    flipped |= (flipped >> 14) & adjacent_o_discs;
+    
+    legals |= flipped >> 7;
+    
+    
+    /* direction SW */
+    flipped  = (p_discs <<  7) & inner_o_discs;
+    flipped |= (flipped <<  7) & inner_o_discs;
+    
+    adjacent_o_discs = inner_o_discs & (inner_o_discs << 7);
+    
+    flipped |= (flipped << 14) & adjacent_o_discs;
+    flipped |= (flipped << 14) & adjacent_o_discs;
+    
+    legals |= flipped << 7;
+    
+    
+    /* direction NW */
+    flipped  = (p_discs >>  9) & inner_o_discs;
+    flipped |= (flipped >>  9) & inner_o_discs;
+    
+    adjacent_o_discs = inner_o_discs & (inner_o_discs >> 9);
+    
+    flipped |= (flipped >> 18) & adjacent_o_discs;
+    flipped |= (flipped >> 18) & adjacent_o_discs;
+    
+    legals |= flipped >> 9;
+    
+    
+    /* direction SE */
+    flipped  = (p_discs <<  9) & inner_o_discs;
+    flipped |= (flipped <<  9) & inner_o_discs;
+    
+    adjacent_o_discs = inner_o_discs & (inner_o_discs << 9);
+    
+    flipped |= (flipped << 18) & adjacent_o_discs;
+    flipped |= (flipped << 18) & adjacent_o_discs;
+    
+    legals |= flipped << 9;
+    
+    //Removes existing discs
+    legals &= ~(p_discs | o_discs);
+    
+    return legals;
+    
+}
+
+
+
+unsigned long long RXBitBoard::hashcode() const {
+    
+    const int opponent = player^1;
+    
+    const unsigned long long p = discs[player];
+    const unsigned long long o = discs[opponent];
+    
+    unsigned int lines1_2 = static_cast<unsigned int> ((p & 0xFFFF000000000000ULL) >> 48);
+    unsigned int lines3_4 = static_cast<unsigned int> ((p & 0x0000FFFF00000000ULL) >> 32);
+    unsigned int lines5_6 = static_cast<unsigned int> ((p & 0x00000000FFFF0000ULL) >> 16);
+    unsigned int lines7_8 = static_cast<unsigned int> ((p & 0x000000000000FFFFULL));
+    
+    
+    unsigned long long
+    hashcode  = hashcodeTable_lines1_2[lines1_2][PLAYER];
+    hashcode ^= hashcodeTable_lines3_4[lines3_4][PLAYER];
+    hashcode ^= hashcodeTable_lines5_6[lines5_6][PLAYER];
+    hashcode ^= hashcodeTable_lines7_8[lines7_8][PLAYER];
+    
+    
+    lines1_2 = static_cast<unsigned int> ((o & 0xFFFF000000000000ULL) >> 48);
+    lines3_4 = static_cast<unsigned int> ((o & 0x0000FFFF00000000ULL) >> 32);
+    lines5_6 = static_cast<unsigned int> ((o & 0x00000000FFFF0000ULL) >> 16);
+    lines7_8 = static_cast<unsigned int> ((o & 0x000000000000FFFFULL));
+    
+    hashcode ^= hashcodeTable_lines1_2[lines1_2][OPPONENT];
+    hashcode ^= hashcodeTable_lines3_4[lines3_4][OPPONENT];
+    hashcode ^= hashcodeTable_lines5_6[lines5_6][OPPONENT];
+    hashcode ^= hashcodeTable_lines7_8[lines7_8][OPPONENT];
+    
+    
+    return hashcode;
+    
+}
+
+
+
+unsigned long long RXBitBoard::hashcode_after_move(RXMove* move)  const {
+    
+    const int opponent = player^1;
+    
+    const unsigned long long o = discs[player] | (move->flipped | move->square);
+    const unsigned long long p = discs[opponent] ^ move->flipped;
+    
+    unsigned int lines1_2 = static_cast<unsigned int> ((p & 0xFFFF000000000000ULL) >> 48);
+    unsigned int lines3_4 = static_cast<unsigned int> ((p & 0x0000FFFF00000000ULL) >> 32);
+    unsigned int lines5_6 = static_cast<unsigned int> ((p & 0x00000000FFFF0000ULL) >> 16);
+    unsigned int lines7_8 = static_cast<unsigned int> ((p & 0x000000000000FFFFULL));
+    
+    
+    unsigned long long
+    hashcode  = hashcodeTable_lines1_2[lines1_2][PLAYER];
+    hashcode ^= hashcodeTable_lines3_4[lines3_4][PLAYER];
+    hashcode ^= hashcodeTable_lines5_6[lines5_6][PLAYER];
+    hashcode ^= hashcodeTable_lines7_8[lines7_8][PLAYER];
+    
+    
+    lines1_2 = static_cast<unsigned int> ((o & 0xFFFF000000000000ULL) >> 48);
+    lines3_4 = static_cast<unsigned int> ((o & 0x0000FFFF00000000ULL) >> 32);
+    lines5_6 = static_cast<unsigned int> ((o & 0x00000000FFFF0000ULL) >> 16);
+    lines7_8 = static_cast<unsigned int> ((o & 0x000000000000FFFFULL));
+    
+    hashcode ^= hashcodeTable_lines1_2[lines1_2][OPPONENT];
+    hashcode ^= hashcodeTable_lines3_4[lines3_4][OPPONENT];
+    hashcode ^= hashcodeTable_lines5_6[lines5_6][OPPONENT];
+    hashcode ^= hashcodeTable_lines7_8[lines7_8][OPPONENT];
+    
+    
+    return hashcode;
+    
+}
+
+#endif
+
+
 RXBitBoard::RXBitBoard(): player(BLACK), n_empties(60), n_nodes(0) {
     
     //start position
     discs[BLACK] = 0X000000810000000ULL;
     discs[WHITE] = 0X000001008000000ULL;
-
+    
     /* create emptiesList */
     RXSquareList* iEmpties = empties_list;      //empties[0]
     iEmpties->position = NOMOVE;                //sentinel
@@ -233,7 +516,7 @@ RXBitBoard::RXBitBoard(): player(BLACK), n_empties(60), n_nodes(0) {
             iEmpties->position = PRESORTED_POSITION[i];
             iEmpties->previous = iEmpties - 1;
             iEmpties->next = iEmpties + 1 ;
-        
+            
             position_to_empties[PRESORTED_POSITION[i]] = iEmpties;
             iEmpties = iEmpties->next;
         }
@@ -242,7 +525,7 @@ RXBitBoard::RXBitBoard(): player(BLACK), n_empties(60), n_nodes(0) {
     iEmpties->previous = iEmpties - 1;
     iEmpties->next = 0;                         //NULL
     
-        
+    
     init_generate_flips();
     init_generate_flips();
     
@@ -335,7 +618,7 @@ void RXBitBoard::build(const std::string& init) {
     
     player = UNDEF;
 
-    int id = 0;
+    unsigned int id = 0;
     for (int i = A1; i >= H8; i--) {
         
         switch (std::tolower(init[id])) {
@@ -534,7 +817,7 @@ void RXBitBoard::print_empties_list() const {
 
 void RXBitBoard::print_moves_list(RXMove* Moves) const {
     std::cout << "MovesList";
-    for(; Moves->position != NULL; Moves = Moves->next)
+    for(; Moves->position != static_cast<char>(NOMOVE); Moves = Moves->next)
         std::cout << " : " << RXMove::index_to_coord(Moves->position);
     std::cout << std::endl;
 }

@@ -151,7 +151,7 @@ void RXRoxane::resume() {
 //			
 //			//read date
 //			from.read(reinterpret_cast<char*>(c), sizeof(char)); //siecle de creation
-//			from.read(reinterpret_cast<char*>(c), sizeof(char)); //année de creation
+//			from.read(reinterpret_cast<char*>(c), sizeof(char)); //annee de creation
 //			from.read(reinterpret_cast<char*>(c), sizeof(char)); //mois de creation
 //			from.read(reinterpret_cast<char*>(c), sizeof(char)); //jour de creation
 //			
@@ -160,7 +160,7 @@ void RXRoxane::resume() {
 //			int nRecords = i[0];
 //			from.read(reinterpret_cast<char*>(s), sizeof(short)); //nombre d'enregistrement 2
 //			
-//			//année des parties
+//			//annee des parties
 //			from.read(reinterpret_cast<char*>(s), sizeof(short));
 //			
 //			//parametres

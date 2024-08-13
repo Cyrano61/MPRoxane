@@ -11,7 +11,7 @@
 #define RXROXANE_HPP
 
 #include <string>
-#include<atomic>
+#include <atomic>
 
 #include "OsObjects.hpp"
 #include "ODKStream.hpp"
