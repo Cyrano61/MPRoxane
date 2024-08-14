@@ -217,6 +217,7 @@ void RXBitBoard::init_hashcodeTable() {
 
 #ifdef __ARM_NEON
 
+
 unsigned long long RXBitBoard::get_legal_moves(const unsigned long long p_discs, const unsigned long long o_discs ) {
     
     const uint64x2_t pp_discs = vdupq_n_u64(p_discs);

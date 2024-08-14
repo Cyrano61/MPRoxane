@@ -2030,9 +2030,7 @@ void  RXEngine::idle_loop() {
 
 
 void RXEngine::idle_loop(unsigned int threadID, RXSplitPoint* waitSp) {
-	
-	//    assert(threadID >= 0 && threadID < THREAD_MAX);
-    
+	    
 	
     while(true) {
 		

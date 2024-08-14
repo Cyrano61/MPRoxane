@@ -910,10 +910,7 @@ int RXEngine::MG_PVS_deep(int threadID, RXBBPatterns& sBoard, const bool pv, con
 // after we return from the split point.
 
 void RXEngine::MG_SP_search_DEEP(RXSplitPoint* sp, const unsigned int threadID) {
-	
-	//    assert(threadID >= 0 && threadID < activeThreads);
-	//    assert(activeThreads > 1);
-	
+		
 	
 	RXBBPatterns& sBoard = sp->sBoardStack[threadID];
 	sBoard = *(sp->sBoard); //operator=

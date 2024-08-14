@@ -823,9 +823,6 @@ int RXEngine::EG_PVS_ETC_mobility(int threadID, RXBitBoard& board, const bool pv
 int RXEngine::EG_PVS_deep(int threadID, RXBBPatterns& sBoard, const bool pv, const int selectivity, bool& selective_cutoff, int alpha, int beta, bool passed) {
 	
 
-	
-//	assert(alpha>=-64*VALUE_DISC && beta<=64*VALUE_DISC);
-
 	if(abort.load() || thread_should_stop(threadID))
 		return INTERRUPT_SEARCH;
 
@@ -850,7 +847,7 @@ int RXEngine::EG_PVS_deep(int threadID, RXBBPatterns& sBoard, const bool pv, con
 	if(USE_STABILITY) {
 	
 		/*	
-			la stabilite calculŽe est inferieure ou egale a la stabilitŽ reelle
+			la stabilitŽ calculŽe est inferieure ou egale a la stabilitŽ reelle
 			donc le score_max_calculŽ est surestimŽ.
 			score_max<=score_max_calculŽ<=alpha ==> coupure
 			&
@@ -1419,11 +1416,8 @@ int RXEngine::EG_PVS_deep(int threadID, RXBBPatterns& sBoard, const bool pv, con
 // after we return from the split point.
 
 void RXEngine::EG_SP_search_DEEP(RXSplitPoint* sp, const unsigned int threadID) {
-	
-	//    assert(threadID >= 0 && threadID < activeThreads);
-	//    assert(activeThreads > 1);
-	
-	
+		
+    
 	RXBBPatterns& sBoard = sp->sBoardStack[threadID];
 	sBoard = *(sp->sBoard); //operator=
 	RXBitBoard& board = sBoard.board;
