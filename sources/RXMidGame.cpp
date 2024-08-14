@@ -1011,10 +1011,15 @@ void RXEngine::MG_SP_search_DEEP(RXSplitPoint* sp, const unsigned int threadID) 
         if(abort.load()  || thread_should_stop(threadID))
             break;
         
+        sp->child_selective_cutoff = child_selective_cutoff;
         
-        //first control without mutex
+        if(sp->child_selective_cutoff)
+            sp->selective_cutoff = true;
+
+        //first without mutex
         if((score > sp->bestscore) || (!sp->selective_cutoff && child_selective_cutoff)) {
-            
+ 
+ 
             //update
             pthread_mutex_lock(&(sp->lock));
             
@@ -1770,14 +1775,15 @@ void RXEngine::MG_SP_search_XEndcut(RXSplitPoint* sp, const unsigned int threadI
       	if(abort.load()  || thread_should_stop(threadID))
 			break;
 		
-        //first control without mutex
+ 
+        //first without mutex
         if((score > sp->bestscore) || (!sp->selective_cutoff && child_selective_cutoff)) {
-            
+                    
             //update
             pthread_mutex_lock(&(sp->lock));
             
             sp->child_selective_cutoff = child_selective_cutoff;
-            
+
             if(sp->child_selective_cutoff)
                 sp->selective_cutoff = true;
             

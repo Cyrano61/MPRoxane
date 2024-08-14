@@ -1546,12 +1546,11 @@ void RXEngine::EG_SP_search_DEEP(RXSplitPoint* sp, const unsigned int threadID) 
 			break;
 		
 		//assert(score != -INTERRUPT_SEARCH);
-		
-		
-        //first control without mutex
+		        
+        //first without mutex
         if((score > sp->bestscore) || (!sp->selective_cutoff && child_selective_cutoff)) {
 
-            //update
+             //update
              pthread_mutex_lock(&(sp->lock));
 
             sp->child_selective_cutoff = child_selective_cutoff;
@@ -1929,10 +1928,11 @@ void RXEngine::EG_SP_search_XEndcut(RXSplitPoint* sp, const unsigned int threadI
 		
       	if(abort.load() || thread_should_stop(threadID))
 			break;
-		        
-        //first control without mutex
+
+
+        //first without mutex
         if((score > sp->bestscore) || (!sp->selective_cutoff && child_selective_cutoff)) {
-            
+          
             pthread_mutex_lock(&(sp->lock));
             
             //update SplitPoint
@@ -2242,40 +2242,40 @@ void RXEngine::EG_SP_search_root(RXSplitPoint* sp, const unsigned int threadID) 
 		
 		//assert(score != -INTERRUPT_SEARCH);
 		
-		
-        //first control without mutex
+
+ 
+        //first without mutex
         if((score > sp->bestscore) || (!sp->selective_cutoff && child_selective_cutoff)) {
             
             //update
-             pthread_mutex_lock(&(sp->lock));
-
-
-			sp->child_selective_cutoff = child_selective_cutoff;
-			
-      		if(sp->child_selective_cutoff)
-				sp->selective_cutoff = true;
-			
-      		// New best move?
-     		if(score > sp->bestscore) {
-        		sp->bestscore = score;
-				sp->bestmove = move->position;
-				
-				if(dependent_time && board.n_empties>19)
-					manager->sendMsg(showBestmove(board.n_empties, false, sp->selectivity, sp->alpha, sp->beta, sp->bestscore, sp->bestmove));
-				
-       			if(score > sp->alpha) {
-					
-          			if(score >= sp->beta) {
-						sp->explored = true;
-          			} else {
-						sp->alpha = score;
-					}
-					
-				}
-      		}
+            pthread_mutex_lock(&(sp->lock));
+            
+            sp->child_selective_cutoff = child_selective_cutoff;
+            
+            if(sp->child_selective_cutoff)
+                sp->selective_cutoff = true;
+            
+            // New best move?
+            if(score > sp->bestscore) {
+                sp->bestscore = score;
+                sp->bestmove = move->position;
+                
+                if(dependent_time && board.n_empties>19)
+                    manager->sendMsg(showBestmove(board.n_empties, false, sp->selectivity, sp->alpha, sp->beta, sp->bestscore, sp->bestmove));
+                
+                if(score > sp->alpha) {
+                    
+                    if(score >= sp->beta) {
+                        sp->explored = true;
+                    } else {
+                        sp->alpha = score;
+                    }
+                    
+                }
+            }
             
             pthread_mutex_unlock(&(sp->lock));
-		}
+        }
 		
     }
 	

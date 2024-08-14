@@ -217,46 +217,121 @@ void RXBitBoard::init_hashcodeTable() {
 
 #ifdef __ARM_NEON
 
-unsigned long long RXBitBoard::get_legal_moves(const unsigned long long p_discs, const unsigned long long o_discs ){
+unsigned long long RXBitBoard::get_legal_moves(const unsigned long long p_discs, const unsigned long long o_discs ) {
     
-    unsigned int  mO, movesL, movesH, flip1, pre1;
-    uint64x1_t    rP, rO;
-    uint64x2_t    PP, OO, MM, flip, pre;
+    const uint64x2_t pp_discs = vdupq_n_u64(p_discs);
+    const uint64x2_t oo_discs = vdupq_n_u64(o_discs);
+    
+    const uint64x2_t inner_oo_discs = vdupq_n_u64(o_discs & 0x7E7E7E7E7E7E7E7EULL);
 
-        /* vertical_mirror in PP[1], OO[1] */                               mO = (unsigned int) o_discs & 0x7e7e7e7e;
-    rP = vreinterpret_u64_u8(vrev64_u8(vcreate_u8(p_discs)));               flip1  = mO & ((unsigned int) p_discs << 1);
-    PP = vcombine_u64(vcreate_u64(p_discs), rP);                            flip1 |= mO & (flip1 << 1);
-                                                                            pre1   = mO & (mO << 1);
-    rO = vreinterpret_u64_u8(vrev64_u8(vcreate_u8(o_discs)));               flip1 |= pre1 & (flip1 << 2);
-    OO = vcombine_u64(vcreate_u64(o_discs), rO);                            flip1 |= pre1 & (flip1 << 2);
-                                                                            movesL = flip1 << 1;
+    
+    //direction -1, +1
+    static int64x2_t shift_1 = {-1, 1};
+    static int64x2_t shift_2 = {-2, 2};
+    
+    uint64x2_t
+    flipped = vandq_u64(vshlq_u64(pp_discs, shift_1), inner_oo_discs);
+    flipped = vorrq_u64(flipped, vandq_u64(vshlq_u64(flipped, shift_1), inner_oo_discs));
 
-    flip = vandq_u64(OO, vshlq_n_u64(PP, 8));                               flip1  = mO & ((unsigned int) p_discs >> 1);
-    flip = vorrq_u64(flip, vandq_u64(OO, vshlq_n_u64(flip, 8)));            flip1 |= mO & (flip1 >> 1);
-    pre  = vandq_u64(OO, vshlq_n_u64(OO, 8));                pre1 >>= 1;
-    flip = vorrq_u64(flip, vandq_u64(pre, vshlq_n_u64(flip, 16)));          flip1 |= pre1 & (flip1 >> 2);
-    flip = vorrq_u64(flip, vandq_u64(pre, vshlq_n_u64(flip, 16)));          flip1 |= pre1 & (flip1 >> 2);
-    MM   = vshlq_n_u64(flip, 8);                                            movesL |= flip1 >> 1;
+    uint64x2_t 
+    adjacent_oo_discs = vandq_u64(inner_oo_discs, vshlq_u64(inner_oo_discs, shift_1));
 
-    OO   = vandq_u64(OO, vdupq_n_u64(0x7e7e7e7e7e7e7e7e));                  mO = (unsigned int) (o_discs >> 32) & 0x7e7e7e7e;
-    flip = vandq_u64(OO, vshlq_n_u64(PP, 7));                               flip1  = mO & ((unsigned int) (p_discs >> 32) << 1);
-    flip = vorrq_u64(flip, vandq_u64(OO, vshlq_n_u64(flip, 7)));            flip1 |= mO & (flip1 << 1);
-    pre  = vandq_u64(OO, vshlq_n_u64(OO, 7));                               pre1   = mO & (mO << 1);
-    flip = vorrq_u64(flip, vandq_u64(pre, vshlq_n_u64(flip, 14)));          flip1 |= pre1 & (flip1 << 2);
-    flip = vorrq_u64(flip, vandq_u64(pre, vshlq_n_u64(flip, 14)));          flip1 |= pre1 & (flip1 << 2);
-    MM   = vorrq_u64(MM, vshlq_n_u64(flip, 7));                             movesH = flip1 << 1;
+    flipped = vorrq_u64(flipped, vandq_u64(vshlq_u64(flipped, shift_2), adjacent_oo_discs));
+    flipped = vorrq_u64(flipped, vandq_u64(vshlq_u64(flipped, shift_2), adjacent_oo_discs));
 
-    flip = vandq_u64(OO, vshlq_n_u64(PP, 9));                               flip1  = mO & ((unsigned int) (p_discs >> 32) >> 1);
-    flip = vorrq_u64(flip, vandq_u64(OO, vshlq_n_u64(flip, 9)));            flip1 |= mO & (flip1 >> 1);
-    pre  = vandq_u64(OO, vshlq_n_u64(OO, 9));                               pre1 >>= 1;
-    flip = vorrq_u64(flip, vandq_u64(pre, vshlq_n_u64(flip, 18)));          flip1 |= pre1 & (flip1 >> 2);
-    flip = vorrq_u64(flip, vandq_u64(pre, vshlq_n_u64(flip, 18)));          flip1 |= pre1 & (flip1 >> 2);
-    MM   = vorrq_u64(MM, vshlq_n_u64(flip, 9));                             movesH |= flip1 >> 1;
+    uint64x2_t legals = vshlq_u64(flipped, shift_1);
 
-    movesL |= vgetq_lane_u32(vreinterpretq_u32_u64(MM), 0) | __builtin_bswap32(vgetq_lane_u32(vreinterpretq_u32_u64(MM), 3));
-    movesH |= vgetq_lane_u32(vreinterpretq_u32_u64(MM), 1) | __builtin_bswap32(vgetq_lane_u32(vreinterpretq_u32_u64(MM), 2));
-    return (movesL | ((unsigned long long) movesH << 32)) & ~(p_discs|o_discs);    // mask with empties
+    //direction -8 , +8
+    static int64x2_t shift_8    = {-8, 8};
+    static int64x2_t shift_16 = {-16, 16};
+
+    flipped = vandq_u64(vshlq_u64(pp_discs, shift_8), oo_discs);
+    flipped = vorrq_u64(flipped, vandq_u64(vshlq_u64(flipped, shift_8), oo_discs));
+    
+    adjacent_oo_discs = vandq_u64(oo_discs, vshlq_u64(oo_discs, shift_8));
+    
+    flipped = vorrq_u64(flipped, vandq_u64(vshlq_u64(flipped, shift_16), adjacent_oo_discs));
+    flipped = vorrq_u64(flipped, vandq_u64(vshlq_u64(flipped, shift_16), adjacent_oo_discs));
+
+    legals = vorrq_u64(legals, vshlq_u64(flipped, shift_8));
+
+    //direction -7 , +7
+    static int64x2_t shift_7    = {-7, 7};
+    static int64x2_t shift_14 = {-14, 14};
+
+    flipped = vandq_u64(vshlq_u64(pp_discs, shift_7), inner_oo_discs);
+    flipped = vorrq_u64(flipped, vandq_u64(vshlq_u64(flipped, shift_7), inner_oo_discs));
+
+    adjacent_oo_discs = vandq_u64(inner_oo_discs, vshlq_u64(inner_oo_discs, shift_7));
+
+    flipped = vorrq_u64(flipped, vandq_u64(vshlq_u64(flipped, shift_14), adjacent_oo_discs));
+    flipped = vorrq_u64(flipped, vandq_u64(vshlq_u64(flipped, shift_14), adjacent_oo_discs));
+
+    legals = vorrq_u64(legals, vshlq_u64(flipped, shift_7));
+    
+    //direction -9 , +9
+    static int64x2_t shift_9    = {-9, 9};
+    static int64x2_t shift_18 = {-18, 18};
+
+    flipped = vandq_u64(vshlq_u64(pp_discs, shift_9), inner_oo_discs);
+    flipped = vorrq_u64(flipped, vandq_u64(vshlq_u64(flipped, shift_9), inner_oo_discs));
+
+    adjacent_oo_discs = vandq_u64(inner_oo_discs, vshlq_u64(inner_oo_discs, shift_9));
+
+    flipped = vorrq_u64(flipped, vandq_u64(vshlq_u64(flipped, shift_18), adjacent_oo_discs));
+    flipped = vorrq_u64(flipped, vandq_u64(vshlq_u64(flipped, shift_18), adjacent_oo_discs));
+
+    legals = vorrq_u64(legals, vshlq_u64(flipped, shift_9));
+    
+    
+    return ((vgetq_lane_u64(legals, 0) | vgetq_lane_u64(legals, 1)) & ~(p_discs | o_discs));
+
 }
+
+
+
+//version Edax semble plus lente que la version classique ????
+
+//unsigned long long RXBitBoard::get_legal_moves(const unsigned long long p_discs, const unsigned long long o_discs ){
+//    
+//    unsigned int  mO, movesL, movesH, flip1, pre1;
+//    uint64x1_t    rP, rO;
+//    uint64x2_t    PP, OO, MM, flip, pre;
+//
+//        /* vertical_mirror in PP[1], OO[1] */                               mO = (unsigned int) o_discs & 0x7e7e7e7e;
+//    rP = vreinterpret_u64_u8(vrev64_u8(vcreate_u8(p_discs)));               flip1  = mO & ((unsigned int) p_discs << 1);
+//    PP = vcombine_u64(vcreate_u64(p_discs), rP);                            flip1 |= mO & (flip1 << 1);
+//                                                                            pre1   = mO & (mO << 1);
+//    rO = vreinterpret_u64_u8(vrev64_u8(vcreate_u8(o_discs)));               flip1 |= pre1 & (flip1 << 2);
+//    OO = vcombine_u64(vcreate_u64(o_discs), rO);                            flip1 |= pre1 & (flip1 << 2);
+//                                                                            movesL = flip1 << 1;
+//
+//    flip = vandq_u64(OO, vshlq_n_u64(PP, 8));                               flip1  = mO & ((unsigned int) p_discs >> 1);
+//    flip = vorrq_u64(flip, vandq_u64(OO, vshlq_n_u64(flip, 8)));            flip1 |= mO & (flip1 >> 1);
+//    pre  = vandq_u64(OO, vshlq_n_u64(OO, 8));                               pre1 >>= 1;
+//    flip = vorrq_u64(flip, vandq_u64(pre, vshlq_n_u64(flip, 16)));          flip1 |= pre1 & (flip1 >> 2);
+//    flip = vorrq_u64(flip, vandq_u64(pre, vshlq_n_u64(flip, 16)));          flip1 |= pre1 & (flip1 >> 2);
+//    MM   = vshlq_n_u64(flip, 8);                                            movesL |= flip1 >> 1;
+//
+//    OO   = vandq_u64(OO, vdupq_n_u64(0x7e7e7e7e7e7e7e7e));                  mO = (unsigned int) (o_discs >> 32) & 0x7e7e7e7e;
+//    flip = vandq_u64(OO, vshlq_n_u64(PP, 7));                               flip1  = mO & ((unsigned int) (p_discs >> 32) << 1);
+//    flip = vorrq_u64(flip, vandq_u64(OO, vshlq_n_u64(flip, 7)));            flip1 |= mO & (flip1 << 1);
+//    pre  = vandq_u64(OO, vshlq_n_u64(OO, 7));                               pre1   = mO & (mO << 1);
+//    flip = vorrq_u64(flip, vandq_u64(pre, vshlq_n_u64(flip, 14)));          flip1 |= pre1 & (flip1 << 2);
+//    flip = vorrq_u64(flip, vandq_u64(pre, vshlq_n_u64(flip, 14)));          flip1 |= pre1 & (flip1 << 2);
+//    MM   = vorrq_u64(MM, vshlq_n_u64(flip, 7));                             movesH = flip1 << 1;
+//
+//    flip = vandq_u64(OO, vshlq_n_u64(PP, 9));                               flip1  = mO & ((unsigned int) (p_discs >> 32) >> 1);
+//    flip = vorrq_u64(flip, vandq_u64(OO, vshlq_n_u64(flip, 9)));            flip1 |= mO & (flip1 >> 1);
+//    pre  = vandq_u64(OO, vshlq_n_u64(OO, 9));                               pre1 >>= 1;
+//    flip = vorrq_u64(flip, vandq_u64(pre, vshlq_n_u64(flip, 18)));          flip1 |= pre1 & (flip1 >> 2);
+//    flip = vorrq_u64(flip, vandq_u64(pre, vshlq_n_u64(flip, 18)));          flip1 |= pre1 & (flip1 >> 2);
+//    MM   = vorrq_u64(MM, vshlq_n_u64(flip, 9));                             movesH |= flip1 >> 1;
+//
+//    movesL |= vgetq_lane_u32(vreinterpretq_u32_u64(MM), 0) | __builtin_bswap32(vgetq_lane_u32(vreinterpretq_u32_u64(MM), 3));
+//    movesH |= vgetq_lane_u32(vreinterpretq_u32_u64(MM), 1) | __builtin_bswap32(vgetq_lane_u32(vreinterpretq_u32_u64(MM), 2));
+//    return (movesL | ((unsigned long long) movesH << 32)) & ~(p_discs|o_discs);    // mask with empties
+//}
 
 
 
@@ -496,6 +571,10 @@ unsigned long long RXBitBoard::hashcode_after_move(RXMove* move)  const {
 }
 
 #endif
+
+//semble plus rapide que la version NEON ????
+
+
 
 
 RXBitBoard::RXBitBoard(): player(BLACK), n_empties(60), n_nodes(0) {

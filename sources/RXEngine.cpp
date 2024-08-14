@@ -2136,21 +2136,31 @@ void RXEngine::idle_loop(unsigned int threadID, RXSplitPoint* waitSp) {
 		
         //lance les slaves
 
-        //first control without mutex
-        if(waitSp && waitSp->n_Slaves == 0) {
-            
-            //second control with mutex
-            pthread_mutex_lock(&(waitSp->lock));
-            if (waitSp->n_Slaves == 0) {
-                
-                threads[threadID].state = RXThread::SEARCHING;
-                pthread_mutex_unlock(&(waitSp->lock));
-                
-                break;
-            }
-            pthread_mutex_unlock(&(waitSp->lock));
-        }
+//        //first without mutex
+//        if(waitSp && waitSp->n_Slaves == 0) {
+//            
+//            //second control with mutex
+//            pthread_mutex_lock(&(waitSp->lock));
+//            if (waitSp->n_Slaves == 0) {
+//                
+//                threads[threadID].state = RXThread::SEARCHING;
+//                pthread_mutex_unlock(&(waitSp->lock));
+//                
+//                break;
+//            }
+//            pthread_mutex_unlock(&(waitSp->lock));
+//        }
 
+             
+        //n_Slaves without mutex
+        if (waitSp && waitSp->n_Slaves == 0) {
+            
+            pthread_mutex_lock(&(waitSp->lock));
+            threads[threadID].state = RXThread::SEARCHING;
+            pthread_mutex_unlock(&(waitSp->lock));
+            
+            break;
+        }
 
 		
     }
@@ -2391,7 +2401,7 @@ bool RXEngine::split(RXBBPatterns& sBoard, bool pv, int pvDev,
 	// add thread
 	for(unsigned int i = 0; i < activeThreads; i++) {
 		
-        //first control without mutex
+        //first without mutex
         if(splitPoint.n_Slaves < THREAD_PER_SPLITPOINT_MAX && thread_is_available(i, master)) {
             
             pthread_mutex_lock(&MP_sync);
