@@ -520,7 +520,6 @@ bool RXBitBoard::do_flips_D3(unsigned long long& P, unsigned long long& O) {
 
 bool RXBitBoard::do_flips_E3(unsigned long long& P, unsigned long long& O) {
 
-    unsigned long long my_discs, opp_discs, r;
 
      unsigned int outflank_h;
      unsigned long long flipped, outflank_v, outflank_d;

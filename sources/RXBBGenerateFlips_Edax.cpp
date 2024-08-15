@@ -624,8 +624,6 @@ bool RXBitBoard::generate_flips_E3(RXMove& move) const {
     const unsigned long long P = discs[player];
     const unsigned long long O = discs[player^1];
 
-    unsigned long long my_discs, opp_discs, r;
-
     unsigned int outflank_h;
     unsigned long long flipped, outflank_v, outflank_d;
 
