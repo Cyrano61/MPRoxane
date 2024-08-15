@@ -8,6 +8,8 @@
  *
  */
 
+#ifndef __ARM_NEON
+
 #include "RXBitBoard.hpp"
 #include "RXTools.hpp"
 
@@ -2852,4 +2854,4 @@ RXBitBoard::do_flips_H2, RXBitBoard::do_flips_G2, RXBitBoard::do_flips_F2, RXBit
 RXBitBoard::do_flips_H1, RXBitBoard::do_flips_G1, RXBitBoard::do_flips_F1, RXBitBoard::do_flips_E1, RXBitBoard::do_flips_D1, RXBitBoard::do_flips_C1, RXBitBoard::do_flips_B1, RXBitBoard::do_flips_A1
 };
 
-
+#endif

@@ -41,7 +41,14 @@ class RXBitBoard {
     static unsigned long long hashcodeTable_lines5_6[2][65536];
     static unsigned long long hashcodeTable_lines7_8[2][65536];
 
+    
 	public :
+    
+    static const unsigned char OUTFLANK_3[64];
+    static const unsigned char OUTFLANK_4[64];
+    static const unsigned long long FLIPPED_3_H[21];
+    static const unsigned long long FLIPPED_4_H[19];
+
     
     static void init_hashcodeTable();
 	
@@ -173,6 +180,40 @@ bool generate_flips_##pos(RXMove& move) const
     
     
 };
+
+/*
+ * Set all bits below the sole outflank bit if outfrank != 0
+ */
+#if __has_builtin(__builtin_subcll)
+static inline unsigned long long OutflankToFlipmask(unsigned long long outflank) {
+    unsigned long long flipmask, cy;
+    flipmask = __builtin_subcll(outflank, 1, 0, &cy);
+    return __builtin_addcll(flipmask, 0, cy, &cy);
+}
+#else
+    #define OutflankToFlipmask(outflank)    ((outflank) - (unsigned int) ((outflank) != 0))
+#endif
+
+// Strictly, (long long) >> 64 is undefined in C, but either 0 bit (no change)
+// or 64 bit (zero out) shift will lead valid result (i.e. flipped == 0).
+#define    outflank_right(O,maskr)    (0x8000000000000000ULL >> __builtin_clzll(~(O) & (maskr)))
+
+// in case continuous from MSB
+#define    outflank_right_H(O)    (0x80000000u >> __builtin_clz(~(O)))
+
+
+#ifdef __clang__    // poor optimization for vbicq(const,x) (ndk-r15)
+#define not_O_in_mask(mask,O)    vandq_u64((mask), vdupq_n_u64(~(O)))
+#else
+#define not_O_in_mask(mask,O)    vbicq_u64((mask), vdupq_n_u64(O))
+#endif
+
+//rotl8
+#if __has_builtin(__builtin_rotateleft8)
+    #define rotl8(x,y)    __builtin_rotateleft8((x),(y))
+#elif defined(__GNUC__) && (__GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 5)) && (defined(__x86_64__) || defined(__i386__))
+    #define rotl8(x,y)    __builtin_ia32_rolqi((x),(y))
+#endif
 
 
 

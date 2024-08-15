@@ -10,6 +10,7 @@
 		153F675D10867B6F00C63274 /* RXSearch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 153F675B10867B6F00C63274 /* RXSearch.cpp */; };
 		15F23C400E771D5D00D70E52 /* RXHashShallow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 15F23C3F0E771D5D00D70E52 /* RXHashShallow.cpp */; };
 		373E1DC62C6DED4C00F7087D /* RXBBGenerateFlips_Edax.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 373E1DC52C6DED4C00F7087D /* RXBBGenerateFlips_Edax.cpp */; };
+		3794E1392C6E32CE009EFC98 /* RXBBDoFlips_Edax.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3794E1382C6E32CE009EFC98 /* RXBBDoFlips_Edax.cpp */; };
 		37C0C9102C5A780E00570AE5 /* RXConstantes.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 37C0C8FA2C5A780D00570AE5 /* RXConstantes.hpp */; };
 		37C0C9112C5A780E00570AE5 /* RXPattern.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 37C0C8FB2C5A780D00570AE5 /* RXPattern.hpp */; };
 		37C0C9122C5A780E00570AE5 /* RXTools.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 37C0C8FC2C5A780D00570AE5 /* RXTools.hpp */; };
@@ -85,6 +86,7 @@
 		153F675B10867B6F00C63274 /* RXSearch.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = RXSearch.cpp; path = sources/RXSearch.cpp; sourceTree = "<group>"; };
 		15F23C3F0E771D5D00D70E52 /* RXHashShallow.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = RXHashShallow.cpp; path = sources/RXHashShallow.cpp; sourceTree = "<group>"; };
 		373E1DC52C6DED4C00F7087D /* RXBBGenerateFlips_Edax.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = RXBBGenerateFlips_Edax.cpp; path = sources/RXBBGenerateFlips_Edax.cpp; sourceTree = "<group>"; };
+		3794E1382C6E32CE009EFC98 /* RXBBDoFlips_Edax.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = RXBBDoFlips_Edax.cpp; path = sources/RXBBDoFlips_Edax.cpp; sourceTree = "<group>"; };
 		37C0C8FA2C5A780D00570AE5 /* RXConstantes.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = RXConstantes.hpp; path = sources/RXConstantes.hpp; sourceTree = "<group>"; };
 		37C0C8FB2C5A780D00570AE5 /* RXPattern.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = RXPattern.hpp; path = sources/RXPattern.hpp; sourceTree = "<group>"; };
 		37C0C8FC2C5A780D00570AE5 /* RXTools.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = RXTools.hpp; path = sources/RXTools.hpp; sourceTree = "<group>"; };
@@ -174,6 +176,7 @@
 				4FBA60D408D8BE9E00855FD8 /* RXBitBoard.cpp */,
 				4FBA60CD08D8BE9E00855FD8 /* RXBBCountFlips.cpp */,
 				4FBA60CE08D8BE9E00855FD8 /* RXBBDoFlips.cpp */,
+				3794E1382C6E32CE009EFC98 /* RXBBDoFlips_Edax.cpp */,
 				4FC6E59A0B445FDC0063CDF9 /* RXBBGenerateFlips.cpp */,
 				373E1DC52C6DED4C00F7087D /* RXBBGenerateFlips_Edax.cpp */,
 				4FBA60D008D8BE9E00855FD8 /* RXBBPatterns.cpp */,
@@ -344,6 +347,7 @@
 				4FBA610608D8BE9E00855FD8 /* RXMidGame.cpp in Sources */,
 				4FBA610708D8BE9E00855FD8 /* RXMove.cpp in Sources */,
 				4FBA610C08D8BE9E00855FD8 /* sockbuf.cpp in Sources */,
+				3794E1392C6E32CE009EFC98 /* RXBBDoFlips_Edax.cpp in Sources */,
 				4FBA611108D8BEEC00855FD8 /* RXRoxane.cpp in Sources */,
 				4FCB59B9097D80AF00D297EB /* ggsstream.cpp in Sources */,
 				4FCB59BB097D80AF00D297EB /* OsObjects.cpp in Sources */,
