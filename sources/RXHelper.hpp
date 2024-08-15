@@ -3,7 +3,7 @@
  *  Roxane
  *
  *  Created by BrunoCausse on 10/09/08.
- *  Copyright 2008 personnel. All rights reserved.
+ *  Copyright 2008-2024 personnel. All rights reserved.
  *
  */
 #ifndef RXHELPER_HPP

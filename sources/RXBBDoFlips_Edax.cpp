@@ -3,7 +3,7 @@
 //  Roxane
 //
 //  Created by Causse Bruno on 15/08/2024.
-//  Copyright © 2024 bruno.causse. All rights reserved.
+//  Copyright © 2024 personnel. All rights reserved.
 //
 
 #include <stdio.h>

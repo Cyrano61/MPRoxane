@@ -3,7 +3,7 @@
  *  learn_01
  *
  *  Created by Bruno Causse on 11/06/05.
- *  Copyright 2005 personnel. All rights reserved.
+ *  Copyright 2005-2024 personnel. All rights reserved.
  *
  */
 #include <iostream>

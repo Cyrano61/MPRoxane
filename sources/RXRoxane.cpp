@@ -3,7 +3,7 @@
  *  BitBoard
  *
  *  Created by Bruno Causse on 01/09/05.
- *  Copyright 2005 personnel. All rights reserved.
+ *  Copyright 2005-2024 personnel. All rights reserved.
  *
  */
  
