@@ -292,6 +292,7 @@ unsigned long long RXBitBoard::get_legal_moves(const unsigned long long p_discs,
 
 
 //version Edax semble plus lente que la version classique ????
+//pourquoi des operations 64 bits et 128 bits ?
 
 //unsigned long long RXBitBoard::get_legal_moves(const unsigned long long p_discs, const unsigned long long o_discs ){
 //    
@@ -513,10 +514,10 @@ unsigned long long RXBitBoard::hashcode() const {
     
     
     unsigned long long
-    hashcode  = hashcodeTable_lines1_2[lines1_2][PLAYER];
-    hashcode ^= hashcodeTable_lines3_4[lines3_4][PLAYER];
-    hashcode ^= hashcodeTable_lines5_6[lines5_6][PLAYER];
-    hashcode ^= hashcodeTable_lines7_8[lines7_8][PLAYER];
+    hashcode  = hashcodeTable_lines1_2[PLAYER][lines1_2];
+    hashcode ^= hashcodeTable_lines3_4[PLAYER][lines3_4];
+    hashcode ^= hashcodeTable_lines5_6[PLAYER][lines5_6];
+    hashcode ^= hashcodeTable_lines7_8[PLAYER][lines7_8];
     
     
     lines1_2 = static_cast<unsigned int> ((o & 0xFFFF000000000000ULL) >> 48);
@@ -524,10 +525,10 @@ unsigned long long RXBitBoard::hashcode() const {
     lines5_6 = static_cast<unsigned int> ((o & 0x00000000FFFF0000ULL) >> 16);
     lines7_8 = static_cast<unsigned int> ((o & 0x000000000000FFFFULL));
     
-    hashcode ^= hashcodeTable_lines1_2[lines1_2][OPPONENT];
-    hashcode ^= hashcodeTable_lines3_4[lines3_4][OPPONENT];
-    hashcode ^= hashcodeTable_lines5_6[lines5_6][OPPONENT];
-    hashcode ^= hashcodeTable_lines7_8[lines7_8][OPPONENT];
+    hashcode ^= hashcodeTable_lines1_2[OPPONENT][lines1_2];
+    hashcode ^= hashcodeTable_lines3_4[OPPONENT][lines3_4];
+    hashcode ^= hashcodeTable_lines5_6[OPPONENT][lines5_6];
+    hashcode ^= hashcodeTable_lines7_8[OPPONENT][lines7_8];
     
     
     return hashcode;
@@ -550,10 +551,10 @@ unsigned long long RXBitBoard::hashcode_after_move(RXMove* move)  const {
     
     
     unsigned long long
-    hashcode  = hashcodeTable_lines1_2[lines1_2][PLAYER];
-    hashcode ^= hashcodeTable_lines3_4[lines3_4][PLAYER];
-    hashcode ^= hashcodeTable_lines5_6[lines5_6][PLAYER];
-    hashcode ^= hashcodeTable_lines7_8[lines7_8][PLAYER];
+    hashcode  = hashcodeTable_lines1_2[PLAYER][lines1_2];
+    hashcode ^= hashcodeTable_lines3_4[PLAYER][lines3_4];
+    hashcode ^= hashcodeTable_lines5_6[PLAYER][lines5_6];
+    hashcode ^= hashcodeTable_lines7_8[PLAYER][lines7_8];
     
     
     lines1_2 = static_cast<unsigned int> ((o & 0xFFFF000000000000ULL) >> 48);
@@ -561,10 +562,10 @@ unsigned long long RXBitBoard::hashcode_after_move(RXMove* move)  const {
     lines5_6 = static_cast<unsigned int> ((o & 0x00000000FFFF0000ULL) >> 16);
     lines7_8 = static_cast<unsigned int> ((o & 0x000000000000FFFFULL));
     
-    hashcode ^= hashcodeTable_lines1_2[lines1_2][OPPONENT];
-    hashcode ^= hashcodeTable_lines3_4[lines3_4][OPPONENT];
-    hashcode ^= hashcodeTable_lines5_6[lines5_6][OPPONENT];
-    hashcode ^= hashcodeTable_lines7_8[lines7_8][OPPONENT];
+    hashcode ^= hashcodeTable_lines1_2[OPPONENT][lines1_2];
+    hashcode ^= hashcodeTable_lines3_4[OPPONENT][lines3_4];
+    hashcode ^= hashcodeTable_lines5_6[OPPONENT][lines5_6];
+    hashcode ^= hashcodeTable_lines7_8[OPPONENT][lines7_8];
     
     
     return hashcode;

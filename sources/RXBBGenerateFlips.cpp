@@ -8,12 +8,14 @@
  *
  */
 
+#ifndef __ARM_NEON
+
 #include "RXBitBoard.hpp"
 #include "RXTools.hpp"
 
+
 bool RXBitBoard::generate_flips_A1(RXMove& move) const {
 	
-
 	const unsigned long long discs_player = discs[player];
 	const unsigned long long discs_opponent = discs[player^1];
 
@@ -42,6 +44,8 @@ bool RXBitBoard::generate_flips_A1(RXMove& move) const {
 		flipped |= 0X8000000000000000ULL - (0X2ULL<<_bsrll(my_discs));
 	}
 	
+
+    
 	if(flipped == 0)
 		return false;
 		
@@ -3211,3 +3215,5 @@ void RXBitBoard::init_generate_flips() {
 	generate_flips[H8] = &RXBitBoard::generate_flips_H8;
 
 }
+
+#endif

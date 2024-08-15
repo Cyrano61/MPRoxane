@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		153F675D10867B6F00C63274 /* RXSearch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 153F675B10867B6F00C63274 /* RXSearch.cpp */; };
 		15F23C400E771D5D00D70E52 /* RXHashShallow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 15F23C3F0E771D5D00D70E52 /* RXHashShallow.cpp */; };
+		373E1DC62C6DED4C00F7087D /* RXBBGenerateFlips_Edax.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 373E1DC52C6DED4C00F7087D /* RXBBGenerateFlips_Edax.cpp */; };
 		37C0C9102C5A780E00570AE5 /* RXConstantes.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 37C0C8FA2C5A780D00570AE5 /* RXConstantes.hpp */; };
 		37C0C9112C5A780E00570AE5 /* RXPattern.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 37C0C8FB2C5A780D00570AE5 /* RXPattern.hpp */; };
 		37C0C9122C5A780E00570AE5 /* RXTools.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 37C0C8FC2C5A780D00570AE5 /* RXTools.hpp */; };
@@ -83,6 +84,7 @@
 /* Begin PBXFileReference section */
 		153F675B10867B6F00C63274 /* RXSearch.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = RXSearch.cpp; path = sources/RXSearch.cpp; sourceTree = "<group>"; };
 		15F23C3F0E771D5D00D70E52 /* RXHashShallow.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = RXHashShallow.cpp; path = sources/RXHashShallow.cpp; sourceTree = "<group>"; };
+		373E1DC52C6DED4C00F7087D /* RXBBGenerateFlips_Edax.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = RXBBGenerateFlips_Edax.cpp; path = sources/RXBBGenerateFlips_Edax.cpp; sourceTree = "<group>"; };
 		37C0C8FA2C5A780D00570AE5 /* RXConstantes.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = RXConstantes.hpp; path = sources/RXConstantes.hpp; sourceTree = "<group>"; };
 		37C0C8FB2C5A780D00570AE5 /* RXPattern.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = RXPattern.hpp; path = sources/RXPattern.hpp; sourceTree = "<group>"; };
 		37C0C8FC2C5A780D00570AE5 /* RXTools.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = RXTools.hpp; path = sources/RXTools.hpp; sourceTree = "<group>"; };
@@ -173,6 +175,7 @@
 				4FBA60CD08D8BE9E00855FD8 /* RXBBCountFlips.cpp */,
 				4FBA60CE08D8BE9E00855FD8 /* RXBBDoFlips.cpp */,
 				4FC6E59A0B445FDC0063CDF9 /* RXBBGenerateFlips.cpp */,
+				373E1DC52C6DED4C00F7087D /* RXBBGenerateFlips_Edax.cpp */,
 				4FBA60D008D8BE9E00855FD8 /* RXBBPatterns.cpp */,
 				4FBA60D208D8BE9E00855FD8 /* RXBBPattGeneratePatterns.cpp */,
 				153F675B10867B6F00C63274 /* RXSearch.cpp */,
@@ -347,6 +350,7 @@
 				4FC71BCE0A13DF7E003F958E /* RXBBCountFlips.cpp in Sources */,
 				4FC6E59B0B445FDC0063CDF9 /* RXBBGenerateFlips.cpp in Sources */,
 				4FBF04940BDE80B800E7D270 /* RXBBPattGeneratePatterns.cpp in Sources */,
+				373E1DC62C6DED4C00F7087D /* RXBBGenerateFlips_Edax.cpp in Sources */,
 				15F23C400E771D5D00D70E52 /* RXHashShallow.cpp in Sources */,
 				153F675D10867B6F00C63274 /* RXSearch.cpp in Sources */,
 			);
@@ -361,6 +365,7 @@
 				CLANG_ENABLE_OBJC_WEAK = NO;
 				COPY_PHASE_STRIP = YES;
 				DEAD_CODE_STRIPPING = YES;
+				ENABLE_OPENMP_SUPPORT = YES;
 				GCC_ALTIVEC_EXTENSIONS = NO;
 				GCC_AUTO_VECTORIZATION = YES;
 				GCC_C_LANGUAGE_STANDARD = "compiler-default";
@@ -428,7 +433,7 @@
 				GCC_ENABLE_SYMBOL_SEPARATION = NO;
 				GCC_FAST_MATH = YES;
 				GCC_FEEDBACK_DIRECTED_OPTIMIZATION = Off;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_INLINES_ARE_PRIVATE_EXTERN = YES;
 				GCC_INPUT_FILETYPE = automatic;
 				GCC_MODEL_PPC64 = YES;
@@ -482,6 +487,7 @@
 			buildSettings = {
 				CLANG_ENABLE_OBJC_WEAK = NO;
 				DEAD_CODE_STRIPPING = YES;
+				ENABLE_OPENMP_SUPPORT = YES;
 				GCC_ALTIVEC_EXTENSIONS = NO;
 				GCC_AUTO_VECTORIZATION = YES;
 				GCC_C_LANGUAGE_STANDARD = "compiler-default";
