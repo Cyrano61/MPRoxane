@@ -413,7 +413,7 @@ bool RXBitBoard::do_flips_H2(unsigned long long& P, unsigned long long& O) {
 
 bool RXBitBoard::do_flips_A3(unsigned long long& P, unsigned long long& O) {
 
-    unsigned int outflank_h;
+     unsigned int outflank_h;
      unsigned long long flipped, outflank_v, outflank_d9;
 
      outflank_v = outflank_right(O, 0x0000008080808080) & P;

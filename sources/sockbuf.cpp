@@ -69,24 +69,27 @@ int sockbuf::connect(const string& sServer, int nPort) {
 		return kErrNoHost;
 	if (!(protoent=getprotobyname(sProtocol.c_str())))
 		return kErrNoProtocol;
-    
-    std::cout << "jusque la sa passe" << std::endl;
-    
+        
 	sa.sin_family=AF_INET;
-	sa.sin_port=htons(nPort);
-	sa.sin_addr.s_addr=*(u2*)hostent->h_addr_list[0];
-	//sa.sin_addr.s_addr=* reinterpret_cast< u4* > (hostent->h_addr_list[0]);
+
+    sa.sin_port=htons(nPort);
+    
+    //sa.sin_addr.s_addr=*(u2*)hostent->h_addr_list[0];
+	sa.sin_addr.s_addr=* reinterpret_cast< u4* > (hostent->h_addr_list[0]);
 
 	// get socket
 	if (!(sock=socket(AF_INET, SOCK_STREAM, protoent->p_proto)))
 		return kErrNoSocket;
-	
+
+
 	// connect
 	if (::connect(sock,(const sockaddr*)&sa,sizeof(sa))) {
+        
 		//close(sock);
         fplog->close();
 		return kErrCantConnect;
 	}
+
 
 	fConnected=true;
 	return 0;

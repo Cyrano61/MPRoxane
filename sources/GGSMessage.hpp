@@ -18,7 +18,9 @@ public:
 	// handle the message
 	virtual void Handle()=0;
 	virtual void In(istream& is);
-
+    
+   virtual ~CMsg(){};
+    
 	ggsstream* pgs;
 	string sFrom;
 	string sRawText;

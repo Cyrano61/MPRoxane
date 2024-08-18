@@ -20,7 +20,7 @@ open tail_b.command
 sleep 1
 
 # lancement du prog
-./Roxane -mode ggs -login Edmond -passw MDP -h 25 -t 2 ../../fforum-20-39.src
+../build/release/Roxane -mode ggs -login Edmond -passw MDP -h 25 -t 2 ../scripts/fforum-20-39.src
 
 
 
