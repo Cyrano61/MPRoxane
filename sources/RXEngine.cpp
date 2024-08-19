@@ -1356,7 +1356,7 @@ std::string RXEngine::display(RXBitBoard& board, const int type, const int allow
 		
 		if(type != GGS_MSG) {
 			if(type == HASHTABLE) {
-				buffer << "00:00:00.00 |             |             |";
+				buffer << "00:00:00.00 |              |             |";
 			} else {
 				buffer << toHMS(time/1000.0) << " | ";
 				

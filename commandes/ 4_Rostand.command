@@ -10,17 +10,18 @@
 #chemin d'acces du script
 cd ${0%/*}
 
-resize -s 21 96
 
 #visualisation des log
-open tail_a.command
-open tail_b.command
+open ../build/log/tail_a.command
+open ../build/log/tail_b.command
 
 #attente du lancement des tails
 sleep 1
 
 # lancement du prog
-./Roxane -mode ggs -login Rostand -passw MDP -h 24 -t 4 ../../fforum-20-39.src
+../build/release/Roxane -mode ggs -login Rostand -passw MDP -h 26 -t 4 ../scripts/fforum-20-39.src
+
+
 
 # fin du script
 

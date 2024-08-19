@@ -19,7 +19,9 @@ open ../build/log/tail_b.command
 sleep 1
 
 # lancement du prog
-../build/Release/Roxane  -mode ggs -login Roxane -passw Rostand -h 26 -t 8 /Users/caussebruno/Documents/othello/MPRoxane[2024-07-21]/scripts/fforum-20-39.src
+../build/release/Roxane -mode ggs -login Roxane -passw Rostand -h 26 -t 8 ../scripts/fforum-20-39.src
+
+
 
 # fin du script
 
