@@ -194,6 +194,7 @@ void ggsstream::Process(){
 }
 
 void ggsstream::ProcessLine(string& sLine){
+        
 	if (sLine=="READY")
 		ProcessMessage();
 	else {
@@ -457,7 +458,7 @@ void ggsstream::BaseOsGameOver(const string& idg) {
 //	when we join the game,  when komi is set in a game,
 //	and when a move is undone in a game.
 void ggsstream::BaseOsJoin(const CMsgOsJoin* pmsg) {
-	map<string,COsGame>::iterator i=idToGame.find(pmsg->idg);
+	//map<string,COsGame>::iterator i=idToGame.find(pmsg->idg);
 	idToGame[pmsg->idg]=pmsg->game;
 }
 
@@ -495,7 +496,8 @@ void ggsstream::EndGame(const CMsgOsMatchDelta* pmsg, const string& idg) {
 
 		if (pgame->result.status==COsResult::kUnfinished)
 			pgame->SetResult(pmsg->result, pmsg->match.pis);
-		HandleOsGameOver(pmsg, idg);
+		//HandleOsGameOver(pmsg, idg);
+        HandleOsGameOver(idg);
 	}
 }
 
@@ -626,7 +628,8 @@ void ggsstream::HandleOsFinger(const CMsgOsFinger* pmsg) {
 	HandleOs(pmsg);
 }
 
-void ggsstream::HandleOsGameOver(const CMsgOsMatchDelta* pmsg, const string& idg) {
+//void ggsstream::HandleOsGameOver(const CMsgOsMatchDelta* pmsg, const string& idg) {
+void ggsstream::HandleOsGameOver(const string& idg) {
 	BaseOsGameOver(idg);
 }
 
@@ -712,6 +715,8 @@ void ggsstream::HandleOsWatchDelta(const CMsgOsWatchDelta* pmsg) {
 }
 
 void ggsstream::HandleOsWho(const CMsgOsWho* pmsg) {
+    //sinon le param est non utilisé
+    HandleOs(pmsg);
 }
 
 COsGame* ggsstream::PGame(const string& idg) {

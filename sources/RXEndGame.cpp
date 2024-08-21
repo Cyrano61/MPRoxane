@@ -2092,7 +2092,7 @@ void RXEngine::EG_PVS_root(RXBBPatterns& sBoard, const int selectivity, int alph
 					if(search_client == RXSearch::kGGSMode) {	// GGS mode
 						
 						if(dependent_time && board.n_empties>19)
-							manager->sendMsg("         " + RXMove::index_to_coord(iter->position) + " is better? ");
+							manager->sendMsg("         " + RXMove::index_to_coord(iter->position) + " maybe better? ");
 						
 					}
 					

@@ -141,6 +141,7 @@ void CODKStream::HandleOsUpdate(const CMsgOsUpdate* pmsg) {
 
 // helper function for join and update messages
 void CODKStream::GetMoveIfNeeded(const string& idg) {
+        
 	COsGame* pgame=PGame(idg);
 	if (pgame!=NULL) {
 	

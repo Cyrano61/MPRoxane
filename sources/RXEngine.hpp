@@ -53,6 +53,7 @@ public:
 	explicit My_punct(size_t r=0):std::numpunct<char>(r) {}
 	
 protected:
+    //bug ??? Parse ggs entre '.' & ','
 	char do_decimal_point() const {return ',';}
 	char do_thousands_sep() const {return ' ';}
 	std::string do_grouping() const {return "\003";}

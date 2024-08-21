@@ -19,6 +19,8 @@ sockbuf::sockbuf() {
 	loglast=kLogNone;
 	if (fLogging) {
 		fplog=new ofstream("recv.txt");
+        if(!fplog->is_open())
+            std::cout << "unable to open log file for writing" << std::endl;
 	}
 
 	// create get buffer
@@ -75,7 +77,7 @@ int sockbuf::connect(const string& sServer, int nPort) {
     sa.sin_port=htons(nPort);
     
     //sa.sin_addr.s_addr=*(u2*)hostent->h_addr_list[0];
-	sa.sin_addr.s_addr=* reinterpret_cast< u4* > (hostent->h_addr_list[0]);
+	sa.sin_addr.s_addr=* reinterpret_cast< unsigned int* > (hostent->h_addr_list[0]);
 
 	// get socket
 	if (!(sock=socket(AF_INET, SOCK_STREAM, protoent->p_proto)))

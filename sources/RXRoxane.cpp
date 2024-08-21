@@ -186,7 +186,7 @@ void RXRoxane::resume() {
 //				RXBitBoard& board = sBoard.board;
 //				RXMove move;
 //				
-//				char moves[60];
+//				ch/Users/caussebruno/Documents/othello/MPRoxane[2024-07-21]ar moves[60];
 //				from.read(reinterpret_cast<char*>(moves), 60*sizeof(char)); //move
 //				int iMove = 0;
 //				
@@ -267,7 +267,7 @@ void RXRoxane::get_move(const string& _idg, COsGame* g) {
 	pthread_mutex_lock(&mutex);
 
 	resume_flag.store(false);
-
+    
 	idg = _idg;
 
 	RXBBPatterns& sBoard = search.sBoard;
@@ -361,6 +361,12 @@ void RXRoxane::get_move(const string& _idg, COsGame* g) {
 	search.dependent_time = true;	
 	search.tMatch         = static_cast<int>( g->posStart.cks[player^1].tCurrent*1000);
 	search.tRemaining     = static_cast<int>(game[player].cks[player^1].tCurrent*1000);
+    
+    //debug
+    //std::cout << "time match : " << search.tMatch << std::endl;
+    //std::cout << "time remaining : " << search.tRemaining << std::endl;
+
+    
 
 	search.sBoard.build(g->pos.board.fromGGS());
 	
@@ -403,6 +409,7 @@ void RXRoxane::get_move(const string& _idg, COsGame* g) {
 
 /* synchronized method */
 void RXRoxane::get_move(const std::string& file_name) {
+    
 	
 	pthread_mutex_lock(&mutex);
 	
@@ -460,14 +467,19 @@ void RXRoxane::get_move(const std::string& file_name) {
 				
 			}
 					
-			engine[SHARED]->writeLog("-----------------------------------------------------------------------------------");
-			engine[SHARED]->writeLog("Total time  : " + toHMS(T));
+			engine[SHARED]->writeLog("---------------------------------------------------------------------------------------------");
+			engine[SHARED]->writeLog("Total time  :     " + toHMS(T));
 			
 			
 			std::ostringstream buffer;
-			buffer << "Total nodes : " << nodes << "\n";
-			if (T>0) {
-				buffer << "N/s : " << static_cast<int>(nodes/T);
+            
+            std::locale loc(std::locale(),new My_punct);
+            buffer.imbue(loc);
+
+            
+			buffer << "Total nodes : " << std::setw(15) <<  nodes << "\n";
+			if (T>0.2) {
+				buffer << "Speed       : " << std::setw(15) << static_cast<int>((nodes/1000)/T) << " kN/s";
 			}
 			engine[SHARED]->writeLog(buffer.str());
 			

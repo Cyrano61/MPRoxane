@@ -82,7 +82,8 @@ public:
 	virtual void HandleOsErr			(const CMsgOsErr* pmsg);
 	virtual void HandleOsFatalTimeout	(const CMsgOsFatalTimeout* pmsg);
 	virtual void HandleOsFinger			(const CMsgOsFinger* pmsg);
-	virtual void HandleOsGameOver		(const CMsgOsMatchDelta* pmsg, const string& idg);
+//    virtual void HandleOsGameOver        (const CMsgOsMatchDelta* pmsg, const string& idg);
+	virtual void HandleOsGameOver		(const string& idg);
 	virtual void HandleOsHistory		(const CMsgOsHistory* pmsg);
 	virtual void HandleOsJoin			(const CMsgOsJoin* pmsg);
 	virtual void HandleOsLogin			();

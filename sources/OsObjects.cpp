@@ -63,6 +63,8 @@ void IgnoreAlnum(istream& is) {
 		is.ignore(1);
 }
 
+//Debug 1
+//parse string GGS move E2/16.00/109.00 to COsMovelistItem
 void COsMoveListItem::In(istream& is) {
 
 	// move
@@ -177,6 +179,7 @@ void COsClock::Clear() {
 }
 
 void COsClock::Update(double tElapsed, bool fIncludeIncrement) {
+    
 	tCurrent-=tElapsed;
 
 	// adjust for timeouts and grace periods
@@ -882,8 +885,9 @@ string COsDateTime::Text() const {
 // COsPosition
 /////////////////////////////////////
 
+//debug
 void COsPosition::Update(const COsMoveListItem& mli) {
-	cks[board.fBlackMove].Update(mli.tElapsed);
+    cks[board.fBlackMove].Update(mli.tElapsed);
 	board.Update(mli.mv);
 }
 

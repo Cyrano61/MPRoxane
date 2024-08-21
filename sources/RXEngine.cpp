@@ -1214,7 +1214,7 @@ std::string RXEngine::showPV(RXBitBoard& board, int depthLine) const {
 			score = entry.lower;
 		}
 				
-		buffer << std::fixed << std::showpos << std::setprecision(2) << ((float)score)/VALUE_DISC;
+		buffer << std::fixed << std::showpos << std::setprecision(0) << ((float)score)/VALUE_DISC;
 
 		buffer << "  Pv : " << hTable->line2String(board, depthLine, type_hashtable);
 	}
@@ -1261,7 +1261,7 @@ std::string RXEngine::showHashmove(const RXBitBoard& board, RXHashValue& entry) 
 		score = entry.lower;
 	}
 			
-	buffer << std::fixed << std::showpos << std::setprecision(2) << ((float)score)/VALUE_DISC;
+	buffer << std::fixed << std::showpos << std::setprecision(0) << ((float)score)/VALUE_DISC;
 	
 
 	return buffer.str();
@@ -1287,7 +1287,7 @@ std::string RXEngine::showBestmove(const int depth, const bool pv_ext, const int
 	else
 		buffer << " == ";
 		
-	buffer << std::fixed << std::showpos << std::setprecision(2) << ((float)score)/VALUE_DISC;
+	buffer << std::fixed << std::showpos << std::setprecision(0) << ((float)score)/VALUE_DISC;
 	
 
 	return buffer.str();
@@ -1297,6 +1297,9 @@ std::string RXEngine::showBestmove(const int depth, const bool pv_ext, const int
 std::string RXEngine::display(RXBitBoard& board, const int type, const int allowed_display, int score, const int time, const int time_level) {
 
 	std::ostringstream buffer;
+    std::locale loc(std::locale(),new My_punct);
+    buffer.imbue(loc);
+
 	
 	//unsynchronized acces
 	RXHashValue entry;
@@ -1350,19 +1353,19 @@ std::string RXEngine::display(RXBitBoard& board, const int type, const int allow
 				break;
 		}
 		
-		buffer << std::showpos << std::setprecision(2) << std::setw(6) << (float)score/VALUE_DISC << " | ";
+		buffer << std::showpos << std::setprecision(0) << std::setw(3) << (float)score/VALUE_DISC << "  | ";
 		
 		buffer << std::noshowpos << variationPrincipal(board, 12) << "| ";
 		
 		if(type != GGS_MSG) {
 			if(type == HASHTABLE) {
-				buffer << "00:00:00.00 |              |             |";
+				buffer << "00:00:00.00 |                |          |";
 			} else {
 				buffer << toHMS(time/1000.0) << " | ";
 				
-				buffer << std::noshowpos << std::setprecision(0) << std::setw(12) << board.n_nodes << " | ";
+				buffer << std::noshowpos << std::setprecision(0) << std::setw(14) << board.n_nodes << " | ";
 				
-				buffer << std::setw(11) << (board.n_nodes/max(1, time_level)) * 1000 << " |";
+				buffer << std::setw(8) << (time_level == 0 ? ' ':(board.n_nodes/max(1, time_level))) << " |";
 			}
 		}
 				
@@ -1519,7 +1522,7 @@ void RXEngine::get_move(RXSearch& s) {
 
 		if(speed > 1000) {
 			buffer.str("");
-			buffer << "speed : " << std::setw(14) << speed << " n/s";
+			buffer << "speed : " << std::setw(15) << static_cast<int>(speed/1000) << " kN/s";
 			manager->sendMsg(buffer.str());
 		}
 	}
@@ -1626,7 +1629,7 @@ void RXEngine::run() {
 	
 
 
-	*log	<< "-------------------------------------------------------------------------------------------------\n"
+	*log	<< "---------------------------------------------------------------------------------------------------\n"
 			<< search_sBoard
 			<< std::endl;
 						
@@ -1654,7 +1657,7 @@ void RXEngine::run() {
 		
 	} else {
 
-		*log << " depth |  score  | principal variation                 | time        |    nodes (N) |  speed(N/s) |" << std::endl;
+		*log << " depth | score | principal variation                 | time        |      nodes (N) |     kN/s |" << std::endl;
 
 		int depth = 2;
 		int selectivity = MG_SELECT;

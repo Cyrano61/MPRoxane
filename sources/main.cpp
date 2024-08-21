@@ -33,6 +33,7 @@
 
 
 int main (int argc, char * const argv[]) {
+    
     	
 	std::string login, password, file_name, mode, imposed_opening = "";
 	unsigned int nBitsTable = 20;
@@ -84,8 +85,6 @@ int main (int argc, char * const argv[]) {
 	
 	if(mode == "ggs" && !login.empty() && !password.empty()) {
 
-        std::cout << "tentative conection" << std::endl;
-
 		int err;
 		CODKStream gs;
 		
@@ -106,9 +105,7 @@ int main (int argc, char * const argv[]) {
 			gs.Disconnect();
 			return err;
 		}
-        
-        std::cout << "lance le process" <<std::endl;
-		
+        		
 		gs.Process();			// receive, parse, and pass on messages
 	}
 	

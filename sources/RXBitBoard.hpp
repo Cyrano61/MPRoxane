@@ -421,6 +421,8 @@ inline int RXBitBoard::get_stability(const int color, const int n_stables_cut) c
 	left_right &= left_right >> 1;
 	left_right &= 0x0101010101010101ULL;
 
+    //trick
+//unsigned long long left_right = filled;
 	left_right = (left_right << 8) - left_right; //*=255
 	left_right |= 0x8181818181818181ULL;
 	
