@@ -14,12 +14,31 @@ ftp.nj.nec.com      (138.15.10.2)  @ 4000/1/2, 5000/1/2, SSL: 5006
                     http://www.cs.ualberta.ca/~mburo/
 
 : Enter login (yours, or one you'd like to use).
-[send]Edmond
+[send]Roxane
 [recv]: Enter your password.
-[send]MDP
+[send]Rostand
 [recv]READY
 
+: + /ams 1
+: + /ax 1
 : + /os 1
+: + HCyrano 1
+: + OO7 1
+: + Roxane 1
+: + Saio2000 1
+: + Saio2002 1
+: + Saio2003 1
+: + Saio3000 1
+: + Saio3001 1
+: + ant 1
+: + ant+ 1
+: + fly 1
+: + patzer 1
+: + piglet 1
+: + scorp+ 1
+: + scorpion 1
+: + viper 1
+READY
 : help faq
 Frequently Asked Questions
 --------------------------
@@ -38,19 +57,19 @@ Frequently Asked Questions
 
 4) I just want to play Othello, how do I do it? 
  = You have to talk to Othello Service Server .. (type: tell /os help)
-   If you haven't mastered (system) aliases yet go back to (3).
-
-5) I want to se Othello top list, I type tell /os top and get error?
- = /os implements all kinds of variants of Othello, you have to tell it
-   what variant you are interested in (type: tell /os top 8)
-
-6) What other games are avai[send]ve -ack
+   If you haven't mastered (system) aliases yet[send]ve -ack
 notify + /os
 mso
 tell /os client +
 ts trust +
 tell /os open 0
-[recv]lable?
+[recv] go back to (3).
+
+5) I want to se Othello top list, I type tell /os top and get error?
+ = /os implements all kinds of variants of Othello, you have to tell it
+   what variant you are interested in (type: tell /os top 8)
+
+6) What other games are available?
  = /os = Othello, /ams = Amazons, /cks = Checkers.
 
 7) What other documentation is available?
@@ -97,55 +116,68 @@ READY
 READY
 READY
 
+HCyrano: t /os open1
+READY
+[send]t /os open1
+[recv]READY
+
+/os: ERR command 'open1' not recognized.
+READY
+
+HCyrano: ta s8r18 5:00 Saio3001
+READY
+[send]ta s8r18 5:00 Saio3001
+[recv]READY
+
+/os: ERR Your open value is too low for new matches.
+READY
+
 HCyrano: t /os open 1
 READY
 [send]t /os open 1
 [recv]READY
 
-HCyrano: t /os continue
+HCyrano: ta s8r18 5:00 Saio3001
 READY
-[send]t /os continue
+[send]ta s8r18 5:00 Saio3001
 [recv]READY
 
-/os: +  .44 2743.8 Edmond   05:00//02:00    s8r18 S 2663.6 Saio3001 .32241
+/os: +  .59 2719.6 Roxane   05:00//02:00    s8r18 R 2710.6 Saio3001
 READY
 
-/os: + match .50 2744 Edmond 2664 Saio3001 s8r18 R
+/os: + match .63 2720 Roxane 2711 Saio3001 s8r18 R
 READY
 
-/os: join .50.0 (;GM[Othello]PC[GGS/os]DT[2024.08.21_08:29:06.MDT]
-|PB[Edmond]PW[Saio3001]
-|RB[2743.85]RW[2663.6]
+/os: join .63.0 (;GM[Othello]PC[GGS/os]DT[2024.08.21_13:17:35.MDT]
+|PB[Roxane]PW[Saio3001]
+|RB[2719.56]RW[2710.62]
 |TI[05:00//02:00]
 |TY[s8r18]RE[?]
-|BO[8 -------- -------- --O---*- --*OOOO- --**O--- ***OOO-- ---O---- ---O---- *]
+|BO[8 -------- ---*---- --O**O-- --O*O*-- --O**O-- --*OO*-- ---O---- -------- *]
 |;)
 READY
 
-/os: join .50.1 (;GM[Othello]PC[GGS/os]DT[2024.08.21_08:29:06.MDT]
-|PB[Saio3001]PW[Edmond]
-|RB[2663.6]RW[2743.85]
+/os: join .63.1 (;GM[Othello]PC[GGS/os]DT[2024.08.21_13:17:35.MDT]
+|PB[Saio3001]PW[Roxane]
+|RB[2710.62]RW[2719.56]
 |TI[05:00//02:00]
 |TY[s8r18]RE[?]
-|BO[8 -------- -------- --O---*- --*OOOO- --**O--- ***OOO-- ---O---- ---O---- *]
+|BO[8 -------- ---*---- --O**O-- --O*O*-- --O**O-- --*OO*-- ---O---- -------- *]
 |;)
 READY
 
-/os: -  .44 2743.8 Edmond   05:00//02:00    s8r18 S 2663.6 Saio3001 .32241
+/os: -  .59 2719.6 Roxane   05:00//02:00    s8r18 R 2710.6 Saio3001
 READY
-[send]tell .Edmond --
-tell .Edmond game .50.0
-tell .Edmond HashTable SHARED
+[send]tell .Roxane --
+tell .Roxane game .63.0
+tell .Roxane HashTable SHARED
 
-tell .Edmond Active threads : 2
+tell .Roxane Active threads : 8
 
-tell .Edmond  14@72   D3 == +11
-tell .Edmond  16@72   D3 == +10
-tell .Edmond  18@72   D3 == +9
-[recv]
-Saio3001: Nice to continue the stored game with u
-READY
-[send]tell .Edmond  20@72   D3 == +8
+tell .Roxane  14@72   B6 == -4
+tell .Roxane  16@72   B6 == -4
+[recv]READY
+[send]tell .Roxane  18@72   B6 == -4
 [recv]READY
 READY
 READY
@@ -153,50 +185,50 @@ READY
 READY
 READY
 READY
-READY
-READY
-READY
-[send]tell .Edmond  22@72   D3 == +7
-tell .Edmond          F5 is better? 
-tell .Edmond  22@72   F5 == +8
+[send]tell .Roxane  20@72   B6 == -4
+[recv]READY
+[send]tell .Roxane          E7 maybe better? 
+[recv]READY
+[send]tell .Roxane  20@72   E7 == -3
 [recv]READY
 READY
-READY
-[send]tell .Edmond  24@72   F5 == +7
-tell .Edmond          D3 is better? 
+[send]tell .Roxane  22@72   E7 == -3
 [recv]READY
-[send]tell .Edmond  24@72   D3 == +8
+[send]tell .Roxane  24@72   E7 == -3
 [recv]READY
-READY
-[send]tell .Edmond  26@72   D3 == +8
+[send]tell .Roxane  26@72   E7 == -4
 [recv]READY
-[send]tell .Edmond  28@72   D3 == +8
+[send]tell .Roxane  28@72   E7 == -4
 [recv]READY
-[send]tell .Edmond  30@72   D3 == +8
+[send]tell .Roxane  30@72   E7 == -4
 [recv]READY
-[send]tell .Edmond  32@72+  D3 == +8
+[send]tell .Roxane          B6 maybe better? 
 [recv]READY
-[send]tell .Edmond  32@72+  D3 == +8  Pv : D3 b5 B4 b3 D2 a3 
-tell .Edmond Ts : 00:00:53.03   Tm : 00:00:53.03
-tell .Edmond nodes :  2 805 724 148
-tell .Edmond speed :          52 902 kN/s
-tell /os play .50.0 D3/8.00/53.04
+[send]tell .Roxane  32@72+  E7 == -4
+[recv]READY
+[send]tell .Roxane  34@72+  E7 == -4
+[recv]READY
+[send]tell .Roxane  34@72+  E7 == -4  Pv : E7 c7 G5 f8 B5 e2 
+tell .Roxane Ts : 00:01:00.19   Tm : 00:01:00.19
+tell .Roxane nodes : 10 340 689 855
+tell .Roxane speed :         171 797 kN/s
+tell /os play .63.0 E7/-4.00/60.19
 [recv]READY
 READY
 READY
 READY
 READY
 
-/os: update .50.0 D3/8.00/53.04
+/os: update .63.0 E7/-4.00/60.19
 READY
 
-/os: update .50.1 d3/8.50/41.92
+/os: update .63.1 e7/-3.50/47.06
 READY
-[send]tell .Edmond --
-tell .Edmond game .50.1
-tell .Edmond HashTable SHARED
+[send]tell .Roxane --
+tell .Roxane game .63.1
+tell .Roxane HashTable SHARED
 
-tell .Edmond Active threads : 2
+tell .Roxane Active threads : 8
 
 [recv]READY
 READY
@@ -204,16 +236,3348 @@ READY
 READY
 READY
 READY
-[send]tell .Edmond  31@72+  B5 == -8  Pv : B5 b4 B3 d2 A3 a5 
-tell .Edmond Ts : 00:00:18.98   Tm : 00:00:18.51
-tell .Edmond nodes :  1 008 938 052
-tell .Edmond speed :          53 149 kN/s
-tell /os play .50.1 B5/-8.00/18.51
+[send]tell .Roxane  35@72+  C7 == +4
+[recv]READY
+[send]tell .Roxane  35@72+  C7 == +4  Pv : C7 g5 F8 b5 E2 b6 
+tell .Roxane Ts : 00:00:28.52   Tm : 00:00:28.05
+tell .Roxane nodes :  4 911 869 998
+tell .Roxane speed :         172 177 kN/s
+tell /os play .63.1 C7/4.00/28.05
 [recv]READY
 READY
 READY
 READY
 READY
 
-/os: update .50.1 B5/-8.00/18.51
+/os: update .63.1 C7/4.00/28.05
+READY
+
+/os: update .63.0 c7/3.50/75.48
+READY
+[send]tell .Roxane --
+tell .Roxane game .63.0
+tell .Roxane HashTable SHARED
+
+tell .Roxane Active threads : 8
+
+[recv]READY
+READY
+READY
+READY
+READY
+READY
+[send]tell .Roxane  44@72   G5 == -4  Pv : G5 f8 B5 e2 B6 b4 
+tell .Roxane Ts : 00:01:34.69   Tm : 00:00:47.09
+tell .Roxane nodes : 25 004 105 471
+tell .Roxane speed :         264 057 kN/s
+tell /os play .63.0 G5/-4.00/47.09
+[recv]READY
+READY
+READY
+READY
+READY
+
+/os: update .63.0 G5/-4.00/47.09
+READY
+
+/os: update .63.1 g5/-4.00/18.47
+READY
+[send]tell .Roxane --
+tell .Roxane game .63.1
+tell .Roxane HashTable SHARED
+
+tell .Roxane Active threads : 8
+
+[recv]READY
+READY
+READY
+READY
+READY
+READY
+[send]tell .Roxane  43@84   F8 == +4
+[recv]READY
+[send]tell .Roxane  43@84   F8 == +4  Pv : F8 b5 E2 b6 B4 a4 
+tell .Roxane Ts : 00:01:15.20   Tm : 00:01:14.73
+tell .Roxane nodes : 20 074 212 163
+tell .Roxane speed :         266 915 kN/s
+tell /os play .63.1 F8/4.00/74.74
+[recv]READY
+READY
+READY
+READY
+READY
+
+/os: update .63.1 F8/4.00/74.74
+READY
+
+/os: update .63.0 f8/4.00/11.84
+READY
+[send]tell .Roxane --
+tell .Roxane game .63.0
+tell .Roxane HashTable SHARED
+
+tell .Roxane Active threads : 8
+
+[recv]READY
+READY
+READY
+READY
+READY
+READY
+[send]tell .Roxane  42@84   B5 == -4  Pv : B5 e2 B6 b4 A4 c1 
+tell .Roxane Ts : 00:00:41.98   Tm : 00:00:41.50
+tell .Roxane nodes : 11 668 852 414
+tell .Roxane speed :         277 929 kN/s
+tell /os play .63.0 B5/-4.00/41.50
+[recv]READY
+READY
+READY
+READY
+READY
+
+/os: update .63.0 B5/-4.00/41.50
+READY
+
+/os: update .63.1 b5/-4.00/27.92
+READY
+[send]tell .Roxane --
+tell .Roxane game .63.1
+tell .Roxane HashTable SHARED
+
+tell .Roxane Active threads : 8
+
+[recv]READY
+READY
+READY
+READY
+READY
+READY
+[send]tell .Roxane  41@91   E2 == +4
+[recv]READY
+[send]tell .Roxane  41@91   E2 == +4  Pv : E2 b6 B4 a4 C1 f2 
+tell .Roxane Ts : 00:00:50.51   Tm : 00:00:50.03
+tell .Roxane nodes : 13 659 545 000
+tell .Roxane speed :         270 389 kN/s
+tell /os play .63.1 E2/4.00/50.04
+[recv]READY
+READY
+READY
+READY
+READY
+
+/os: update .63.1 E2/4.00/50.04
+READY
+
+/os: update .63.0 e2/4.00/24.30
+READY
+[send]tell .Roxane --
+tell .Roxane game .63.0
+tell .Roxane HashTable SHARED
+
+tell .Roxane Active threads : 8
+
+[recv]READY
+READY
+READY
+READY
+READY
+READY
+[send]tell .Roxane  40@91   B6 == -4  Pv : B6 b4 A4 c1 F2 a3 
+tell .Roxane Ts : 00:00:34.16   Tm : 00:00:33.69
+tell .Roxane nodes :  9 741 455 014
+tell .Roxane speed :         285 146 kN/s
+tell /os play .63.0 B6/-4.00/33.70
+[recv]READY
+READY
+READY
+READY
+READY
+
+/os: update .63.0 B6/-4.00/33.70
+READY
+
+/os: update .63.1 b6/-4.00/23.16
+READY
+[send]tell .Roxane --
+tell .Roxane game .63.1
+tell .Roxane HashTable SHARED
+
+tell .Roxane Active threads : 8
+
+[recv]READY
+READY
+READY
+READY
+READY
+READY
+[send]tell .Roxane  39@91   B4 == +4  Pv : B4 a4 C1 f2 A3 e1 
+tell .Roxane Ts : 00:00:33.10   Tm : 00:00:32.57
+tell .Roxane nodes :  9 264 772 687
+tell .Roxane speed :         279 843 kN/s
+tell /os play .63.1 B4/4.00/32.57
+[recv]READY
+READY
+READY
+READY
+READY
+
+/os: update .63.1 B4/4.00/32.57
+READY
+
+/os: update .63.0 b4/4.00/21.20
+READY
+[send]tell .Roxane --
+tell .Roxane game .63.0
+tell .Roxane HashTable SHARED
+
+tell .Roxane Active threads : 8
+
+[recv]READY
+READY
+READY
+READY
+READY
+READY
+[send]tell .Roxane  38@91   A4 == -4  Pv : A4 c1 F2 a3 E1 a6 
+tell .Roxane Ts : 00:00:24.78   Tm : 00:00:24.32
+tell .Roxane nodes :  7 110 382 080
+tell .Roxane speed :         286 894 kN/s
+tell /os play .63.0 A4/-4.00/24.33
+[recv]READY
+READY
+READY
+READY
+READY
+
+/os: update .63.0 A4/-4.00/24.33
+READY
+
+/os: update .63.1 a4/-4.00/41.47
+READY
+[send]tell .Roxane --
+tell .Roxane game .63.1
+tell .Roxane HashTable SHARED
+
+tell .Roxane Active threads : 8
+
+[recv]READY
+READY
+READY
+READY
+READY
+READY
+[send]tell .Roxane  37@95   C1 == +4  Pv : C1 f2 A3 e1 A6 a2 
+tell .Roxane Ts : 00:00:52.95   Tm : 00:00:35.63
+tell .Roxane nodes : 14 984 978 665
+tell .Roxane speed :         282 991 kN/s
+tell /os play .63.1 C1/4.00/35.63
+[recv]READY
+READY
+READY
+READY
+READY
+
+/os: update .63.1 C1/4.00/35.63
+READY
+
+/os: update .63.0 g6/2.00/43.17
+READY
+[send]tell .Roxane --
+tell .Roxane game .63.0
+tell .Roxane HashTable BLACK
+
+tell .Roxane Active threads : 4
+
+tell .Roxane [24@72+] B3 >= -4
+[recv]READY
+[send]tell .Roxane  24@72+  B3 == -4
+[recv]READY
+READY
+READY
+READY
+READY
+READY
+READY
+[send]tell .Roxane  26@72+  B3 == -4
+[recv]READY
+[send]tell .Roxane  36@72   B3 >= -2
+tell .Roxane  36@72   B3 == -2
+[recv]READY
+READY
+[send]tell .Roxane  36@84   B3 == -2
+[recv]READY
+[send]tell .Roxane  36@91   B3 == -2
+[recv]READY
+[send]tell .Roxane  36@91   B3 == -2  Pv : B3 g3 G4 h4 F1 a6 
+tell .Roxane Ts : 00:00:22.62   Tm : 00:00:22.62
+tell .Roxane nodes :  3 332 259 109
+tell .Roxane speed :         147 308 kN/s
+tell /os play .63.0 B3/-2.00/22.62
+[recv]READY
+READY
+READY
+READY
+READY
+
+/os: update .63.0 B3/-2.00/22.62
+READY
+
+/os: update .63.1 f2/-2.00/30.41
+READY
+[send]tell .Roxane --
+tell .Roxane game .63.1
+tell .Roxane HashTable WHITE
+
+tell .Roxane Active threads : 4
+
+tell .Roxane [35@95 ] A3 == +4
+[recv]READY
+READY
+READY
+READY
+READY
+READY
+READY
+[send]tell .Roxane  35@95   A3 == +4  Pv : A3 e1 A6 a2 G6 b3 
+tell .Roxane Ts : 00:00:25.85   Tm : 00:00:25.85
+tell .Roxane nodes :  3 413 849 901
+tell .Roxane speed :         132 028 kN/s
+tell /os play .63.1 A3/4.00/25.86
+[recv]READY
+READY
+READY
+READY
+READY
+
+/os: update .63.1 A3/4.00/25.86
+READY
+
+/os: update .63.0 g3/2.00/17.47
+READY
+[send]tell .Roxane --
+tell .Roxane game .63.0
+tell .Roxane HashTable BLACK
+
+tell .Roxane Active threads : 4
+
+[recv]READY
+READY
+READY
+READY
+READY
+READY
+[send]tell .Roxane  34@98   G4 == -2  Pv : G4 h4 F1 a6 F2 h3 
+tell .Roxane Ts : 00:00:53.92   Tm : 00:00:19.48
+tell .Roxane nodes :  7 459 589 837
+tell .Roxane speed :         138 327 kN/s
+tell /os play .63.0 G4/-2.00/19.49
+[recv]READY
+READY
+READY
+READY
+READY
+
+/os: update .63.0 G4/-2.00/19.49
+READY
+
+/os: update .63.1 e1/-2.00/34.19
+READY
+[send]tell .Roxane --
+tell .Roxane game .63.1
+tell .Roxane HashTable WHITE
+
+tell .Roxane Active threads : 4
+
+[recv]READY
+READY
+READY
+READY
+READY
+READY
+[send]tell .Roxane  33@98   A6 == +4  Pv : A6 a2 G6 b3 H5 d1 
+tell .Roxane Ts : 00:00:45.51   Tm : 00:00:10.67
+tell .Roxane nodes :  6 682 795 519
+tell .Roxane speed :         146 819 kN/s
+tell /os play .63.1 A6/4.00/10.68
+[recv]READY
+READY
+READY
+READY
+READY
+
+/os: update .63.1 A6/4.00/10.68
+READY
+
+/os: update .63.0 h4/2.00/20.47
+READY
+[send]tell .Roxane --
+tell .Roxane game .63.0
+tell .Roxane HashTable BLACK
+
+tell .Roxane Active threads : 4
+
+[recv]READY
+READY
+READY
+READY
+READY
+READY
+[send]tell .Roxane  32@100  F1 == -2  Pv : F1 a6 F2 h3 D8 c8 
+tell .Roxane Ts : 00:00:50.41   Tm : 00:00:14.75
+tell .Roxane nodes :  7 652 812 965
+tell .Roxane speed :         151 808 kN/s
+tell /os play .63.0 F1/-2.00/14.76
+[recv]READY
+READY
+READY
+READY
+READY
+
+/os: update .63.0 F1/-2.00/14.76
+READY
+
+/os: update .63.1 d1/-4.00/39.89
+READY
+[send]tell .Roxane --
+tell .Roxane game .63.1
+tell .Roxane HashTable WHITE
+
+tell .Roxane Active threads : 4
+
+tell .Roxane [31@98 ] A5 >= +4
+[recv]READY
+READY
+READY
+READY
+READY
+READY
+READY
+[send]tell .Roxane  31@98   A5 == +4
+[recv]READY
+[send]tell .Roxane  31@98   A5 == +4  Pv : A5 b1 F1 g1 C2 b3 
+tell .Roxane Ts : 00:00:09.96   Tm : 00:00:09.96
+tell .Roxane nodes :  1 631 855 249
+tell .Roxane speed :         163 775 kN/s
+tell /os play .63.1 A5/4.00/9.96
+[recv]READY
+READY
+READY
+READY
+READY
+
+/os: update .63.1 A5/4.00/9.96
+READY
+
+/os: update .63.0 h5/2.00/17.45
+READY
+[send]tell .Roxane --
+tell .Roxane game .63.0
+tell .Roxane HashTable BLACK
+
+tell .Roxane Active threads : 4
+
+tell .Roxane [30@100] D8 >= -2
+[recv]READY
+READY
+READY
+READY
+READY
+READY
+READY
+[send]tell .Roxane  30@100  D8 >= -2  Pv : D8 d1 E8 c8 F7 c1 
+tell .Roxane Ts : 00:00:07.29   Tm : 00:00:07.29
+tell .Roxane nodes :  1 346 626 207
+tell .Roxane speed :         184 545 kN/s
+tell /os play .63.0 D8/-2.00/7.30
+[recv]READY
+READY
+READY
+READY
+READY
+
+/os: update .63.0 D8/-2.00/7.30
+READY
+
+/os: update .63.1 b1/-4.00/10.39
+READY
+[send]tell .Roxane --
+tell .Roxane game .63.1
+tell .Roxane HashTable WHITE
+
+tell .Roxane Active threads : 4
+
+tell .Roxane  29@100  F1 == +4  Pv : F1 g1 C2 b3 G6 f7 
+tell .Roxane Ts : 00:00:00.35   Tm : 00:00:00.00
+tell .Roxane nodes :     60 361 029
+tell .Roxane speed :         170 031 kN/s
+tell /os play .63.1 F1/4.00
+[recv]READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+
+/os: update .63.1 F1/4.00
+READY
+
+/os: update .63.0 b8/2.00/13.41
+READY
+[send]tell .Roxane --
+tell .Roxane game .63.0
+tell .Roxane HashTable BLACK
+
+tell .Roxane Active threads : 4
+
+tell .Roxane [28@100] F2 >= -2
+tell .Roxane  28@100  F2 == -2
+[recv]READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+[send]tell .Roxane  28@100  F2 == -2  Pv : F2 a6 C8 e8 A5 a3 
+tell .Roxane Ts : 00:00:03.57   Tm : 00:00:03.57
+tell .Roxane nodes :    644 797 446
+tell .Roxane speed :         180 262 kN/s
+tell /os play .63.0 F2/-2.00/3.58
+[recv]READY
+READY
+READY
+READY
+READY
+
+/os: update .63.0 F2/-2.00/3.58
+READY
+
+/os: update .63.1 g1/-4.00/0.01
+READY
+[send]tell .Roxane --
+tell .Roxane game .63.1
+tell .Roxane HashTable WHITE
+
+tell .Roxane Active threads : 4
+
+tell .Roxane  27@100  C2 == +4  Pv : C2 b3 G6 f7 E8 h6 
+tell .Roxane Ts : 00:00:00.00   Tm : 00:00:00.00
+tell .Roxane nodes :          1 412
+tell /os play .63.1 C2/4.00
+[recv]READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+
+/os: update .63.1 C2/4.00
+READY
+
+/os: update .63.0 a6/2.00/3.19
+READY
+[send]tell .Roxane --
+tell .Roxane game .63.0
+tell .Roxane HashTable BLACK
+
+tell .Roxane Active threads : 4
+
+tell .Roxane  26@100  C8 == -2  Pv : C8 e8 A5 c2 A7 c1 
+tell .Roxane Ts : 00:00:00.12   Tm : 00:00:00.00
+tell .Roxane nodes :     20 042 621
+tell .Roxane speed :         161 634 kN/s
+tell /os play .63.0 C8/-2.00
+[recv]READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+
+/os: update .63.0 C8/-2.00
+READY
+
+/os: update .63.1 b3/-4.00/0.01
+READY
+[send]tell .Roxane --
+tell .Roxane game .63.1
+tell .Roxane HashTable WHITE
+
+tell .Roxane Active threads : 4
+
+tell .Roxane  25@100  G6 == +4  Pv : G6 f7 E8 h6 G4 g3 
+tell .Roxane Ts : 00:00:00.00   Tm : 00:00:00.00
+tell .Roxane nodes :            958
+tell .Roxane speed :             958 kN/s
+tell /os play .63.1 G6/4.00/0.00
+[recv]READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+
+/os: update .63.1 G6/4.00
+READY
+
+/os: update .63.0 e8/2.00/0.01
+READY
+[send]tell .Roxane --
+tell .Roxane game .63.0
+tell .Roxane HashTable BLACK
+
+tell .Roxane Active threads : 4
+
+tell .Roxane  24@100  A5 == -2  Pv : A5 c2 A7 c1 D1 a3 
+tell .Roxane Ts : 00:00:00.00   Tm : 00:00:00.00
+tell .Roxane nodes :          1 265
+tell .Roxane speed :             421 kN/s
+tell /os play .63.0 A5/-2.00
+[recv]READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+
+/os: update .63.0 A5/-2.00
+READY
+
+/os: update .63.1 f7/-4.00/0.01
+READY
+[send]tell .Roxane --
+tell .Roxane game .63.1
+tell .Roxane HashTable WHITE
+
+tell .Roxane Active threads : 4
+
+tell .Roxane  23@100  E8 == +4  Pv : E8 h6 G4 g3 H4 c8 
+tell .Roxane Ts : 00:00:00.00   Tm : 00:00:00.00
+tell .Roxane nodes :            903
+tell .Roxane speed :             451 kN/s
+tell /os play .63.1 E8/4.00
+[recv]READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+
+/os: update .63.1 E8/4.00
+READY
+
+/os: update .63.0 c2/2.00/0.01
+READY
+[send]tell .Roxane --
+tell .Roxane game .63.0
+tell .Roxane HashTable BLACK
+
+tell .Roxane Active threads : 4
+
+tell .Roxane  22@100  A7 == -2  Pv : A7 c1 D1 a3 A2 b2 
+tell .Roxane Ts : 00:00:00.00   Tm : 00:00:00.00
+tell .Roxane nodes :            737
+tell .Roxane speed :             368 kN/s
+tell /os play .63.0 A7/-2.00
+[recv]READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+
+/os: update .63.0 A7/-2.00
+READY
+
+/os: update .63.1 h6/-4.00/0.01
+READY
+[send]tell .Roxane --
+tell .Roxane game .63.1
+tell .Roxane HashTable WHITE
+
+tell .Roxane Active threads : 4
+
+tell .Roxane  21@100  G4 == +4  Pv : G4 g3 H4 c8 H5 d8 
+tell .Roxane Ts : 00:00:00.00   Tm : 00:00:00.00
+tell .Roxane nodes :            715
+tell .Roxane speed :             357 kN/s
+tell /os play .63.1 G4/4.00
+[recv]READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+
+/os: update .63.1 G4/4.00
+READY
+
+/os: update .63.0 c1/2.00/0.01
+READY
+[send]tell .Roxane --
+tell .Roxane game .63.0
+tell .Roxane HashTable BLACK
+
+tell .Roxane Active threads : 4
+
+tell .Roxane  20@100  D1 == -2  Pv : D1 a3 A2 b2 F7 e1 
+tell .Roxane Ts : 00:00:00.00   Tm : 00:00:00.00
+tell .Roxane nodes :            583
+tell .Roxane speed :             291 kN/s
+tell /os play .63.0 D1/-2.00
+[recv]READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+
+/os: update .63.0 D1/-2.00
+READY
+
+/os: update .63.1 g3/-4.00/0.01
+READY
+[send]tell /os play .63.1 H4/4.00
+[recv]READY
+
+/os: update .63.1 H4/4.00
+READY
+
+/os: update .63.0 a2/2.00/0.01
+READY
+[send]tell /os play .63.0 G7/-2.00/0.01
+[recv]READY
+
+/os: update .63.0 G7/-2.00/0.01
+READY
+
+/os: update .63.1 c8/-4.00/0.01
+READY
+[send]tell /os play .63.1 H5/4.00/0.00
+[recv]READY
+
+/os: update .63.1 H5/4.00
+READY
+
+/os: update .63.0 h8/2.00/0.01
+READY
+[send]tell /os play .63.0 H6/-2.00/0.02
+[recv]READY
+
+/os: update .63.0 H6/-2.00/0.02
+READY
+
+/os: update .63.1 d8/-4.00/0.01
+READY
+[send]tell /os play .63.1 H7/4.00/0.00
+[recv]READY
+
+/os: update .63.1 H7/4.00
+READY
+
+/os: update .63.0 h7/2.00/0.01
+READY
+[send]tell /os play .63.0 G8/-2.00/0.01
+[recv]READY
+
+/os: update .63.0 G8/-2.00/0.01
+READY
+
+/os: update .63.1 h3/-4.00/0.01
+READY
+[send]tell /os play .63.1 H2/4.00/0.00
+[recv]READY
+
+/os: update .63.1 H2/4.00
+READY
+
+/os: update .63.0 f7/2.00/0.01
+READY
+[send]tell /os play .63.0 A8/-2.00/0.00
+[recv]READY
+
+/os: update .63.0 A8/-2.00
+READY
+
+/os: update .63.1 g8/-4.00/0.01
+READY
+[send]tell /os play .63.1 B8/4.00/0.00
+[recv]READY
+
+/os: update .63.1 B8/4.00
+READY
+
+/os: update .63.0 b7/2.00/0.01
+READY
+[send]tell /os play .63.0 H2/-2.00/0.00
+[recv]READY
+
+/os: update .63.0 H2/-2.00
+READY
+
+/os: update .63.1 a8/-4.00/0.01
+READY
+[send]tell /os play .63.1 B2/4.00/0.00
+[recv]READY
+
+/os: update .63.1 B2/4.00
+READY
+
+/os: update .63.0 h3/2.00/0.01
+READY
+[send]tell /os play .63.0 A3/-2.00/0.00
+[recv]READY
+
+/os: update .63.0 A3/-2.00
+READY
+
+/os: update .63.1 a7/-4.00/0.01
+READY
+[send]tell /os play .63.1 B7/4.00/0.00
+[recv]READY
+
+/os: update .63.1 B7/4.00
+READY
+
+/os: update .63.0 h1/2.00/0.01
+READY
+[send]tell /os play .63.0 B1/-2.00/0.00
+[recv]READY
+
+/os: update .63.0 B1/-2.00
+READY
+
+/os: update .63.1 g7/-4.00/0.01
+READY
+[send]tell /os play .63.1 H8/4.00/0.00
+[recv]READY
+
+/os: update .63.1 H8/4.00
+READY
+
+/os: update .63.0 e1/2.00/0.01
+READY
+[send]tell /os play .63.0 A1/-2.00/0.00
+[recv]READY
+
+/os: update .63.0 A1/-2.00
+READY
+
+/os: update .63.1 g2/-4.00/0.01
+READY
+[send]tell /os play .63.1 H1//0.00
+[recv]READY
+
+/os: update .63.1 H1
+READY
+
+/os: update .63.0 b2/2.00/0.01
+READY
+[send]tell /os play .63.0 G2/-2.00
+[recv]READY
+
+/os: update .63.0 G2/-2.00
+READY
+
+/os: update .63.1 a2/-4.00/0.01
+READY
+[send]tell /os play .63.1 A1//0.00
+[recv]READY
+
+/os: update .63.1 A1
+READY
+
+/os: end .63.1 ( Roxane vs. Saio3001 ) +4.00
+READY
+
+/os: update .63.0 g1/2.00/0.01
+READY
+
+/os: end .63.0 ( Roxane vs. Saio3001 ) -2.00
+READY
+
+/os: rating_update .63
+|Roxane   2719.56 @  87.85   +16.56 -> 2736.12 @  85.26
+|Saio3001 2710.62 @  61.96    -8.35 -> 2702.27 @  61.06
+READY
+
+/os: - match .63 2736 Roxane 2702 Saio3001 s8r18 R +1.00  .32247
+READY
+
+HCyrano: ta s8r18 5:00 Saio3001
+READY
+[send]ta s8r18 5:00 Saio3001
+[recv]READY
+
+/os: +  .60 2736.1 Roxane   05:00//02:00    s8r18 R 2702.3 Saio3001
+READY
+
+/os: + match .6 2736 Roxane 2702 Saio3001 s8r18 R
+READY
+
+/os: join .6.0 (;GM[Othello]PC[GGS/os]DT[2024.08.21_13:30:37.MDT]
+|PB[Roxane]PW[Saio3001]
+|RB[2736.12]RW[2702.27]
+|TI[05:00//02:00]
+|TY[s8r18]RE[?]
+|BO[8 ---*-*-- --O**--- --O*O--- ---*OO-- ---OOOO- --O-O-O- -------- -------- *]
+|;)
+READY
+
+/os: join .6.1 (;GM[Othello]PC[GGS/os]DT[2024.08.21_13:30:37.MDT]
+|PB[Saio3001]PW[Roxane]
+|RB[2702.27]RW[2736.12]
+|TI[05:00//02:00]
+|TY[s8r18]RE[?]
+|BO[8 ---*-*-- --O**--- --O*O--- ---*OO-- ---OOOO- --O-O-O- -------- -------- *]
+|;)
+READY
+
+/os: -  .60 2736.1 Roxane   05:00//02:00    s8r18 R 2702.3 Saio3001
+READY
+[send]tell .Roxane --
+tell .Roxane game .6.0
+tell .Roxane HashTable SHARED
+
+tell .Roxane Active threads : 8
+
+tell .Roxane  14@72   F3 == +14
+tell .Roxane  16@72   F3 == +13
+tell .Roxane          B4 maybe better? 
+tell .Roxane  16@72   B4 == +14
+tell .Roxane  18@72   B4 == +16
+tell .Roxane  20@72   B4 == +15
+[recv]READY
+[send]tell .Roxane  22@72   B4 == +15
+tell .Roxane  24@72   B4 == +15
+[recv]READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+[send]tell .Roxane  26@72   B4 == +14
+tell .Roxane          F3 maybe better? 
+[recv]READY
+[send]tell .Roxane  26@72   F3 == +16
+[recv]READY
+[send]tell .Roxane  28@72   F3 == +16
+[recv]READY
+READY
+READY
+[send]tell .Roxane  30@72   F3 == +16
+[recv]READY
+[send]tell .Roxane  32@72+  F3 == +16
+[recv]READY
+[send]tell .Roxane  34@72+  F3 == +16
+[recv]READY
+[send]tell .Roxane  36@72+  F3 == +16
+[recv]READY
+[send]tell .Roxane  46@72   F3 == +16
+[recv]READY
+[send]tell .Roxane  46@72   F3 == +16  Pv : F3 c1 G4 e1 B1 c4 
+tell .Roxane Ts : 00:01:18.81   Tm : 00:01:18.82
+tell .Roxane nodes : 18 285 480 253
+tell .Roxane speed :         231 993 kN/s
+tell /os play .6.0 F3/16.00/78.82
+[recv]READY
+READY
+READY
+READY
+READY
+
+/os: update .6.0 F3/16.00/78.82
+READY
+
+/os: update .6.1 b4/14.00/49.83
+READY
+[send]tell .Roxane --
+tell .Roxane game .6.1
+tell .Roxane HashTable WHITE
+
+tell .Roxane Active threads : 4
+
+tell .Roxane [45@72 ] C4 >= -16
+[recv]READY
+READY
+READY
+READY
+READY
+READY
+READY
+[send]tell .Roxane  45@72   C4 >= -16  Pv : C4 f3 G3 b3 A5 c5 
+tell .Roxane Ts : 00:01:26.22   Tm : 00:01:26.22
+tell .Roxane nodes : 14 336 804 613
+tell .Roxane speed :         166 279 kN/s
+tell /os play .6.1 C4/-16.00/86.22
+[recv]READY
+READY
+READY
+READY
+READY
+
+/os: update .6.1 C4/-16.00/86.22
+READY
+
+/os: update .6.0 c1/-14.00/45.50
+READY
+[send]tell .Roxane --
+tell .Roxane game .6.0
+tell .Roxane HashTable BLACK
+
+tell .Roxane Active threads : 4
+
+tell .Roxane [44@72 ] G4 == +16
+[recv]READY
+READY
+READY
+READY
+READY
+READY
+READY
+[send]tell .Roxane  44@84   G4 == +16
+[recv]READY
+[send]tell .Roxane  44@84   G4 == +16  Pv : G4 e1 B1 c4 B3 b4 
+tell .Roxane Ts : 00:00:53.52   Tm : 00:00:53.52
+tell .Roxane nodes :  7 820 879 373
+tell .Roxane speed :         146 127 kN/s
+tell /os play .6.0 G4/16.00/53.52
+[recv]READY
+READY
+READY
+READY
+READY
+
+/os: update .6.0 G4/16.00/53.52
+READY
+
+/os: update .6.1 f3/14.00/10.38
+READY
+[send]tell .Roxane --
+tell .Roxane game .6.1
+tell .Roxane HashTable WHITE
+
+tell .Roxane Active threads : 4
+
+tell .Roxane [33@72+] E1 == -14
+[recv]READY
+READY
+READY
+READY
+READY
+READY
+READY
+[send]tell .Roxane  33@72+  E1 == -14  Pv : E1 b3 C1 b1 A4 f2 
+tell .Roxane Ts : 00:00:58.68   Tm : 00:00:58.68
+tell .Roxane nodes :  9 268 759 515
+tell .Roxane speed :         157 938 kN/s
+tell /os play .6.1 E1/-14.00/58.69
+[recv]READY
+READY
+READY
+READY
+READY
+
+/os: update .6.1 E1/-14.00/58.69
+READY
+
+/os: update .6.0 e1/-16.00/58.50
+READY
+[send]tell .Roxane --
+tell .Roxane game .6.0
+tell .Roxane HashTable BLACK
+
+tell .Roxane Active threads : 4
+
+[recv]READY
+READY
+READY
+READY
+READY
+READY
+[send]tell .Roxane  42@91   B1 == +16
+[recv]READY
+[send]tell .Roxane  42@91   B1 == +16  Pv : B1 c4 B3 b4 A5 g2 
+tell .Roxane Ts : 00:01:52.86   Tm : 00:00:53.19
+tell .Roxane nodes : 16 008 404 830
+tell .Roxane speed :         141 839 kN/s
+tell /os play .6.0 B1/16.00/53.20
+[recv]READY
+READY
+READY
+READY
+READY
+
+/os: update .6.0 B1/16.00/53.20
+READY
+
+/os: update .6.1 b3/14.00/20.39
+READY
+[send]tell .Roxane --
+tell .Roxane game .6.1
+tell .Roxane HashTable WHITE
+
+tell .Roxane Active threads : 4
+
+[recv]READY
+READY
+READY
+READY
+READY
+READY
+[send]tell .Roxane  41@72   C1 <= -16  Pv : C1 b1 A4 f2 A3 c5 
+tell .Roxane Ts : 00:01:24.44   Tm : 00:00:30.26
+tell .Roxane nodes : 12 392 099 410
+tell .Roxane speed :         146 740 kN/s
+tell /os play .6.1 C1/-16.00/30.26
+[recv]READY
+READY
+READY
+READY
+READY
+
+/os: update .6.1 C1/-16.00/30.26
+READY
+
+/os: update .6.0 g2/-16.00/22.44
+READY
+[send]tell .Roxane --
+tell .Roxane game .6.0
+tell .Roxane HashTable BLACK
+
+tell .Roxane Active threads : 4
+
+tell .Roxane [20@72 ] F2 >= +21
+tell .Roxane  20@72   F2 == +27
+tell .Roxane  22@72   F2 == +27
+tell .Roxane  24@72   F2 == +26
+[recv]READY
+[send]tell .Roxane  26@72   F2 == +27
+[recv]READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+[send]tell .Roxane  28@72+  F2 == +26
+[recv]READY
+READY
+[send]tell .Roxane  30@72+  F2 == +24
+[recv]READY
+[send]tell .Roxane  40@72   F2 == +24
+[recv]READY
+[send]tell .Roxane  40@72   F2 == +24  Pv : F2 c4 B3 g3 B5 b4 
+tell .Roxane Ts : 00:00:14.44   Tm : 00:00:14.44
+tell .Roxane nodes :  2 183 637 867
+tell .Roxane speed :         151 137 kN/s
+tell /os play .6.0 F2/24.00/14.45
+[recv]READY
+READY
+READY
+READY
+READY
+
+/os: update .6.0 F2/24.00/14.45
+READY
+
+/os: update .6.1 b1/18.00/39.50
+READY
+[send]tell .Roxane --
+tell .Roxane game .6.1
+tell .Roxane HashTable WHITE
+
+tell .Roxane Active threads : 4
+
+tell .Roxane [39@84 ] A4 == -20
+[recv]READY
+READY
+READY
+READY
+READY
+READY
+READY
+[send]tell .Roxane  39@91   A4 == -20
+[recv]READY
+[send]tell .Roxane  39@91   A4 == -20  Pv : A4 f2 A3 c5 G3 d6 
+tell .Roxane Ts : 00:00:32.07   Tm : 00:00:32.07
+tell .Roxane nodes :  4 036 333 026
+tell .Roxane speed :         125 840 kN/s
+tell /os play .6.1 A4/-20.00/32.08
+[recv]READY
+READY
+READY
+READY
+READY
+
+/os: update .6.1 A4/-20.00/32.08
+READY
+
+/os: update .6.0 h3/-18.00/50.16
+READY
+[send]tell .Roxane --
+tell .Roxane game .6.0
+tell .Roxane HashTable BLACK
+
+tell .Roxane Active threads : 4
+
+tell .Roxane [38@72 ] H5 >= +24
+[recv]READY
+READY
+READY
+READY
+READY
+READY
+READY
+[send]tell .Roxane  38@72   H5 >= +26
+[recv]READY
+[send]tell .Roxane  38@72   H5 == +28
+[recv]READY
+[send]tell .Roxane  38@84   H5 == +28
+[recv]READY
+[send]tell .Roxane  38@84   H5 == +28  Pv : H5 c4 B3 g3 H6 a3 
+tell .Roxane Ts : 00:00:26.49   Tm : 00:00:26.49
+tell .Roxane nodes :  3 661 345 288
+tell .Roxane speed :         138 174 kN/s
+tell /os play .6.0 H5/28.00/26.50
+[recv]READY
+READY
+READY
+READY
+READY
+
+/os: update .6.0 H5/28.00/26.50
+READY
+
+/os: update .6.1 a5/18.00/58.53
+READY
+[send]tell .Roxane --
+tell .Roxane game .6.1
+tell .Roxane HashTable WHITE
+
+tell .Roxane Active threads : 4
+
+tell .Roxane [19@72 ] A6 >= -14
+tell .Roxane  19@72   A6 == -14
+tell .Roxane  21@72   A6 == -15
+[recv]READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+[send]tell .Roxane  23@72+  A6 == -12
+[recv]READY
+[send]tell .Roxane  25@72+  A6 == -16
+[recv]READY
+[send]tell .Roxane  27@72+  A6 == -14
+[recv]READY
+[send]tell .Roxane  37@72   A6 <= -16
+[recv]READY
+[send]tell .Roxane  37@72   A6 == -18
+[recv]READY
+[send]tell .Roxane  37@84   A6 == -18
+[recv]READY
+[send]tell .Roxane  37@91   A6 == -18
+[recv]READY
+[send]tell .Roxane  37@91   A6 == -18  Pv : A6 f2 A3 b5 C5 d6 
+tell .Roxane Ts : 00:00:24.37   Tm : 00:00:24.37
+tell .Roxane nodes :  3 183 748 924
+tell .Roxane speed :         130 615 kN/s
+tell /os play .6.1 A6/-18.00/24.38
+[recv]READY
+READY
+READY
+READY
+READY
+
+/os: update .6.1 A6/-18.00/24.38
+READY
+
+/os: update .6.0 c4/-18.00/21.45
+READY
+[send]tell .Roxane --
+tell .Roxane game .6.0
+tell .Roxane HashTable BLACK
+
+tell .Roxane Active threads : 4
+
+[recv]READY
+READY
+READY
+READY
+READY
+READY
+[send]tell .Roxane  36@95   B3 == +34
+[recv]READY
+[send]tell .Roxane  36@95   B3 == +34  Pv : B3 g3 B5 b4 A5 a3 
+tell .Roxane Ts : 00:01:13.19   Tm : 00:00:15.79
+tell .Roxane nodes : 10 449 227 543
+tell .Roxane speed :         142 758 kN/s
+tell /os play .6.0 B3/34.00/15.79
+[recv]READY
+READY
+READY
+READY
+READY
+
+/os: update .6.0 B3/34.00/15.79
+READY
+
+/os: update .6.1 f2/18.00/24.13
+READY
+[send]tell .Roxane --
+tell .Roxane game .6.1
+tell .Roxane HashTable WHITE
+
+tell .Roxane Active threads : 4
+
+[recv]READY
+READY
+READY
+READY
+READY
+READY
+[send]tell .Roxane  35@95   A3 == -18  Pv : A3 b5 C5 d6 G2 e7 
+tell .Roxane Ts : 00:00:36.27   Tm : 00:00:11.35
+tell .Roxane nodes :  4 944 017 824
+tell .Roxane speed :         136 281 kN/s
+tell /os play .6.1 A3/-18.00/11.35
+[recv]READY
+READY
+READY
+READY
+READY
+
+/os: update .6.1 A3/-18.00/11.35
+READY
+
+/os: update .6.0 h4/-30.00/20.36
+READY
+[send]tell .Roxane --
+tell .Roxane game .6.0
+tell .Roxane HashTable BLACK
+
+tell .Roxane Active threads : 4
+
+tell .Roxane [34@95 ] F6 >= +34
+[recv]READY
+READY
+READY
+READY
+READY
+READY
+READY
+[send]tell .Roxane  34@95   F6 >= +36
+[recv]READY
+[send]tell .Roxane  34@95   F6 >= +40
+[recv]READY
+[send]tell .Roxane  34@95   F6 == +40
+[recv]READY
+[send]tell .Roxane  34@98   F6 == +40
+[recv]READY
+[send]tell .Roxane  34@98   F6 == +40  Pv : F6 e7 H6 h7 H1 b2 
+tell .Roxane Ts : 00:00:14.80   Tm : 00:00:14.80
+tell .Roxane nodes :  1 918 216 424
+tell .Roxane speed :         129 565 kN/s
+tell /os play .6.0 F6/40.00/14.80
+[recv]READY
+READY
+READY
+READY
+READY
+
+/os: update .6.0 F6/40.00/14.80
+READY
+
+/os: update .6.1 b5/18.00/16.49
+READY
+[send]tell .Roxane --
+tell .Roxane game .6.1
+tell .Roxane HashTable WHITE
+
+tell .Roxane Active threads : 4
+
+[recv]READY
+READY
+READY
+READY
+READY
+READY
+[send]tell .Roxane  33@98   C5 == -18
+[recv]READY
+[send]tell .Roxane  33@98   C5 == -18  Pv : C5 d6 G2 e7 C7 g3 
+tell .Roxane Ts : 00:00:40.52   Tm : 00:00:14.24
+tell .Roxane nodes :  5 465 147 682
+tell .Roxane speed :         134 852 kN/s
+tell /os play .6.1 C5/-18.00/14.24
+[recv]READY
+READY
+READY
+READY
+READY
+
+/os: update .6.1 C5/-18.00/14.24
+READY
+
+/os: update .6.0 a2/-38.00/16.01
+READY
+[send]tell .Roxane --
+tell .Roxane game .6.0
+tell .Roxane HashTable BLACK
+
+tell .Roxane Active threads : 4
+
+tell .Roxane [32@98 ] A4 >= +40
+[recv]READY
+READY
+READY
+READY
+READY
+READY
+READY
+[send]tell .Roxane  32@98   A4 >= +42
+[recv]READY
+[send]tell .Roxane  32@98   A4 >= +46
+[recv]READY
+[send]tell .Roxane  32@98   A4 == +46
+[recv]READY
+[send]tell .Roxane  32@98   A4 == +46  Pv : A4 h6 H1 e7 G7 f8 
+tell .Roxane Ts : 00:00:06.50   Tm : 00:00:06.50
+tell .Roxane nodes :    765 588 186
+tell .Roxane speed :         117 728 kN/s
+tell /os play .6.0 A4/46.00/6.50
+[recv]READY
+READY
+READY
+READY
+READY
+
+/os: update .6.0 A4/46.00/6.50
+READY
+
+/os: update .6.1 d6/18.00/17.08
+READY
+[send]tell .Roxane --
+tell .Roxane game .6.1
+tell .Roxane HashTable WHITE
+
+tell .Roxane Active threads : 4
+
+[recv]READY
+READY
+READY
+READY
+READY
+READY
+[send]tell .Roxane  31@98   G2 == -18  Pv : G2 e7 C7 g3 F6 b2 
+tell .Roxane Ts : 00:00:29.18   Tm : 00:00:09.37
+tell .Roxane nodes :  3 873 453 476
+tell .Roxane speed :         132 734 kN/s
+tell /os play .6.1 G2/-18.00/9.37
+[recv]READY
+READY
+READY
+READY
+READY
+
+/os: update .6.1 G2/-18.00/9.37
+READY
+
+/os: update .6.0 h6/-46.00/23.45
+READY
+[send]tell .Roxane --
+tell .Roxane game .6.0
+tell .Roxane HashTable BLACK
+
+tell .Roxane Active threads : 4
+
+tell .Roxane  30@100  H1 == +46  Pv : H1 e7 G7 f8 H8 g8 
+tell .Roxane Ts : 00:00:05.01   Tm : 00:00:00.00
+tell .Roxane nodes :    543 821 087
+tell .Roxane speed :         108 438 kN/s
+tell /os play .6.0 H1/46.00
+[recv]READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+
+/os: update .6.0 H1/46.00
+READY
+
+/os: update .6.1 e7/18.00/31.44
+READY
+[send]tell .Roxane --
+tell .Roxane game .6.1
+tell .Roxane HashTable WHITE
+
+tell .Roxane Active threads : 4
+
+[recv]READY
+READY
+READY
+READY
+READY
+READY
+[send]tell .Roxane  29@98   C7 == -18  Pv : C7 g3 F6 b2 D8 h2 
+tell .Roxane Ts : 00:00:51.38   Tm : 00:00:05.04
+tell .Roxane nodes :  7 397 231 869
+tell .Roxane speed :         143 945 kN/s
+tell /os play .6.1 C7/-18.00/5.04
+[recv]READY
+READY
+READY
+READY
+READY
+
+/os: update .6.1 C7/-18.00/5.04
+READY
+
+/os: update .6.0 e7/-46.00/0.01
+READY
+[send]tell .Roxane --
+tell .Roxane game .6.0
+tell .Roxane HashTable BLACK
+
+tell .Roxane Active threads : 4
+
+tell .Roxane  28@100  G7 == +46  Pv : G7 f8 H8 g8 B4 b2 
+tell .Roxane Ts : 00:00:00.00   Tm : 00:00:00.00
+tell .Roxane nodes :         10 868
+tell .Roxane speed :          10 868 kN/s
+tell /os play .6.0 G7/46.00
+[recv]READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+
+/os: update .6.0 G7/46.00
+READY
+
+/os: update .6.1 g3/18.00/4.53
+READY
+[send]tell .Roxane --
+tell .Roxane game .6.1
+tell .Roxane HashTable WHITE
+
+tell .Roxane Active threads : 4
+
+tell .Roxane  27@100  F6 == -18  Pv : F6 b2 D8 h2 H3 h4 
+tell .Roxane Ts : 00:00:00.00   Tm : 00:00:00.00
+tell .Roxane nodes :        128 239
+tell .Roxane speed :          42 746 kN/s
+tell /os play .6.1 F6/-18.00
+[recv]READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+
+/os: update .6.1 F6/-18.00
+READY
+
+/os: update .6.0 f8/-46.00/0.01
+READY
+[send]tell .Roxane --
+tell .Roxane game .6.0
+tell .Roxane HashTable BLACK
+
+tell .Roxane Active threads : 4
+
+tell .Roxane  26@100  H8 == +46  Pv : H8 g8 B4 b2 A1 h2 
+tell .Roxane Ts : 00:00:00.00   Tm : 00:00:00.00
+tell .Roxane nodes :          1 080
+tell .Roxane speed :           1 080 kN/s
+tell /os play .6.0 H8/46.00
+[recv]READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+
+/os: update .6.0 H8/46.00
+READY
+
+/os: update .6.1 g4/18.00/7.45
+READY
+[send]tell .Roxane --
+tell .Roxane game .6.1
+tell .Roxane HashTable WHITE
+
+tell .Roxane Active threads : 4
+
+tell .Roxane [25@100] D8 >= -18
+tell .Roxane  25@100  D8 == -18
+tell .Roxane  25@100  D8 == -18  Pv : D8 h5 H2 h4 H6 b2 
+tell .Roxane Ts : 00:00:00.15   Tm : 00:00:00.15
+tell .Roxane nodes :     12 195 003
+tell .Roxane speed :          80 230 kN/s
+tell /os play .6.1 D8/-18.00/0.15
+[recv]READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+
+/os: update .6.1 D8/-18.00/0.15
+READY
+
+/os: update .6.0 g8/-46.00/0.01
+READY
+[send]tell .Roxane --
+tell .Roxane game .6.0
+tell .Roxane HashTable BLACK
+
+tell .Roxane Active threads : 4
+
+tell .Roxane  24@100  B4 == +46  Pv : B4 b2 A1 h2 D6 a5 
+tell .Roxane Ts : 00:00:00.00   Tm : 00:00:00.00
+tell .Roxane nodes :          1 044
+tell .Roxane speed :             522 kN/s
+tell /os play .6.0 B4/46.00/0.00
+[recv]READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+
+/os: update .6.0 B4/46.00
+READY
+
+/os: update .6.1 h5/18.00/16.61
+READY
+[send]tell .Roxane --
+tell .Roxane game .6.1
+tell .Roxane HashTable WHITE
+
+tell .Roxane Active threads : 4
+
+tell .Roxane  23@100  H2 == -18  Pv : H2 h4 H6 b2 H3 h1 
+tell .Roxane Ts : 00:00:00.00   Tm : 00:00:00.00
+tell .Roxane nodes :            958
+tell /os play .6.1 H2/-18.00
+[recv]READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+
+/os: update .6.1 H2/-18.00
+READY
+
+/os: update .6.0 b2/-46.00/0.01
+READY
+[send]tell .Roxane --
+tell .Roxane game .6.0
+tell .Roxane HashTable BLACK
+
+tell .Roxane Active threads : 4
+
+tell .Roxane  22@100  A1 == +46  Pv : A1 h2 D6 a5 H7 g3 
+tell .Roxane Ts : 00:00:00.00   Tm : 00:00:00.00
+tell .Roxane nodes :          1 011
+tell .Roxane speed :             505 kN/s
+tell /os play .6.0 A1/46.00
+[recv]READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+
+/os: update .6.0 A1/46.00
+READY
+
+/os: update .6.1 h4/18.00/0.01
+READY
+[send]tell .Roxane --
+tell .Roxane game .6.1
+tell .Roxane HashTable WHITE
+
+tell .Roxane Active threads : 4
+
+tell .Roxane  21@100  H6 == -18  Pv : H6 b2 H3 h1 G1 d7 
+tell .Roxane Ts : 00:00:00.00   Tm : 00:00:00.00
+tell .Roxane nodes :            842
+tell .Roxane speed :             421 kN/s
+tell /os play .6.1 H6/-18.00
+[recv]READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+
+/os: update .6.1 H6/-18.00
+READY
+
+/os: update .6.0 h2/-46.00/0.01
+READY
+[send]tell .Roxane --
+tell .Roxane game .6.0
+tell .Roxane HashTable BLACK
+
+tell .Roxane Active threads : 4
+
+tell .Roxane  20@100  D6 == +46  Pv : D6 a5 H7 g3 A3 b5 
+tell .Roxane Ts : 00:00:00.00   Tm : 00:00:00.00
+tell .Roxane nodes :            961
+tell .Roxane speed :             480 kN/s
+tell /os play .6.0 D6/46.00
+[recv]READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+
+/os: update .6.0 D6/46.00
+READY
+
+/os: update .6.1 b2/18.00/0.01
+READY
+[send]tell /os play .6.1 H3/-18.00
+[recv]READY
+
+/os: update .6.1 H3/-18.00
+READY
+
+/os: update .6.0 a5/-46.00/0.01
+READY
+[send]tell /os play .6.0 H7/46.00
+[recv]READY
+
+/os: update .6.0 H7/46.00
+READY
+
+/os: update .6.1 d7/18.00/0.01
+READY
+[send]tell /os play .6.1 E8/-18.00/0.00
+[recv]READY
+
+/os: update .6.1 E8/-18.00
+READY
+
+/os: update .6.0 g3/-46.00/0.01
+READY
+[send]tell /os play .6.0 A3/46.00/0.00
+[recv]READY
+
+/os: update .6.0 A3/46.00
+READY
+
+/os: update .6.1 f7/18.00/0.01
+READY
+[send]tell /os play .6.1 A1/-18.00/0.01
+[recv]READY
+
+/os: update .6.1 A1/-18.00/0.01
+READY
+
+/os: update .6.0 b5/-46.00/0.01
+READY
+[send]tell /os play .6.0 G1/46.00/0.00
+[recv]READY
+
+/os: update .6.0 G1/46.00
+READY
+
+/os: update .6.1 h1/18.00/0.01
+READY
+[send]tell /os play .6.1 G1/-18.00/0.00
+[recv]READY
+
+/os: update .6.1 G1/-18.00
+READY
+
+/os: update .6.0 c5/-46.00/0.01
+READY
+[send]tell /os play .6.0 D8/46.00/0.00
+[recv]READY
+
+/os: update .6.0 D8/46.00
+READY
+
+/os: update .6.1 f8/18.00/0.01
+READY
+[send]tell /os play .6.1 G8/-18.00/0.00
+[recv]READY
+
+/os: update .6.1 G8/-18.00
+READY
+
+/os: update .6.0 e8/-46.00/0.01
+READY
+[send]tell /os play .6.0 F7/46.00/0.00
+[recv]READY
+
+/os: update .6.0 F7/46.00
+READY
+
+/os: update .6.1 h7/18.00/0.01
+READY
+[send]tell /os play .6.1 G7//0.00
+[recv]READY
+
+/os: update .6.1 G7
+READY
+
+/os: update .6.0 c8/-46.00/0.01
+READY
+[send]tell /os play .6.0 A6/46.00/0.00
+[recv]READY
+
+/os: update .6.0 A6/46.00
+READY
+
+/os: update .6.1 b6/18.00/0.01
+READY
+[send]tell /os play .6.1 B7/-18.00/0.00
+[recv]READY
+
+/os: update .6.1 B7/-18.00
+READY
+
+/os: update .6.0 b6/-46.00/0.01
+READY
+[send]tell /os play .6.0 C7/46.00/0.00
+[recv]READY
+
+/os: update .6.0 C7/46.00
+READY
+
+/os: update .6.1 c8/18.00/0.01
+READY
+[send]tell /os play .6.1 B8//0.00
+[recv]READY
+
+/os: update .6.1 B8
+READY
+
+/os: update .6.0 b7/-46.00/0.01
+READY
+[send]tell /os play .6.0 D7/46.00/0.00
+[recv]READY
+
+/os: update .6.0 D7/46.00
+READY
+
+/os: update .6.1 a8/18.00/0.01
+READY
+[send]tell /os play .6.1 A7
+[recv]READY
+
+/os: update .6.1 A7
+READY
+
+/os: update .6.0 pass
+READY
+[send]tell /os play .6.0 A7/46.00/0.00
+[recv]READY
+
+/os: update .6.0 A7/46.00
+READY
+
+/os: update .6.1 a2/18.00/0.01
+READY
+[send]tell /os play .6.1 PA
+[recv]READY
+
+/os: update .6.1 PA
+READY
+
+/os: update .6.0 a8/-46.00/0.01
+READY
+[send]tell /os play .6.0 B8
+[recv]READY
+
+/os: update .6.0 B8
+READY
+
+/os: end .6.0 ( Roxane vs. Saio3001 ) +46.00
+READY
+
+/os: update .6.1 h8/18.00/0.01
+READY
+
+/os: end .6.1 ( Roxane vs. Saio3001 ) -18.00
+READY
+
+/os: rating_update .6
+|Roxane   2736.12 @  85.27   +31.77 -> 2767.89 @  82.92
+|Saio3001 2702.27 @  61.07   -16.51 -> 2685.77 @  60.22
+READY
+
+/os: - match .6 2768 Roxane 2686 Saio3001 s8r18 R +14.00  .32248
+READY
+
+HCyrano:  ta s8r18 5:00 Saio3001
+READY
+[send]ta s8r18 5:00 Saio3001
+[recv]READY
+
+/os: +  .61 2767.9 Roxane   05:00//02:00    s8r18 R 2685.8 Saio3001
+READY
+
+/os: + match .7 2768 Roxane 2686 Saio3001 s8r18 R
+READY
+
+/os: join .7.0 (;GM[Othello]PC[GGS/os]DT[2024.08.21_13:44:45.MDT]
+|PB[Roxane]PW[Saio3001]
+|RB[2767.89]RW[2685.77]
+|TI[05:00//02:00]
+|TY[s8r18]RE[?]
+|BO[8 -------- -------- --O*O*-- --***O-- --***O-- --O****- ----O--- -------- *]
+|;)
+READY
+
+/os: join .7.1 (;GM[Othello]PC[GGS/os]DT[2024.08.21_13:44:45.MDT]
+|PB[Saio3001]PW[Roxane]
+|RB[2685.77]RW[2767.89]
+|TI[05:00//02:00]
+|TY[s8r18]RE[?]
+|BO[8 -------- -------- --O*O*-- --***O-- --***O-- --O****- ----O--- -------- *]
+|;)
+READY
+
+/os: -  .61 2767.9 Roxane   05:00//02:00    s8r18 R 2685.8 Saio3001
+READY
+[send]tell .Roxane --
+tell .Roxane game .7.0
+tell .Roxane HashTable SHARED
+
+tell .Roxane Active threads : 8
+
+tell .Roxane  14@72   G5 == -9
+tell .Roxane  16@72   G5 == -10
+[recv]READY
+[send]tell .Roxane  18@72   G5 == -9
+[recv]READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+[send]tell .Roxane  20@72   G5 == -9
+[recv]READY
+[send]tell .Roxane  22@72   G5 == -10
+[recv]READY
+[send]tell .Roxane  24@72   G5 == -9
+[recv]READY
+[send]tell .Roxane  26@72   G5 == -8
+[recv]READY
+[send]tell .Roxane  28@72   G5 == -8
+[recv]READY
+[send]tell .Roxane  30@72   G5 == -8
+[recv]READY
+[send]tell .Roxane  32@72+  G5 == -8
+[recv]READY
+[send]tell .Roxane  34@72+  G5 == -8
+[recv]READY
+[send]tell .Roxane  36@72+  G5 == -8
+[recv]READY
+[send]tell .Roxane  36@72+  G5 == -8  Pv : G5 f7 G4 b6 C2 d7 
+tell .Roxane Ts : 00:01:01.63   Tm : 00:01:01.63
+tell .Roxane nodes : 12 581 529 103
+tell .Roxane speed :         204 132 kN/s
+tell /os play .7.0 G5/-8.00/61.63
+[recv]READY
+READY
+READY
+READY
+READY
+
+/os: update .7.0 G5/-8.00/61.63
+READY
+
+/os: update .7.1 g5/-9.50/41.91
+READY
+[send]tell .Roxane --
+tell .Roxane game .7.1
+tell .Roxane HashTable SHARED
+
+tell .Roxane Active threads : 8
+
+[recv]READY
+READY
+READY
+READY
+READY
+READY
+[send]tell .Roxane  35@72+  F7 == +8  Pv : F7 g4 B6 c2 D7 b5 
+tell .Roxane Ts : 00:00:43.57   Tm : 00:00:43.11
+tell .Roxane nodes : 12 467 536 021
+tell .Roxane speed :         286 142 kN/s
+tell /os play .7.1 F7/8.00/43.11
+[recv]READY
+READY
+READY
+READY
+READY
+
+/os: update .7.1 F7/8.00/43.11
+READY
+
+/os: update .7.0 f7/8.00/45.84
+READY
+[send]tell .Roxane --
+tell .Roxane game .7.0
+tell .Roxane HashTable SHARED
+
+tell .Roxane Active threads : 8
+
+[recv]READY
+READY
+READY
+READY
+READY
+READY
+[send]tell .Roxane  34@72+  G4 == -8  Pv : G4 b6 C2 d7 B5 d2 
+tell .Roxane Ts : 00:00:36.16   Tm : 00:00:33.27
+tell .Roxane nodes : 10 454 367 350
+tell .Roxane speed :         289 074 kN/s
+tell /os play .7.0 G4/-8.00/33.27
+[recv]READY
+READY
+READY
+READY
+READY
+
+/os: update .7.0 G4/-8.00/33.27
+READY
+
+/os: update .7.1 g4/-8.00/10.88
+READY
+[send]tell .Roxane --
+tell .Roxane game .7.1
+tell .Roxane HashTable SHARED
+
+tell .Roxane Active threads : 8
+
+[recv]READY
+READY
+READY
+READY
+READY
+READY
+[send]tell .Roxane  33@72+  B6 == +8  Pv : B6 c2 D7 b5 D2 c7 
+tell .Roxane Ts : 00:00:36.69   Tm : 00:00:36.22
+tell .Roxane nodes : 10 454 098 970
+tell .Roxane speed :         284 922 kN/s
+tell /os play .7.1 B6/8.00/36.23
+[recv]READY
+READY
+READY
+READY
+READY
+
+/os: update .7.1 B6/8.00/36.23
+READY
+
+/os: update .7.0 b6/8.00/21.77
+READY
+[send]tell .Roxane --
+tell .Roxane game .7.0
+tell .Roxane HashTable SHARED
+
+tell .Roxane Active threads : 8
+
+[recv]READY
+READY
+READY
+READY
+READY
+READY
+[send]tell .Roxane  32@72+  C2 == -8  Pv : C2 d7 B5 d2 C7 d8 
+tell .Roxane Ts : 00:00:28.47   Tm : 00:00:27.96
+tell .Roxane nodes :  8 074 805 282
+tell .Roxane speed :         283 615 kN/s
+tell /os play .7.0 C2/-8.00/27.96
+[recv]READY
+READY
+READY
+READY
+READY
+
+/os: update .7.0 C2/-8.00/27.96
+READY
+
+/os: update .7.1 c2/-8.00/10.36
+READY
+[send]tell .Roxane --
+tell .Roxane game .7.1
+tell .Roxane HashTable SHARED
+
+tell .Roxane Active threads : 8
+
+[recv]READY
+READY
+READY
+READY
+READY
+READY
+[send]tell .Roxane  41@84   B4 == +8
+[recv]READY
+[send]tell .Roxane  41@84   B4 == +8  Pv : B4 b3 D2 d1 F2 a4 
+tell .Roxane Ts : 00:00:42.60   Tm : 00:00:42.09
+tell .Roxane nodes : 10 765 608 384
+tell .Roxane speed :         252 696 kN/s
+tell /os play .7.1 B4/8.00/42.09
+[recv]READY
+READY
+READY
+READY
+READY
+
+/os: update .7.1 B4/8.00/42.09
+READY
+
+/os: update .7.0 d7/8.00/11.27
+READY
+[send]tell .Roxane --
+tell .Roxane game .7.0
+tell .Roxane HashTable BLACK
+
+tell .Roxane Active threads : 4
+
+tell .Roxane [30@72+] B5 == -8
+[recv]READY
+READY
+READY
+READY
+READY
+READY
+READY
+[send]tell .Roxane  30@72+  B5 == -8  Pv : B5 d2 C7 d8 F2 e2 
+tell .Roxane Ts : 00:00:46.98   Tm : 00:00:46.98
+tell .Roxane nodes :  7 437 004 732
+tell .Roxane speed :         158 277 kN/s
+tell /os play .7.0 B5/-8.00/46.99
+[recv]READY
+READY
+READY
+READY
+READY
+
+/os: update .7.0 B5/-8.00/46.99
+READY
+
+/os: update .7.1 b3/-8.00/47.44
+READY
+[send]tell .Roxane --
+tell .Roxane game .7.1
+tell .Roxane HashTable WHITE
+
+tell .Roxane Active threads : 4
+
+tell .Roxane [39@84 ] D2 == +8
+[recv]READY
+READY
+READY
+READY
+READY
+READY
+READY
+[send]tell .Roxane  39@84   D2 == +8  Pv : D2 d1 F2 a4 A5 f8 
+tell .Roxane Ts : 00:01:15.78   Tm : 00:01:15.78
+tell .Roxane nodes : 11 106 505 783
+tell .Roxane speed :         146 547 kN/s
+tell /os play .7.1 D2/8.00/75.79
+[recv]READY
+READY
+READY
+READY
+READY
+
+/os: update .7.1 D2/8.00/75.79
+READY
+
+/os: update .7.0 d2/8.00/25.50
+READY
+[send]tell .Roxane --
+tell .Roxane game .7.0
+tell .Roxane HashTable BLACK
+
+tell .Roxane Active threads : 4
+
+[recv]READY
+READY
+READY
+READY
+READY
+READY
+[send]tell .Roxane  38@84   C7 == -8  Pv : C7 d8 F2 a4 A5 a6 
+tell .Roxane Ts : 00:01:42.48   Tm : 00:00:25.54
+tell .Roxane nodes : 14 446 726 974
+tell .Roxane speed :         140 960 kN/s
+tell /os play .7.0 C7/-8.00/25.54
+[recv]READY
+READY
+READY
+READY
+READY
+
+/os: update .7.0 C7/-8.00/25.54
+READY
+
+/os: update .7.1 d1/-8.00/21.44
+READY
+[send]tell .Roxane --
+tell .Roxane game .7.1
+tell .Roxane HashTable WHITE
+
+tell .Roxane Active threads : 4
+
+[recv]READY
+READY
+READY
+READY
+READY
+READY
+[send]tell .Roxane  37@84   F2 == +8  Pv : F2 a4 A5 f8 D8 b5 
+tell .Roxane Ts : 00:00:45.14   Tm : 00:00:18.56
+tell .Roxane nodes :  6 704 042 655
+tell .Roxane speed :         148 513 kN/s
+tell /os play .7.1 F2/8.00/18.56
+[recv]READY
+READY
+READY
+READY
+READY
+
+/os: update .7.1 F2/8.00/18.56
+READY
+
+/os: update .7.0 d8/6.00/90.47
+READY
+[send]tell .Roxane --
+tell .Roxane game .7.0
+tell .Roxane HashTable BLACK
+
+tell .Roxane Active threads : 4
+
+[recv]READY
+READY
+READY
+READY
+READY
+READY
+[send]tell .Roxane  36@91   F2 == -6  Pv : F2 a4 A5 a6 B4 a3 
+tell .Roxane Ts : 00:01:51.91   Tm : 00:00:20.73
+tell .Roxane nodes : 15 721 923 559
+tell .Roxane speed :         140 480 kN/s
+tell /os play .7.0 F2/-6.00/20.74
+[recv]READY
+READY
+READY
+READY
+READY
+
+/os: update .7.0 F2/-6.00/20.74
+READY
+
+/os: update .7.1 a4/-8.00/35.86
+READY
+[send]tell .Roxane --
+tell .Roxane game .7.1
+tell .Roxane HashTable WHITE
+
+tell .Roxane Active threads : 4
+
+[recv]READY
+READY
+READY
+READY
+READY
+READY
+[send]tell .Roxane  35@95   A5 == +8  Pv : A5 f8 D8 b5 E1 d7 
+tell .Roxane Ts : 00:02:04.40   Tm : 00:00:16.03
+tell .Roxane nodes : 16 717 563 032
+tell .Roxane speed :         134 382 kN/s
+tell /os play .7.1 A5/8.00/16.04
+[recv]READY
+READY
+READY
+READY
+READY
+
+/os: update .7.1 A5/8.00/16.04
+READY
+
+/os: update .7.0 e2/6.00/14.45
+READY
+[send]tell .Roxane --
+tell .Roxane game .7.0
+tell .Roxane HashTable BLACK
+
+tell .Roxane Active threads : 4
+
+tell .Roxane [34@91 ] A6 >= -6
+[recv]READY
+READY
+READY
+READY
+READY
+READY
+READY
+[send]tell .Roxane  34@91   A6 == -6
+[recv]READY
+[send]tell .Roxane  34@91   A6 == -6  Pv : A6 g3 F1 h3 E1 b4 
+tell .Roxane Ts : 00:00:24.86   Tm : 00:00:24.86
+tell .Roxane nodes :  3 332 677 491
+tell .Roxane speed :         134 014 kN/s
+tell /os play .7.0 A6/-6.00/24.87
+[recv]READY
+READY
+READY
+READY
+READY
+
+/os: update .7.0 A6/-6.00/24.87
+READY
+
+/os: update .7.1 f8/-8.00/45.00
+READY
+[send]tell .Roxane --
+tell .Roxane game .7.1
+tell .Roxane HashTable WHITE
+
+tell .Roxane Active threads : 4
+
+[recv]READY
+READY
+READY
+READY
+READY
+READY
+[send]tell .Roxane  33@98   D8 == +8  Pv : D8 b5 E1 d7 C8 a6 
+tell .Roxane Ts : 00:01:04.69   Tm : 00:00:19.01
+tell .Roxane nodes :  8 653 813 890
+tell .Roxane speed :         133 769 kN/s
+tell /os play .7.1 D8/8.00/19.01
+[recv]READY
+READY
+READY
+READY
+READY
+
+/os: update .7.1 D8/8.00/19.01
+READY
+
+/os: update .7.0 h3/6.00/44.52
+READY
+[send]tell .Roxane --
+tell .Roxane game .7.0
+tell .Roxane HashTable BLACK
+
+tell .Roxane Active threads : 4
+
+tell .Roxane [32@95 ] H4 >= -6
+[recv]READY
+READY
+READY
+READY
+READY
+READY
+READY
+[send]tell .Roxane  32@95   H4 >= -6  Pv : H4 b4 C8 g3 E1 d1 
+tell .Roxane Ts : 00:00:15.31   Tm : 00:00:15.31
+tell .Roxane nodes :  2 230 874 997
+tell .Roxane speed :         145 694 kN/s
+tell /os play .7.0 H4/-6.00/15.31
+[recv]READY
+READY
+READY
+READY
+READY
+
+/os: update .7.0 H4/-6.00/15.31
+READY
+
+/os: update .7.1 b5/-8.00/39.30
+READY
+[send]tell .Roxane --
+tell .Roxane game .7.1
+tell .Roxane HashTable WHITE
+
+tell .Roxane Active threads : 4
+
+[recv]READY
+READY
+READY
+READY
+READY
+READY
+[send]tell .Roxane  31@100  E1 == +8  Pv : E1 d7 C8 a6 C7 g3 
+tell .Roxane Ts : 00:01:24.31   Tm : 00:00:18.66
+tell .Roxane nodes : 13 336 451 842
+tell .Roxane speed :         158 183 kN/s
+tell /os play .7.1 E1/8.00/18.67
+[recv]READY
+READY
+READY
+READY
+READY
+
+/os: update .7.1 E1/8.00/18.67
+READY
+
+/os: update .7.0 g3/6.00/17.97
+READY
+[send]tell .Roxane --
+tell .Roxane game .7.0
+tell .Roxane HashTable BLACK
+
+tell .Roxane Active threads : 4
+
+tell .Roxane [30@98 ] E1 == -6
+[recv]READY
+READY
+READY
+READY
+READY
+READY
+READY
+[send]tell .Roxane  30@100  E1 == -6
+[recv]READY
+[send]tell .Roxane  30@100  E1 == -6  Pv : E1 b4 A5 d1 F1 g1 
+tell .Roxane Ts : 00:00:12.99   Tm : 00:00:12.99
+tell .Roxane nodes :  2 333 213 302
+tell .Roxane speed :         179 533 kN/s
+tell /os play .7.0 E1/-6.00/13.00
+[recv]READY
+READY
+READY
+READY
+READY
+
+/os: update .7.0 E1/-6.00/13.00
+READY
+
+/os: update .7.1 c7/-8.00/22.39
+READY
+[send]tell .Roxane --
+tell .Roxane game .7.1
+tell .Roxane HashTable WHITE
+
+tell .Roxane Active threads : 4
+
+tell .Roxane [29@100] D7 >= +8
+[recv]READY
+READY
+READY
+READY
+READY
+READY
+READY
+[send]tell .Roxane  29@100  D7 >= +8  Pv : D7 c8 A6 e8 A3 g3 
+tell .Roxane Ts : 00:00:04.22   Tm : 00:00:04.22
+tell .Roxane nodes :    805 751 171
+tell .Roxane speed :         190 755 kN/s
+tell /os play .7.1 D7/8.00/4.22
+[recv]READY
+READY
+READY
+READY
+READY
+
+/os: update .7.1 D7/8.00/4.22
+READY
+
+/os: update .7.0 d1/6.00/7.36
+READY
+[send]tell .Roxane --
+tell .Roxane game .7.0
+tell .Roxane HashTable BLACK
+
+tell .Roxane Active threads : 4
+
+tell .Roxane [28@100] F1 >= -6
+[recv]READY
+READY
+READY
+READY
+READY
+READY
+READY
+[send]tell .Roxane  28@100  F1 == -6
+[recv]READY
+[send]tell .Roxane  28@100  F1 == -6  Pv : F1 b1 G7 b7 H2 b3 
+tell .Roxane Ts : 00:00:03.88   Tm : 00:00:03.88
+tell .Roxane nodes :    711 292 386
+tell .Roxane speed :         183 039 kN/s
+tell /os play .7.0 F1/-6.00/3.89
+[recv]READY
+READY
+READY
+READY
+READY
+
+/os: update .7.0 F1/-6.00/3.89
+READY
+
+/os: update .7.1 a6/-8.00/3.23
+READY
+[send]tell .Roxane --
+tell .Roxane game .7.1
+tell .Roxane HashTable WHITE
+
+tell .Roxane Active threads : 4
+
+tell .Roxane [27@100] H3 == +8
+tell .Roxane  27@100  H3 == +8
+tell .Roxane  27@100  H3 == +8  Pv : H3 h4 G3 h2 C8 f1 
+tell .Roxane Ts : 00:00:00.00   Tm : 00:00:00.00
+tell .Roxane nodes :         10 390
+tell .Roxane speed :           2 078 kN/s
+tell /os play .7.1 H3/8.00/0.01
+[recv]READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+
+/os: update .7.1 H3/8.00/0.01
+READY
+
+/os: update .7.0 b1/6.00/4.45
+READY
+[send]tell .Roxane --
+tell .Roxane game .7.0
+tell .Roxane HashTable BLACK
+
+tell .Roxane Active threads : 4
+
+tell .Roxane  26@100  G7 == -6  Pv : G7 b7 H2 b3 A3 b4 
+tell .Roxane Ts : 00:00:00.00   Tm : 00:00:00.00
+tell .Roxane nodes :        531 608
+tell .Roxane speed :          88 601 kN/s
+tell /os play .7.0 G7/-6.00/0.00
+[recv]READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+
+/os: update .7.0 G7/-6.00
+READY
+
+/os: update .7.1 h4/-8.00/0.01
+READY
+[send]tell .Roxane --
+tell .Roxane game .7.1
+tell .Roxane HashTable WHITE
+
+tell .Roxane Active threads : 4
+
+tell .Roxane  25@100  G3 == +8  Pv : G3 h2 C8 f1 C1 b7 
+tell .Roxane Ts : 00:00:00.00   Tm : 00:00:00.00
+tell .Roxane nodes :          1 181
+tell .Roxane speed :           1 181 kN/s
+tell /os play .7.1 G3/8.00
+[recv]READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+
+/os: update .7.1 G3/8.00
+READY
+
+/os: update .7.0 b7/6.00/0.01
+READY
+[send]tell .Roxane --
+tell .Roxane game .7.0
+tell .Roxane HashTable BLACK
+
+tell .Roxane Active threads : 4
+
+tell .Roxane  24@100  H2 == -6  Pv : H2 b3 A3 b4 C1 g1 
+tell .Roxane Ts : 00:00:00.00   Tm : 00:00:00.00
+tell .Roxane nodes :          1 186
+tell .Roxane speed :             593 kN/s
+tell /os play .7.0 H2/-6.00/0.00
+[recv]READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+
+/os: update .7.0 H2/-6.00
+READY
+
+/os: update .7.1 h2/-8.00/0.01
+READY
+[send]tell .Roxane --
+tell .Roxane game .7.1
+tell .Roxane HashTable WHITE
+
+tell .Roxane Active threads : 4
+
+tell .Roxane  23@100  C8 == +8  Pv : C8 f1 C1 b7 H5 h6 
+tell .Roxane Ts : 00:00:00.00   Tm : 00:00:00.00
+tell .Roxane nodes :          1 109
+tell .Roxane speed :             554 kN/s
+tell /os play .7.1 C8/8.00
+[recv]READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+
+/os: update .7.1 C8/8.00
+READY
+
+/os: update .7.0 b3/6.00/0.01
+READY
+[send]tell .Roxane --
+tell .Roxane game .7.0
+tell .Roxane HashTable BLACK
+
+tell .Roxane Active threads : 4
+
+tell .Roxane  22@100  A3 == -6  Pv : A3 b4 C1 g1 A8 h8 
+tell .Roxane Ts : 00:00:00.00   Tm : 00:00:00.00
+tell .Roxane nodes :          1 126
+tell .Roxane speed :             563 kN/s
+tell /os play .7.0 A3/-6.00
+[recv]READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+
+/os: update .7.0 A3/-6.00
+READY
+
+/os: update .7.1 e2/-8.00/0.01
+READY
+[send]tell .Roxane --
+tell .Roxane game .7.1
+tell .Roxane HashTable WHITE
+
+tell .Roxane Active threads : 4
+
+tell .Roxane [21@100] H5 >= +8
+tell .Roxane  21@100  H5 == +8
+tell .Roxane  21@100  H5 == +8  Pv : H5 h6 G2 b2 A3 e8 
+tell .Roxane Ts : 00:00:00.07   Tm : 00:00:00.07
+tell .Roxane nodes :      3 950 622
+tell .Roxane speed :          54 869 kN/s
+tell /os play .7.1 H5/8.00/0.07
+[recv]READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+
+/os: update .7.1 H5/8.00/0.07
+READY
+
+/os: update .7.0 b4/6.00/0.01
+READY
+[send]tell .Roxane --
+tell .Roxane game .7.0
+tell .Roxane HashTable BLACK
+
+tell .Roxane Active threads : 4
+
+tell .Roxane  20@100  C1 == -6  Pv : C1 g1 A8 h8 B8 a4 
+tell .Roxane Ts : 00:00:00.00   Tm : 00:00:00.00
+tell .Roxane nodes :            812
+tell .Roxane speed :             406 kN/s
+tell /os play .7.0 C1/-6.00
+[recv]READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+
+/os: update .7.0 C1/-6.00
+READY
+
+/os: update .7.1 h6/-8.00/0.01
+READY
+[send]tell /os play .7.1 G2/8.00
+[recv]READY
+
+/os: update .7.1 G2/8.00
+READY
+
+/os: update .7.0 g1/6.00/0.01
+READY
+[send]tell /os play .7.0 A8/-6.00
+[recv]READY
+
+/os: update .7.0 A8/-6.00
+READY
+
+/os: update .7.1 b2/-8.00/0.01
+READY
+[send]tell /os play .7.1 A3/8.00
+[recv]READY
+
+/os: update .7.1 A3/8.00
+READY
+
+/os: update .7.0 h8/6.00/0.01
+READY
+[send]tell /os play .7.0 B8/-6.00/0.00
+[recv]READY
+
+/os: update .7.0 B8/-6.00
+READY
+
+/os: update .7.1 e8/-8.00/0.01
+READY
+[send]tell /os play .7.1 B7/8.00/0.00
+[recv]READY
+
+/os: update .7.1 B7/8.00
+READY
+
+/os: update .7.0 a4/6.00/0.01
+READY
+[send]tell /os play .7.0 G2/-6.00/0.00
+[recv]READY
+
+/os: update .7.0 G2/-6.00
+READY
+
+/os: update .7.1 b8/-8.00/0.01
+READY
+[send]tell /os play .7.1 A1/8.00/0.00
+[recv]READY
+
+/os: update .7.1 A1/8.00
+READY
+
+/os: update .7.0 c8/6.00/0.01
+READY
+[send]tell /os play .7.0 A7/-6.00/0.00
+[recv]READY
+
+/os: update .7.0 A7/-6.00
+READY
+
+/os: update .7.1 a2/-8.00/0.01
+READY
+[send]tell /os play .7.1 G8/8.00/0.00
+[recv]READY
+
+/os: update .7.1 G8/8.00
+READY
+
+/os: update .7.0 a5/6.00/0.01
+READY
+[send]tell /os play .7.0 B2/-6.00/0.00
+[recv]READY
+
+/os: update .7.0 B2/-6.00
+READY
+
+/os: update .7.1 h1/-8.00/0.01
+READY
+[send]tell /os play .7.1 A8/8.00/0.00
+[recv]READY
+
+/os: update .7.1 A8/8.00
+READY
+
+/os: update .7.0 h1/6.00/0.01
+READY
+[send]tell /os play .7.0 E8/-6.00/0.00
+[recv]READY
+
+/os: update .7.0 E8/-6.00
+READY
+
+/os: update .7.1 g1/-8.00/0.01
+READY
+[send]tell /os play .7.1 F1/8.00
+[recv]READY
+
+/os: update .7.1 F1/8.00
+READY
+
+/os: update .7.0 f8/6.00/0.01
+READY
+[send]tell /os play .7.0 G8/-6.00/0.00
+[recv]READY
+
+/os: update .7.0 G8/-6.00
+READY
+
+/os: update .7.1 g7/-8.00/0.01
+READY
+[send]tell /os play .7.1 A7/8.00/0.00
+[recv]READY
+
+/os: update .7.1 A7/8.00
+READY
+
+/os: update .7.0 h7/6.00/0.01
+READY
+[send]tell /os play .7.0 H6/-6.00/0.00
+[recv]READY
+
+/os: update .7.0 H6/-6.00
+READY
+
+/os: update .7.1 pass
+READY
+[send]tell /os play .7.1 B1/8.00/0.00
+[recv]READY
+
+/os: update .7.1 B1/8.00
+READY
+
+/os: update .7.0 h5/6.00/0.01
+READY
+[send]tell /os play .7.0 PA//0.00
+[recv]READY
+
+/os: update .7.0 PA
+READY
+
+/os: update .7.1 c1/-8.00/0.01
+READY
+[send]tell /os play .7.1 H7/8.00
+[recv]READY
+
+/os: update .7.1 H7/8.00
+READY
+
+/os: update .7.0 a1/6.00/0.01
+READY
+[send]tell /os play .7.0 A2//0.00
+[recv]READY
+
+/os: update .7.0 A2
+READY
+
+/os: end .7.0 ( Roxane vs. Saio3001 ) -6.00
+READY
+
+/os: update .7.1 h8/-8.00/0.01
+READY
+
+/os: end .7.1 ( Roxane vs. Saio3001 ) +8.00
+READY
+
+/os: rating_update .7
+|Roxane   2767.89 @  82.92    +7.41 -> 2775.30 @  80.84
+|Saio3001 2685.77 @  60.22    -4.01 -> 2681.76 @  59.43
+READY
+
+/os: - match .7 2775 Roxane 2682 Saio3001 s8r18 R +1.00  .32249
+READY
+
+HCyrano:  ta s8r18 5:00 Saio3001
+READY
+[send]ta s8r18 5:00 Saio3001
+[recv]READY
+
+/os: +  .62 2775.3 Roxane   05:00//02:00    s8r18 R 2681.8 Saio3001
+READY
+
+/os: + match .8 2775 Roxane 2682 Saio3001 s8r18 R
+READY
+
+/os: join .8.0 (;GM[Othello]PC[GGS/os]DT[2024.08.21_13:58:21.MDT]
+|PB[Roxane]PW[Saio3001]
+|RB[2775.3]RW[2681.76]
+|TI[05:00//02:00]
+|TY[s8r18]RE[?]
+|BO[8 -------- -----*-- --*O*-*- ---***** --OO*--- ---OOOO- --O----- -------- *]
+|;)
+READY
+
+/os: join .8.1 (;GM[Othello]PC[GGS/os]DT[2024.08.21_13:58:21.MDT]
+|PB[Saio3001]PW[Roxane]
+|RB[2681.76]RW[2775.3]
+|TI[05:00//02:00]
+|TY[s8r18]RE[?]
+|BO[8 -------- -----*-- --*O*-*- ---***** --OO*--- ---OOOO- --O----- -------- *]
+|;)
+READY
+
+/os: -  .62 2775.3 Roxane   05:00//02:00    s8r18 R 2681.8 Saio3001
+READY
+[send]tell .Roxane --
+tell .Roxane game .8.0
+tell .Roxane HashTable SHARED
+
+tell .Roxane Active threads : 8
+
+tell .Roxane  14@72   C6 == -9
+tell .Roxane  16@72   C6 == -9
+tell .Roxane  18@72   C6 == -9
+[recv]READY
+[send]tell .Roxane  20@72   C6 == -9
+[recv]READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+[send]tell .Roxane  22@72   C6 == -9
+[recv]READY
+[send]tell .Roxane  24@72   C6 == -9
+[recv]READY
+[send]tell .Roxane  26@72   C6 == -9
+[recv]READY
+[send]tell .Roxane  28@72   C6 == -9
+[recv]READY
+[send]tell .Roxane  30@72   C6 == -9
+[recv]READY
+[send]tell .Roxane  32@72+  C6 == -8
+[recv]READY
+[send]tell .Roxane  34@72+  C6 == -8
+[recv]READY
+[send]tell .Roxane  34@72+  C6 == -8  Pv : C6 c4 D7 c8 B5 c2 
+tell .Roxane Ts : 00:00:54.93   Tm : 00:00:54.93
+tell .Roxane nodes :  9 613 551 026
+tell .Roxane speed :         174 998 kN/s
+tell /os play .8.0 C6/-8.00/54.94
+[recv]READY
+READY
+READY
+READY
+READY
+
+/os: update .8.0 C6/-8.00/54.94
+READY
+
+/os: update .8.1 c6/-8.50/41.92
+READY
+[send]tell .Roxane --
+tell .Roxane game .8.1
+tell .Roxane HashTable SHARED
+
+tell .Roxane Active threads : 8
+
+[recv]READY
+READY
+READY
+READY
+READY
+READY
+[send]tell .Roxane  33@72+  C4 == +8  Pv : C4 d7 C8 b5 C2 f7 
+tell .Roxane Ts : 00:00:19.03   Tm : 00:00:18.51
+tell .Roxane nodes :  3 274 340 878
+tell .Roxane speed :         172 043 kN/s
+tell /os play .8.1 C4/8.00/18.51
+[recv]READY
+READY
+READY
+READY
+READY
+
+/os: update .8.1 C4/8.00/18.51
+READY
+
+/os: update .8.0 c4/8.50/58.95
+READY
+[send]tell .Roxane --
+tell .Roxane game .8.0
+tell .Roxane HashTable SHARED
+
+tell .Roxane Active threads : 8
+
+tell .Roxane  34@72+  D7 == -8  Pv : D7 c8 B5 c2 F7 e8 
+tell .Roxane Ts : 00:00:40.60   Tm : 00:00:00.00
+tell .Roxane nodes :  9 974 077 251
+tell .Roxane speed :         245 636 kN/s
+tell /os play .8.0 D7/-8.00/0.00
+[recv]READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+
+/os: update .8.0 D7/-8.00
+READY
+
+/os: update .8.1 d7/-8.50/10.86
+READY
+[send]tell .Roxane --
+tell .Roxane game .8.1
+tell .Roxane HashTable SHARED
+
+tell .Roxane Active threads : 8
+
+[recv]READY
+READY
+READY
+READY
+READY
+READY
+[send]tell .Roxane  33@72+  C8 == +8  Pv : C8 b5 C2 f7 E8 h6 
+tell .Roxane Ts : 00:00:51.45   Tm : 00:00:40.15
+tell .Roxane nodes : 14 486 085 468
+tell .Roxane speed :         281 556 kN/s
+tell /os play .8.1 C8/8.00/40.16
+[recv]READY
+READY
+READY
+READY
+READY
+
+/os: update .8.1 C8/8.00/40.16
+READY
+
+/os: update .8.0 c8/8.50/21.02
+READY
+[send]tell .Roxane --
+tell .Roxane game .8.0
+tell .Roxane HashTable SHARED
+
+tell .Roxane Active threads : 8
+
+[recv]READY
+READY
+READY
+READY
+READY
+READY
+[send]tell .Roxane  42@72   B5 == -8
+[recv]READY
+[send]tell .Roxane  42@72   B5 == -8  Pv : B5 c2 F7 e8 H6 f3 
+tell .Roxane Ts : 00:00:45.77   Tm : 00:00:45.29
+tell .Roxane nodes : 13 103 834 223
+tell .Roxane speed :         286 284 kN/s
+tell /os play .8.0 B5/-8.00/45.29
+[recv]READY
+READY
+READY
+READY
+READY
+
+/os: update .8.0 B5/-8.00/45.29
+READY
+
+/os: update .8.1 f7/-8.00/10.80
+READY
+[send]tell .Roxane --
+tell .Roxane game .8.1
+tell .Roxane HashTable WHITE
+
+tell .Roxane Active threads : 4
+
+tell .Roxane [29@72+] F8 >= +8
+[recv]READY
+READY
+READY
+READY
+READY
+READY
+READY
+[send]tell .Roxane  29@72+  F8 == +8
+[recv]READY
+[send]tell .Roxane          E7 maybe better? 
+[recv]READY
+[send]tell .Roxane  29@72+  F8 == +8  Pv : F8 b5 F3 b4 H5 g5 
+tell .Roxane Ts : 00:00:32.47   Tm : 00:00:32.47
+tell .Roxane nodes :  3 439 413 838
+tell .Roxane speed :         105 922 kN/s
+tell /os play .8.1 F8/8.00/32.47
+[recv]READY
+READY
+READY
+READY
+READY
+
+/os: update .8.1 F8/8.00/32.47
+READY
+
+/os: update .8.0 f3/8.00/77.61
+READY
+[send]tell .Roxane --
+tell .Roxane game .8.0
+tell .Roxane HashTable BLACK
+
+tell .Roxane Active threads : 4
+
+tell .Roxane [40@72 ] B4 >= -8
+[recv]READY
+READY
+READY
+READY
+READY
+READY
+READY
+[send]tell .Roxane  40@72   B4 == -8
+[recv]READY
+[send]tell .Roxane  40@72   B4 == -8  Pv : B4 h3 C2 d2 E1 b3 
+tell .Roxane Ts : 00:01:22.14   Tm : 00:01:22.14
+tell .Roxane nodes : 11 644 505 369
+tell .Roxane speed :         141 760 kN/s
+tell /os play .8.0 B4/-8.00/82.14
+[recv]READY
+READY
+READY
+READY
+READY
+
+/os: update .8.0 B4/-8.00/82.14
+READY
+
+/os: update .8.1 b6/-8.00/22.11
+READY
+[send]tell .Roxane --
+tell .Roxane game .8.1
+tell .Roxane HashTable WHITE
+
+tell .Roxane Active threads : 4
+
+tell .Roxane [29@72 ] B5 <= +10
+tell .Roxane  15@72   C2 == +8
+tell .Roxane  17@72   C2 == +8
+tell .Roxane          B5 maybe better? 
+tell .Roxane  17@72   B5 == +9
+[recv]READY
+[send]tell .Roxane  19@72   B5 == +8
+[recv]READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+[send]tell .Roxane  21@72   B5 == +10
+[recv]READY
+[send]tell .Roxane  23@72   B5 == +10
+[recv]READY
+[send]tell .Roxane  25@72+  B5 == +10
+[recv]READY
+[send]tell .Roxane  27@72+  B5 == +10
+[recv]READY
+[send]tell .Roxane  29@72+  B5 == +10
+[recv]READY
+[send]tell .Roxane  29@72+  B5 == +10  Pv : B5 d2 C2 b3 A6 g7 
+tell .Roxane Ts : 00:00:31.92   Tm : 00:00:31.92
+tell .Roxane nodes :  4 783 404 782
+tell .Roxane speed :         149 823 kN/s
+tell /os play .8.1 B5/10.00/31.93
+[recv]READY
+READY
+READY
+READY
+READY
+
+/os: update .8.1 B5/10.00/31.93
+READY
+
+/os: update .8.0 h3/8.00/27.53
+READY
+[send]tell .Roxane --
+tell .Roxane game .8.0
+tell .Roxane HashTable BLACK
+
+tell .Roxane Active threads : 4
+
+[recv]READY
+READY
+READY
+READY
+READY
+READY
+[send]tell .Roxane  38@84   C2 == -8
+[recv]READY
+[send]tell .Roxane  38@84   C2 == -8  Pv : C2 d2 E1 b3 A4 f1 
+tell .Roxane Ts : 00:00:57.93   Tm : 00:00:25.04
+tell .Roxane nodes :  8 374 091 722
+tell .Roxane speed :         144 550 kN/s
+tell /os play .8.0 C2/-8.00/25.05
+[recv]READY
+READY
+READY
+READY
+READY
+
+/os: update .8.0 C2/-8.00/25.05
 READY

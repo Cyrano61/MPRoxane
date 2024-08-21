@@ -239,7 +239,7 @@ void RXEngine::MG_PVS_root(RXBBPatterns& sBoard, const int depth,  int alpha, in
 				if(search_client == RXSearch::kGGSMode) {	// GGS mode
 					
 					if(dependent_time && depth>13)
-						manager->sendMsg("         " + RXMove::index_to_coord(iter->position) + " is better? ");
+						manager->sendMsg("         " + RXMove::index_to_coord(iter->position) + " maybe better? ");
 				}
 				
 				

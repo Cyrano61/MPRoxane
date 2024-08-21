@@ -1197,7 +1197,7 @@ std::string RXEngine::showPV(RXBitBoard& board, int depthLine) const {
             }
         }
 		
-		if( entry.selectivity != NO_SELECT)
+		if(entry.selectivity != NO_SELECT)
 			buffer <<  (pv_ext? "+":" ");
 
 		buffer << "  " << RXMove::index_to_coord(entry.move);
@@ -1244,7 +1244,7 @@ std::string RXEngine::showHashmove(const RXBitBoard& board, RXHashValue& entry) 
         }
     }
 	
-	if( entry.selectivity != NO_SELECT)
+	if(entry.selectivity != NO_SELECT)
 		buffer <<  (pv_ext? "+":" ");
 	
 	buffer << "] " << RXMove::index_to_coord(entry.move);
@@ -1274,7 +1274,7 @@ std::string RXEngine::showBestmove(const int depth, const bool pv_ext, const int
 		
 	buffer << " " << depth << "@" << CONFIDENCE[selectivity];
 	
-	if( selectivity != NO_SELECT)
+	if(selectivity != NO_SELECT)
 		buffer << (pv_ext? "+":" ");
 
 		
@@ -1305,13 +1305,30 @@ std::string RXEngine::display(RXBitBoard& board, const int type, const int allow
 	RXHashValue entry;
 	if( hTable->get(board, type_hashtable, entry) && ((entry.depth >= board.n_empties && entry.selectivity >= allowed_display) || (entry.depth < board.n_empties && entry.depth >= allowed_display))) {
 		
+        int depth = (entry.depth >= board.n_empties? board.n_empties : entry.depth);
 		
 		buffer << (type == HASHTABLE? "[":" ");
-		buffer <<std::fixed << std::setw(2) << (entry.depth >= board.n_empties? board.n_empties : entry.depth);
-		if(entry.selectivity != NO_SELECT)
-			buffer << "@" << std::setw(2) << CONFIDENCE[entry.selectivity];
-		else
-			buffer << "   ";
+		buffer <<std::fixed << std::setw(2) << depth ;
+        if(entry.selectivity != NO_SELECT) {
+            buffer << "@" << std::setw(2) << CONFIDENCE[entry.selectivity];
+            
+            bool pv_ext = false;
+            if(depth!=board.n_empties && depth>MIN_DEPTH_USE_PV_EXTENSION && depth+pv_extension>=board.n_empties) {
+                if(entry.lower == entry.upper && entry.lower%VALUE_DISC == 0) {
+                    pv_ext = true;
+                } else if(entry.lower == -MAX_SCORE &&  entry.upper%VALUE_DISC == 0) {
+                    pv_ext = true;
+                } else if(entry.lower%VALUE_DISC == 0) {
+                    pv_ext = true;
+                }
+            }
+            
+            if(entry.selectivity != NO_SELECT)
+                buffer <<  (pv_ext? "+":" ");
+
+            
+        } else
+			buffer << "    ";
 			
 		buffer << (type == HASHTABLE? "]|":" |");
 		
@@ -1657,7 +1674,7 @@ void RXEngine::run() {
 		
 	} else {
 
-		*log << " depth | score | principal variation                 | time        |      nodes (N) |     kN/s |" << std::endl;
+		*log << "  depth | score | principal variation                 | time        |      nodes (N) |     kN/s |" << std::endl;
 
 		int depth = 2;
 		int selectivity = MG_SELECT;

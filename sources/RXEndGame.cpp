@@ -2218,7 +2218,7 @@ void RXEngine::EG_SP_search_root(RXSplitPoint* sp, const unsigned int threadID) 
 			extra_time++;
 			
 			if(dependent_time && board.n_empties>19)
-				manager->sendMsg("         " + RXMove::index_to_coord(move->position) + " is better? ");
+				manager->sendMsg("         " + RXMove::index_to_coord(move->position) + " maybe better? ");
 			
 			if(sp->selectivity != NO_SELECT)
 				score = -EG_PVS_deep(threadID, sBoard, true, sp->selectivity, child_selective_cutoff, -sp->beta, (child_selective_cutoff? -sp->alpha : -score), false);
