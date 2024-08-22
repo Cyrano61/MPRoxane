@@ -1537,11 +1537,15 @@ void RXEngine::get_move(RXSearch& s) {
 		buffer << "nodes : " << std::setw(14) << s.bestMove.nodes;
 		manager->sendMsg(buffer.str());
 
-		if(speed > 1000) {
-			buffer.str("");
-			buffer << "speed : " << std::setw(15) << static_cast<int>(speed/1000) << " kN/s";
-			manager->sendMsg(buffer.str());
-		}
+        buffer.str("");
+		if(speed > 100) {
+			buffer << "speed : " << std::setw(14) << static_cast<int>(speed/1000) << " kN/s";
+        } else {
+            buffer << "speed : " << std::setw(14) << " N/A ";
+
+        }
+        manager->sendMsg(buffer.str());
+
 	}
 
 

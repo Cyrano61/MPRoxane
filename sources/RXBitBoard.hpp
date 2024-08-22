@@ -143,7 +143,6 @@ bool generate_flips_##pos(RXMove& move) const
     static int get_mobility(const unsigned long long discs_player, const unsigned long long discs_opponent);
     static int get_corner_stability(const unsigned long long& discs_player);
     int get_stability(const int color, const int n_stables_cut) const;
-    static int	get_border(const unsigned long long  p_discs, const unsigned long long  o_discs);
     
     static int local_Parity(const unsigned long long p_discs, const unsigned long long o_discs, const int position);
     int local_Parity(const int position) const;
@@ -411,47 +410,103 @@ inline int RXBitBoard::get_corner_stability(const unsigned long long& discs_play
 
 }
 
+/// retourne un pseudo (sous evalué) score de pions stables
+/// - Parameters:
+///   - color: couleur du joueur
+///   - n_stables_cut: valeur de coupure (type alpha, beta)
 inline int RXBitBoard::get_stability(const int color, const int n_stables_cut) const {
+    
+    
+    unsigned long long filled = discs[BLACK] | discs[WHITE];
+    
+    
+    unsigned long long left_right = filled;
+    left_right &= left_right >> 4;
+    left_right &= left_right >> 2;
+    left_right &= left_right >> 1;
+    left_right &= 0x0101010101010101ULL;
+    
+    //trick multiplication par 255 (remplit le lignes)
+    left_right = (left_right << 8) - left_right; //*=255
+    left_right |= 0x8181818181818181ULL;
+    
+    //    //identique
+    //    unsigned long long left_right = filled;
+    //    left_right &= left_right>>4;
+    //    left_right &= left_right>>2;
+    //    left_right &= left_right>>1;
+    //    left_right = (left_right & 0x0101010101010101ULL)*0xFFULL;
+    //
+    //    left_right |= 0x8181818181818181ULL;
+    
+    unsigned long long up_down = filled;
+    up_down &= (up_down >> 32) | (up_down << 32);
+    up_down &= (up_down >> 16) | (up_down << 16);
+    up_down &= (up_down >>  8) | (up_down <<  8);
+    
+    up_down |= 0xFF000000000000FFULL;
 
-	unsigned long long filled = discs[BLACK] | discs[WHITE];
+    unsigned long long diag_a, diag_b;
+    
+#ifndef __ARM_NEON
+        
+    diag_a = filled;
+    diag_a &= ((diag_a>>28) & 0x00000000F0F0F0F0ULL) | ((diag_a<<28) & 0x0F0F0F0F00000000ULL) | 0xF0F0F0F00F0F0F0FULL;
+    diag_a &= ((diag_a>>14) & 0x0000FCFCFCFCFCFCULL) | ((diag_a<<14) & 0x3F3F3F3F3F3F0000ULL) | 0xC0C0000000000303ULL;
+    diag_a &= (diag_a>> 7) & (diag_a<< 7);
+    
+    diag_a |= 0xFF818181818181FFULL;
+    
+    diag_b = filled;
+    //diag_b &= ((diag_b>>36) & 0x000000000F0F0F0FULL) | ((diag_b<<36) & 0xF0F0F0F000000000ULL) | 0x0F0F0F0FF0F0F0F0ULL;
+    diag_b &= (diag_b>>36) | (diag_b<<36) | 0x0F0F0F0FF0F0F0F0ULL;
+    diag_b &= ((diag_b>>18) & 0x00003F3F3F3F3F3FULL) | ((diag_b<<18) & 0xFCFCFCFCFCFC0000ULL) | 0x030300000000C0C0ULL;
+    diag_b &= (diag_b>> 9) & (diag_b<< 9);
+    
+    diag_b |= 0xFF818181818181FFULL;
+    
+    
+#else
+       
+    
+    static uint64x2_t shift_right_4 = {-28,-36};
+    static uint64x2_t shift_left_4  = { 28, 36};
+    static uint64x2_t mask_right_4 = { 0x00000000F0F0F0F0ULL, 0x000000000F0F0F0FULL};
+    static uint64x2_t mask_left_4  = { 0x0F0F0F0F00000000ULL, 0xF0F0F0F000000000ULL};
+    static uint64x2_t mask_4       = { 0xF0F0F0F00F0F0F0FULL, 0x0F0F0F0FF0F0F0F0ULL};
 
-	unsigned long long left_right = filled;
-	left_right &= left_right >> 4;
-	left_right &= left_right >> 2;
-	left_right &= left_right >> 1;
-	left_right &= 0x0101010101010101ULL;
+    static uint64x2_t shift_right_2 = {-14,-18};
+    static uint64x2_t shift_left_2  = { 14, 18};
+    static uint64x2_t mask_right_2 = { 0x0000FCFCFCFCFCFCULL, 0x00003F3F3F3F3F3FULL};
+    static uint64x2_t mask_left_2  = { 0x3F3F3F3F3F3F0000ULL, 0xFCFCFCFCFCFC0000ULL};
+    static uint64x2_t mask_2       = { 0xC0C0000000000303ULL, 0x030300000000C0C0ULL};
+    
+    static uint64x2_t shift_right = {-7,-9};
+    static uint64x2_t shift_left  = { 7, 9};
+        
+    uint64x2_t diag = vdupq_n_u64(filled);
+    
+    uint64x2_t
+    temp = vandq_u64(vshlq_u64(diag, shift_right_4), mask_right_4);
+    temp = vorrq_u64(temp , vandq_u64(vshlq_u64(diag, shift_left_4), mask_left_4));
+    diag = vandq_u64(diag, vorrq_u64(temp, mask_4));
 
-    //trick
-//unsigned long long left_right = filled;
-	left_right = (left_right << 8) - left_right; //*=255
-	left_right |= 0x8181818181818181ULL;
-	
-	unsigned long long up_down = filled;
-	up_down &= (up_down >> 32) | (up_down << 32);
-	up_down &= (up_down >> 16) | (up_down << 16);
-	up_down &= (up_down >>  8) & (up_down <<  8);
+    temp = vandq_u64(vshlq_u64(diag, shift_right_2), mask_right_2);
+    temp = vorrq_u64(temp , vandq_u64(vshlq_u64(diag, shift_left_2), mask_left_2));
+    diag = vandq_u64(diag, vorrq_u64(temp, mask_2));
 
-	up_down |= 0xFF000000000000FFULL;
-	
-	
-	unsigned long long diag_a = filled;
-	diag_a &= ((diag_a>>28) & 0x00000000F0F0F0F0ULL) | ((diag_a<<28) & 0x0F0F0F0F00000000ULL) | 0xF0F0F0F00F0F0F0FULL;
-	diag_a &= ((diag_a>>14) & 0x0000FCFCFCFCFCFCULL) | ((diag_a<<14) & 0x3F3F3F3F3F3F0000ULL) | 0xC0C0000000000303ULL;
-	diag_a &= (diag_a>> 7) & (diag_a<< 7);
-	
-	diag_a |= 0xFF818181818181FFULL;
-	
-	unsigned long long diag_b = filled;
-	//diag_b &= ((diag_b>>36) & 0x000000000F0F0F0FULL) | ((diag_b<<36) & 0xF0F0F0F000000000ULL) | 0x0F0F0F0FF0F0F0F0ULL;	
-	diag_b &= (diag_b>>36) | (diag_b<<36) | 0x0F0F0F0FF0F0F0F0ULL;
-	diag_b &= ((diag_b>>18) & 0x00003F3F3F3F3F3FULL) | ((diag_b<<18) & 0xFCFCFCFCFCFC0000ULL) | 0x030300000000C0C0ULL;
-	diag_b &= (diag_b>> 9) & (diag_b<< 9);
-	
-	diag_b |= 0xFF818181818181FFULL;
-	
+    diag = vandq_u64(diag, vandq_u64(vshlq_u64(diag, shift_right), vshlq_u64(diag, shift_left)));
+    diag = vorrq_u64(diag, vdupq_n_u64(0xFF818181818181FFULL));
+    
+    diag_a = vgetq_lane_u64(diag, 0);
+    diag_b = vgetq_lane_u64(diag, 1);
+    
 
-	
-	unsigned long long stable = left_right & up_down & diag_a & diag_b & discs[color];
+
+#endif
+
+    unsigned long long stable = left_right & up_down & diag_a & diag_b & discs[color];
+
 
 	if(stable == 0)
 		return 0;
@@ -463,6 +518,8 @@ inline int RXBitBoard::get_stability(const int color, const int n_stables_cut) c
 	
 
 	unsigned long long old_stable, dir_1, dir_2, dir_3, dir_4;
+    
+    
 
 	do {
 
@@ -485,23 +542,6 @@ inline int RXBitBoard::get_stability(const int color, const int n_stables_cut) c
 
 }
 
-inline int RXBitBoard::get_border(const unsigned long long  p_discs, const unsigned long long  o_discs) {
-	
-	unsigned long long border
-	        = (0x7E7E7E7E7E7E7E7EULL & p_discs) << 1;
-	border |= (0x7E7E7E7E7E7E7E7EULL & p_discs) >> 1;
-	border |= (0x00FFFFFFFFFFFF00ULL & p_discs) << 8;
-	border |= (0x00FFFFFFFFFFFF00ULL & p_discs) >> 8;
-	border |= (0x007E7E7E7E7E7E00ULL & p_discs) << 9;
-	border |= (0x007E7E7E7E7E7E00ULL & p_discs) >> 9;
-	border |= (0x007E7E7E7E7E7E00ULL & p_discs) << 7;
-	border |= (0x007E7E7E7E7E7E00ULL & p_discs) >> 7;
-	
-	border &= ~(p_discs | o_discs);
-			
-	return __builtin_popcountll(border);
-	
-}
 
 
 inline int RXBitBoard::final_score_2(int alpha, const int beta, const bool passed) {

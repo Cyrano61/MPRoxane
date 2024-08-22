@@ -478,9 +478,13 @@ void RXRoxane::get_move(const std::string& file_name) {
 
             
 			buffer << "Total nodes : " << std::setw(15) <<  nodes << "\n";
-			if (T>0.2) {
-				buffer << "Speed       : " << std::setw(15) << static_cast<int>((nodes/1000)/T) << " kN/s";
-			}
+            int speed = static_cast<int>((nodes/1000)/T);
+            buffer << "Speed       : " << std::setw(14);
+			if (speed > 100) {
+				buffer  << static_cast<int>((nodes/1000)/T) << " kN/s";
+            } else {
+                buffer << " N/A";
+            }
 			engine[SHARED]->writeLog(buffer.str());
 			
 			engine[SHARED]->writeLog("");
