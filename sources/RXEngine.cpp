@@ -1382,7 +1382,14 @@ std::string RXEngine::display(RXBitBoard& board, const int type, const int allow
 				
 				buffer << std::noshowpos << std::setprecision(0) << std::setw(14) << board.n_nodes << " | ";
 				
-				buffer << std::setw(8) << (time_level == 0 ? ' ':(board.n_nodes/max(1, time_level))) << " |";
+                unsigned long long speed = 0;
+                if(time_level>0)
+                    speed = board.n_nodes/time_level;
+                if (board.n_nodes > 500000) {
+                    buffer << std::setw(8) << (time_level == 0 ? ' ': speed) << " |";
+                } else {
+                    buffer << std::setw(8) << " N/A" << " |";
+                }
 			}
 		}
 				
@@ -1516,9 +1523,9 @@ void RXEngine::get_move(RXSearch& s) {
 	
 
 	if(search_sBoard.board.n_empties > 19) {
-		int speed = 1;
+		int speed = 0;
 		if(time_search != 0)
-			speed = static_cast<int>((s.bestMove.nodes/time_search) *1000);
+			speed = static_cast<int>(s.bestMove.nodes/time_search) ; //*1000)
 
 		std::ostringstream buffer;
 		
@@ -1538,10 +1545,11 @@ void RXEngine::get_move(RXSearch& s) {
 		manager->sendMsg(buffer.str());
 
         buffer.str("");
-		if(speed > 100) {
-			buffer << "speed : " << std::setw(14) << static_cast<int>(speed/1000) << " kN/s";
+        buffer << "speed : " << std::setw(14);
+		if(s.bestMove.nodes > 500000) {
+			 buffer << static_cast<int>(speed) << " kN/s";
         } else {
-            buffer << "speed : " << std::setw(14) << " N/A ";
+            buffer << "N/A";
 
         }
         manager->sendMsg(buffer.str());

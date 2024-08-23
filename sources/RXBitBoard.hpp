@@ -420,7 +420,12 @@ inline int RXBitBoard::get_stability(const int color, const int n_stables_cut) c
     unsigned long long filled = discs[BLACK] | discs[WHITE];
     
     
-    unsigned long long left_right = filled;
+    unsigned long long left_right, up_down, diag_a, diag_b;
+    
+    
+#ifndef __ARM_NEON
+    
+    left_right = filled;
     left_right &= left_right >> 4;
     left_right &= left_right >> 2;
     left_right &= left_right >> 1;
@@ -429,26 +434,13 @@ inline int RXBitBoard::get_stability(const int color, const int n_stables_cut) c
     //trick multiplication par 255 (remplit le lignes)
     left_right = (left_right << 8) - left_right; //*=255
     left_right |= 0x8181818181818181ULL;
-    
-    //    //identique
-    //    unsigned long long left_right = filled;
-    //    left_right &= left_right>>4;
-    //    left_right &= left_right>>2;
-    //    left_right &= left_right>>1;
-    //    left_right = (left_right & 0x0101010101010101ULL)*0xFFULL;
-    //
-    //    left_right |= 0x8181818181818181ULL;
-    
-    unsigned long long up_down = filled;
+     
+    up_down = filled;
     up_down &= (up_down >> 32) | (up_down << 32);
     up_down &= (up_down >> 16) | (up_down << 16);
     up_down &= (up_down >>  8) | (up_down <<  8);
     
     up_down |= 0xFF000000000000FFULL;
-
-    unsigned long long diag_a, diag_b;
-    
-#ifndef __ARM_NEON
         
     diag_a = filled;
     diag_a &= ((diag_a>>28) & 0x00000000F0F0F0F0ULL) | ((diag_a<<28) & 0x0F0F0F0F00000000ULL) | 0xF0F0F0F00F0F0F0FULL;
@@ -465,10 +457,75 @@ inline int RXBitBoard::get_stability(const int color, const int n_stables_cut) c
     
     diag_b |= 0xFF818181818181FFULL;
     
+    unsigned long long stable = left_right & up_down & diag_a & diag_b & discs[color];
+
+
+    if(stable == 0)
+        return 0;
+        
+
+    int result = VALUE_DISC * __builtin_popcountll(stable);
+    if(result>=n_stables_cut)
+        return result;
+    
+
+    unsigned long long old_stable, dir_1, dir_2, dir_3, dir_4;
+    
+    
+    do {
+
+        old_stable = stable;
+
+        dir_1 = (stable << 1) | (stable >> 1 ) | left_right;
+        dir_2 = (stable << 8) | (stable >> 8 ) | up_down;
+        dir_3 = (stable << 7) | (stable >> 7 ) | diag_a;
+        dir_4 = (stable << 9) | (stable >> 9 ) | diag_b;
+
+        stable = dir_1 & dir_2 & dir_3 & dir_4 & discs[color];
+
+
+    } while(stable != old_stable);
+    
+
+
+    if(stable == 0)
+        return 0;
+        
+    return VALUE_DISC * __builtin_popcountll(stable);
+
+    
     
 #else
-       
     
+    static uint64x2_t shift_right_rlud_4 = {-4,-32};
+    static uint64x2_t shift_left_rlud_4  = {64, 32};
+    static uint64x2_t shift_right_rlud_2 = {-2,-16};
+    static uint64x2_t shift_left_rlud_2  = {64, 16};
+    static uint64x2_t shift_right_rlud_1 = {-1, -8};
+    static uint64x2_t shift_left_rlud_1  = {64,  8};
+    static uint64x2_t shift_left_rl_8    = { 8,  0};
+    
+    static uint64x2_t mask_rlup_and = { 0x0101010101010101ULL, 0xFFFFFFFFFFFFFFFFULL};
+    static uint64x2_t mask_rlup_or  = { 0x8181818181818181ULL, 0xFF000000000000FFULL};
+    static uint64x2_t mask_rlud = {0x8181818181818181ULL, 0xFF000000000000FFULL};
+
+
+    uint64x2_t temp = vdupq_n_u64(filled);
+    
+    temp = vandq_u64( temp, vorrq_u64(vshlq_u64(temp, shift_right_rlud_4), vshlq_u64(temp, shift_left_rlud_4)));
+    temp = vandq_u64( temp, vorrq_u64(vshlq_u64(temp, shift_right_rlud_2), vshlq_u64(temp, shift_left_rlud_2)));
+    temp = vandq_u64( temp, vorrq_u64(vshlq_u64(temp, shift_right_rlud_1), vshlq_u64(temp, shift_left_rlud_1)));
+     
+    
+    //pour l'instant je ne peux vectoriser
+    //trick multiplication par 255 (remplit le lignes)
+    left_right = (vgetq_lane_u64(temp, 0) & 0x0101010101010101ULL) * 0xFFULL;
+    up_down = vgetq_lane_u64(temp, 1);
+    
+
+    uint64x2_t rlud = {left_right, up_down};
+    rlud = vorrq_u64(rlud, mask_rlud);
+        
     static uint64x2_t shift_right_4 = {-28,-36};
     static uint64x2_t shift_left_4  = { 28, 36};
     static uint64x2_t mask_right_4 = { 0x00000000F0F0F0F0ULL, 0x000000000F0F0F0FULL};
@@ -486,7 +543,7 @@ inline int RXBitBoard::get_stability(const int color, const int n_stables_cut) c
         
     uint64x2_t diag = vdupq_n_u64(filled);
     
-    uint64x2_t
+    
     temp = vandq_u64(vshlq_u64(diag, shift_right_4), mask_right_4);
     temp = vorrq_u64(temp , vandq_u64(vshlq_u64(diag, shift_left_4), mask_left_4));
     diag = vandq_u64(diag, vorrq_u64(temp, mask_4));
@@ -498,48 +555,55 @@ inline int RXBitBoard::get_stability(const int color, const int n_stables_cut) c
     diag = vandq_u64(diag, vandq_u64(vshlq_u64(diag, shift_right), vshlq_u64(diag, shift_left)));
     diag = vorrq_u64(diag, vdupq_n_u64(0xFF818181818181FFULL));
     
-    diag_a = vgetq_lane_u64(diag, 0);
-    diag_b = vgetq_lane_u64(diag, 1);
+     
+    unsigned long long stable = vgetq_lane_u64(rlud, 0) & vgetq_lane_u64(rlud, 1) & vgetq_lane_u64(diag, 0) & vgetq_lane_u64(diag, 1) & discs[color];
+
+
+    if(stable == 0)
+        return 0;
+        
+
+    int result = VALUE_DISC * __builtin_popcountll(stable);
+    if(result>=n_stables_cut)
+        return result;
     
+
+    unsigned long long old_stable;
+    uint64x2_t dir_1_8;
+    uint64x2_t dir_7_9;
+    
+    static uint64x2_t shift_right_1_8 = {-1,-8};
+    static uint64x2_t shift_left_1_8  = { 1, 8};
+    static uint64x2_t shift_right_7_9 = {-7,-9};
+    static uint64x2_t shift_left_7_9  = { 7, 9};
+    
+
+    do {
+
+        old_stable = stable;
+        
+        dir_1_8 = vdupq_n_u64(stable);
+        dir_7_9 = vdupq_n_u64(stable);
+        
+        dir_1_8 = vorrq_u64(vorrq_u64(vshlq_u64(dir_1_8, shift_right_1_8), vshlq_u64(dir_1_8, shift_left_1_8)), rlud);
+        dir_7_9 = vorrq_u64(vorrq_u64(vshlq_u64(dir_7_9, shift_right_7_9), vshlq_u64(dir_7_9, shift_left_7_9)), diag);
+
+        dir_1_8 = vandq_u64(dir_1_8, dir_7_9);
+        stable = vgetq_lane_u64(dir_1_8, 0) & vgetq_lane_u64(dir_1_8, 1) & discs[color];
+        
+
+    } while(stable != old_stable);
+    
+
+    if(stable == 0)
+        return 0;
+        
+    return VALUE_DISC * __builtin_popcountll(stable);
 
 
 #endif
 
-    unsigned long long stable = left_right & up_down & diag_a & diag_b & discs[color];
-
-
-	if(stable == 0)
-		return 0;
-		
-
-	int result = VALUE_DISC * __builtin_popcountll(stable);
-	if(result>=n_stables_cut)
-		return result;
-	
-
-	unsigned long long old_stable, dir_1, dir_2, dir_3, dir_4;
-    
-    
-
-	do {
-
-		old_stable = stable;
-
-		dir_1 = (stable << 1) | (stable >> 1 ) | left_right;
-		dir_2 = (stable << 8) | (stable >> 8 ) | up_down;
-		dir_3 = (stable << 7) | (stable >> 7 ) | diag_a;
-		dir_4 = (stable << 9) | (stable >> 9 ) | diag_b;
-
-		stable = dir_1 & dir_2 & dir_3 & dir_4 & discs[color];
-
-	} while(stable != old_stable);
-	
-
-    if(stable == 0)
-        return 0;
-		
-	return VALUE_DISC * __builtin_popcountll(stable);
-
+ 
 }
 
 
