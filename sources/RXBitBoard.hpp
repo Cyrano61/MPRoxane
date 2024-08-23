@@ -410,6 +410,122 @@ inline int RXBitBoard::get_corner_stability(const unsigned long long& discs_play
 
 }
 
+#ifdef __ARM_NEON
+
+/// retourne un pseudo (sous evalué) score de pions stables
+/// la 1ere partie determine les lignes (dans les 4 directions) pleines
+/// si un pions est dans les 4 lignes et appartient a la color, il est stable
+/// la deuxieme partie trouve les pions stables adgacents au pions stables precedents (dans les 4 directions)
+/// - Parameters:
+///   - color: couleur du joueur
+///   - n_stables_cut: valeur de coupure (type alpha, beta)
+inline int RXBitBoard::get_stability(const int color, const int n_stables_cut) const {
+        
+    unsigned long long filled = discs[BLACK] | discs[WHITE];
+    
+    static uint64x2_t shift_right_rlud_4 = {-4,-32};
+    static uint64x2_t shift_left_rlud_4  = {64, 32};
+    static uint64x2_t shift_right_rlud_2 = {-2,-16};
+    static uint64x2_t shift_left_rlud_2  = {64, 16};
+    static uint64x2_t shift_right_rlud_1 = {-1, -8};
+    static uint64x2_t shift_left_rlud_1  = {64,  8};
+    
+    static uint64x2_t mask_rlud = {0x8181818181818181ULL, 0xFF000000000000FFULL};
+
+
+    uint64x2_t rlud = vdupq_n_u64(filled);
+    
+    rlud = vandq_u64( rlud, vorrq_u64(vshlq_u64(rlud, shift_right_rlud_4), vshlq_u64(rlud, shift_left_rlud_4)));
+    rlud = vandq_u64( rlud, vorrq_u64(vshlq_u64(rlud, shift_right_rlud_2), vshlq_u64(rlud, shift_left_rlud_2)));
+    rlud = vandq_u64( rlud, vorrq_u64(vshlq_u64(rlud, shift_right_rlud_1), vshlq_u64(rlud, shift_left_rlud_1)));
+     
+    
+    //pour l'instant je ne peux pas vectoriser
+    //trick multiplication par 255 (remplit le lignes)
+    uint64x1_t temp_0 = vcreate_u64((vgetq_lane_u64(rlud, 0) & 0x0101010101010101ULL) * 0xFFULL);
+    uint64x1_t temp_1 = vcreate_u64(vgetq_lane_u64(rlud, 1));
+    
+    rlud = vcombine_u64(temp_0, temp_1);
+    rlud = vorrq_u64(rlud, mask_rlud);
+        
+    static uint64x2_t shift_right_4 = {-28,-36};
+    static uint64x2_t shift_left_4  = { 28, 36};
+    static uint64x2_t mask_right_4 = { 0x00000000F0F0F0F0ULL, 0x000000000F0F0F0FULL};
+    static uint64x2_t mask_left_4  = { 0x0F0F0F0F00000000ULL, 0xF0F0F0F000000000ULL};
+    static uint64x2_t mask_4       = { 0xF0F0F0F00F0F0F0FULL, 0x0F0F0F0FF0F0F0F0ULL};
+
+    static uint64x2_t shift_right_2 = {-14,-18};
+    static uint64x2_t shift_left_2  = { 14, 18};
+    static uint64x2_t mask_right_2 = { 0x0000FCFCFCFCFCFCULL, 0x00003F3F3F3F3F3FULL};
+    static uint64x2_t mask_left_2  = { 0x3F3F3F3F3F3F0000ULL, 0xFCFCFCFCFCFC0000ULL};
+    static uint64x2_t mask_2       = { 0xC0C0000000000303ULL, 0x030300000000C0C0ULL};
+    
+    static uint64x2_t shift_right = {-7,-9};
+    static uint64x2_t shift_left  = { 7, 9};
+        
+    uint64x2_t diag = vdupq_n_u64(filled);
+    
+    uint64x2_t
+    temp = vandq_u64(vshlq_u64(diag, shift_right_4), mask_right_4);
+    temp = vorrq_u64(temp , vandq_u64(vshlq_u64(diag, shift_left_4), mask_left_4));
+    diag = vandq_u64(diag, vorrq_u64(temp, mask_4));
+
+    temp = vandq_u64(vshlq_u64(diag, shift_right_2), mask_right_2);
+    temp = vorrq_u64(temp , vandq_u64(vshlq_u64(diag, shift_left_2), mask_left_2));
+    diag = vandq_u64(diag, vorrq_u64(temp, mask_2));
+
+    diag = vandq_u64(diag, vandq_u64(vshlq_u64(diag, shift_right), vshlq_u64(diag, shift_left)));
+    diag = vorrq_u64(diag, vdupq_n_u64(0xFF818181818181FFULL));
+    
+    temp = vandq_u64(rlud, diag);
+    unsigned long long stable = vgetq_lane_u64(temp, 0) & vgetq_lane_u64(temp, 1) & discs[color];
+
+
+    if(stable == 0)
+        return 0;
+        
+
+    int result = VALUE_DISC * __builtin_popcountll(stable);
+    if(result>=n_stables_cut)
+        return result;
+    
+
+    unsigned long long old_stable;
+    uint64x2_t dir_1_8;
+    uint64x2_t dir_7_9;
+    
+    static uint64x2_t shift_right_1_8 = {-1,-8};
+    static uint64x2_t shift_left_1_8  = { 1, 8};
+    static uint64x2_t shift_right_7_9 = {-7,-9};
+    static uint64x2_t shift_left_7_9  = { 7, 9};
+    
+
+    do {
+
+        old_stable = stable;
+        
+        dir_1_8 = vdupq_n_u64(stable);
+        dir_7_9 = vdupq_n_u64(stable);
+        
+        dir_1_8 = vorrq_u64(vorrq_u64(vshlq_u64(dir_1_8, shift_right_1_8), vshlq_u64(dir_1_8, shift_left_1_8)), rlud);
+        dir_7_9 = vorrq_u64(vorrq_u64(vshlq_u64(dir_7_9, shift_right_7_9), vshlq_u64(dir_7_9, shift_left_7_9)), diag);
+
+        dir_1_8 = vandq_u64(dir_1_8, dir_7_9);
+        stable = vgetq_lane_u64(dir_1_8, 0) & vgetq_lane_u64(dir_1_8, 1) & discs[color];
+        
+
+    } while(stable != old_stable);
+    
+
+    if(stable == 0)
+        return 0;
+        
+    return VALUE_DISC * __builtin_popcountll(stable);
+ 
+}
+
+#else
+
 /// retourne un pseudo (sous evalué) score de pions stables
 /// - Parameters:
 ///   - color: couleur du joueur
@@ -419,12 +535,8 @@ inline int RXBitBoard::get_stability(const int color, const int n_stables_cut) c
     
     unsigned long long filled = discs[BLACK] | discs[WHITE];
     
-    
     unsigned long long left_right, up_down, diag_a, diag_b;
-    
-    
-#ifndef __ARM_NEON
-    
+
     left_right = filled;
     left_right &= left_right >> 4;
     left_right &= left_right >> 2;
@@ -493,120 +605,10 @@ inline int RXBitBoard::get_stability(const int color, const int n_stables_cut) c
         
     return VALUE_DISC * __builtin_popcountll(stable);
 
-    
-    
-#else
-    
-    static uint64x2_t shift_right_rlud_4 = {-4,-32};
-    static uint64x2_t shift_left_rlud_4  = {64, 32};
-    static uint64x2_t shift_right_rlud_2 = {-2,-16};
-    static uint64x2_t shift_left_rlud_2  = {64, 16};
-    static uint64x2_t shift_right_rlud_1 = {-1, -8};
-    static uint64x2_t shift_left_rlud_1  = {64,  8};
-    static uint64x2_t shift_left_rl_8    = { 8,  0};
-    
-    static uint64x2_t mask_rlup_and = { 0x0101010101010101ULL, 0xFFFFFFFFFFFFFFFFULL};
-    static uint64x2_t mask_rlup_or  = { 0x8181818181818181ULL, 0xFF000000000000FFULL};
-    static uint64x2_t mask_rlud = {0x8181818181818181ULL, 0xFF000000000000FFULL};
-
-
-    uint64x2_t temp = vdupq_n_u64(filled);
-    
-    temp = vandq_u64( temp, vorrq_u64(vshlq_u64(temp, shift_right_rlud_4), vshlq_u64(temp, shift_left_rlud_4)));
-    temp = vandq_u64( temp, vorrq_u64(vshlq_u64(temp, shift_right_rlud_2), vshlq_u64(temp, shift_left_rlud_2)));
-    temp = vandq_u64( temp, vorrq_u64(vshlq_u64(temp, shift_right_rlud_1), vshlq_u64(temp, shift_left_rlud_1)));
-     
-    
-    //pour l'instant je ne peux vectoriser
-    //trick multiplication par 255 (remplit le lignes)
-    left_right = (vgetq_lane_u64(temp, 0) & 0x0101010101010101ULL) * 0xFFULL;
-    up_down = vgetq_lane_u64(temp, 1);
-    
-
-    uint64x2_t rlud = {left_right, up_down};
-    rlud = vorrq_u64(rlud, mask_rlud);
-        
-    static uint64x2_t shift_right_4 = {-28,-36};
-    static uint64x2_t shift_left_4  = { 28, 36};
-    static uint64x2_t mask_right_4 = { 0x00000000F0F0F0F0ULL, 0x000000000F0F0F0FULL};
-    static uint64x2_t mask_left_4  = { 0x0F0F0F0F00000000ULL, 0xF0F0F0F000000000ULL};
-    static uint64x2_t mask_4       = { 0xF0F0F0F00F0F0F0FULL, 0x0F0F0F0FF0F0F0F0ULL};
-
-    static uint64x2_t shift_right_2 = {-14,-18};
-    static uint64x2_t shift_left_2  = { 14, 18};
-    static uint64x2_t mask_right_2 = { 0x0000FCFCFCFCFCFCULL, 0x00003F3F3F3F3F3FULL};
-    static uint64x2_t mask_left_2  = { 0x3F3F3F3F3F3F0000ULL, 0xFCFCFCFCFCFC0000ULL};
-    static uint64x2_t mask_2       = { 0xC0C0000000000303ULL, 0x030300000000C0C0ULL};
-    
-    static uint64x2_t shift_right = {-7,-9};
-    static uint64x2_t shift_left  = { 7, 9};
-        
-    uint64x2_t diag = vdupq_n_u64(filled);
-    
-    
-    temp = vandq_u64(vshlq_u64(diag, shift_right_4), mask_right_4);
-    temp = vorrq_u64(temp , vandq_u64(vshlq_u64(diag, shift_left_4), mask_left_4));
-    diag = vandq_u64(diag, vorrq_u64(temp, mask_4));
-
-    temp = vandq_u64(vshlq_u64(diag, shift_right_2), mask_right_2);
-    temp = vorrq_u64(temp , vandq_u64(vshlq_u64(diag, shift_left_2), mask_left_2));
-    diag = vandq_u64(diag, vorrq_u64(temp, mask_2));
-
-    diag = vandq_u64(diag, vandq_u64(vshlq_u64(diag, shift_right), vshlq_u64(diag, shift_left)));
-    diag = vorrq_u64(diag, vdupq_n_u64(0xFF818181818181FFULL));
-    
-     
-    unsigned long long stable = vgetq_lane_u64(rlud, 0) & vgetq_lane_u64(rlud, 1) & vgetq_lane_u64(diag, 0) & vgetq_lane_u64(diag, 1) & discs[color];
-
-
-    if(stable == 0)
-        return 0;
-        
-
-    int result = VALUE_DISC * __builtin_popcountll(stable);
-    if(result>=n_stables_cut)
-        return result;
-    
-
-    unsigned long long old_stable;
-    uint64x2_t dir_1_8;
-    uint64x2_t dir_7_9;
-    
-    static uint64x2_t shift_right_1_8 = {-1,-8};
-    static uint64x2_t shift_left_1_8  = { 1, 8};
-    static uint64x2_t shift_right_7_9 = {-7,-9};
-    static uint64x2_t shift_left_7_9  = { 7, 9};
-    
-
-    do {
-
-        old_stable = stable;
-        
-        dir_1_8 = vdupq_n_u64(stable);
-        dir_7_9 = vdupq_n_u64(stable);
-        
-        dir_1_8 = vorrq_u64(vorrq_u64(vshlq_u64(dir_1_8, shift_right_1_8), vshlq_u64(dir_1_8, shift_left_1_8)), rlud);
-        dir_7_9 = vorrq_u64(vorrq_u64(vshlq_u64(dir_7_9, shift_right_7_9), vshlq_u64(dir_7_9, shift_left_7_9)), diag);
-
-        dir_1_8 = vandq_u64(dir_1_8, dir_7_9);
-        stable = vgetq_lane_u64(dir_1_8, 0) & vgetq_lane_u64(dir_1_8, 1) & discs[color];
-        
-
-    } while(stable != old_stable);
-    
-
-    if(stable == 0)
-        return 0;
-        
-    return VALUE_DISC * __builtin_popcountll(stable);
-
-
-#endif
-
  
 }
 
-
+#endif
 
 inline int RXBitBoard::final_score_2(int alpha, const int beta, const bool passed) {
 	return final_score_2(discs[player], discs[player^1], alpha/VALUE_DISC, beta/VALUE_DISC, passed,  empties_list->next->position,  empties_list->next->next->position)*VALUE_DISC;
