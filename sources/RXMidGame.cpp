@@ -103,12 +103,13 @@ void RXEngine::iterative_deepening(RXBBPatterns& sBoard, RXMove* list, int depth
 		
 		//update probable time for next depth
 		
-		int pTime = pTime_next_level(sBoard.board, eTime - time_startLevel, depth, depth+2);
-		time_nextLevel = pTime;
+        time_nextLevel = pTime_next_level(sBoard.board, eTime - time_startLevel, depth, depth+2);;
 		
 		if(depth>6)			
-			if(probable_timeout(pTime)) {
+			if(probable_timeout(time_nextLevel)) {
 				abort.store(true);
+                *log << "[" << get_current_time() << "] " << "        RXEngine ID : likely timeout" << std::endl;
+
 				break;
 			}
 		
@@ -311,6 +312,7 @@ int RXEngine::MG_PVS_deep(int threadID, RXBBPatterns& sBoard, const bool pv, con
 	
 	//time gestion
 	if(dependent_time && get_current_dependentTime() > time_limit()) {
+        *log << "        MG_PVS_deep : idThread :" << threadID << " time search expired, stops search" << std::endl;
 		abort.store(true);
 		return INTERRUPT_SEARCH;
 	}
@@ -835,18 +837,6 @@ int RXEngine::MG_PVS_deep(int threadID, RXBBPatterns& sBoard, const bool pv, con
                             }
                         }
 					} else {
-					
-//						if(depth <=  MAX_DEPTH_USE_PROBCUT)
-//							score = -MG_NWS_XProbCut(threadID, sBoard, 0, selectivity, depth-1, child_selective_cutoff, -lower-1, false);
-//						else
-//							score = -MG_PVS_deep(threadID, sBoard, false, selectivity, depth-1, child_selective_cutoff, -lower-1, -lower, false);
-//							
-//						if(lower < score && score < upper)
-//							if(depth <=  MAX_DEPTH_USE_PROBCUT)
-//								score = -MG_PVS_deep(threadID, sBoard, pv, selectivity, depth-1, child_selective_cutoff, -upper, -lower, false);
-//							else
-//								score = -MG_PVS_deep(threadID, sBoard, pv, selectivity, depth-1, child_selective_cutoff, -upper, child_selective_cutoff? -lower : -score, false);
-						
 							
 						score = -MG_NWS_XProbCut(threadID, sBoard, 0, selectivity, depth-1, child_selective_cutoff, -lower-1, false);
 
@@ -1439,6 +1429,7 @@ int RXEngine::MG_NWS_XProbCut(int threadID, RXBBPatterns& sBoard, const int pvDe
 	
 	//time gestion
 	if (dependent_time && get_current_dependentTime() > time_limit()) {
+        *log << "        MG_MWS_XProbCut : idThread :" << threadID << " time search expired, stops search" << std::endl;
 		abort.store(true);
 		return INTERRUPT_SEARCH;
 	}

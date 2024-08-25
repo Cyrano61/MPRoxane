@@ -88,6 +88,7 @@ int main (int argc, char * const argv[]) {
 		int err;
 		CODKStream gs;
 		
+        //liaison Roxane GGS
 		roxane.connectGGS(&gs);
 		gs.pComputer = &roxane;
 		

@@ -1,630 +1,651 @@
+[-1965356462]         RXEngine BLACK : stop : new position
 ---------------------------------------------------------------------------------------------------
 
   A B C D E F G H 
-1 O . . O O O O # 1
-2 . O O O O O O # 2
-3 O O # # O O O # 3
-4 O O # O O O # # 4	Noirs: 12	Blancs: 32
-5 O O O O O O # # 5	NOIRS au trait
-6 . . . O O O O # 6
-7 . . . . O . . # 7
-8 . . . . . . . . 8
+1 # # # O # # # # 1
+2 O # # # # # # # 2
+3 O O # # # # # # 3
+4 O O O # # # # # 4	Noirs: 27	Blancs: 31
+5 O O O # # O O . 5	NOIRS au trait
+6 O O O O O . . . 6
+7 O O O O O O O . 7
+8 O O O O O O O . 8
   A B C D E F G H 
 
-Evaluation : 42
+Evaluation : 6
 
+[0]         RXEngine : dependent time : false
   depth | score | principal variation                 | time        |      nodes (N) |     kN/s |
-  2     |  +42  | C1 b1 -- -- -- -- -- -- -- -- -- -- | 00:00:00.00 |             83 |      N/A |
-  4     |  +37  | C1 b1 D8 f7 -- -- -- -- -- -- -- -- | 00:00:00.00 |            255 |      N/A |
-  6     |  +35  | C1 b1 G7 f7 F8 h8 -- -- -- -- -- -- | 00:00:00.00 |          2 408 |      N/A |
-  8@72  |  +35  | A2 b1 C1 pa B6 c7 A7 b7 -- -- -- -- | 00:00:00.00 |         11 611 |      N/A |
- 10@72  |  +34  | A2 b1 C1 pa B6 c7 A7 b7 D8 g7 -- -- | 00:00:00.00 |         29 664 |      N/A |
- 20     |  +38  | A2 b1 C1 pa B6 c7 A7 b7 B8 d7 F8 c6 | 00:00:00.39 |     16 655 429 |   42 272 |
+  6     |   +6  | H5 -- -- -- -- -- -- -- -- -- -- -- | 00:00:00.00 |             49 |      N/A |
+[0]         RXEngine : end search
+I play H5
+evaluation 6
+time 00:00:00.00
+[43]         RXEngine BLACK : stop : new position
+---------------------------------------------------------------------------------------------------
+
+  A B C D E F G H 
+1 O O O O O O O O 1
+2 # O O # # # . . 2
+3 # # O O # O O . 3
+4 # O # O O O . . 4	Noirs: 18	Blancs: 31
+5 # O O O O # . . 5	BLANCS au trait
+6 # O O # O O . . 6
+7 # O O O O O . . 7
+8 # # # # . . . . 8
+  A B C D E F G H 
+
+Evaluation : -6
+
+[0]         RXEngine : dependent time : false
+  depth | score | principal variation                 | time        |      nodes (N) |     kN/s |
+  3     |   -4  | G4 g2 H2 -- -- -- -- -- -- -- -- -- | 00:00:00.00 |            138 |      N/A |
+  5     |   -2  | G2 g6 G7 g4 H6 -- -- -- -- -- -- -- | 00:00:00.00 |            800 |      N/A |
+ 15     |   +0  | G5 g6 H5 e8 G7 h6 G4 h8 F8 -- -- -- | 00:00:00.00 |        411 988 |      N/A |
+[8]         RXEngine : end search
+I play G5
+evaluation 0
+time 00:00:00.00
+[51]         RXEngine BLACK : stop : new position
+---------------------------------------------------------------------------------------------------
+
+  A B C D E F G H 
+1 . . O O O O . . 1
+2 # . O O O O O . 2
+3 # # O O # O # # 3
+4 # O # O # # # # 4	Noirs: 29	Blancs: 18
+5 # # # O # # # # 5	BLANCS au trait
+6 . # # O # O # # 6
+7 . . O # # # . # 7
+8 . . . . # . . . 8
+  A B C D E F G H 
+
+Evaluation : 5
+
+[0]         RXEngine : dependent time : false
+  depth | score | principal variation                 | time        |      nodes (N) |     kN/s |
+  3     |   +2  | A7 b2 H2 -- -- -- -- -- -- -- -- -- | 00:00:00.00 |            297 |      N/A |
+  5     |   +2  | G8 f8 D8 h1 B2 -- -- -- -- -- -- -- | 00:00:00.00 |          1 535 |      N/A |
+  7@72  |   +0  | F8 d8 A6 a7 H2 h1 G7 -- -- -- -- -- | 00:00:00.00 |         11 878 |      N/A |
+ 17     |   +2  | G8 d8 B8 b2 H2 h1 G1 g7 A7 a6 A1 -- | 00:00:00.01 |        713 967 |   44 622 |
+[17]         RXEngine : end search
+I play G8
+evaluation 2
+time 00:00:00.01
+[61]         RXEngine BLACK : stop : new position
+---------------------------------------------------------------------------------------------------
+
+  A B C D E F G H 
+1 . . O . . . . . 1
+2 . . O O # . . . 2
+3 O O O # # # O . 3
+4 O O O O # O # # 4	Noirs: 28	Blancs: 18
+5 # # # O O # O # 5	NOIRS au trait
+6 # # # # # O O # 6
+7 # . # # # # O # 7
+8 . . # # # # . . 8
+  A B C D E F G H 
+
+Evaluation : -8
+
+[0]         RXEngine : dependent time : false
+  depth | score | principal variation                 | time        |      nodes (N) |     kN/s |
+  2     |   -1  | A2 e1 -- -- -- -- -- -- -- -- -- -- | 00:00:00.00 |            206 |      N/A |
+  4     |   -1  | A2 e1 F2 b2 -- -- -- -- -- -- -- -- | 00:00:00.00 |            295 |      N/A |
+  6@72  |   +1  | A2 f2 F1 b2 E1 d1 -- -- -- -- -- -- | 00:00:00.00 |          1 719 |      N/A |
+  8@72  |   -3  | A2 f2 F1 e1 H3 g1 D1 b1 -- -- -- -- | 00:00:00.00 |          3 385 |      N/A |
+ 18     |   +4  | A2 b7 E1 f1 D1 h3 H2 f2 G2 h1 H8 g8 | 00:00:00.01 |        738 871 |   52 776 |
+[15]         RXEngine : end search
 I play A2
-evaluation 38
-time 00:00:00.39
+evaluation 4
+time 00:00:00.01
+[58]         RXEngine BLACK : stop : new position
+---------------------------------------------------------------------------------------------------
+
+  A B C D E F G H 
+1 . . O . . O . . 1
+2 . . . O O O # . 2
+3 . # . # O # O O 3
+4 . . # # # O O O 4	Noirs: 25	Blancs: 20
+5 # # # # O O O O 5	BLANCS au trait
+6 # # # O # # O O 6
+7 # # # # # # . . 7
+8 # O # # . O . . 8
+  A B C D E F G H 
+
+Evaluation : 1
+
+[0]         RXEngine : dependent time : false
+  depth | score | principal variation                 | time        |      nodes (N) |     kN/s |
+  3     |   -1  | C3 e1 D1 -- -- -- -- -- -- -- -- -- | 00:00:00.00 |            186 |      N/A |
+  5     |   +2  | C3 e1 D1 h2 G7 -- -- -- -- -- -- -- | 00:00:00.00 |            703 |      N/A |
+  7@72  |   -1  | C3 e1 D1 g1 G7 b1 B4 -- -- -- -- -- | 00:00:00.00 |          3 062 |      N/A |
+  9@72  |   +0  | B4 a4 C3 a3 G8 b2 C2 e1 D1 -- -- -- | 00:00:00.00 |         27 391 |      N/A |
+ 19     |   +0  | C3 e1 D1 g1 A3 c2 H1 h2 G8 a4 G7 a2 | 00:00:00.04 |      2 814 596 |   70 364 |
+[41]         RXEngine : end search
+I play C3
+evaluation 0
+time 00:00:00.04
+[84]         RXEngine BLACK : stop : new position
+---------------------------------------------------------------------------------------------------
+
+  A B C D E F G H 
+1 . . . . # . . . 1
+2 . . . # # # O . 2
+3 . O O O # # # # 3
+4 # O O O O # # O 4	Noirs: 27	Blancs: 18
+5 . # # O O # # O 5	BLANCS au trait
+6 O O # O # # # # 6
+7 O O O # # . . . 7
+8 # . # # # # . . 8
+  A B C D E F G H 
+
+Evaluation : -2
+
+[0]         RXEngine : dependent time : false
+  depth | score | principal variation                 | time        |      nodes (N) |     kN/s |
+  3     |   -1  | A5 c2 G1 -- -- -- -- -- -- -- -- -- | 00:00:00.00 |            310 |      N/A |
+  5     |   +0  | G1 b8 C1 h1 F1 -- -- -- -- -- -- -- | 00:00:00.00 |          1 667 |      N/A |
+  7@72  |   +0  | G1 c2 A5 a3 C1 b8 F1 -- -- -- -- -- | 00:00:00.00 |          6 292 |      N/A |
+  9@72  |   -1  | G1 b8 A5 c2 C1 a3 F7 g8 G7 -- -- -- | 00:00:00.00 |         15 444 |      N/A |
+ 19     |   +0  | G1 c2 A5 a3 C1 d1 F1 b2 B1 a1 A2 h1 | 00:00:00.05 |      4 037 853 |   80 757 |
+[51]         RXEngine : end search
+I play G1
+evaluation 0
+time 00:00:00.05
+[93]         RXEngine BLACK : stop : new position
 ---------------------------------------------------------------------------------------------------
 
   A B C D E F G H 
 1 . O O O O O . . 1
-2 . . O O O O # . 2
-3 . O O O O O O . 3
-4 # # # # # O O . 4	Noirs: 14	Blancs: 28
-5 . # # O O # . . 5	NOIRS au trait
-6 O O # O # # . . 6
-7 . . O # # O . . 7
-8 . O O O . . O . 8
+2 . . O # # O . . 2
+3 . O O O O # # O 3
+4 . O O O # O # # 4	Noirs: 19	Blancs: 25
+5 . O O # O O # # 5	NOIRS au trait
+6 . # O # # O # # 6
+7 . . O . # # # # 7
+8 . . O . . . . O 8
   A B C D E F G H 
 
-Evaluation : 8
+Evaluation : -3
 
+[1]         RXEngine : dependent time : false
   depth | score | principal variation                 | time        |      nodes (N) |     kN/s |
-  2     |   +4  | H4 a3 -- -- -- -- -- -- -- -- -- -- | 00:00:00.00 |            334 |      N/A |
-  4     |   -2  | H4 a3 F8 e8 -- -- -- -- -- -- -- -- | 00:00:00.00 |            518 |      N/A |
-  6@72  |   -4  | G1 h1 A3 a5 A7 b2 -- -- -- -- -- -- | 00:00:00.00 |          2 977 |      N/A |
-  8@72  |   -1  | H3 a3 A2 a5 A7 h1 F8 e8 -- -- -- -- | 00:00:00.00 |         10 646 |      N/A |
- 10@72  |   -2  | H4 a3 A2 h5 H6 g6 H2 g5 H3 a5 -- -- | 00:00:00.00 |         23 480 |      N/A |
- 12@72  |   -2  | H4 a3 A2 h5 H6 g6 H2 a5 A7 f8 E8 g5 | 00:00:00.00 |         42 819 |      N/A |
- 22@98  |   +0  | H4 a3 A2 g6 G5 h5 F8 e8 H6 g7 H2 a5 | 00:00:00.41 |     19 100 995 |   45 915 |
- 22     |   +0  | H4 a3 A2 g6 G5 h5 F8 e8 H6 g7 H2 a5 | 00:00:00.67 |     11 507 924 |   44 952 |
-I play H4
+  2     |   -3  | D8 a6 -- -- -- -- -- -- -- -- -- -- | 00:00:00.00 |            317 |      N/A |
+  4     |   -4  | D8 d7 B7 e8 -- -- -- -- -- -- -- -- | 00:00:00.00 |            685 |      N/A |
+  6@72  |   -5  | A4 a3 A6 a5 A2 d7 -- -- -- -- -- -- | 00:00:00.00 |          6 404 |      N/A |
+  8@72  |   -7  | D8 a6 B8 d7 B7 e8 F8 g8 -- -- -- -- | 00:00:00.00 |         29 340 |      N/A |
+ 10@72  |   -5  | D8 a6 A4 a3 A5 d7 E8 b2 A1 a2 -- -- | 00:00:00.00 |         32 352 |      N/A |
+ 20     |   +0  | D8 a6 A4 a3 D7 a5 B8 g8 F8 e8 B7 a8 | 00:00:00.21 |     17 239 088 |   81 316 |
+[216]         RXEngine : end search
+I play D8
 evaluation 0
-time 00:00:00.67
+time 00:00:00.21
+[259]         RXEngine BLACK : stop : new position
 ---------------------------------------------------------------------------------------------------
 
   A B C D E F G H 
-1 . . O O O . . . 1
-2 . . . . # # . O 2
-3 O O O O O # O O 3
-4 . O O O O # O O 4	Noirs: 9	Blancs: 33
-5 # . O O O # # O 5	NOIRS au trait
-6 . . . O O # O O 6
-7 . . . O O O # O 7
-8 . . O O O O . . 8
-  A B C D E F G H 
-
-Evaluation : 14
-
-  depth | score | principal variation                 | time        |      nodes (N) |     kN/s |
-  2     |   +6  | C6 f1 -- -- -- -- -- -- -- -- -- -- | 00:00:00.00 |            162 |      N/A |
-  4     |   +3  | C6 b6 A4 b5 -- -- -- -- -- -- -- -- | 00:00:00.00 |            374 |      N/A |
-  6@72  |   +1  | C6 b5 B7 f1 A4 a8 -- -- -- -- -- -- | 00:00:00.00 |          3 275 |      N/A |
-  8@72  |   -1  | C6 b5 B7 f1 A4 a8 B6 a7 -- -- -- -- | 00:00:00.00 |          9 814 |      N/A |
- 10@72  |   +1  | C6 b5 C7 h8 G8 g2 A4 a6 H1 g1 -- -- | 00:00:00.00 |         25 373 |      N/A |
- 12@72  |   +0  | C6 c7 G2 h1 C2 g1 F1 d2 B2 a2 A4 a6 | 00:00:00.00 |         89 159 |      N/A |
- 22@98  |   +6  | G2 h1 C2 g1 F1 d2 B2 a2 B6 c6 B5 a4 | 00:00:00.42 |     19 170 385 |   46 193 |
- 22     |   +6  | G2 h1 C2 g1 F1 d2 B2 a2 B6 c6 B5 a4 | 00:00:00.68 |      9 939 312 |   37 506 |
-I play G2
-evaluation 6
-time 00:00:00.68
----------------------------------------------------------------------------------------------------
-
-  A B C D E F G H 
-1 . . # # # # # . 1
-2 . . # # # # . . 2
-3 . O O O # # . . 3
-4 . O O # # # # . 4	Noirs: 26	Blancs: 15
-5 . O O # # # O . 5	BLANCS au trait
-6 O O O O # O O . 6
-7 . . . # O # . . 7
-8 . . # # # # # . 8
-  A B C D E F G H 
-
-Evaluation : -12
-
-  depth | score | principal variation                 | time        |      nodes (N) |     kN/s |
-  3     |   -6  | C7 b8 H3 -- -- -- -- -- -- -- -- -- | 00:00:00.00 |            246 |      N/A |
-  5     |   -3  | C7 h4 H5 b8 H3 -- -- -- -- -- -- -- | 00:00:00.00 |            798 |      N/A |
-  7@72  |   -6  | C7 b8 B7 h4 H5 a8 A7 -- -- -- -- -- | 00:00:00.00 |          4 212 |      N/A |
-  9@72  |   -3  | C7 b8 B7 a8 A7 a3 H3 a5 A4 -- -- -- | 00:00:00.00 |          8 396 |      N/A |
- 11@72  |   -4  | C7 b8 B7 a8 A7 a3 H3 a5 A4 g7 B2 -- | 00:00:00.00 |         25 658 |      N/A |
- 13@72  |   -7  | G3 c7 B2 g2 G7 h4 H5 h8 B7 b8 H1 a1 | 00:00:00.00 |        154 717 |      N/A |
- 23@95  |  -12  | G3 h6 C7 h4 H5 h3 G2 h1 H2 b8 G7 a2 | 00:00:00.91 |     41 249 725 |   45 680 |
- 23@98  |  -12  | G3 h6 C7 h4 H5 h3 G2 h1 H2 b8 G7 a2 | 00:00:01.02 |      4 224 528 |   36 107 |
- 23     |  -12  | G3 h6 C7 h4 H5 h3 G2 h1 H2 b8 G7 a2 | 00:00:02.56 |     59 062 894 |   38 377 |
-I play G3
-evaluation -12
-time 00:00:02.56
----------------------------------------------------------------------------------------------------
-
-  A B C D E F G H 
-1 . . O . # . O . 1
-2 . . O . # O . O 2
-3 . O O # # # O O 3
-4 O O O O # # # O 4	Noirs: 20	Blancs: 21
-5 O O O O # # . . 5	BLANCS au trait
-6 # # O O # O . . 6
+1 . . # O . O . . 1
+2 . . O O O O . . 2
+3 O O # O # # O . 3
+4 O O O O # # O O 4	Noirs: 21	Blancs: 23
+5 O O O # # O # . 5	NOIRS au trait
+6 O # O # # # # # 6
 7 . . # # # # . . 7
-8 . . . # # # . . 8
+8 . . # . O . # . 8
   A B C D E F G H 
 
-Evaluation : -1
+Evaluation : -10
 
+[0]         RXEngine : dependent time : false
   depth | score | principal variation                 | time        |      nodes (N) |     kN/s |
-  3     |   -7  | G2 f1 D1 -- -- -- -- -- -- -- -- -- | 00:00:00.00 |            344 |      N/A |
-  5     |  -11  | D2 g5 B8 a3 H6 -- -- -- -- -- -- -- | 00:00:00.00 |          1 750 |      N/A |
-  7@72  |   -7  | D2 g5 B8 a3 G2 f1 D1 -- -- -- -- -- | 00:00:00.00 |          2 750 |      N/A |
-  9@72  |  -10  | D2 g5 B8 a3 G2 f1 D1 h1 H6 -- -- -- | 00:00:00.00 |         11 124 |      N/A |
- 11@72  |  -12  | D2 g5 B8 a3 B7 a8 A7 c8 H5 g6 H6 -- | 00:00:00.00 |         57 639 |      N/A |
- 13@72  |  -10  | D2 g5 B8 a3 G6 b7 C8 a8 A7 h6 G2 h1 | 00:00:00.00 |         50 381 |      N/A |
- 23@95  |  -14  | D2 g5 B8 a3 B7 a8 A7 c8 G7 g8 H6 h5 | 00:00:00.48 |     19 641 097 |   41 349 |
- 23@98  |  -14  | D2 g5 B8 a3 B7 a8 A7 c8 G7 g8 H6 h5 | 00:00:00.58 |      3 769 636 |   35 901 |
- 23     |  -14  | D2 g5 B8 a3 B7 a8 A7 c8 G7 g8 H6 h5 | 00:00:00.69 |      4 124 431 |   38 189 |
-I play D2
-evaluation -14
-time 00:00:00.69
+  2     |  -11  | H5 h3 -- -- -- -- -- -- -- -- -- -- | 00:00:00.00 |            288 |      N/A |
+  4     |  -12  | H5 h3 H2 a7 -- -- -- -- -- -- -- -- | 00:00:00.00 |            478 |      N/A |
+  6@72  |   -9  | B1 a7 H2 g2 E1 a1 -- -- -- -- -- -- | 00:00:00.00 |          4 750 |      N/A |
+  8@72  |   -8  | B1 a7 H2 h5 H3 g7 E1 f8 -- -- -- -- | 00:00:00.00 |          9 607 |      N/A |
+ 10@72  |   -7  | B1 a7 H2 g2 E1 a1 A2 b2 H1 g1 -- -- | 00:00:00.00 |         27 763 |      N/A |
+ 20     |   -2  | B7 a7 E1 b1 H2 h3 H5 d8 F8 a8 B2 g2 | 00:00:00.06 |      5 325 925 |   80 695 |
+[69]         RXEngine : end search
+I play B7
+evaluation -2
+time 00:00:00.06
+[112]         RXEngine BLACK : stop : new position
 ---------------------------------------------------------------------------------------------------
 
   A B C D E F G H 
-1 . . . # # # # . 1
-2 # . # # # O . . 2
+1 . . O . . . . . 1
+2 . . O O O . . # 2
+3 . # O O O O # # 3
+4 # # # # O # O # 4	Noirs: 20	Blancs: 24
+5 . # # O # O O # 5	NOIRS au trait
+6 # # O # O O # # 6
+7 . O O O O O . # 7
+8 . . . O O O . . 8
+  A B C D E F G H 
+
+Evaluation : 9
+
+[0]         RXEngine : dependent time : false
+  depth | score | principal variation                 | time        |      nodes (N) |     kN/s |
+  2     |   +5  | F1 e1 -- -- -- -- -- -- -- -- -- -- | 00:00:00.00 |            197 |      N/A |
+  4     |   +6  | F1 g7 F2 e1 -- -- -- -- -- -- -- -- | 00:00:00.00 |            496 |      N/A |
+  6@72  |   +4  | F1 g2 E1 g7 D1 g1 -- -- -- -- -- -- | 00:00:00.00 |          4 500 |      N/A |
+  8@72  |   +3  | F1 g2 E1 g7 H8 g8 A7 a8 -- -- -- -- | 00:00:00.00 |          8 955 |      N/A |
+ 10@72  |   +1  | F1 f2 G1 a3 E1 d1 B1 a5 A2 g7 -- -- | 00:00:00.00 |         29 233 |      N/A |
+ 20     |   +0  | F1 a3 F2 d1 A2 a5 B1 a1 B2 a7 E1 g1 | 00:00:00.16 |     13 462 645 |   84 141 |
+[163]         RXEngine : end search
+I play F1
+evaluation 0
+time 00:00:00.16
+[207]         RXEngine BLACK : stop : new position
+---------------------------------------------------------------------------------------------------
+
+  A B C D E F G H 
+1 . O # # # # . . 1
+2 . . O # # O . . 2
+3 # # O O # O O O 3
+4 # # # O O # O O 4	Noirs: 24	Blancs: 20
+5 # # O O # O O O 5	NOIRS au trait
+6 # # # # O O . # 6
+7 # . # # O . . . 7
+8 . . . . . . . . 8
+  A B C D E F G H 
+
+Evaluation : 10
+
+[0]         RXEngine : dependent time : false
+  depth | score | principal variation                 | time        |      nodes (N) |     kN/s |
+  2     |  +10  | A1 a2 -- -- -- -- -- -- -- -- -- -- | 00:00:00.00 |            209 |      N/A |
+  4     |   +9  | A1 a2 F8 e8 -- -- -- -- -- -- -- -- | 00:00:00.00 |            288 |      N/A |
+  6@72  |  +10  | A1 a2 H2 d8 F8 a8 -- -- -- -- -- -- | 00:00:00.00 |          1 655 |      N/A |
+  8@72  |   +7  | A1 h7 G1 a2 G2 a8 H2 h1 -- -- -- -- | 00:00:00.00 |          6 162 |      N/A |
+ 10@72  |   +5  | G2 g1 H1 h2 E8 d8 C8 f7 A1 a2 -- -- | 00:00:00.00 |         20 123 |      N/A |
+ 20     |  +10  | G2 g1 H1 h2 F8 d8 G6 f7 G8 c8 A1 e8 | 00:00:00.05 |      3 101 339 |   59 641 |
+[53]         RXEngine : end search
+I play G2
+evaluation 10
+time 00:00:00.05
+[96]         RXEngine BLACK : stop : new position
+---------------------------------------------------------------------------------------------------
+
+  A B C D E F G H 
+1 . # # # . . . . 1
+2 # . # O O . . . 2
 3 # # O # O O . . 3
-4 # # # O # O . . 4	Noirs: 22	Blancs: 18
-5 # # O # # O . . 5	NOIRS au trait
-6 . O # # # O O . 6
-7 O . O O O O . . 7
-8 . . . . O O . . 8
+4 # O # O # O . . 4	Noirs: 25	Blancs: 19
+5 # O O # O # # # 5	NOIRS au trait
+6 # O O # # O # . 6
+7 . . O O O O O . 7
+8 . # # # # # . . 8
   A B C D E F G H 
 
-Evaluation : 8
+Evaluation : 2
 
+[0]         RXEngine : dependent time : false
   depth | score | principal variation                 | time        |      nodes (N) |     kN/s |
-  2     |   +4  | B2 a1 -- -- -- -- -- -- -- -- -- -- | 00:00:00.00 |            209 |      N/A |
-  4     |   +7  | B2 c1 A6 a1 -- -- -- -- -- -- -- -- | 00:00:00.00 |            551 |      N/A |
-  6@72  |   +6  | B2 c1 B1 b7 A6 a1 -- -- -- -- -- -- | 00:00:00.00 |          5 356 |      N/A |
-  8@72  |   +4  | B2 c1 G5 h1 G4 h6 G3 h5 -- -- -- -- | 00:00:00.00 |         16 528 |      N/A |
- 10@72  |   +3  | B2 c1 A6 a1 D8 h1 B1 c8 B7 a8 -- -- | 00:00:00.00 |         58 950 |      N/A |
- 12@72  |   +2  | B2 c1 A6 a1 D8 h1 B1 c8 B7 a8 G5 h6 | 00:00:00.00 |        130 962 |      N/A |
- 14@72  |   +2  | B2 c1 G5 h4 H5 h1 H6 h7 G3 b7 G7 a6 | 00:00:00.02 |        307 335 |      N/A |
- 24@91  |   +6  | B2 c1 G5 h4 G4 h1 H7 h3 H5 g3 A6 a1 | 00:00:01.39 |     64 104 021 |   46 723 |
- 24@95  |   +6  | B2 c1 G5 h4 G4 h1 H7 h3 H5 g3 A6 a1 | 00:00:02.02 |     26 522 699 |   41 899 |
- 24@98  |   +6  | B2 c1 G5 h4 G4 h1 H7 h3 H5 g3 A6 a1 | 00:00:02.67 |     23 541 398 |   36 273 |
- 24     |   +6  | B2 c1 G5 h4 G4 h1 H7 h3 H5 g3 A6 a1 | 00:00:09.94 |    284 791 149 |   39 173 |
-I play B2
-evaluation 6
-time 00:00:09.94
----------------------------------------------------------------------------------------------------
-
-  A B C D E F G H 
-1 . . . # # # . . 1
-2 . . O O O # . . 2
-3 . . O O O # # . 3
-4 . O O O O # # # 4	Noirs: 21	Blancs: 19
-5 . . O O O O # # 5	NOIRS au trait
-6 . . O # O # # # 6
-7 . . # # O O . . 7
-8 . # # # # . O . 8
-  A B C D E F G H 
-
-Evaluation : -9
-
-  depth | score | principal variation                 | time        |      nodes (N) |     kN/s |
-  2     |  -12  | B7 b6 -- -- -- -- -- -- -- -- -- -- | 00:00:00.00 |            283 |      N/A |
-  4     |  -10  | B7 g7 A4 b6 -- -- -- -- -- -- -- -- | 00:00:00.00 |            505 |      N/A |
-  6@72  |  -10  | B7 g7 A4 b6 A6 b3 -- -- -- -- -- -- | 00:00:00.00 |          3 218 |      N/A |
-  8@72  |   -7  | B7 g7 B6 b5 H8 a8 F8 a7 -- -- -- -- | 00:00:00.00 |          8 003 |      N/A |
- 10@72  |   -8  | B7 g7 A4 b6 A6 a5 H8 a3 F8 a7 -- -- | 00:00:00.00 |         22 648 |      N/A |
- 12@72  |   -7  | B7 g7 A4 a5 A6 b6 H8 a8 F8 b3 A3 b5 | 00:00:00.00 |         68 220 |      N/A |
- 14@72  |   -9  | B7 g7 A4 a5 A3 a2 H8 b5 A6 a8 A7 f8 | 00:00:00.01 |        200 950 |      N/A |
- 24@91  |   -8  | B3 c1 B1 a3 B2 h3 A5 a4 B6 h7 B5 b7 | 00:00:00.70 |     30 712 771 |   44 511 |
- 24@95  |   -8  | B3 c1 B1 a3 B2 h3 A5 a4 B6 h7 B5 b7 | 00:00:00.92 |      8 660 898 |   38 664 |
- 24@98  |   -8  | B3 c1 B1 a3 B2 h3 A5 a4 B6 h7 B5 b7 | 00:00:01.38 |     17 294 076 |   37 352 |
- 24     |   -8  | B3 c1 B1 a3 B2 h3 A5 a4 B6 h7 B5 b7 | 00:00:02.23 |     34 543 247 |   40 831 |
-I play B3
-evaluation -8
-time 00:00:02.23
+  2     |   +3  | G3 g2 -- -- -- -- -- -- -- -- -- -- | 00:00:00.00 |            151 |      N/A |
+  4     |   +4  | G3 g2 H8 f2 -- -- -- -- -- -- -- -- | 00:00:00.00 |            312 |      N/A |
+  6@72  |  +10  | G3 h4 G4 h3 H8 g8 -- -- -- -- -- -- | 00:00:00.00 |          2 732 |      N/A |
+  8@72  |   +5  | G3 h4 G4 f2 H3 h7 H8 g8 -- -- -- -- | 00:00:00.00 |          4 543 |      N/A |
+ 10@72  |   +5  | G3 h4 G4 f2 H8 g8 H7 a8 H6 e1 -- -- | 00:00:00.00 |          6 070 |      N/A |
+ 20     |   +0  | G3 h4 G4 f2 H8 g8 H7 h6 B7 a8 A7 a1 | 00:00:00.07 |      5 252 396 |   70 978 |
+[75]         RXEngine : end search
+I play G3
+evaluation 0
+time 00:00:00.07
+[118]         RXEngine BLACK : stop : new position
 ---------------------------------------------------------------------------------------------------
 
   A B C D E F G H 
 1 . O O O O O . . 1
 2 . . O O O O . . 2
-3 . O O O O # . . 3
-4 # # # # # # . . 4	Noirs: 17	Blancs: 22
-5 . O # O O # . . 5	BLANCS au trait
-6 O O O # O # . . 6
-7 . . O O # # . . 7
-8 . . # # # # . . 8
+3 O # # O O O . . 3
+4 . # # # O O . . 4	Noirs: 15	Blancs: 29
+5 # # # # # # O . 5	NOIRS au trait
+6 # # # O O O . O 6
+7 # . O O O O . . 7
+8 . O O O O O . . 8
   A B C D E F G H 
 
-Evaluation : -10
+Evaluation : -2
 
+[0]         RXEngine : dependent time : false
   depth | score | principal variation                 | time        |      nodes (N) |     kN/s |
-  3     |   -3  | A5 a7 B7 -- -- -- -- -- -- -- -- -- | 00:00:00.00 |            269 |      N/A |
-  5     |   -9  | G2 b8 B7 a5 A3 -- -- -- -- -- -- -- | 00:00:00.00 |            865 |      N/A |
-  7@72  |   +2  | G2 a2 A3 b8 A1 a5 B7 -- -- -- -- -- | 00:00:00.00 |          2 384 |      N/A |
-  9@72  |   +8  | G2 b8 B7 a2 A5 b2 G3 h3 A1 -- -- -- | 00:00:00.00 |          6 354 |      N/A |
- 11@72  |   +8  | G2 b8 B7 a2 A5 b2 G3 h3 A1 a3 H2 -- | 00:00:00.00 |         14 999 |      N/A |
- 13@72  |   +7  | G2 b8 B7 a2 A5 b2 G3 h3 A1 a3 H2 h1 | 00:00:00.00 |         14 736 |      N/A |
- 15@72  |   +7  | G2 b8 B7 a2 A5 b2 G3 h3 A1 a3 H2 h1 | 00:00:00.00 |         31 900 |      N/A |
- 25@84  |   +4  | G2 b8 B7 a2 A5 b2 G3 h3 A1 a3 H2 h1 | 00:00:00.04 |      1 645 507 |   43 302 |
- 25@91  |   +4  | G2 b8 B7 a2 A5 b2 G3 h3 A1 a3 H2 h1 | 00:00:00.06 |      1 147 274 |   42 491 |
- 25@95  |   +4  | G2 b8 B7 a2 A5 b2 G3 h3 A1 a3 H2 h1 | 00:00:00.15 |      3 670 796 |   41 713 |
- 25@98  |   +4  | G2 b8 B7 a2 A5 b2 G3 h3 A1 a3 H2 h1 | 00:00:00.29 |      5 236 565 |   37 946 |
- 25     |   +4  | G2 b8 B7 a2 A5 b2 G3 h3 A1 a3 H2 h1 | 00:00:00.74 |     18 827 012 |   42 024 |
-I play G2
-evaluation 4
-time 00:00:00.74
+  2     |   -3  | G7 g6 -- -- -- -- -- -- -- -- -- -- | 00:00:00.00 |            160 |      N/A |
+  4     |   -5  | G7 g6 H5 g4 -- -- -- -- -- -- -- -- | 00:00:00.00 |            381 |      N/A |
+  6@72  |   +0  | G6 h5 G4 g3 G2 a2 -- -- -- -- -- -- | 00:00:00.00 |          4 459 |      N/A |
+  8@72  |   -2  | G6 g4 H5 h4 G7 b7 G3 a2 -- -- -- -- | 00:00:00.00 |          9 209 |      N/A |
+ 10@72  |   +1  | G6 h5 G4 g3 G2 a2 H4 h1 H3 b2 -- -- | 00:00:00.00 |         15 880 |      N/A |
+ 20     |   -2  | G6 g4 G2 g3 H2 h4 H3 h5 H7 a4 A2 h1 | 00:00:00.08 |      7 116 144 |   82 745 |
+[88]         RXEngine : end search
+I play G6
+evaluation -2
+time 00:00:00.08
+[131]         RXEngine BLACK : stop : new position
 ---------------------------------------------------------------------------------------------------
 
   A B C D E F G H 
-1 . . . . . # . . 1
-2 # . # # # . . . 2
-3 # # # # O O . . 3
-4 # O # O O # # . 4	Noirs: 27	Blancs: 12
-5 # O O # # # . . 5	BLANCS au trait
-6 # O O # # . . . 6
-7 . . O O O # . . 7
-8 . # # # # # # . 8
+1 . . # # . . . . 1
+2 O . # # O # . . 2
+3 O O # O O . . . 3
+4 O # O # O O O . 4	Noirs: 23	Blancs: 21
+5 O O # # O O O # 5	NOIRS au trait
+6 O O # # # O O # 6
+7 . . # # # # O # 7
+8 . . # . . # . # 8
+  A B C D E F G H 
+
+Evaluation : 2
+
+[0]         RXEngine : dependent time : false
+  depth | score | principal variation                 | time        |      nodes (N) |     kN/s |
+  2     |   -4  | H3 h4 -- -- -- -- -- -- -- -- -- -- | 00:00:00.00 |            240 |      N/A |
+  4     |   -1  | E1 b2 F3 d8 -- -- -- -- -- -- -- -- | 00:00:00.00 |            403 |      N/A |
+  6@72  |   -6  | G3 g8 H3 h4 E8 g1 -- -- -- -- -- -- | 00:00:00.00 |          5 116 |      N/A |
+  8@72  |   -6  | G3 g8 H4 f3 E1 f1 E8 b1 -- -- -- -- | 00:00:00.00 |         10 036 |      N/A |
+ 10@72  |   -4  | G3 g8 F3 h4 H3 b2 E8 e1 A1 h2 -- -- | 00:00:00.00 |         27 668 |      N/A |
+ 20     |   -4  | G3 g8 F3 h4 H3 b2 E8 d8 A1 e1 F1 h2 | 00:00:00.08 |      6 991 501 |   87 393 |
+[82]         RXEngine : end search
+I play G3
+evaluation -4
+time 00:00:00.08
+[125]         RXEngine BLACK : stop : new position
+---------------------------------------------------------------------------------------------------
+
+  A B C D E F G H 
+1 . # # # # # # # 1
+2 . . # O O O . . 2
+3 . . O # O O # # 3
+4 . O O # # O # # 4	Noirs: 23	Blancs: 21
+5 . O O O O O # # 5	NOIRS au trait
+6 . # . # O O # # 6
+7 . . . O . # . # 7
+8 . . O O O O . . 8
+  A B C D E F G H 
+
+Evaluation : -3
+
+[0]         RXEngine : dependent time : false
+  depth | score | principal variation                 | time        |      nodes (N) |     kN/s |
+  2     |   -7  | A3 a4 -- -- -- -- -- -- -- -- -- -- | 00:00:00.00 |            215 |      N/A |
+  4     |   -5  | A3 h2 C6 h8 -- -- -- -- -- -- -- -- | 00:00:00.00 |            451 |      N/A |
+  6@72  |   -7  | A3 a4 B2 e7 G7 g8 -- -- -- -- -- -- | 00:00:00.00 |          3 620 |      N/A |
+  8@72  |   -6  | E7 h2 C7 b8 C6 b3 A6 g8 -- -- -- -- | 00:00:00.00 |         28 947 |      N/A |
+ 10@72  |   -7  | E7 h2 B2 b3 A6 a1 A2 a5 C6 h8 -- -- | 00:00:00.00 |         77 469 |      N/A |
+ 20     |   -8  | E7 c7 A4 b3 A6 a5 C6 g8 B7 a3 A2 h2 | 00:00:00.10 |      8 518 477 |   82 703 |
+[107]         RXEngine : end search
+I play E7
+evaluation -8
+time 00:00:00.10
+[150]         RXEngine BLACK : stop : new position
+---------------------------------------------------------------------------------------------------
+
+  A B C D E F G H 
+1 . . . . . . . . 1
+2 . . . . . O . O 2
+3 . O O O O O O O 3
+4 O O O O O # O O 4	Noirs: 16	Blancs: 28
+5 O # # O O O # O 5	NOIRS au trait
+6 . # # # O # O O 6
+7 . . # # # O # O 7
+8 . . O # # # # O 8
+  A B C D E F G H 
+
+Evaluation : 2
+
+[0]         RXEngine : dependent time : false
+  depth | score | principal variation                 | time        |      nodes (N) |     kN/s |
+  2     |   +0  | C2 d2 -- -- -- -- -- -- -- -- -- -- | 00:00:00.00 |            204 |      N/A |
+  4     |   -2  | E2 c2 D2 d1 -- -- -- -- -- -- -- -- | 00:00:00.00 |            519 |      N/A |
+  6@72  |   -2  | C2 d2 D1 e1 E2 a6 -- -- -- -- -- -- | 00:00:00.00 |          4 204 |      N/A |
+  8@72  |   -2  | C2 d2 A3 a2 E1 a6 E2 f1 -- -- -- -- | 00:00:00.00 |          8 487 |      N/A |
+ 10@72  |   -4  | C2 d2 A3 a2 E1 d1 E2 f1 B1 a6 -- -- | 00:00:00.00 |         29 021 |      N/A |
+ 20     |   -2  | C2 d2 A3 a2 E1 d1 E2 f1 B1 a6 B7 a8 | 00:00:00.13 |     12 804 491 |   95 555 |
+[136]         RXEngine : end search
+I play C2
+evaluation -2
+time 00:00:00.13
+[179]         RXEngine BLACK : stop : new position
+---------------------------------------------------------------------------------------------------
+
+  A B C D E F G H 
+1 . . # # # . . . 1
+2 . . # # # # . O 2
+3 O O # # O O O O 3
+4 O O O O O O # O 4	Noirs: 21	Blancs: 22
+5 . O O # # # # O 5	BLANCS au trait
+6 . O O O # # # O 6
+7 . . . # O # # . 7
+8 . . # . . . . . 8
+  A B C D E F G H 
+
+Evaluation : 2
+
+[0]         RXEngine : dependent time : false
+  depth | score | principal variation                 | time        |      nodes (N) |     kN/s |
+  3     |   +5  | C7 a7 A6 -- -- -- -- -- -- -- -- -- | 00:00:00.00 |            373 |      N/A |
+  5     |   +0  | C7 d8 G1 f1 B1 -- -- -- -- -- -- -- | 00:00:00.00 |          1 812 |      N/A |
+  7@72  |   +2  | C7 b8 D8 e8 H8 h7 G8 -- -- -- -- -- | 00:00:00.00 |          4 305 |      N/A |
+  9@72  |   +3  | C7 d8 G1 f1 B1 a7 A6 b2 E8 -- -- -- | 00:00:00.00 |          8 768 |      N/A |
+ 11@72  |   +1  | C7 b8 D8 e8 H8 h7 G8 h1 F8 b7 F1 -- | 00:00:00.00 |         28 116 |      N/A |
+ 21     |   +0  | C7 b8 D8 e8 H8 h7 G8 h1 F8 b7 G1 f1 | 00:00:00.06 |      5 761 761 |   85 996 |
+[69]         RXEngine : end search
+I play C7
+evaluation 0
+time 00:00:00.06
+[112]         RXEngine BLACK : stop : new position
+---------------------------------------------------------------------------------------------------
+
+  A B C D E F G H 
+1 . . . # . O . . 1
+2 . . # # # O . # 2
+3 # # # # # # # # 3
+4 # O O # # O O # 4	Noirs: 25	Blancs: 18
+5 # O # O O O # # 5	BLANCS au trait
+6 # # O O O O . # 6
+7 # . . O O O O . 7
+8 . . . . . . . . 8
+  A B C D E F G H 
+
+Evaluation : -3
+
+[0]         RXEngine : dependent time : false
+  depth | score | principal variation                 | time        |      nodes (N) |     kN/s |
+  3     |   -4  | C1 e1 G6 -- -- -- -- -- -- -- -- -- | 00:00:00.00 |            303 |      N/A |
+  5     |   -6  | B1 c1 E1 c7 C8 -- -- -- -- -- -- -- | 00:00:00.00 |          1 786 |      N/A |
+  7@72  |   -6  | E1 c1 B1 c8 D8 g6 H7 -- -- -- -- -- | 00:00:00.00 |          6 199 |      N/A |
+  9@72  |   -5  | B1 c1 E1 c8 G6 d8 F8 c7 E8 -- -- -- | 00:00:00.00 |         21 992 |      N/A |
+ 11@72  |   -3  | B7 e1 C1 a8 C7 b8 G6 c8 D8 h8 H7 -- | 00:00:00.00 |         63 512 |      N/A |
+ 21     |   +0  | B7 e1 C1 a8 C7 b8 G6 c8 D8 f8 E8 h7 | 00:00:00.09 |      8 918 422 |   98 004 |
+[95]         RXEngine : end search
+I play B7
+evaluation 0
+time 00:00:00.09
+[139]         RXEngine BLACK : stop : new position
+---------------------------------------------------------------------------------------------------
+
+  A B C D E F G H 
+1 . . O O O O . . 1
+2 O . O O O O . . 2
+3 O # # # O O O . 3
+4 O # # O # O . . 4	Noirs: 19	Blancs: 23
+5 O O # # O # # . 5	NOIRS au trait
+6 O O # # # # . . 6
+7 O . # # # . . . 7
+8 . . # # . O . . 8
+  A B C D E F G H 
+
+Evaluation : -12
+
+[0]         RXEngine : dependent time : false
+  depth | score | principal variation                 | time        |      nodes (N) |     kN/s |
+  2     |  -11  | G4 h4 -- -- -- -- -- -- -- -- -- -- | 00:00:00.00 |            200 |      N/A |
+  4     |  -15  | G4 h4 B7 a8 -- -- -- -- -- -- -- -- | 00:00:00.00 |            360 |      N/A |
+  6@72  |  -12  | G4 b7 H2 h4 G2 h1 -- -- -- -- -- -- | 00:00:00.00 |          1 663 |      N/A |
+  8@72  |  -14  | G4 h4 G2 h5 H3 h1 G6 h7 -- -- -- -- | 00:00:00.00 |          6 564 |      N/A |
+ 10@72  |  -18  | G4 b7 H2 h4 H3 h1 A8 b2 A1 b1 -- -- | 00:00:00.00 |         29 119 |      N/A |
+ 12@72  |  -15  | H3 g4 G2 h6 H5 g6 G1 b2 G7 h1 H7 h2 | 00:00:00.00 |         50 551 |      N/A |
+ 22@98  |  -20  | G2 g4 H4 h1 B7 h6 H5 h3 H2 g6 F7 a8 | 00:00:00.28 |     19 851 071 |   69 167 |
+ 22     |  -20  | G2 g4 H4 h1 B7 h6 H5 h3 H2 g6 F7 a8 | 00:00:00.39 |      7 739 591 |   71 005 |
+[399]         RXEngine : end search
+I play G2
+evaluation -20
+time 00:00:00.39
+[442]         RXEngine BLACK : stop : new position
+---------------------------------------------------------------------------------------------------
+
+  A B C D E F G H 
+1 . . O O O O . . 1
+2 . . O O O O . . 2
+3 . # O # # O O # 3
+4 O O # O O O O # 4	Noirs: 16	Blancs: 24
+5 . O O O O O # # 5	NOIRS au trait
+6 # O O # # # # # 6
+7 . . # . # . . . 7
+8 . . . . . . . . 8
+  A B C D E F G H 
+
+Evaluation : 3
+
+[0]         RXEngine : dependent time : false
+  depth | score | principal variation                 | time        |      nodes (N) |     kN/s |
+  2     |   +0  | B2 d8 -- -- -- -- -- -- -- -- -- -- | 00:00:00.00 |            257 |      N/A |
+  4     |   +0  | B2 d8 A5 d7 -- -- -- -- -- -- -- -- | 00:00:00.00 |            507 |      N/A |
+  6@72  |   -2  | B2 c8 H2 g2 A5 d7 -- -- -- -- -- -- | 00:00:00.00 |          3 037 |      N/A |
+  8@72  |   +4  | B2 c8 H2 g2 A5 d7 F7 a1 -- -- -- -- | 00:00:00.00 |          6 579 |      N/A |
+ 10@72  |   +4  | B2 d8 C8 b8 D7 a1 G2 e8 F7 h1 -- -- | 00:00:00.00 |         30 352 |      N/A |
+ 12@72  |   +4  | B2 d8 A3 a5 B1 e8 D7 f7 B8 g7 G8 f8 | 00:00:00.00 |         97 389 |      N/A |
+ 14@72  |   +3  | B2 d8 A3 a5 B1 e8 D7 f7 B8 g7 G8 c8 | 00:00:00.00 |         92 691 |      N/A |
+ 24@91  |   +4  | B2 c8 H2 g2 A5 a7 H1 g1 D7 d8 E8 b7 | 00:00:00.23 |     17 830 803 |   79 248 |
+ 24@95  |   +4  | B2 c8 H2 g2 A5 a7 H1 g1 D7 d8 E8 b7 | 00:00:00.30 |      4 801 932 |   70 616 |
+ 24@98  |   +4  | B2 c8 H2 g2 A5 a7 H1 g1 D7 d8 E8 b7 | 00:00:00.38 |      4 862 840 |   60 035 |
+ 24     |   +4  | B2 c8 H2 g2 A5 a7 H1 g1 D7 d8 E8 b7 | 00:00:00.58 |     16 914 037 |   82 911 |
+[585]         RXEngine : end search
+I play B2
+evaluation 4
+time 00:00:00.58
+[628]         RXEngine BLACK : stop : new position
+---------------------------------------------------------------------------------------------------
+
+  A B C D E F G H 
+1 O . O O O O . . 1
+2 # O # # O # . . 2
+3 # O O O # # # . 3
+4 # O O O # # . . 4	Noirs: 21	Blancs: 17
+5 # O O # O # . . 5	BLANCS au trait
+6 # O # # # . . . 6
+7 # . # # . . . . 7
+8 . . . . . . . . 8
+  A B C D E F G H 
+
+Evaluation : 56
+
+[0]         RXEngine : dependent time : false
+  depth | score | principal variation                 | time        |      nodes (N) |     kN/s |
+  2     |  +75  | A8 pa -- -- -- -- -- -- -- -- -- -- | 00:00:00.00 |            150 |      N/A |
+  4     |  +71  | A8 pa H3 g2 -- -- -- -- -- -- -- -- | 00:00:00.00 |            644 |      N/A |
+  6     |  +71  | A8 pa B8 c8 D8 e8 -- -- -- -- -- -- | 00:00:00.00 |          8 182 |      N/A |
+  8@72  |  +74  | A8 pa B8 c8 G6 f6 B7 h6 -- -- -- -- | 00:00:00.00 |         19 290 |      N/A |
+ 10@72  |  +73  | G5 g6 A8 h5 B1 g4 G1 pa H3 g2 -- -- | 00:00:00.00 |         80 195 |      N/A |
+ 12@72  |  +77  | H3 g2 A8 h4 G1 h2 D8 b8 C8 b7 H1 pa | 00:00:00.01 |        224 079 |      N/A |
+ 14@72  |  +78  | A8 pa B8 c8 H3 g2 G4 h2 B7 g5 B1 h4 | 00:00:00.01 |        176 488 |      N/A |
+ 16@72  |  +76  | A8 pa B8 c8 H3 g2 G4 h2 B7 g5 B1 h4 | 00:00:00.03 |        700 788 |   46 719 |
+ 26@72  |>=+64  | A8 pa B8 c8 H3 g2 B1 g4 F7 e7 G1 g8 | 00:00:00.06 |      2 196 347 |   61 009 |
+ 26     |>=+64  | A8 pa B8 c8 H3 g2 B1 g4 F7 e7 G1 g8 | 00:00:00.06 |          9 488 |      N/A |
+[68]         RXEngine : end search
+I play A8
+evaluation 64
+time 00:00:00.06
+---------------------------------------------------------------------------------------------
+Total time  :     00:00:02.33
+Total nodes :     179 581 789
+Speed       :          76 842 kN/s
+
+[79624]         RXEngine BLACK : stop : new position
+---------------------------------------------------------------------------------------------------
+
+  A B C D E F G H 
+1 . . . . . . . . 1
+2 . . . O O # . . 2
+3 . . . O O . # . 3
+4 . . O O O # O . 4	Noirs: 6	Blancs: 12
+5 . . . O # # . . 5	NOIRS au trait
+6 . . O . O . . . 6
+7 . . . . O # . . 7
+8 . . . . . . . . 8
   A B C D E F G H 
 
 Evaluation : 16
 
+[1]         RXEngine : dependent time : true
   depth | score | principal variation                 | time        |      nodes (N) |     kN/s |
-  3     |  +19  | F6 g2 G3 -- -- -- -- -- -- -- -- -- | 00:00:00.00 |            408 |      N/A |
-  5     |  +21  | F6 f2 H4 a7 G6 -- -- -- -- -- -- -- | 00:00:00.00 |          2 260 |      N/A |
-  7@72  |  +22  | F6 g5 G3 f2 H4 h5 H3 -- -- -- -- -- | 00:00:00.00 |          7 560 |      N/A |
-  9@72  |  +21  | F6 g5 G3 f2 H4 h5 H6 h3 H2 -- -- -- | 00:00:00.00 |         17 989 |      N/A |
- 11@72  |  +20  | F6 g5 G3 f2 H4 h5 H3 g6 G2 a7 D1 -- | 00:00:00.00 |         45 038 |      N/A |
- 13@72  |  +20  | F6 g5 H4 h3 H2 a7 E1 g3 C1 b2 F2 d1 | 00:00:00.00 |        114 048 |      N/A |
- 15@72  |  +20  | F6 g5 F2 g3 D1 c1 E1 g2 H1 g1 B2 a1 | 00:00:00.01 |        202 712 |      N/A |
- 25@84  |  +26  | F6 g5 G3 f2 H4 h5 H6 h3 H2 g2 E1 b2 | 00:00:00.49 |     17 189 922 |   35 663 |
- 25@91  |  +28  | F6 g5 G3 f2 H4 h5 H3 g6 G2 a7 H6 g7 | 00:00:00.93 |     17 926 073 |   41 020 |
- 25@95  |  +28  | F6 g5 G3 f2 H4 h5 H3 g6 G2 a7 H6 g7 | 00:00:01.17 |      7 965 236 |   33 188 |
- 25@98  |  +28  | F6 g5 G3 f2 H4 h5 H3 g6 G2 a7 H6 g7 | 00:00:01.64 |     14 699 685 |   31 143 |
- 25     |  +28  | F6 g5 G3 f2 H4 h5 H3 g6 G2 a7 H6 g7 | 00:00:05.81 |    125 399 559 |   30 057 |
-I play F6
-evaluation 28
-time 00:00:05.81
----------------------------------------------------------------------------------------------------
 
-  A B C D E F G H 
-1 . . O # . O . . 1
-2 . . # # O O . . 2
-3 O O O O O # # . 3
-4 O O O O O # . . 4	Noirs: 13	Blancs: 25
-5 O O O # O # # . 5	NOIRS au trait
-6 O O O O # # . . 6
-7 . . . O O # . . 7
-8 . . # . O . . . 8
-  A B C D E F G H 
+        tr: 00:04:59.99 tm: 00:01:20.35 xt: 00:01:20.35
+        stop before       : 00:03:39.64   : 00:02:19.28
 
-Evaluation : 4
-
-  depth | score | principal variation                 | time        |      nodes (N) |     kN/s |
-  2     |   +7  | E1 g2 -- -- -- -- -- -- -- -- -- -- | 00:00:00.00 |            262 |      N/A |
-  4     |  +12  | E1 h5 H4 h6 -- -- -- -- -- -- -- -- | 00:00:00.00 |            584 |      N/A |
-  6@72  |  +12  | E1 g6 B2 h5 A2 g4 -- -- -- -- -- -- | 00:00:00.00 |          4 939 |      N/A |
-  8@72  |  +13  | E1 g6 B2 h5 B1 g4 H4 a1 -- -- -- -- | 00:00:00.00 |         10 942 |      N/A |
- 10@72  |  +13  | E1 g4 G6 h2 B2 f8 H5 h3 C7 d8 -- -- | 00:00:00.00 |         44 395 |      N/A |
- 12@72  |  +12  | E1 h4 G6 g4 B2 h6 B1 a1 D8 f8 C7 b8 | 00:00:00.00 |        153 088 |      N/A |
- 14@72  |  +11  | E1 g6 B2 h5 A2 h3 G2 a1 B1 g4 G1 h1 | 00:00:00.02 |        412 169 |      N/A |
- 16@72  |  +11  | E1 g6 B2 h5 D8 g4 F8 h3 C7 b7 H6 b1 | 00:00:00.04 |        568 288 |   27 061 |
- 26@72  |  +14  | E1 h4 G6 g4 H6 h2 H5 f8 D8 b8 H3 h7 | 00:00:01.75 |     73 502 903 |   43 084 |
- 26@84  |  +16  | E1 h4 G6 g4 H5 h6 B2 f8 D8 b8 C7 h3 | 00:00:02.78 |     42 803 332 |   41 395 |
- 26@91  |  +16  | E1 h4 G6 g4 H5 h6 B2 f8 D8 b8 C7 h3 | 00:00:03.42 |     24 386 877 |   38 283 |
- 26@95  |  +16  | E1 h4 G6 g4 H5 h6 B2 f8 D8 b8 C7 h3 | 00:00:04.39 |     36 061 625 |   37 138 |
- 26@98  |  +16  | E1 h4 G6 g4 H5 h6 B2 f8 D8 b8 C7 h3 | 00:00:05.79 |     50 332 409 |   35 823 |
- 26     |  +16  | E1 h4 G6 g4 H5 h6 B2 f8 D8 b8 C7 h3 | 00:00:10.12 |    150 526 443 |   34 787 |
-I play E1
-evaluation 16
-time 00:00:10.12
----------------------------------------------------------------------------------------------------
-
-  A B C D E F G H 
-1 . . . . # . . . 1
-2 . . # # # . . . 2
-3 . O O O # O O O 3
-4 . O O O # O O O 4	Noirs: 12	Blancs: 26
-5 . O # O # O # O 5	NOIRS au trait
-6 . O O # # O O O 6
-7 . . O O # O . . 7
-8 . . O . . O . . 8
-  A B C D E F G H 
-
-Evaluation : 18
-
-  depth | score | principal variation                 | time        |      nodes (N) |     kN/s |
-  2     |  +13  | D8 f2 -- -- -- -- -- -- -- -- -- -- | 00:00:00.00 |            317 |      N/A |
-  4     |   +6  | D8 e8 A4 f2 -- -- -- -- -- -- -- -- | 00:00:00.00 |            731 |      N/A |
-  6@72  |   +4  | D8 e8 A4 f2 A5 a6 -- -- -- -- -- -- | 00:00:00.00 |          7 573 |      N/A |
-  8@72  |   +3  | D8 e8 G8 h8 F2 g2 B2 g7 -- -- -- -- | 00:00:00.00 |         24 525 |      N/A |
- 10@72  |   +4  | D8 e8 H7 h8 F2 g7 B7 f1 A7 a8 -- -- | 00:00:00.00 |         35 605 |      N/A |
- 12@72  |   +5  | D8 e8 H7 h8 F2 g7 B7 f1 A7 a8 B8 a5 | 00:00:00.00 |        112 587 |      N/A |
- 14@72  |   +6  | D8 e8 H7 h8 F2 g7 B7 f1 A7 b1 C1 d1 | 00:00:00.01 |        134 555 |      N/A |
- 16@72  |   +5  | D8 e8 H7 h8 F2 g7 B7 f1 A7 b1 C1 d1 | 00:00:00.02 |        360 827 |      N/A |
- 26@72  |  +10  | D8 e8 G8 h8 F2 g7 B7 a7 A6 a5 A2 a3 | 00:00:01.03 |     43 828 209 |   43 394 |
- 26@84  |  +10  | D8 e8 G8 h8 F2 g7 B7 a7 A6 a5 A2 a3 | 00:00:01.15 |      4 730 484 |   39 751 |
- 26@91  |  +10  | D8 e8 G8 h8 F2 g7 B7 a7 A6 a5 A2 a3 | 00:00:01.26 |      3 657 884 |   33 558 |
- 26@95  |  +10  | D8 e8 G8 h8 F2 g7 B7 a7 A6 a5 A2 a3 | 00:00:01.69 |     16 723 057 |   38 710 |
- 26@98  |  +10  | D8 e8 G8 h8 F2 g7 B7 a7 A6 a5 A2 a3 | 00:00:02.45 |     26 102 345 |   34 345 |
- 26     |  +10  | D8 e8 G8 h8 F2 g7 B7 a7 A6 a5 A2 a3 | 00:00:37.58 |  1 359 544 902 |   38 702 |
-I play D8
-evaluation 10
-time 00:00:37.58
----------------------------------------------------------------------------------------------------
-
-  A B C D E F G H 
-1 . . . . O . # . 1
-2 . . . . . # . . 2
-3 . . . # # # O . 3
-4 O # # # # # O O 4	Noirs: 18	Blancs: 19
-5 . # # O O # O O 5	BLANCS au trait
-6 # # O # # # O O 6
-7 . . O O O O . O 7
-8 . . . . O O . . 8
-  A B C D E F G H 
-
-Evaluation : -1
-
-  depth | score | principal variation                 | time        |      nodes (N) |     kN/s |
-  3     |   +5  | E2 d2 C1 -- -- -- -- -- -- -- -- -- | 00:00:00.00 |            326 |      N/A |
-  5     |   +6  | G7 h8 G8 h2 E2 -- -- -- -- -- -- -- | 00:00:00.00 |          1 853 |      N/A |
-  7@72  |   +7  | E2 d2 G7 h8 G8 h3 C1 -- -- -- -- -- | 00:00:00.00 |          7 226 |      N/A |
-  9@72  |  +10  | A3 b3 E2 h2 F1 d1 G7 d2 H3 -- -- -- | 00:00:00.00 |         34 800 |      N/A |
- 11@72  |   +9  | E2 h2 G7 d2 A3 h8 H3 g8 H1 g2 C1 -- | 00:00:00.00 |         58 636 |      N/A |
- 13@72  |   +9  | E2 h2 G7 f1 H1 h3 D1 c8 D8 g2 B7 d2 | 00:00:00.01 |        135 462 |      N/A |
- 15@72  |   +9  | E2 h2 G7 h8 H3 g2 C2 g8 F1 d1 H1 b3 | 00:00:00.01 |        153 036 |      N/A |
- 17@72+ |  +10  | E2 h2 G7 h8 H3 g2 C2 g8 H1 f1 D1 c1 | 00:00:00.03 |        824 616 |   35 852 |
- 27@72  |   +6  | E2 h2 G7 f1 H1 h3 D1 c8 G2 h8 G8 d8 | 00:00:00.84 |     34 766 390 |   43 134 |
- 27@84  |   +6  | E2 h2 G7 f1 H1 h3 D1 c8 G2 h8 G8 d8 | 00:00:01.04 |      7 461 671 |   38 264 |
- 27@91  |   +6  | E2 h2 G7 f1 H1 h3 D1 c8 G2 h8 G8 d8 | 00:00:01.39 |     13 188 439 |   37 681 |
- 27@95  |   +6  | E2 h2 G7 f1 H1 h3 D1 c8 G2 h8 G8 d8 | 00:00:02.26 |     32 424 086 |   37 013 |
- 27@98  |   +6  | E2 h2 G7 f1 H1 h3 D1 c8 G2 h8 G8 d8 | 00:00:03.70 |     49 234 822 |   34 167 |
- 27     |   +6  | E2 h2 G7 f1 H1 h3 D1 c8 G2 h8 G8 d8 | 00:00:08.87 |    202 378 396 |   39 197 |
-I play E2
-evaluation 6
-time 00:00:08.87
----------------------------------------------------------------------------------------------------
-
-  A B C D E F G H 
-1 . . . # . . . . 1
-2 . . . O # . . # 2
-3 . . # O O # # # 3
-4 # # # O # # # # 4	Noirs: 27	Blancs: 10
-5 # # # O O # # # 5	BLANCS au trait
-6 # # # O O O # # 6
-7 . . # O . . . # 7
-8 . . . . . . . . 8
-  A B C D E F G H 
-
-Evaluation : 2
-
-  depth | score | principal variation                 | time        |      nodes (N) |     kN/s |
-  3     |   +0  | A3 f2 A7 -- -- -- -- -- -- -- -- -- | 00:00:00.00 |            369 |      N/A |
-  5     |   -1  | A3 a2 E1 f1 C2 -- -- -- -- -- -- -- | 00:00:00.00 |          1 855 |      N/A |
-  7@72  |   -3  | A3 f2 A7 c1 D8 b3 A2 -- -- -- -- -- | 00:00:00.00 |          7 154 |      N/A |
-  9@72  |   -2  | A3 f2 B3 c1 A7 e8 D8 c2 F8 -- -- -- | 00:00:00.00 |         35 097 |      N/A |
- 11@72  |   -1  | E1 f1 F2 c1 B8 g1 B7 a8 A7 e8 B2 -- | 00:00:00.00 |         54 749 |      N/A |
- 13@72  |   -1  | A3 f2 E1 c1 F1 c2 A7 g1 B3 e8 B8 c8 | 00:00:00.01 |        130 358 |      N/A |
- 15@72  |   +0  | B3 f2 A3 c1 E1 f1 C2 b1 B2 a1 A2 e8 | 00:00:00.02 |        491 216 |      N/A |
- 17@72+ |   +2  | E1 f1 F2 c1 B8 g1 B7 a8 A7 e8 C8 e7 | 00:00:00.09 |      2 185 972 |   35 257 |
- 27@72  |   +0  | A3 f2 E1 f1 C2 b1 B3 c1 G2 a2 G7 e8 | 00:00:01.43 |     54 821 560 |   40 911 |
- 27@84  |   +0  | A3 f2 E1 f1 C2 b1 B3 c1 G2 a2 G7 e8 | 00:00:01.56 |      4 951 442 |   35 880 |
- 27@91  |   +0  | A3 f2 E1 f1 C2 b1 B3 c1 G2 a2 G7 e8 | 00:00:02.57 |     39 356 302 |   39 160 |
- 27@95  |   +0  | A3 f2 E1 f1 C2 b1 B3 c1 G2 a2 G7 e8 | 00:00:03.29 |     24 626 009 |   34 013 |
- 27@98  |   +0  | A3 f2 E1 f1 C2 b1 B3 c1 G2 a2 G7 e8 | 00:00:04.81 |     47 482 648 |   31 341 |
- 27     |   +0  | A3 f2 E1 f1 C2 b1 B3 c1 G2 a2 G7 e8 | 00:00:10.95 |    252 664 516 |   41 130 |
-I play A3
-evaluation 0
-time 00:00:10.95
----------------------------------------------------------------------------------------------------
-
-  A B C D E F G H 
-1 . . . . O O . . 1
-2 . . . O O O . . 2
-3 . # # # # O O O 3
-4 . . # # O O # O 4	Noirs: 16	Blancs: 20
-5 . # # # # # O O 5	NOIRS au trait
-6 . . O O O # O O 6
-7 . . # . O # . O 7
-8 . . . . . # . . 8
-  A B C D E F G H 
-
-Evaluation : -4
-
-  depth | score | principal variation                 | time        |      nodes (N) |     kN/s |
-  2     |   -2  | D8 b6 -- -- -- -- -- -- -- -- -- -- | 00:00:00.00 |            321 |      N/A |
-  4     |   -2  | D8 b6 A5 c8 -- -- -- -- -- -- -- -- | 00:00:00.00 |            612 |      N/A |
-  6@72  |   -2  | D8 c8 D7 e8 B8 g7 -- -- -- -- -- -- | 00:00:00.00 |          6 512 |      N/A |
-  8@72  |   -1  | D8 c8 D7 b4 C2 a6 A3 a4 -- -- -- -- | 00:00:00.00 |         24 134 |      N/A |
- 10@72  |   -3  | E8 b6 D7 c2 A5 a3 G7 h8 G8 d8 -- -- | 00:00:00.00 |        189 465 |      N/A |
- 12@72  |   -3  | E8 b6 B4 a6 C2 a3 B2 d7 G1 d8 G2 a1 | 00:00:00.02 |        311 221 |      N/A |
- 14@72  |   -3  | D8 b6 D7 c2 A5 a3 G2 g7 B4 a7 A6 a4 | 00:00:00.05 |      1 009 536 |   26 566 |
- 16@72  |   -3  | D8 b6 D7 c2 A5 a3 G2 g7 B4 a7 A6 a4 | 00:00:00.10 |      1 134 210 |   27 005 |
- 18@72+ |   -2  | D8 b6 D7 a5 B4 a4 A3 b7 G1 h1 H2 e8 | 00:00:00.25 |      4 784 413 |   32 110 |
- 28@72  |   -2  | D8 b6 D7 a5 B4 a4 A3 b7 G1 h1 H2 e8 | 00:00:03.58 |    143 359 281 |   42 960 |
- 28@84  |   -2  | D8 b6 D7 a5 B4 a4 A3 b7 G1 h1 H2 e8 | 00:00:06.02 |    105 635 463 |   43 417 |
- 28@91  |   -2  | D8 b6 D7 a5 B4 a4 A3 b7 G1 h1 H2 e8 | 00:00:09.73 |    152 514 339 |   41 053 |
- 28@95  |   -2  | D8 b6 D7 a5 B4 a4 A3 b7 G1 h1 H2 e8 | 00:00:19.69 |    402 779 535 |   40 435 |
- 28@98  |   -2  | D8 b6 D7 a5 B4 a4 A3 b7 G1 h1 H2 e8 | 00:00:38.87 |    703 309 171 |   36 676 |
- 28     |   -2  | D8 b6 D7 a5 B4 a4 A3 b7 G1 h1 H2 e8 | 00:01:24.71 |  2 159 265 323 |   47 105 |
-I play D8
-evaluation -2
-time 00:01:24.71
----------------------------------------------------------------------------------------------------
-
-  A B C D E F G H 
-1 . . O O O . . . 1
-2 # # O O . . . . 2
-3 # # # # O O O O 3
-4 # # # # O # . . 4	Noirs: 18	Blancs: 18
-5 # # # O # # . . 5	NOIRS au trait
-6 # # O O O . . . 6
-7 . . . O O O . . 7
-8 . . . O . . . . 8
-  A B C D E F G H 
-
-Evaluation : 5
-
-  depth | score | principal variation                 | time        |      nodes (N) |     kN/s |
-  2     |   +3  | F6 c7 -- -- -- -- -- -- -- -- -- -- | 00:00:00.00 |            153 |      N/A |
-  4     |   -2  | F6 c7 G4 e2 -- -- -- -- -- -- -- -- | 00:00:00.00 |            427 |      N/A |
-  6@72  |   -2  | F8 g6 G5 c7 G4 h6 -- -- -- -- -- -- | 00:00:00.00 |          6 879 |      N/A |
-  8@72  |   +0  | F8 g6 G5 h5 E8 g8 F6 g4 -- -- -- -- | 00:00:00.00 |         11 470 |      N/A |
- 10@72  |   -3  | F8 e8 C8 g4 C7 f6 G5 h5 H4 g6 -- -- | 00:00:00.00 |         47 709 |      N/A |
- 12@72  |   -2  | F8 g5 G4 a1 C7 a7 H6 e2 G6 f6 E8 g8 | 00:00:00.01 |        212 901 |      N/A |
- 14@72  |   -3  | F8 g4 C7 f6 G5 g6 G8 a1 H6 a7 H5 h4 | 00:00:00.03 |        487 369 |      N/A |
- 16@72  |   -4  | C7 c8 G8 a1 F8 a7 E2 g4 F6 f1 F2 e8 | 00:00:00.08 |      1 277 264 |   24 562 |
- 18@72+ |   -6  | C7 g6 F6 c8 F2 g2 H6 h5 E8 b7 E2 f1 | 00:00:00.45 |     12 948 173 |   34 995 |
- 28@72  |   -2  | C7 g6 G5 f6 G4 c8 B7 e2 B8 h6 H5 h4 | 00:00:02.86 |    128 701 645 |   53 314 |
- 28@84  |   -2  | C7 g6 G5 f6 G4 c8 B7 e2 B8 h6 H5 h4 | 00:00:04.55 |     79 177 412 |   46 989 |
- 28@91  |   -2  | C7 g6 G5 f6 G4 c8 B7 e2 B8 h6 H5 h4 | 00:00:05.98 |     60 709 529 |   42 513 |
- 28@95  |   -2  | C7 g6 G5 f6 G4 c8 B7 e2 B8 h6 H5 h4 | 00:00:10.87 |    214 904 806 |   43 938 |
- 28@98  |   -2  | C7 g6 G5 f6 G4 c8 B7 e2 B8 h6 H5 h4 | 00:00:17.96 |    254 983 095 |   35 933 |
- 28     |   -2  | C7 g6 G5 f6 G4 c8 B7 e2 B8 h6 H5 h4 | 00:01:29.52 |  3 420 138 526 |   47 796 |
-I play C7
-evaluation -2
-time 00:01:29.52
----------------------------------------------------------------------------------------------------
-
-  A B C D E F G H 
-1 . . . . . . . . 1
-2 # . # . . . . . 2
-3 . # # # # O O O 3
-4 O O # O # # . . 4	Noirs: 18	Blancs: 17
-5 O O O # # # # . 5	BLANCS au trait
-6 O O # # # # . . 6
-7 O . O O O # . . 7
-8 . . . O O . . . 8
-  A B C D E F G H 
-
-Evaluation : 0
-
-  depth | score | principal variation                 | time        |      nodes (N) |     kN/s |
-  3     |   +1  | E2 d2 F2 -- -- -- -- -- -- -- -- -- | 00:00:00.00 |            552 |      N/A |
-  5     |   +2  | G6 f2 H5 c8 G4 -- -- -- -- -- -- -- | 00:00:00.00 |          4 788 |      N/A |
-  7@72  |   +0  | G6 f2 H5 h6 H4 h2 G4 -- -- -- -- -- | 00:00:00.00 |         18 457 |      N/A |
-  9@72  |   +1  | G6 h7 H4 g4 E2 f2 D2 c1 F1 -- -- -- | 00:00:00.00 |         75 620 |      N/A |
- 11@72  |   +2  | G6 h7 H4 g4 E2 f2 D2 c1 H6 h5 H8 -- | 00:00:00.00 |        139 864 |      N/A |
- 13@72  |   +2  | G6 f2 H5 h6 C1 f8 H4 c8 H7 b1 G4 d1 | 00:00:00.02 |        435 254 |      N/A |
- 15@72  |   +4  | G6 f2 H4 h6 H5 h2 G4 h7 C1 f8 G8 b2 | 00:00:00.04 |        604 321 |   26 274 |
- 17@72+ |   +4  | G6 h7 C1 f2 G2 g8 H6 h1 H8 h2 H4 d1 | 00:00:00.23 |      7 604 984 |   41 557 |
- 19@72+ |   +4  | G6 h7 C1 f2 G2 g8 H6 h1 H8 h2 H4 d1 | 00:00:00.38 |      4 051 307 |   27 189 |
- 29@72  |   +0  | G6 h7 C1 f2 G2 g8 F8 h1 H8 h2 G4 h5 | 00:00:21.52 |    999 625 392 |   47 281 |
- 29@84  |   +0  | G6 h7 C1 f2 G2 g8 F8 h1 H8 h2 G4 h5 | 00:00:29.61 |    354 584 663 |   43 802 |
- 29@91  |   +0  | G6 h7 C1 f2 G2 g8 F8 h1 H8 h2 G4 h5 | 00:00:45.72 |    720 754 993 |   44 734 |
- 29@95  |   +0  | G6 h7 C1 f2 G2 g8 F8 h1 H8 h2 G4 h5 | 00:01:20.74 |  1 537 835 273 |   43 923 |
- 29@98  |   +0  | G6 h7 C1 f2 G2 g8 F8 h1 H8 h2 G4 h5 | 00:02:24.55 |  2 615 161 864 |   40 979 |
- 29     |   +0  | G6 h7 C1 f2 G2 g8 F8 h1 H8 h2 G4 h5 | 00:05:48.81 |  9 105 875 031 |   44 580 |
-I play G6
-evaluation 0
-time 00:05:48.81
----------------------------------------------------------------------------------------------------
-
-  A B C D E F G H 
-1 . . # # # # # . 1
-2 . . # # # # . . 2
-3 . O O O # # . . 3
-4 . O O # O # . . 4	Noirs: 21	Blancs: 14
-5 . O # # # # # . 5	BLANCS au trait
-6 O O O O O # O . 6
-7 . . . O # # . . 7
-8 . . . . . . . . 8
-  A B C D E F G H 
-
-Evaluation : -5
-
-  depth | score | principal variation                 | time        |      nodes (N) |     kN/s |
-  3     |   +1  | H5 h4 H3 -- -- -- -- -- -- -- -- -- | 00:00:00.00 |            413 |      N/A |
-  5     |   +3  | H5 h4 H3 h6 H7 -- -- -- -- -- -- -- | 00:00:00.00 |          1 591 |      N/A |
-  7@72  |   +1  | H5 d8 C8 c7 E8 h4 H3 -- -- -- -- -- | 00:00:00.00 |          7 982 |      N/A |
-  9@72  |   +1  | H5 d8 C7 g4 F8 a3 E8 g8 H3 -- -- -- | 00:00:00.00 |         15 443 |      N/A |
- 11@72  |   +1  | H5 c7 G3 g4 H4 h6 H7 h2 D8 f8 B2 -- | 00:00:00.00 |         69 768 |      N/A |
- 13@72  |   +2  | H5 c7 G3 g4 H4 h6 H7 h2 C8 d8 G8 b8 | 00:00:00.00 |         66 385 |      N/A |
- 15@72  |   +3  | H5 d8 C7 g4 H4 h6 F8 g3 H7 b8 C8 e8 | 00:00:00.01 |        269 562 |      N/A |
- 17@72+ |   +4  | H5 d8 C7 g4 H4 h6 H7 g3 C8 b8 E8 b7 | 00:00:00.06 |      1 837 889 |   36 757 |
- 19@72+ |   +4  | H5 d8 C7 g4 H4 h6 H7 g3 C8 b8 E8 b7 | 00:00:00.09 |        779 238 |   25 974 |
- 29@72  |   +2  | H5 h4 H3 d8 C8 c7 E8 g8 G4 g3 F8 b8 | 00:00:00.77 |     28 726 578 |   42 684 |
- 29@84  |   +2  | H5 h4 H3 d8 C8 c7 E8 g8 G4 g3 F8 b8 | 00:00:00.99 |      8 997 873 |   40 169 |
- 29@91  |   +2  | H5 h4 H3 d8 C8 c7 E8 g8 G4 g3 F8 b8 | 00:00:01.39 |     14 295 464 |   35 384 |
- 29@95  |   +2  | H5 h4 H3 d8 C8 c7 E8 g8 G4 g3 F8 b8 | 00:00:02.77 |     50 942 845 |   36 915 |
- 29@98  |   +2  | H5 h4 H3 d8 C8 c7 E8 g8 G4 g3 F8 b8 | 00:00:05.57 |     89 491 680 |   32 052 |
- 29     |   +2  | H5 h4 H3 d8 C8 c7 E8 g8 G4 g3 F8 b8 | 00:00:31.75 |  1 122 215 425 |   42 855 |
-I play H5
-evaluation 2
-time 00:00:31.75
----------------------------------------------------------------------------------------------------
-
-  A B C D E F G H 
-1 . . . . . . . . 1
-2 . . . . . . . . 2
-3 . . . # # O O O 3
-4 . . # # # O O O 4	Noirs: 12	Blancs: 22
-5 . . # # O # O O 5	NOIRS au trait
-6 . O O O # # # O 6
-7 . . O # O O . O 7
-8 . O O O O O . . 8
-  A B C D E F G H 
-
-Evaluation : -1
-
-  depth | score | principal variation                 | time        |      nodes (N) |     kN/s |
-  2     |   +1  | B5 b3 -- -- -- -- -- -- -- -- -- -- | 00:00:00.00 |            198 |      N/A |
-  4     |   +2  | B5 e2 F1 d1 -- -- -- -- -- -- -- -- | 00:00:00.00 |            472 |      N/A |
-  6@72  |   +0  | B5 a4 F2 g2 A6 f1 -- -- -- -- -- -- | 00:00:00.00 |          3 619 |      N/A |
-  8@72  |   -4  | A6 b5 B4 a3 A4 e2 E1 b3 -- -- -- -- | 00:00:00.00 |         15 653 |      N/A |
- 10@72  |   -2  | A6 e2 F1 d1 E1 g1 F2 c2 C3 d2 -- -- | 00:00:00.00 |         26 266 |      N/A |
- 12@72  |   -2  | A6 e2 F1 d1 F2 c2 B1 d2 E1 b7 C3 c1 | 00:00:00.00 |         66 073 |      N/A |
- 14@72  |   -4  | A6 e2 F1 b5 A5 d1 F2 c2 E1 g1 C3 d2 | 00:00:00.01 |        128 244 |      N/A |
- 16@72  |   -5  | A6 b5 B4 a3 A4 e2 E1 c2 D2 b3 F2 c3 | 00:00:00.02 |        408 739 |      N/A |
- 18@72+ |   -4  | A6 b5 B4 a3 A4 e2 E1 c2 D2 b3 F2 c3 | 00:00:00.04 |        451 341 |      N/A |
- 20@72+ |   -4  | A6 b5 B4 a3 A4 e2 E1 c2 D2 b3 F2 c3 | 00:00:00.09 |      1 199 558 |   25 522 |
- 30@72  |  -10  | A6 b5 B4 a3 A4 e2 E1 b3 F2 a5 A2 g2 | 00:00:01.43 |     58 259 641 |   43 283 |
- 30@84  |  -10  | A6 b5 B4 a3 A4 e2 E1 b3 F2 a5 A2 g2 | 00:00:02.40 |     41 574 447 |   42 993 |
- 30@91  |  -10  | A6 b5 B4 a3 A4 e2 E1 b3 F2 a5 A2 g2 | 00:00:05.83 |    151 362 930 |   44 167 |
- 30@95  |  -10  | A6 b5 B4 a3 A4 e2 E1 b3 F2 a5 A2 g2 | 00:00:07.12 |     46 766 197 |   36 029 |
- 30@98  |  -10  | A6 b5 B4 a3 A4 e2 E1 b3 F2 a5 A2 g2 | 00:00:10.86 |    133 032 278 |   35 570 |
- 30     |  -10  | A6 b5 B4 a3 A4 e2 E1 b3 F2 a5 A2 g2 | 00:00:40.78 |  1 316 765 434 |   44 015 |
-I play A6
-evaluation -10
-time 00:00:40.78
----------------------------------------------------------------------------------------------------
-
-  A B C D E F G H 
-1 . . # O O O . . 1
-2 . . O O O . . . 2
-3 . O O O # O O . 3
-4 . O O O O # O . 4	Noirs: 14	Blancs: 20
-5 . O # O # # # . 5	NOIRS au trait
-6 O O # # # # . . 6
-7 . . # . # # . . 7
-8 . . . . . . . . 8
-  A B C D E F G H 
-
-Evaluation : 2
-
-  depth | score | principal variation                 | time        |      nodes (N) |     kN/s |
-  2     |   +0  | G1 f2 -- -- -- -- -- -- -- -- -- -- | 00:00:00.00 |            426 |      N/A |
-  4     |   +2  | G1 f2 H3 d8 -- -- -- -- -- -- -- -- | 00:00:00.00 |            759 |      N/A |
-  6@72  |   +1  | G1 f2 H3 d8 C8 d7 -- -- -- -- -- -- | 00:00:00.00 |          3 617 |      N/A |
-  8@72  |   +4  | G1 f2 H3 h4 H5 h6 H7 g2 -- -- -- -- | 00:00:00.00 |          8 218 |      N/A |
- 10@72  |   +1  | G1 f2 H3 h5 H6 h7 H2 c8 A3 h4 -- -- | 00:00:00.00 |         33 142 |      N/A |
- 12@72  |   +2  | G1 f2 H3 d8 C8 d7 E8 h4 H5 h6 H7 g2 | 00:00:00.00 |         73 948 |      N/A |
- 14@72  |   +2  | G1 f2 H3 d8 C8 d7 E8 h5 H6 h7 H2 g6 | 00:00:00.00 |         97 548 |      N/A |
- 16@72  |   +2  | G1 f2 H3 d8 C8 d7 E8 h5 H6 h7 H2 g6 | 00:00:00.01 |        198 676 |      N/A |
- 18@72+ |   +4  | G1 f2 H3 d8 C8 d7 E8 h5 H6 h7 H2 g6 | 00:00:00.04 |        784 423 |   29 052 |
- 20@72+ |   +4  | G1 f2 H3 d8 C8 d7 E8 h5 H6 h7 H2 g6 | 00:00:00.11 |      2 371 672 |   33 881 |
- 30@72  |   +4  | G1 f2 H3 d8 C8 d7 E8 h5 H6 h7 H2 g6 | 00:00:01.38 |     56 350 961 |   44 196 |
- 30@84  |   +4  | G1 f2 H3 d8 C8 d7 E8 h5 H6 h7 H2 g6 | 00:00:01.91 |     20 650 616 |   39 259 |
- 30@91  |   +4  | G1 f2 H3 d8 C8 d7 E8 h5 H6 h7 H2 g6 | 00:00:03.08 |     46 924 741 |   40 106 |
- 30@95  |   +4  | G1 f2 H3 d8 C8 d7 E8 h5 H6 h7 H2 g6 | 00:00:05.31 |     86 391 591 |   38 671 |
- 30@98  |   +4  | G1 f2 H3 d8 C8 d7 E8 h5 H6 h7 H2 g6 | 00:00:10.38 |    185 752 398 |   36 652 |
- 30     |   +4  | G1 f2 H3 d8 C8 d7 E8 h5 H6 h7 H2 g6 | 00:00:49.43 |  1 673 057 795 |   42 845 |
-I play G1
+  2     |  +12  | H3 f6 -- -- -- -- -- -- -- -- -- -- | 00:00:00.00 |            315 |      N/A |
+  4     |   +9  | C3 c5 F3 f6 -- -- -- -- -- -- -- -- | 00:00:00.00 |            774 |      N/A |
+  6@72  |   +7  | C3 c5 F3 f6 H5 b4 -- -- -- -- -- -- | 00:00:00.00 |          4 763 |      N/A |
+  8@72  |   +8  | C3 c5 F3 f6 D6 g5 H4 d7 -- -- -- -- | 00:00:00.00 |         11 465 |      N/A |
+ 10@72  |   +7  | C3 c5 F3 f6 D6 g5 E1 f1 H4 c1 -- -- | 00:00:00.01 |         44 353 |      N/A |
+ 12@72  |   +8  | C3 c5 F3 f6 C1 d1 E1 g5 H4 b3 H6 h5 | 00:00:00.03 |        149 537 |      N/A |
+ 14@72  |   +5  | C3 c5 F3 f6 C1 d1 E1 g6 H4 h3 H2 g5 | 00:00:00.05 |        484 646 |      N/A |
+ 16@72  |   +4  | C3 c5 F3 f6 C1 d1 H5 g6 E1 b3 D6 c2 | 00:00:00.09 |      1 531 645 |   38 291 |
+ 18@72  |   +4  | C3 c5 F3 f6 C1 d1 H5 g6 E1 b3 B4 c2 | 00:00:00.12 |      1 356 350 |   42 385 |
+ 20@72  |   +5  | C3 c5 F3 f6 C1 d1 H5 g6 E1 b3 B4 c2 | 00:00:00.17 |      2 308 583 |   48 095 |
+ 22@72  |   +4  | C3 c5 F3 f6 C1 d1 H5 g6 E1 b3 B4 c2 | 00:00:00.27 |      5 212 680 |   49 644 |
+ 24@72  |   +3  | C3 c5 F3 f6 C1 d1 H5 g6 E1 b3 B4 c2 | 00:00:00.70 |     22 349 201 |   52 340 |
+ 26@72  |   +3  | C3 c5 F3 f6 C1 d1 H5 g6 E1 b3 B4 c2 | 00:00:01.18 |     25 297 038 |   52 812 |
+ 28@72  |   +3  | C3 c5 F3 f6 C1 d1 H5 g6 E1 b3 B4 c2 | 00:00:01.96 |     41 097 626 |   52 621 |
+ 30@72  |   +4  | C3 c5 F3 f6 C1 d1 H5 g6 E1 b3 D6 c2 | 00:00:04.12 |    115 981 390 |   53 620 |
+[5377]         RXEngine BLACK : stop : resume
+[5377]         RXEngine : end search
+I play C3
 evaluation 4
-time 00:00:49.43
+time 00:00:05.37
+[5377]         RXEngine BLACK : stop : resume
+[5378]         RXEngine BLACK : stop : resume
+[5426]         RXEngine BLACK : stop : resume
+[16331]         RXEngine BLACK : stop : new position
 ---------------------------------------------------------------------------------------------------
 
   A B C D E F G H 
 1 . . . . . . . . 1
 2 . . . . . . . . 2
-3 . . . . . . . O 3
-4 . . O O O O O . 4	Noirs: 12	Blancs: 18
-5 . . O O O O O # 5	NOIRS au trait
-6 O O O O # # # # 6
-7 . . # # O O # # 7
-8 . . # # . O . # 8
+3 . . O # . O . . 3
+4 O . # # # O . . 4	Noirs: 10	Blancs: 8
+5 . O # # O # # . 5	NOIRS au trait
+6 . # # O . . . . 6
+7 . . O . . . . . 7
+8 . . . . . . . . 8
   A B C D E F G H 
 
-Evaluation : 57
+Evaluation : 2
 
+[0]         RXEngine : dependent time : true
   depth | score | principal variation                 | time        |      nodes (N) |     kN/s |
-  2     |  +53  | H4 g8 -- -- -- -- -- -- -- -- -- -- | 00:00:00.00 |            171 |      N/A |
-  4     |  +56  | H4 g8 E8 b7 -- -- -- -- -- -- -- -- | 00:00:00.00 |            361 |      N/A |
-  6@72  |  +62  | H4 g8 E8 b7 B5 b4 -- -- -- -- -- -- | 00:00:00.00 |          2 724 |      N/A |
-  8@72  |  +72  | G8 e8 H4 b7 H2 b8 A8 pa -- -- -- -- | 00:00:00.00 |          5 209 |      N/A |
- 10@72  |  +75  | G8 e8 H4 b7 H2 b8 A8 pa A7 pa -- -- | 00:00:00.00 |          7 498 |      N/A |
- 12@72  |  +74  | G8 e8 H4 b7 H2 b8 A8 pa A7 pa B5 b4 | 00:00:00.00 |         29 915 |      N/A |
- 14@72  |  +76  | G8 e8 H4 b7 H2 b8 A8 pa A7 pa B5 b4 | 00:00:00.00 |         33 170 |      N/A |
- 16@72  |  +83  | G8 e8 H4 b7 H2 b8 A8 pa A7 pa G3 f3 | 00:00:00.01 |        143 010 |      N/A |
- 18@72  |  +81  | G8 e8 H4 b7 H2 b8 A8 pa A7 pa G3 f3 | 00:00:00.01 |         72 768 |      N/A |
- 34@72  |>=+64  | G8 e8 H4 b7 H2 b8 A8 pa A7 pa G3 f3 | 00:00:00.01 |            503 |      N/A |
- 34     |>=+64  | G8 e8 H4 b7 H2 b8 A8 pa A7 pa G3 f3 | 00:00:00.01 |          5 056 |      N/A |
-I play G8
-evaluation 64
-time 00:00:00.01
----------------------------------------------------------------------------------------------
-Total time  :     00:12:16.34
-Total nodes :  31 851 215 107
-Speed       :          43 256 kN/s
 
+        tr: 00:04:59.99 tm: 00:01:20.35 xt: 00:01:20.35
+        stop before       : 00:03:39.64   : 00:02:19.28
+
+  2     |   +2  | F6 a5 -- -- -- -- -- -- -- -- -- -- | 00:00:00.00 |            391 |      N/A |
+  4     |   +4  | F6 a5 E6 d7 -- -- -- -- -- -- -- -- | 00:00:00.00 |            927 |      N/A |
+  6@72  |   +5  | F6 e3 E6 a5 G4 d7 -- -- -- -- -- -- | 00:00:00.00 |         11 776 |      N/A |
+  8@72  |   +3  | F6 e3 E6 b4 A3 b3 A5 d7 -- -- -- -- | 00:00:00.01 |         31 374 |      N/A |
+ 10@72  |   +2  | F6 e3 E6 b4 A3 b3 A5 h6 G4 h5 -- -- | 00:00:00.02 |        158 975 |      N/A |
+ 12@72  |   +2  | A5 b4 C2 f6 E6 e7 B3 a3 A2 a7 D7 c8 | 00:00:00.04 |        440 788 |      N/A |
+ 14@72  |   +1  | A5 d2 E3 b3 E7 a6 B4 d7 E6 f7 F6 e2 | 00:00:00.08 |      1 251 256 |   32 083 |
+ 16@72  |   +1  | A5 d2 E3 b3 E7 a6 G3 d7 E6 f7 F6 b4 | 00:00:00.12 |      1 707 930 |   41 656 |
+ 18@72  |   +1  | A5 d2 E3 b3 E7 a6 F6 d7 E6 g3 D8 e2 | 00:00:00.22 |      4 878 447 |   49 780 |
+ 20@72  |   +1  | A5 d2 E3 b3 E7 a6 F6 d7 E6 g3 D8 e2 | 00:00:00.41 |      9 619 635 |   51 718 |
+ 22@72  |   +0  | A5 d2 E3 b3 E7 a6 G3 g4 E6 a7 B4 f2 | 00:00:01.27 |     46 684 055 |   54 346 |
+ 24@72  |   +0  | A5 d2 E3 b3 E7 a6 G3 g4 E6 a7 B4 f2 | 00:00:02.53 |     68 306 689 |   54 082 |
+ 26@72  |   +1  | A5 d2 E3 b3 E7 a6 F6 d7 E6 g3 D8 e2 | 00:00:04.74 |    121 191 242 |   54 862 |
+[5328]         RXEngine BLACK : stop : resume
+[5328]         RXEngine : end search
+I play A5
+evaluation 1
+time 00:00:05.32
+[5328]         RXEngine BLACK : stop : resume
+[5329]         RXEngine BLACK : stop : resume
+[5374]         RXEngine BLACK : stop : resume

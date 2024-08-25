@@ -65,6 +65,8 @@ public :
 	void resume();
 
 	virtual void run();
+    
+    RXEngine* getEngine(const int color) const;
 
 	
 	//privateProtocol
@@ -79,6 +81,8 @@ public :
 	//GGSProtocol
 	void connectGGS(CODKStream* client);
 	void imposed_opening(const std::string& line);
+    
+    void stop_engine(const std::string& _idg, COsGame* game);
 
 	void get_move(const std::string& _idg, COsGame* game);
 

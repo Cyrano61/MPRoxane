@@ -1,0 +1,99 @@
+        RX : stop : new position
+---------------------------------------------------------------------------------------------------
+
+  A B C D E F G H 
+1 . . . . . . . . 1
+2 . . . . . . . . 2
+3 . . O # O # . . 3
+4 . . # O # O . . 4	Noirs: 9	Blancs: 12
+5 O O O O # O . . 5	BLANCS au trait
+6 . O # O # O . . 6
+7 . . . # # . . . 7
+8 . . . . . . . . 8
+  A B C D E F G H 
+
+Evaluation : -8
+
+  depth | score | principal variation                 | time        |      nodes (N) |     kN/s |
+[43@72 ]|   -8  | B4 c7 F2 e2 F7 b3 E1 a4 A6 g5 F8 d8 | 00:00:00.00 |                |          |
+
+        tr: 00:04:16.88 tm: 00:02:29.41 xt: 00:00:53.73
+        stop before       : 00:01:47.46   : 00:00:53.73
+
+        MG : time search expired, stops search
+        RX : end search
+I play B4
+evaluation -8
+time 00:01:38.61
+---------------------------------------------------------------------------------------------------
+
+  A B C D E F G H 
+1 . . . . . . . . 1
+2 . . . . . . . . 2
+3 . . O # O # . . 3
+4 . O O O # O . . 4	Noirs: 10	Blancs: 13
+5 O O O O # O . . 5	BLANCS au trait
+6 . O # # # O . . 6
+7 . . # # # . . . 7
+8 . . . . . . . . 8
+  A B C D E F G H 
+
+Evaluation : -9
+
+  depth | score | principal variation                 | time        |      nodes (N) |     kN/s |
+[41@72 ]|   -8  | F2 e2 F7 b3 E1 a4 A6 g5 F8 d8 G6 a3 | 00:00:00.00 |                |          |
+
+        tr: 00:02:38.26 tm: 00:00:42.23 xt: 00:00:42.23
+        stop before       : 00:01:56.03   : 00:01:13.79
+
+        EG : time search expired, stops search
+        RX : end search
+I play F2
+evaluation -8
+time 00:00:27.87
+---------------------------------------------------------------------------------------------------
+
+  A B C D E F G H 
+1 . . . . . . . . 1
+2 . . . . # O . . 2
+3 . . O # # O . . 3
+4 . O O O # O . . 4	Noirs: 11	Blancs: 14
+5 O O O O # O . . 5	BLANCS au trait
+6 . O # # # O . . 6
+7 . . # # # . . . 7
+8 . . . . . . . . 8
+  A B C D E F G H 
+
+Evaluation : -14
+
+  depth | score | principal variation                 | time        |      nodes (N) |     kN/s |
+[39@84 ]|   -8  | F7 b3 E1 a4 A6 g5 F8 d8 G6 a3 H6 a7 | 00:00:00.00 |                |          |
+        RX : stop : new position
+        RX : end search
+---------------------------------------------------------------------------------------------------
+
+  A B C D E F G H 
+1 . . . . . . . . 1
+2 . . . . . O . . 2
+3 . # # # O O . . 3
+4 . O # O # O . . 4	Noirs: 13	Blancs: 12
+5 O O O # # O . . 5	BLANCS au trait
+6 . O # # # O . . 6
+7 . . # # # . . . 7
+8 . . . . . . . . 8
+  A B C D E F G H 
+
+Evaluation : -10
+
+  depth | score | principal variation                 | time        |      nodes (N) |     kN/s |
+[39@84 ]|>= -8  | E2 -- -- -- -- -- -- -- -- -- -- -- | 00:00:00.00 |                |          |
+
+        tr: 00:02:10.38 tm: 00:01:06.11 xt: 00:00:32.13
+        stop before       : 00:01:04.27   : 00:00:32.13
+
+        RX : stop : resume
+ 39@84  |>= -8  | E2 -- -- -- -- -- -- -- -- -- -- -- | 00:12:29.39 | 40 503 880 848 |   54 049 |
+        RX : end search
+I play E2
+evaluation -8
+time 00:12:29.39

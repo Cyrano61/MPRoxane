@@ -13,7 +13,7 @@ case "$0" in
 esac
 
 #resize window
-printf "\e[8;30;100t"
+printf "\e[8;39;100t"
 
 # lancement du prog
 tail -f engine_1.txt

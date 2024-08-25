@@ -68,6 +68,16 @@ void RXRoxane::connectGGS(CODKStream* client) {
 	GGSClient = client;
 }
 
+void RXRoxane::stop_engine(const string& _idg, COsGame* g) {
+    
+    int player = g->pos.board.fBlackMove? BLACK : WHITE;
+
+    std::cout << "RXRoxane::stop_game :" << _idg << " Engine : " << (player == BLACK? "BLACK" : "WHITE") << std::endl;
+    
+    engine[player]->resume();
+    
+}
+
 
 /* unSynchronized method */
 void RXRoxane::resume() {
@@ -84,6 +94,12 @@ void RXRoxane::resume() {
 	main_PV->reset();
 	expected_PV->reset();
 		
+}
+
+RXEngine* RXRoxane::getEngine(const int color) const {
+    if (color == BLACK || color == WHITE)
+        return engine[color];
+    return NULL;
 }
 
 ///* synchronized method */
@@ -299,8 +315,8 @@ void RXRoxane::get_move(const string& _idg, COsGame* g) {
 		if(game[player^1].board.bt.n == 0 || game[player^1].board == g->pos.board) {
 			
 			if(!hTable->is_shared()) {
-				engine[BLACK]->stop();
-				engine[WHITE]->stop();
+				engine[BLACK]->stop("engine BLACK stop : become SHARED");
+				engine[WHITE]->stop("engine WHITE stop : become SHARED");
 								
 				hTable->mergePV(board);
 				main_PV->mergePV(board);
@@ -319,7 +335,7 @@ void RXRoxane::get_move(const string& _idg, COsGame* g) {
 			
 			if(hTable->is_shared()) {
 				
-				engine[SHARED]->stop();
+				engine[SHARED]->stop("engine SHARED stop");
 
 				hTable->copyPV(expected_PV, RXHashTable::HASH_SHARED, board, board.player==BLACK? RXHashTable::HASH_BLACK:RXHashTable::HASH_WHITE);
 				hTable->copyPV(main_PV, RXHashTable::HASH_SHARED, board, board.player==BLACK? RXHashTable::HASH_BLACK:RXHashTable::HASH_WHITE);
@@ -359,6 +375,7 @@ void RXRoxane::get_move(const string& _idg, COsGame* g) {
 	search.search_on_opponent_time = true;	
 	
 	search.dependent_time = true;	
+    
 	search.tMatch         = static_cast<int>( g->posStart.cks[player^1].tCurrent*1000);
 	search.tRemaining     = static_cast<int>(game[player].cks[player^1].tCurrent*1000);
     
@@ -408,6 +425,7 @@ void RXRoxane::get_move(const string& _idg, COsGame* g) {
 }
 
 /* synchronized method */
+// solved fforum test
 void RXRoxane::get_move(const std::string& file_name) {
     
 	
@@ -433,7 +451,7 @@ void RXRoxane::get_move(const std::string& file_name) {
 		search.search_on_opponent_time = false;	
 
 		search.dependent_time = false;	
-		
+
 
 		std::ifstream in(file_name.c_str());
 		if(in) {

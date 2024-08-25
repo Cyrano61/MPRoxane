@@ -832,7 +832,9 @@ int RXEngine::EG_PVS_deep(int threadID, RXBBPatterns& sBoard, const bool pv, con
 	
 	//time gestion
 	if(dependent_time && get_current_dependentTime() > time_limit()) {
-		abort.store(true);
+        *log << "        EG_PVS_deep : idThread :" << threadID << " time search expired, stops search" << std::endl;
+        
+        abort.store(true);
 		return INTERRUPT_SEARCH;
 	}
 
@@ -1595,6 +1597,8 @@ int RXEngine::EG_NWS_XEndCut(int threadID, RXBBPatterns& sBoard, const int pvDev
 	
 	//time gestion
 	if(dependent_time && get_current_dependentTime() > time_limit()) {
+        *log << "        EG_MWS_XEndCut : idThread :" << threadID << " time search expired, stops search" << std::endl;
+
 		abort.store(true);
 		return INTERRUPT_SEARCH;
 	}
@@ -2407,7 +2411,7 @@ void RXEngine::EG_driver(RXBBPatterns& sBoard, int selectivity, int end_selectiv
 			alpha = std::max(s_alpha, std::min(s_beta-VALUE_DISC, alpha));
 			beta  = std::min(s_beta, std::max(s_alpha+VALUE_DISC, beta ));
 			
-			//always even window
+			//search window has always peers limits
 			if(alpha<0) {
 				if(alpha%(2*VALUE_DISC) != 0)
 					alpha -= 2*VALUE_DISC + alpha%(2*VALUE_DISC) ;
@@ -2478,11 +2482,12 @@ void RXEngine::EG_driver(RXBBPatterns& sBoard, int selectivity, int end_selectiv
 		if(abort.load() )
 			break;
 		
-		int pTime = pTime_next_level(sBoard.board, eTime - eTime_start_level);
-		time_nextLevel = pTime;
+		time_nextLevel = pTime_next_level(sBoard.board, eTime - eTime_start_level);
 		
-		if(probable_timeout(pTime)) {
+		if(probable_timeout(time_nextLevel)) {
 			abort.store(true);
+            *log << "        EG Driver : likely timeout" << std::endl;
+
 			break;
 		}
 		
@@ -2507,25 +2512,6 @@ void RXEngine::EG_driver(RXBBPatterns& sBoard, int selectivity, int end_selectiv
 
 int RXEngine::EG_pv_extension(int threadID, RXBitBoard& board, const bool pv, int alpha, int beta, bool passed) {
 				 	
-//		int lower =  static_cast<int>(floor(static_cast<float>(alpha)/VALUE_DISC));
-//		if(lower %2 != 0)
-//			lower--;
-//		lower *= VALUE_DISC;
-//		
-//		lower = std::max(-64*VALUE_DISC, std::min(63*VALUE_DISC, lower));
-//		
-//		int upper =  static_cast<int>(ceil(static_cast<float>(beta)/VALUE_DISC));
-//		if(upper %2 != 0)
-//			upper++;
-//		upper *= VALUE_DISC;
-//
-//		upper = std::min(64*VALUE_DISC, std::max(-63*VALUE_DISC, upper));
-//
-//		if(board.n_empties+1 < EG_MEDIUM_HI_TO_LOW)
-//			return EG_PVS_hash_mobility(threadID, board, pv, lower, upper, passed);
-//		else
-//			return EG_PVS_ETC_mobility(threadID, board, pv,lower, upper, passed);
-
 	if(board.n_empties+1 < EG_MEDIUM_HI_TO_LOW)
 		return EG_PVS_hash_mobility(threadID, board, pv, alpha, beta, passed);
 	else

@@ -167,8 +167,6 @@ class RXEngine: public Runnable, public RXHelper {
 	enum t_search {BOOK, MIDGAME, ENDGAME};
 
 	static const int CHECK_TO_LAST_THREE;
-	
-	
 	static const bool USE_SINGULAR_EXTENSION;
 	static const bool USE_SINGULAR_PROBCUT;
 	
@@ -402,8 +400,8 @@ public:
 
 	virtual void run();
 
-	void stop();
-	void resume();					
+	void stop(std::string msg);
+	void resume();
 		
 	//MidGame part (RXMidGame.cpp)
 		
@@ -432,6 +430,20 @@ inline int RXEngine::get_current_dependentTime() const {
 	return get_system_time() - dependentTime_start;
 }
 
+inline int RXEngine::time_limit() const {
+    
+    int time = time_move;
+    
+    if(first_move)
+        time = (66*time)/100;
+        
+    if(extra_time)
+        time += extratime_move;
+    
+    return time;
+}
+
+
 inline void RXEngine::probcut_bounds(const RXBitBoard& board, const int selectivity, const int depth, const int pvDev, const int pivot, int& lower_bound, int& upper_bound) const {
 	
 	
@@ -454,21 +466,6 @@ inline void RXEngine::probcut_bounds(const RXBitBoard& board, const int selectiv
 		
 	
 	
-}
-
-
-
-inline int RXEngine::time_limit() const {
-	
-	int time = time_move;
-	
-	if(first_move)
-		time = (66*time)/100;
-		
-	if(extra_time)
-		time += extratime_move;
-	
-	return time;
 }
 
 

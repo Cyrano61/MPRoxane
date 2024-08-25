@@ -95,7 +95,8 @@ void CMsgOsEnd::In(istream& is) {
 }
 
 void CMsgOsEnd::Handle() {
-	pgs->HandleOsEnd(this);
+    
+ 	pgs->HandleOsEnd(this);
 }
 
 ///////////////////////////////////

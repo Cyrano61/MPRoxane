@@ -1401,10 +1401,17 @@ std::string RXEngine::display(RXBitBoard& board, const int type, const int allow
 
 
 
-void RXEngine::stop() {
+void RXEngine::stop(std::string msg) {
 
 	abort.store(true);
+    
+    if (manager->getEngine(BLACK) == this)
+        *log << "[" << get_current_time() << "] " << "        RXEngine BLACK : stop : " << msg << std::endl;
+    else
+        *log << "[" << get_current_time() << "] " << "        RXEngine WHITE : stop : " << msg << std::endl;
 
+
+    //wait end main thread
 	if(pthreadMain[0] != NULL) {
 		pthread_join(pthreadMain[0], NULL);
 		pthreadMain[0] = NULL;
@@ -1420,7 +1427,7 @@ void RXEngine::resume() {
 
     resume_flag.store(true);
 	
-	stop();
+	stop("resume");
 
 	hTable_shallow->reset();
 }
@@ -1437,7 +1444,8 @@ void RXEngine::get_move(RXSearch& s) {
 	
 	dependentTime_start = get_system_time();
 	dependent_time = s.dependent_time;
-	
+    
+ 	
 		
 	RXBBPatterns& sBoard = s.sBoard;
 	RXBitBoard& board = sBoard.board;
@@ -1453,10 +1461,13 @@ void RXEngine::get_move(RXSearch& s) {
 		new_search = false;
 
 		determine_move_time(board);
+        
+        //DEGUG
+        *log << "[" << get_current_time() << "] " << "        RXEngine : dependent time : " << (dependent_time ? "true":"false" )<< std::endl;
 
 		//interrupt search if time limit < probable time search
 		if(time_limit() < (time_nextLevel - (get_current_time() - time_startLevel))) {
-			*log  << "        interrupt search.\n" <<  std::endl;
+			*log  << "        interrupt search: likely timeout\n" <<  std::endl;
 			abort.store(true);
 		}
 
@@ -1466,7 +1477,7 @@ void RXEngine::get_move(RXSearch& s) {
 
 
 		//kill current search
-		stop();
+		stop("new position");
 		
 		new_search = true;
 		
@@ -1661,6 +1672,9 @@ void RXEngine::run() {
 	*log	<< "---------------------------------------------------------------------------------------------------\n"
 			<< search_sBoard
 			<< std::endl;
+    //DEGUG
+    *log << "[" << get_current_time() << "] " << "        RXEngine : dependent time : " << (dependent_time ? "true":"false" )<< std::endl;
+
 						
 	RXBitBoard& board = search_sBoard.board;
 	root_player = board.player;
@@ -1850,6 +1864,8 @@ void RXEngine::run() {
 	allThreadsShouldSleep = true;	
 	
     abort.store(true);
+    *log << "[" << get_current_time() << "] " << "        RXEngine : end search" << std::endl;
+
 	
 	time_search = get_system_time() - time_search;
 
@@ -1860,8 +1876,8 @@ void RXEngine::run() {
 bool RXEngine::probable_timeout(double probable_time_next_level) const {
 	
 	if(dependent_time) {
-		
-		double tElapsed_dependent = get_current_dependentTime() ;
+        
+ 		double tElapsed_dependent = get_current_dependentTime() ;
 		double time_for_move = time_move;
 
 		if ((tElapsed_dependent + probable_time_next_level) > 3*time_for_move)
@@ -2164,22 +2180,6 @@ void RXEngine::idle_loop(unsigned int threadID, RXSplitPoint* waitSp) {
 		//			
 		//		if (i == activeThreads) {
 		
-        //lance les slaves
-
-//        //first without mutex
-//        if(waitSp && waitSp->n_Slaves == 0) {
-//            
-//            //second control with mutex
-//            pthread_mutex_lock(&(waitSp->lock));
-//            if (waitSp->n_Slaves == 0) {
-//                
-//                threads[threadID].state = RXThread::SEARCHING;
-//                pthread_mutex_unlock(&(waitSp->lock));
-//                
-//                break;
-//            }
-//            pthread_mutex_unlock(&(waitSp->lock));
-//        }
 
              
         //n_Slaves without mutex
@@ -2206,7 +2206,9 @@ void RXEngine::wake_sleeping_threads() {
 	allThreadsShouldSleep = false;
 
 	for (unsigned int i = 0; i<activeThreads; i++) {
+        pthread_mutex_lock(&(threads[i].lock));
 		wake_sleeping_thread(i);
+        pthread_mutex_unlock(&(threads[i].lock));
 	}
 }
 
@@ -2216,9 +2218,8 @@ void RXEngine::wake_sleeping_thread(unsigned int threadID) {
 	
 	assert(allThreadsShouldSleep == false);
 	
-	//pthread_mutex_lock(&(threads[threadID].lock));
 	pthread_cond_signal(&(threads[threadID].cond));
-	//pthread_mutex_unlock(&(threads[threadID].lock));
+	
 	
 }
 

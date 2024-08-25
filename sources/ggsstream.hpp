@@ -30,6 +30,7 @@ public:
 	virtual int Login(const char* sLogin, const char* sPassword);
 	virtual int Logout();
 	virtual const string& GetLogin() const;
+    virtual const string& GetPassword() const;
 
 	// turn stream data into messages
 	virtual void Process();
@@ -82,8 +83,7 @@ public:
 	virtual void HandleOsErr			(const CMsgOsErr* pmsg);
 	virtual void HandleOsFatalTimeout	(const CMsgOsFatalTimeout* pmsg);
 	virtual void HandleOsFinger			(const CMsgOsFinger* pmsg);
-//    virtual void HandleOsGameOver        (const CMsgOsMatchDelta* pmsg, const string& idg);
-	virtual void HandleOsGameOver		(const string& idg);
+    virtual void HandleOsGameOver       (const CMsgOsMatchDelta* pmsg, const string& idg);
 	virtual void HandleOsHistory		(const CMsgOsHistory* pmsg);
 	virtual void HandleOsJoin			(const CMsgOsJoin* pmsg);
 	virtual void HandleOsLogin			();
@@ -131,7 +131,7 @@ protected:
 	virtual void Post(CMsg* pmsg);
 
 	bool fLoggedIn, fConnected, fHasOs;
-	string sLogin;
+	string sLogin, sPassword;
 
 private:
 	string sMsg;

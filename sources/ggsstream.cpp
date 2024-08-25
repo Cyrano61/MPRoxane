@@ -161,6 +161,11 @@ const string& ggsstream::GetLogin() const {
 	return sLogin;
 }
 
+const string& ggsstream::GetPassword() const {
+    return sPassword;
+}
+
+
 // process incoming data from GGS. 'is' is a socket connection.
 //	strip bells and '|' at the beginning of lines. Once we have an
 //	entire message(terminated by "READY" on its own line), call Parse()
@@ -424,7 +429,7 @@ void ggsstream::BaseGGSDisconnect() {
 
 void ggsstream::BaseGGSLogin() {
 	// required commands for ODK to work:
-	(*this) << "ve -ack\n"		// turn off GGS Parser comments
+	(*this) << "ve -ack\n"		    // turn off GGS Parser comments
 			<< "notify + /os\n";	// tell us when /os comes up/goes down
 
 	flush();
@@ -443,8 +448,10 @@ void ggsstream::BaseGGSUserDelta(const CMsgGGSUserDelta* pmsg) {
 void ggsstream::BaseOsEnd(const CMsgOsEnd* pmsg) {
 	// end messages occur at the end of some synch games
 	//	to let you know the result
+    
 	COsGame* pgame=PGame(pmsg->idg);
 	if (pgame) {
+        //update result
 		_ASSERT(pgame->mt.fSynch);
 		pgame->SetResult(pmsg->result, pmsg->sPlayers);
 	}
@@ -496,8 +503,8 @@ void ggsstream::EndGame(const CMsgOsMatchDelta* pmsg, const string& idg) {
 
 		if (pgame->result.status==COsResult::kUnfinished)
 			pgame->SetResult(pmsg->result, pmsg->match.pis);
-		//HandleOsGameOver(pmsg, idg);
-        HandleOsGameOver(idg);
+		HandleOsGameOver(pmsg, idg);
+        //HandleOsGameOver(idg);
 	}
 }
 
@@ -605,6 +612,7 @@ void ggsstream::HandleOsComment(const CMsgOsComment* pmsg) {
 }
 
 void ggsstream::HandleOsEnd(const CMsgOsEnd* pmsg) {
+     
 	BaseOsEnd(pmsg);
 	HandleOs(pmsg);
 }
@@ -628,9 +636,9 @@ void ggsstream::HandleOsFinger(const CMsgOsFinger* pmsg) {
 	HandleOs(pmsg);
 }
 
-//void ggsstream::HandleOsGameOver(const CMsgOsMatchDelta* pmsg, const string& idg) {
-void ggsstream::HandleOsGameOver(const string& idg) {
+void ggsstream::HandleOsGameOver(const CMsgOsMatchDelta* pmsg, const string& idg) {
 	BaseOsGameOver(idg);
+    HandleOs(pmsg);
 }
 
 void ggsstream::HandleOsHistory(const CMsgOsHistory* pmsg) {

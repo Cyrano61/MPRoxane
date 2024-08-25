@@ -9,8 +9,10 @@
 #include "RXRoxane.hpp"
 
 #include <iostream>
+#include <unistd.h>
 using namespace std;
 
+//affiche le message dans la console
 void CODKStream::HandleGGS(const CMsg* pmsg) {
 	cout << pmsg->sRawText << "\n";
 }
@@ -24,6 +26,7 @@ void CODKStream::HandleGGSLogin() {
 void CODKStream::HandleGGSTell(const CMsgGGSTell* pmsg) {
 	cout << pmsg->sFrom << " " << pmsg->sText << "\n";
 	
+    //join
 	/**********************************************************************/
 	if(	(pmsg->sFrom=="romano"
 		 || pmsg->sFrom=="ymatiou2"
@@ -100,6 +103,37 @@ void CODKStream::HandleOsMatchDelta(const CMsgOsMatchDelta* pmsg) {
 //	}
 //	BaseOsMatchDelta(pmsg);
 //}
+
+//message .end
+void CODKStream::HandleOsEnd(const CMsgOsEnd *pmsg) {
+    
+    BaseOsEnd(pmsg);
+    COsGame* pgame=PGame(pmsg->idg);
+    if (pgame!=NULL) {
+        pComputer->stop_engine(pmsg->idg, pgame);
+    }
+}
+
+void CODKStream::HandleOsTimeout(const CMsgOsTimeout* pmsg){
+    
+    COsGame* pgame=PGame(pmsg->idg);
+    if (pgame!=NULL) {
+        pComputer->stop_engine(pmsg->idg, pgame);
+    }
+    BaseOsGameOver(pmsg->idg);
+    
+    //logout
+    int err = Logout();
+    
+    //wait 2 seconds
+    sleep(2);
+    
+    err = Login(GetLogin().c_str(), GetPassword().c_str());
+    
+    if(err)
+        std::cout << "erreur :" << err << std::endl;
+
+}
 
 
   // Example handler from Roxane:

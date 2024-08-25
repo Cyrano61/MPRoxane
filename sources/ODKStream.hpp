@@ -22,14 +22,21 @@ public:
 	virtual void HandleOsUnknown		(const CMsgOsUnknown* pmsg);
 	virtual void HandleOsUpdate			(const CMsgOsUpdate* pmsg);
 
-	virtual void GetMoveIfNeeded(const string& idg);
-	virtual void SendMove(const string& idg, COsMoveListItem& mli);
-	virtual void SendMsg(const string& msg);
+    virtual void HandleOsEnd            (const CMsgOsEnd* pmsg);
+    virtual void HandleOsTimeout        (const CMsgOsTimeout* pmsg);
+    //virtual void HandleOsFatalTimeout   (const CMsgOsFatalTimeout* pmsg);
+    virtual void HandleOsRequestDelta   (const CMsgOsRequestDelta* pmsg);
+    virtual void HandleOsGameOver       (const CMsgOsMatchDelta* pmsg, const string& idg);
 
-	virtual void HandleOsRequestDelta(const CMsgOsRequestDelta* pmsg);
-	virtual void HandleOsGameOver(const CMsgOsMatchDelta* pmsg,const string& idg);
+    //virtual void HandleOsMatchDelta     (const CMsgOsMatchDelta* pmsg);
 
-//	virtual void HandleOsMatchDelta(const CMsgOsMatchDelta* pmsg);
+
+	virtual void GetMoveIfNeeded        (const string& idg);
+	virtual void SendMove               (const string& idg, COsMoveListItem& mli);
+	virtual void SendMsg                (const string& msg);
+    
+
+
 	
 	RXRoxane* pComputer;
 };
