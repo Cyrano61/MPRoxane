@@ -158,9 +158,9 @@ bool generate_flips_##pos(RXMove& move) const
     int final_score_2(int alpha, const int beta, const bool passed);
     int final_score_2(const unsigned long long discs_player, const unsigned long long discs_opponent, const int alpha, const int beta, const bool passed, const int idSquare1, const int idSquare2);
     int final_score_3(int alpha, const int beta, const bool passed);
-    int final_score_3(const unsigned long long discs_player, const unsigned long long discs_opponent, int alpha, const int beta, const bool passed, const int idSquare1, const int idSquare2, const int idSquare3);
+    int final_score_3(const unsigned long long discs_player, const unsigned long long discs_opponent, int alpha, const int beta, const bool passed, const int sort3, int idSquare1, int idSquare2, int idSquare3);
     int	final_score_4(int alpha, const int beta, const bool passed);
-    int	final_score_4(const unsigned long long discs_player, const unsigned long long discs_opponent, int alpha, const int beta, const bool passed, const int idSquare1, const int idSquare2, const int idSquare3, const int idSquare4);
+    int	final_score_4(const unsigned long long discs_player, const unsigned long long discs_opponent, int alpha, const int beta, const bool passed, const int sort3, const int idSquare1, const int idSquare2, const int idSquare3, const int idSquare4);
     
     std::string cassio_script() const;
     
@@ -346,33 +346,6 @@ inline uint64_t RXBitBoard::calc_legal(const uint64_t P, const uint64_t O){
 
 inline int RXBitBoard::get_corner_stability(const unsigned long long& discs_player) {
 
-//    // Old version
-//    unsigned long long nStables = 0ULL;
-//
-//    if(discs_player & 0X8000000000000000ULL) {
-//        nStables++;
-//        nStables += ((discs_player >> 62) & 0x0000000000000001ULL);
-//        nStables += ((discs_player >> 55) & 0x0000000000000001ULL);
-//    }
-//    if(discs_player & 0X0000000000000080ULL) {
-//        nStables++;
-//        nStables += ((discs_player >> 15) & 0x0000000000000001ULL);
-//        nStables += ((discs_player >> 6)  & 0x0000000000000001ULL);
-//    }
-//    if(discs_player & 0X0100000000000000ULL) {
-//        nStables++;
-//        nStables += ((discs_player >> 57) & 0x0000000000000001ULL);
-//        nStables += ((discs_player >> 48) & 0x0000000000000001ULL);
-//    }
-//    if(discs_player & 0X0000000000000001ULL) {
-//        nStables++;
-//        nStables += ((discs_player >> 8) & 0x0000000000000001ULL);
-//        nStables += ((discs_player >> 1) & 0x0000000000000001ULL);
-//    }
-//
-//    return static_cast<unsigned int>(nStables);
-//
-    
     unsigned long long stables = discs_player & 0x8100000000000081ULL;
  
     stables |= (discs_player & (stables << 1)) & 0x0200000000000002ULL;
@@ -381,33 +354,6 @@ inline int RXBitBoard::get_corner_stability(const unsigned long long& discs_play
     stables |= (discs_player & (stables >> 8)) & 0x0081000000000000ULL;
         
     return static_cast<unsigned int>(__builtin_popcountll(stables));
-    
-    
-//    // version EDAX : identique
-//    return static_cast<unsigned int>(__builtin_popcountll(((  (0x0100000000000001 & discs_player) << 1)
-//                                                           | ((0x8000000000000080 & discs_player) >> 1)
-//                                                           | ((0x0000000000000081 & discs_player) << 8)
-//                                                           | ((0x8100000000000000 & discs_player) >> 8)
-//                                                           |   0x8100000000000081) & discs_player));
-   
-//    //version kindergarten EDAX (multipication)
-//    static const char n_stable_h2a2h1g1b1a1[64] = {
-//        0, 1, 0, 2, 0, 1, 0, 2, 1, 2, 1, 3, 2, 3, 2, 4,
-//        0, 2, 0, 3, 0, 2, 0, 3, 1, 3, 1, 4, 2, 4, 2, 5,
-//        0, 1, 0, 2, 0, 1, 0, 2, 2, 3, 2, 4, 3, 4, 3, 5,
-//        0, 2, 0, 3, 0, 2, 0, 3, 2, 4, 2, 5, 3, 5, 3, 6
-//    };
-//
-//    static const char n_stable_h8g8b8a8h7a7[64] = {
-//        0, 0, 0, 0, 1, 2, 1, 2, 0, 0, 0, 0, 2, 3, 2, 3,
-//        0, 0, 0, 0, 1, 2, 1, 2, 0, 0, 0, 0, 2, 3, 2, 3,
-//        1, 1, 2, 2, 2, 3, 3, 4, 1, 1, 2, 2, 3, 4, 4, 5,
-//        2, 2, 3, 3, 3, 4, 4, 5, 2, 2, 3, 3, 4, 5, 5, 6
-//    };
-//
-//    return (n_stable_h8g8b8a8h7a7[(((unsigned int) (discs_player >> 32) & 0xc3810000) * 0x00000411) >> 26]
-//        + n_stable_h2a2h1g1b1a1[(((unsigned int) discs_player & 0x000081c3) * 0x04410000) >> 26]);
-
 }
 
 #ifdef __ARM_NEON
@@ -423,61 +369,61 @@ inline int RXBitBoard::get_stability(const int color, const int n_stables_cut) c
         
     unsigned long long filled = discs[BLACK] | discs[WHITE];
     
-    static uint64x2_t shift_right_rlud_4 = {-4,-32};
-    static uint64x2_t shift_left_rlud_4  = {64, 32};
-    static uint64x2_t shift_right_rlud_2 = {-2,-16};
-    static uint64x2_t shift_left_rlud_2  = {64, 16};
-    static uint64x2_t shift_right_rlud_1 = {-1, -8};
-    static uint64x2_t shift_left_rlud_1  = {64,  8};
+    static uint64x2_t shr_hv_4 = {-4,-32};
+    static uint64x2_t shl_hv_4 = {64, 32};
+    static uint64x2_t shr_hv_2 = {-2,-16};
+    static uint64x2_t shl_hv_2 = {64, 16};
+    static uint64x2_t shr_hv_1 = {-1, -8};
+    static uint64x2_t shl_hv_1 = {64,  8};
     
-    static uint64x2_t mask_rlud = {0x8181818181818181ULL, 0xFF000000000000FFULL};
+    static uint64x2_t mask_hv = {0x8181818181818181ULL, 0xFF000000000000FFULL};
 
 
-    uint64x2_t rlud = vdupq_n_u64(filled);
+    uint64x2_t hv = vdupq_n_u64(filled);
     
-    rlud = vandq_u64( rlud, vorrq_u64(vshlq_u64(rlud, shift_right_rlud_4), vshlq_u64(rlud, shift_left_rlud_4)));
-    rlud = vandq_u64( rlud, vorrq_u64(vshlq_u64(rlud, shift_right_rlud_2), vshlq_u64(rlud, shift_left_rlud_2)));
-    rlud = vandq_u64( rlud, vorrq_u64(vshlq_u64(rlud, shift_right_rlud_1), vshlq_u64(rlud, shift_left_rlud_1)));
+    hv = vandq_u64( hv, vorrq_u64(vshlq_u64(hv, shr_hv_4), vshlq_u64(hv, shl_hv_4)));
+    hv = vandq_u64( hv, vorrq_u64(vshlq_u64(hv, shr_hv_2), vshlq_u64(hv, shl_hv_2)));
+    hv = vandq_u64( hv, vorrq_u64(vshlq_u64(hv, shr_hv_1), vshlq_u64(hv, shl_hv_1)));
      
     
     //pour l'instant je ne peux pas vectoriser
     //trick multiplication par 255 (remplit le lignes)
-    uint64x1_t temp_0 = vcreate_u64((vgetq_lane_u64(rlud, 0) & 0x0101010101010101ULL) * 0xFFULL);
-    uint64x1_t temp_1 = vcreate_u64(vgetq_lane_u64(rlud, 1));
+    uint64x1_t temp_0 = vcreate_u64((vgetq_lane_u64(hv, 0) & 0x0101010101010101ULL) * 0xFFULL);
     
-    rlud = vcombine_u64(temp_0, temp_1);
-    rlud = vorrq_u64(rlud, mask_rlud);
+    hv = vcombine_u64(temp_0, vget_high_u64(hv));
+    hv = vorrq_u64(hv, mask_hv);
         
-    static uint64x2_t shift_right_4 = {-28,-36};
-    static uint64x2_t shift_left_4  = { 28, 36};
+    static uint64x2_t shr_dg_4 = {-28,-36};
+    static uint64x2_t shl_dg_4 = { 28, 36};
     static uint64x2_t mask_right_4 = { 0x00000000F0F0F0F0ULL, 0x000000000F0F0F0FULL};
     static uint64x2_t mask_left_4  = { 0x0F0F0F0F00000000ULL, 0xF0F0F0F000000000ULL};
     static uint64x2_t mask_4       = { 0xF0F0F0F00F0F0F0FULL, 0x0F0F0F0FF0F0F0F0ULL};
 
-    static uint64x2_t shift_right_2 = {-14,-18};
-    static uint64x2_t shift_left_2  = { 14, 18};
+    static uint64x2_t shr_dg_2 = {-14,-18};
+    static uint64x2_t shl_dg_2 = { 14, 18};
     static uint64x2_t mask_right_2 = { 0x0000FCFCFCFCFCFCULL, 0x00003F3F3F3F3F3FULL};
     static uint64x2_t mask_left_2  = { 0x3F3F3F3F3F3F0000ULL, 0xFCFCFCFCFCFC0000ULL};
     static uint64x2_t mask_2       = { 0xC0C0000000000303ULL, 0x030300000000C0C0ULL};
     
-    static uint64x2_t shift_right = {-7,-9};
-    static uint64x2_t shift_left  = { 7, 9};
+    static uint64x2_t shr = {-7,-9};
+    static uint64x2_t shl = { 7, 9};
         
-    uint64x2_t diag = vdupq_n_u64(filled);
+    uint64x2_t dg = vdupq_n_u64(filled);
     
     uint64x2_t
-    temp = vandq_u64(vshlq_u64(diag, shift_right_4), mask_right_4);
-    temp = vorrq_u64(temp , vandq_u64(vshlq_u64(diag, shift_left_4), mask_left_4));
-    diag = vandq_u64(diag, vorrq_u64(temp, mask_4));
+    temp = vandq_u64(vshlq_u64(dg, shr_dg_4), mask_right_4);
+    temp = vorrq_u64(temp , vandq_u64(vshlq_u64(dg, shl_dg_4), mask_left_4));
+    dg = vandq_u64(dg, vorrq_u64(temp, mask_4));
 
-    temp = vandq_u64(vshlq_u64(diag, shift_right_2), mask_right_2);
-    temp = vorrq_u64(temp , vandq_u64(vshlq_u64(diag, shift_left_2), mask_left_2));
-    diag = vandq_u64(diag, vorrq_u64(temp, mask_2));
+    temp = vandq_u64(vshlq_u64(dg, shr_dg_2), mask_right_2);
+    temp = vorrq_u64(temp , vandq_u64(vshlq_u64(dg, shl_dg_2), mask_left_2));
+    dg = vandq_u64(dg, vorrq_u64(temp, mask_2));
 
-    diag = vandq_u64(diag, vandq_u64(vshlq_u64(diag, shift_right), vshlq_u64(diag, shift_left)));
-    diag = vorrq_u64(diag, vdupq_n_u64(0xFF818181818181FFULL));
+    dg = vandq_u64(dg, vandq_u64(vshlq_u64(dg, shr), vshlq_u64(dg, shl)));
+    dg = vorrq_u64(dg, vdupq_n_u64(0xFF818181818181FFULL));
     
-    temp = vandq_u64(rlud, diag);
+    
+    temp = vandq_u64(hv, dg);
     unsigned long long stable = vgetq_lane_u64(temp, 0) & vgetq_lane_u64(temp, 1) & discs[color];
 
 
@@ -491,32 +437,53 @@ inline int RXBitBoard::get_stability(const int color, const int n_stables_cut) c
     
 
     unsigned long long old_stable;
-    uint64x2_t dir_1_8;
-    uint64x2_t dir_7_9;
+    uint64x2_t dir_hv;
+    uint64x2_t dir_dg;
     
-    static uint64x2_t shift_right_1_8 = {-1,-8};
-    static uint64x2_t shift_left_1_8  = { 1, 8};
-    static uint64x2_t shift_right_7_9 = {-7,-9};
-    static uint64x2_t shift_left_7_9  = { 7, 9};
-    
-
+    static uint64x2_t shr_hv = {-1,-8};
+    static uint64x2_t shl_hv = { 1, 8};
+    static uint64x2_t shr_dg = {-7,-9};
+    static uint64x2_t shl_dg = { 7, 9};
+        
     do {
 
         old_stable = stable;
         
-        dir_1_8 = vdupq_n_u64(stable);
-        dir_7_9 = vdupq_n_u64(stable);
+        dir_hv = vdupq_n_u64(stable);
+        dir_dg = vdupq_n_u64(stable);
         
-        dir_1_8 = vorrq_u64(vorrq_u64(vshlq_u64(dir_1_8, shift_right_1_8), vshlq_u64(dir_1_8, shift_left_1_8)), rlud);
-        dir_7_9 = vorrq_u64(vorrq_u64(vshlq_u64(dir_7_9, shift_right_7_9), vshlq_u64(dir_7_9, shift_left_7_9)), diag);
+        dir_hv = vorrq_u64(vorrq_u64(vshlq_u64(dir_hv, shr_hv), vshlq_u64(dir_hv, shl_hv)), hv);
+        dir_dg = vorrq_u64(vorrq_u64(vshlq_u64(dir_dg, shr_dg), vshlq_u64(dir_dg, shl_dg)), dg);
 
-        dir_1_8 = vandq_u64(dir_1_8, dir_7_9);
-        stable = vgetq_lane_u64(dir_1_8, 0) & vgetq_lane_u64(dir_1_8, 1) & discs[color];
+        temp = vandq_u64(dir_hv, dir_dg);
+        temp = vandq_u64(temp, vcombine_u64(vget_high_u64(temp), vget_low_u64(temp)));
+    
+        stable = vgetq_lane_u64(temp, 0) & discs[color];
         
 
     } while(stable != old_stable);
+  
     
+//    do {
+//        
+//        old_stable = stable;
+//        
+//        bug
+//
+//        dir_hv = vorrq_u64(vorrq_u64(vshlq_u64(temp, shr_hv), vshlq_u64(temp, shl_hv)), hv);
+//        dir_dg = vorrq_u64(vorrq_u64(vshlq_u64(temp, shr_dg), vshlq_u64(temp, shl_dg)), dg);
+//
+//        temp = vandq_u64(dir_hv, dir_dg);
+//        temp = vandq_u64(temp, vcombine_u64(vget_high_u64(temp), vget_low_u64(temp)));
+//
+//
+//        stable = vgetq_lane_u64(temp, 0) & discs[color];
+//
+//    } while(stable != old_stable);
 
+
+ //   std::cout << "stable : " << std::hex << stable << std::endl;
+    
     if(stable == 0)
         return 0;
         
@@ -711,15 +678,32 @@ inline int RXBitBoard::final_score_2(const unsigned long long discs_player, cons
 
 
 inline int RXBitBoard::final_score_3(int alpha, const int beta, const bool passed) {
-	return final_score_3(discs[player], discs[player^1], alpha/VALUE_DISC, beta/VALUE_DISC, passed,  empties_list->next->position,  empties_list->next->next->position,  empties_list->next->next->next->position)*VALUE_DISC;
+	return final_score_3(discs[player], discs[player^1], alpha/VALUE_DISC, beta/VALUE_DISC, passed, 0,  empties_list->next->position,  empties_list->next->next->position,  empties_list->next->next->next->position)*VALUE_DISC;
 }
 
-inline int RXBitBoard::final_score_3(const unsigned long long discs_player, const unsigned long long discs_opponent, int alpha, const int beta, const bool passed, const int idSquare1, const int idSquare2, const int idSquare3) {
+inline int RXBitBoard::final_score_3(const unsigned long long discs_player, const unsigned long long discs_opponent, int alpha, const int beta, const bool passed, const int sort3, int idSquare1, int idSquare2, int idSquare3) {
 
 	int score, bestscore = UNDEF_SCORE;
 	
 	unsigned long long d_player = discs_player;
 	unsigned long long d_opponent = discs_opponent;
+    
+    if(!passed) {
+        // parity based move sorting
+        int tmp;
+        switch (sort3 & 0x03) {
+            case 1:
+                tmp = idSquare1; idSquare1 = idSquare2; idSquare2 = tmp;    // case 1(x2) 2(x1 x3)
+                break;
+            case 2:
+                tmp = idSquare1; idSquare1 = idSquare3; idSquare3 = idSquare2; idSquare2 = tmp;    // case 1(x3) 2(x1 x2)
+                break;
+            case 3:
+                tmp = idSquare2; idSquare2 = idSquare3; idSquare3 = tmp;
+                break;
+        }
+    }
+
 		
 	if ((d_opponent & NEIGHBOR[idSquare1]) && (do_flips[idSquare1](d_player, d_opponent))){ 
 		n_nodes++;
@@ -779,26 +763,32 @@ inline int RXBitBoard::final_score_3(const unsigned long long discs_player, cons
 								
 		} else {
 			n_nodes++;
-			bestscore = -final_score_3(d_opponent, d_player, -beta, -alpha, true, idSquare1, idSquare2, idSquare3);
+			bestscore = -final_score_3(d_opponent, d_player, -beta, -alpha, true, sort3, idSquare1, idSquare2, idSquare3);
 		}
 	}
 	
 	return bestscore;
 }
 
+/// <#Description#>
+/// - Parameters:
+///   - alpha: <#alpha description#>
+///   - beta: <#beta description#>
+///   - passed: <#passed description#>
 inline int RXBitBoard::final_score_4(int alpha, const int beta, const bool passed) {
 	
+    //stability Cutoff
 	int diffPions = 2*__builtin_popcountll(discs[player]) - 60;
 	
-	if (alpha >= 5000 || (alpha >= 0 && (diffPions*VALUE_DISC <= alpha - 2400))) {
-		
-		int stability_bound = 6400 - 2 * get_stability(player^1, (6500-alpha)/2);
+	if (alpha >= 4*VALUE_DISC || (alpha >= 0 && (diffPions*VALUE_DISC <= alpha - 12*VALUE_DISC))) {
+
+		int stability_bound = 64*VALUE_DISC - 2 * get_stability(player^1, (65*VALUE_DISC-alpha)/2);
 		if ( stability_bound <= alpha )
 			return stability_bound; //alpha
 		
-	} else if (beta <= -5000 || (beta <= 0 && (diffPions*VALUE_DISC >= beta + 2400))) {
-		
-		int stability_bound = -6400 + 2 * get_stability(player, (6500+beta)/2);
+	} else if (beta <= -6*VALUE_DISC || (beta <= 0 && (diffPions*VALUE_DISC >= beta + 12*VALUE_DISC))) {
+
+		int stability_bound = -64*VALUE_DISC + 2 * get_stability(player, (65*VALUE_DISC+beta)/2);
 		if ( stability_bound >= beta )
 			return stability_bound; //beta
 		
@@ -808,62 +798,70 @@ inline int RXBitBoard::final_score_4(int alpha, const int beta, const bool passe
 	int sq_2 = empties_list->next->next->position;
 	int sq_3 = empties_list->next->next->next->position;
 	int sq_4 = empties_list->next->next->next->next->position;
+    
+    //Edax's sorting on the parity (4 empties square) **Bright
 	
-//	if(parity[RXBitBoard::QUADRANT_ID[sq_1]] == 0) {
-//		
-//		if(parity[RXBitBoard::QUADRANT_ID[sq_2]] == 1) {
-//			
-//			if(parity[RXBitBoard::QUADRANT_ID[sq_3]] == 1) {
-//				int temp = sq_1;
-//				sq_1 = sq_2;
-//				sq_2 = sq_3;
-//				sq_3 = temp;
-//			} else {
-//				int temp = sq_1;
-//				sq_1 = sq_2;
-//				sq_2 = sq_4;
-//				sq_4 = sq_3;
-//				sq_3 = temp;
-//			}
-//			
-//		} else {
-//			
-//			if(parity[RXBitBoard::QUADRANT_ID[sq_3]] == 1) {
-//				int temp = sq_1;
-//				sq_1 = sq_3;
-//				sq_3 = temp;
-//				temp = sq_2;
-//				sq_2 = sq_4;
-//				sq_4 = temp;
-//			}
-//		}
-//		
-//		
-//	} else {
-//		
-//		if(parity[RXBitBoard::QUADRANT_ID[sq_2]] == 0) {
-//			
-//			if(parity[RXBitBoard::QUADRANT_ID[sq_3]] == 1) {
-//				int temp = sq_2;
-//				sq_2 = sq_3;
-//				sq_3 = temp;
-//			} else {
-//				int temp = sq_2;
-//				sq_2 = sq_4;
-//				sq_4 = sq_3;
-//				sq_3 = temp;
-//			}
-//			
-//		}
-//		
-//		
-//	}
+    // parity sort
+    static const unsigned char parity_case[64] = {    /* sq_4sq_3sq_2sq_1 = */
+        /*0000*/  0, /*0001*/  0, /*0010*/  1, /*0011*/  9, /*0100*/  2, /*0101*/ 10, /*0110*/ 11, /*0111*/  3,
+        /*0002*/  0, /*0003*/  0, /*0012*/  0, /*0013*/  0, /*0102*/  4, /*0103*/  4, /*0112*/  5, /*0113*/  5,
+        /*0020*/  1, /*0021*/  0, /*0030*/  1, /*0031*/  0, /*0120*/  6, /*0121*/  7, /*0130*/  6, /*0131*/  7,
+        /*0022*/  9, /*0023*/  0, /*0032*/  0, /*0033*/  9, /*0122*/  8, /*0123*/  0, /*0132*/  0, /*0133*/  8,
+        /*0200*/  2, /*0201*/  4, /*0210*/  6, /*0211*/  8, /*0300*/  2, /*0301*/  4, /*0310*/  6, /*0311*/  8,
+        /*0202*/ 10, /*0203*/  4, /*0212*/  7, /*0213*/  0, /*0302*/  4, /*0303*/ 10, /*0312*/  0, /*0313*/  7,
+        /*0220*/ 11, /*0221*/  5, /*0230*/  6, /*0231*/  0, /*0320*/  6, /*0321*/  0, /*0330*/ 11, /*0331*/  5,
+        /*0222*/  3, /*0223*/  5, /*0232*/  7, /*0233*/  8, /*0322*/  8, /*0323*/  7, /*0332*/  5, /*0333*/  3
+    };
+    int sort3;    // for move sorting on 3 empties
+    static const short sort3_shuf[] = {
+        0x0000,    //  0: 1(sq_1) 3(sq_2 sq_3 sq_4),      1(sq_1) 1(sq_2) 2(sq_3 sq_4), 1 1 1 1, 4                              sq_4sq_1sq_2sq_3-sq_3sq_1sq_2sq_4-sq_2sq_1sq_3sq_4-sq_1sq_2sq_3sq_4
+        0x1100,    //  1: 1(sq_2) 3(sq_1 sq_3 sq_4)       sq_4sq_2sq_1sq_3-sq_3sq_2sq_1sq_4-sq_2sq_1sq_3sq_4-sq_1sq_2sq_3sq_4
+        0x2011,    //  2: 1(sq_3) 3(sq_1 sq_2 sq_4)       sq_4sq_3sq_1sq_2-sq_3sq_1sq_2sq_4-sq_2sq_3sq_1sq_4-sq_1sq_3sq_2sq_4
+        0x0222,    //  3: 1(sq_4) 3(sq_1 sq_2 sq_3)       sq_4sq_1sq_2sq_3-sq_3sq_4sq_1sq_2-sq_2sq_4sq_1sq_3-sq_1sq_4sq_2sq_3
+        0x3000,    //  4: 1(sq_1) 1(sq_3) 2(sq_2 sq_4)    sq_4sq_1sq_2sq_3-sq_2sq_1sq_3sq_4-sq_3sq_1sq_2sq_4-sq_1sq_3sq_2sq_4 <- sq_4sq_1sq_3sq_2-sq_2sq_1sq_3sq_4-sq_3sq_1sq_2sq_4-sq_1sq_3sq_2sq_4
+        0x3300,    //  5: 1(sq_1) 1(sq_4) 2(sq_2 sq_3)    sq_3sq_1sq_2sq_4-sq_2sq_1sq_3sq_4-sq_4sq_1sq_2sq_3-sq_1sq_4sq_2sq_3 <- sq_3sq_1sq_4sq_2-sq_2sq_1sq_4sq_3-sq_4sq_1sq_2sq_3-sq_1sq_4sq_2sq_3
+        0x2000,    //  6: 1(sq_2) 1(sq_3) 2(sq_1 sq_4)    sq_4sq_1sq_2sq_3-sq_1sq_2sq_3sq_4-sq_3sq_2sq_1sq_4-sq_2sq_3sq_1sq_4 <- sq_4sq_2sq_3sq_1-sq_1sq_2sq_3sq_4-sq_3sq_2sq_1sq_4-sq_2sq_3sq_1sq_4
+        0x2300,    //  7: 1(sq_2) 1(sq_4) 2(sq_1 sq_3)    sq_3sq_1sq_2sq_4-sq_1sq_2sq_3sq_4-sq_4sq_2sq_1sq_3-sq_2sq_4sq_1sq_3 <- sq_3sq_2sq_4sq_1-sq_1sq_2sq_4sq_3-sq_4sq_2sq_1sq_3-sq_2sq_4sq_1sq_3
+        0x2200,    //  8: 1(sq_3) 1(sq_4) 2(sq_1 sq_2)    sq_2sq_1sq_3sq_4-sq_1sq_2sq_3sq_4-sq_4sq_3sq_1sq_2-sq_3sq_4sq_1sq_2 <- sq_2sq_3sq_4sq_1-sq_1sq_3sq_4sq_2-sq_4sq_3sq_1sq_2-sq_3sq_4sq_1sq_2
+        0x2200,    //  9: 2(sq_1 sq_2) 2(sq_3 sq_4)       sq_4sq_3sq_1sq_2-sq_3sq_4sq_1sq_2-sq_2sq_1sq_3sq_4-sq_1sq_2sq_3sq_4
+        0x1021,    // 10: 2(sq_1 sq_3) 2(sq_2 sq_4)       sq_4sq_2sq_1sq_3-sq_3sq_1sq_2sq_4-sq_2sq_4sq_1sq_3-sq_1sq_3sq_2sq_4
+        0x0112     // 11: 2(sq_1 sq_4) 2(sq_2 sq_3)       sq_4sq_1sq_2sq_3-sq_3sq_2sq_1sq_4-sq_2sq_3sq_1sq_4-sq_1sq_4sq_2sq_3
+    };
+    
+    // parity based move sorting.
+    // The following hole sizes are possible:
+    //    4 - 1 3 - 2 2 - 1 1 2 - 1 1 1 1
+    // Only the 1 1 2 case needs move sorting on this ply.
+    int tmp, paritysort;
+
+    
+    paritysort = parity_case[((sq_3 ^ sq_4) & 0x24) + ((((sq_2 ^ sq_4) & 0x24) * 2 + ((sq_1 ^ sq_4) & 0x4)) >> 2)];
+    switch (paritysort) {
+        case 4: // case 1(sq_1) 1(sq_3) 2(sq_2 sq_4)
+            tmp = sq_2; sq_2 = sq_3; sq_3 = tmp;
+            break;
+        case 5: // case 1(sq_1) 1(sq_4) 2(sq_2 sq_3)
+            tmp = sq_2; sq_2 = sq_4; sq_4 = sq_3; sq_3 = tmp;
+            break;
+        case 6:    // case 1(sq_2) 1(sq_3) 2(sq_1 sq_4)
+            tmp = sq_1; sq_1 = sq_2; sq_2 = sq_3; sq_3 = tmp;
+            break;
+        case 7: // case 1(sq_2) 1(sq_4) 2(sq_1 sq_3)
+            tmp = sq_1; sq_1 = sq_2; sq_2 = sq_4; sq_4 = sq_3; sq_3 = tmp;
+            break;
+        case 8:    // case 1(sq_3) 1(sq_4) 2(sq_1 sq_2)
+            tmp = sq_1; sq_1 = sq_3; sq_3 = tmp; tmp = sq_2; sq_2 = sq_4; sq_4 = tmp;
+            break;
+    }
+    sort3 = sort3_shuf[paritysort];
+
+//    //dunny
+//    int sort3 = 0;
 	
-	
-	return final_score_4(discs[player], discs[player^1], alpha/VALUE_DISC, beta/VALUE_DISC, passed, sq_1,  sq_2, sq_3, sq_4)*VALUE_DISC;
+	return final_score_4(discs[player], discs[player^1], alpha/VALUE_DISC, beta/VALUE_DISC, passed, sort3, sq_1,  sq_2, sq_3, sq_4)*VALUE_DISC;
 }
 
-inline int RXBitBoard::final_score_4(const unsigned long long discs_player, const unsigned long long discs_opponent, int alpha, const int beta, const bool passed, const int idSquare1, const int idSquare2, const int idSquare3, const int idSquare4) {
+inline int RXBitBoard::final_score_4(const unsigned long long discs_player, const unsigned long long discs_opponent, int alpha, const int beta, const bool passed, const int sort3, const int idSquare1, const int idSquare2, const int idSquare3, const int idSquare4) {
 
 		
 	int score, bestscore = UNDEF_SCORE;
@@ -873,8 +871,8 @@ inline int RXBitBoard::final_score_4(const unsigned long long discs_player, cons
 	
 	if ((d_opponent & NEIGHBOR[idSquare1]) && (do_flips[idSquare1](d_player, d_opponent))){ 
 		n_nodes++;
-			 
-		bestscore = -final_score_3(d_opponent, d_player, -beta, -alpha, false, idSquare2, idSquare3, idSquare4);
+        			 
+		bestscore = -final_score_3(d_opponent, d_player, -beta, -alpha, false, sort3, idSquare2, idSquare3, idSquare4);
 				
 		if(bestscore>=beta)
 			return bestscore;
@@ -890,7 +888,7 @@ inline int RXBitBoard::final_score_4(const unsigned long long discs_player, cons
 	if ((d_opponent & NEIGHBOR[idSquare2]) && (do_flips[idSquare2](d_player, d_opponent))){ 
 		n_nodes++;
 		
-		score = -final_score_3(d_opponent, d_player, -beta, -alpha, false, idSquare1, idSquare3, idSquare4);
+		score = -final_score_3(d_opponent, d_player, -beta, -alpha, false, sort3>>4, idSquare1, idSquare3, idSquare4);
 		
 		if(score>=beta)
 			return score;
@@ -909,7 +907,7 @@ inline int RXBitBoard::final_score_4(const unsigned long long discs_player, cons
 	if ((d_opponent & NEIGHBOR[idSquare3]) && (do_flips[idSquare3](d_player, d_opponent))) {
 		n_nodes++;
 		
-		score = -final_score_3(d_opponent, d_player, -beta, -alpha, false, idSquare1, idSquare2, idSquare4);
+		score = -final_score_3(d_opponent, d_player, -beta, -alpha, false, sort3>>8, idSquare1, idSquare2, idSquare4);
 		
 		if(score>=beta)
 			return score;
@@ -928,7 +926,7 @@ inline int RXBitBoard::final_score_4(const unsigned long long discs_player, cons
 	if ((d_opponent & NEIGHBOR[idSquare4]) && (do_flips[idSquare4](d_player, d_opponent))){ 
 		n_nodes++;
 		
-		score = -final_score_3(d_opponent, d_player, -beta, -alpha, false, idSquare1, idSquare2, idSquare3);
+		score = -final_score_3(d_opponent, d_player, -beta, -alpha, false, sort3>>12, idSquare1, idSquare2, idSquare3);
 
 		if(score > bestscore)
 			return score;
@@ -949,7 +947,7 @@ inline int RXBitBoard::final_score_4(const unsigned long long discs_player, cons
 								
 		} else {
 			n_nodes++;
-			bestscore = -final_score_4(d_opponent, d_player, -beta, -alpha, true, idSquare1, idSquare2, idSquare3, idSquare4);
+			bestscore = -final_score_4(d_opponent, d_player, -beta, -alpha, true, sort3, idSquare1, idSquare2, idSquare3, idSquare4);
 		}
 	}
 	

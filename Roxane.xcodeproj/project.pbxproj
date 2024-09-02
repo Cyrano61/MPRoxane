@@ -49,7 +49,6 @@
 		4FBA610708D8BE9E00855FD8 /* RXMove.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4FBA60DF08D8BE9E00855FD8 /* RXMove.cpp */; };
 		4FBA610C08D8BE9E00855FD8 /* sockbuf.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4FBA60E408D8BE9E00855FD8 /* sockbuf.cpp */; };
 		4FBA611108D8BEEC00855FD8 /* RXRoxane.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4FBA610F08D8BEEC00855FD8 /* RXRoxane.cpp */; };
-		4FBF04940BDE80B800E7D270 /* RXBBPattGeneratePatterns.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4FBA60D208D8BE9E00855FD8 /* RXBBPattGeneratePatterns.cpp */; };
 		4FC6E59B0B445FDC0063CDF9 /* RXBBGenerateFlips.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4FC6E59A0B445FDC0063CDF9 /* RXBBGenerateFlips.cpp */; };
 		4FC71BCE0A13DF7E003F958E /* RXBBCountFlips.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4FBA60CD08D8BE9E00855FD8 /* RXBBCountFlips.cpp */; };
 		4FCB59B9097D80AF00D297EB /* ggsstream.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4FCB59B5097D80AE00D297EB /* ggsstream.cpp */; };
@@ -117,7 +116,6 @@
 		4FBA60CD08D8BE9E00855FD8 /* RXBBCountFlips.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = RXBBCountFlips.cpp; path = sources/RXBBCountFlips.cpp; sourceTree = "<group>"; };
 		4FBA60CE08D8BE9E00855FD8 /* RXBBDoFlips.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = RXBBDoFlips.cpp; path = sources/RXBBDoFlips.cpp; sourceTree = "<group>"; };
 		4FBA60D008D8BE9E00855FD8 /* RXBBPatterns.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = RXBBPatterns.cpp; path = sources/RXBBPatterns.cpp; sourceTree = "<group>"; };
-		4FBA60D208D8BE9E00855FD8 /* RXBBPattGeneratePatterns.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = RXBBPattGeneratePatterns.cpp; path = sources/RXBBPattGeneratePatterns.cpp; sourceTree = "<group>"; };
 		4FBA60D408D8BE9E00855FD8 /* RXBitBoard.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = RXBitBoard.cpp; path = sources/RXBitBoard.cpp; sourceTree = "<group>"; };
 		4FBA60D708D8BE9E00855FD8 /* RXEndGame.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = RXEndGame.cpp; path = sources/RXEndGame.cpp; sourceTree = "<group>"; };
 		4FBA60D808D8BE9E00855FD8 /* RXEngine.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = RXEngine.cpp; path = sources/RXEngine.cpp; sourceTree = "<group>"; };
@@ -180,7 +178,6 @@
 				4FC6E59A0B445FDC0063CDF9 /* RXBBGenerateFlips.cpp */,
 				373E1DC52C6DED4C00F7087D /* RXBBGenerateFlips_Edax.cpp */,
 				4FBA60D008D8BE9E00855FD8 /* RXBBPatterns.cpp */,
-				4FBA60D208D8BE9E00855FD8 /* RXBBPattGeneratePatterns.cpp */,
 				153F675B10867B6F00C63274 /* RXSearch.cpp */,
 				4FBA60D808D8BE9E00855FD8 /* RXEngine.cpp */,
 				4FBA60DE08D8BE9E00855FD8 /* RXMidGame.cpp */,
@@ -353,7 +350,6 @@
 				4FCB59BB097D80AF00D297EB /* OsObjects.cpp in Sources */,
 				4FC71BCE0A13DF7E003F958E /* RXBBCountFlips.cpp in Sources */,
 				4FC6E59B0B445FDC0063CDF9 /* RXBBGenerateFlips.cpp in Sources */,
-				4FBF04940BDE80B800E7D270 /* RXBBPattGeneratePatterns.cpp in Sources */,
 				373E1DC62C6DED4C00F7087D /* RXBBGenerateFlips_Edax.cpp in Sources */,
 				15F23C400E771D5D00D70E52 /* RXHashShallow.cpp in Sources */,
 				153F675D10867B6F00C63274 /* RXSearch.cpp in Sources */,

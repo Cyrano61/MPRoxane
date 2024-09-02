@@ -692,7 +692,9 @@ int RXEngine::MG_PVS_deep(int threadID, RXBBPatterns& sBoard, const bool pv, con
                                         const unsigned long long legal_movesBB = RXBitBoard::get_legal_moves(board.discs[board.player], board.discs[board.player^1]);
 										int bestscore1 = UNDEF_SCORE; //masquage
 										for(RXSquareList* empties = board.empties_list->next; bestscore1<-_lower && empties->position != NOMOVE; empties = empties->next)
-                                            if(legal_movesBB & 1ULL<<empties->position) { ((sBoard).*(sBoard.generate_patterns[empties->position][board.player]))(lastMove);
+                                            if(legal_movesBB & 1ULL<<empties->position) { 
+                                                ((board).*(board.generate_flips[empties->position]))(lastMove);
+                                                ((sBoard).*(sBoard.update_patterns[empties->position][board.player]))(lastMove);
 												board.n_nodes++;
 
 												int score= -sBoard.get_score(lastMove);	
@@ -1222,7 +1224,8 @@ int RXEngine::MG_PVS_shallow(int threadID, RXBBPatterns& sBoard, const bool pv, 
 
 					bestmove = hashmove;
 
-					((sBoard).*(sBoard.generate_patterns[bestmove][board.player]))(*move);
+                    ((board).*(board.generate_flips[bestmove]))(*move);
+                    ((sBoard).*(sBoard.update_patterns[bestmove][board.player]))(*move);
 					board.n_nodes++;
 					bestscore= -sBoard.get_score(*move);	
 
@@ -1233,7 +1236,10 @@ int RXEngine::MG_PVS_shallow(int threadID, RXBBPatterns& sBoard, const bool pv, 
                 const unsigned long long legal_movesBB = RXBitBoard::get_legal_moves(board.discs[board.player], board.discs[board.player^1]);
 
 				for(RXSquareList* empties = board.empties_list->next; lower < upper &&  empties->position != NOMOVE; empties = empties->next) {
-                    if(empties->position != hashmove && (legal_movesBB & 1ULL<<empties->position)) { ((sBoard).*(sBoard.generate_patterns[empties->position][board.player]))(*move);
+                    if(empties->position != hashmove && (legal_movesBB & 1ULL<<empties->position)) {
+                        
+                        ((board).*(board.generate_flips[empties->position ]))(*move);
+                        ((sBoard).*(sBoard.update_patterns[empties->position ][board.player]))(*move);
 						board.n_nodes++;
 						int score= -sBoard.get_score(*move);
 				
@@ -1429,7 +1435,7 @@ int RXEngine::MG_NWS_XProbCut(int threadID, RXBBPatterns& sBoard, const int pvDe
 	
 	//time gestion
 	if (dependent_time && get_current_dependentTime() > time_limit()) {
-        *log << "        MG_MWS_XProbCut : idThread :" << threadID << " time search expired, stops search" << std::endl;
+        *log << "[" << get_current_time() << "] " << "        MG_NWS_XProbCut : idThread :" << threadID << " time search expired, stops search" << std::endl;
 		abort.store(true);
 		return INTERRUPT_SEARCH;
 	}

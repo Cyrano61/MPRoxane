@@ -24,7 +24,6 @@ std::ostream& operator<<(std::ostream& os, RXBBPatterns& sBoard) {
 
 RXBBPatterns::RXBBPatterns(): pattern(new RXPattern()) {
 
-	init_generate_patterns();
 	init_update_patterns();
 
 	pattern->set_WHITE_D4();
@@ -36,7 +35,6 @@ RXBBPatterns::RXBBPatterns(): pattern(new RXPattern()) {
 
 RXBBPatterns::RXBBPatterns(const RXBBPatterns& src) : board(src.board), pattern(new RXPattern()) {
 		
-	init_generate_patterns();
 	init_update_patterns();
 	
 	*pattern = *(src.pattern); //copy

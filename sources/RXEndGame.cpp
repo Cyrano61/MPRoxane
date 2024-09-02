@@ -15,8 +15,16 @@
 #include "RXRoxane.hpp"
 
 const bool RXEngine::USE_STABILITY = true;
-const int RXEngine::HIGH_STABILITY_THRESOLD = 2400;
-const int RXEngine::stability_threshold[] = { 6500, 6500, 6500, 6500, 6500, 4800, 3800, 3000, 2400, 2400, 2400, 2400, 2400, 2400, 2400, 2400, 2400, 2400, 2400};
+
+const int RXEngine::stability_threshold[] =
+{   6500, 6500, 6500, 6500,  400,  600,  800, 1000,
+    2000, 2200, 2400, 2600, 2800, 3000, 3200, 3400,
+    2400, 3600, 3800, 4000, 4000, 4200, 4200, 4400,
+    4400, 4600, 4600, 4800, 4800, 5000, 5200, 5200,
+    5400, 5400, 5600, 5600, 5800, 5800, 6000, 6000,
+    6200, 6200, 6500, 6500, 6500, 6500, 6500, 6500,
+    6500, 6500, 6500, 6500, 6500, 6500, 6500, 6500,
+    6500, 6500, 6500, 6500, 6500, 6500, 6500, 6500};
 
 int RXEngine::EG_DEEP_TO_MEDIUM = 17;
 const int RXEngine::EG_MEDIUM_HI_TO_LOW = 14; //12 (6'42) : 13 (6'25) : 14 (6'26)
@@ -50,17 +58,17 @@ int RXEngine::EG_alphabeta_parity(int threadID, RXBitBoard& board, int alpha, in
 	
 	int opponent = board.player^1;
 	
-	/*
-	if(USE_STABILITY) {
-		if ( alpha >= stability_threshold[board.n_empties] ) {
-				int stability_bound = 6400 - 2 * board.get_stability(board.player^1, (6500-alpha)/2);
-				if ( stability_bound <= alpha )
-					return alpha;
-				if ( stability_bound < beta )
-					beta = stability_bound + VALUE_DISC;
-		}
-	}
-	*/
+	
+//	if(USE_STABILITY && board.n_empties == 6) {
+//		if ( alpha >= stability_threshold[board.n_empties]) {
+//				int stability_bound = 6400 - 2 * board.get_stability(board.player^1, (6500-alpha)/2);
+//				if ( stability_bound <= alpha )
+//					return alpha;
+//				if ( stability_bound < beta )
+//					beta = stability_bound + VALUE_DISC;
+//		}
+//	}
+	
 	
 	RXMove& move = threads[threadID]._move[board.n_empties][1];
 
@@ -69,7 +77,7 @@ int RXEngine::EG_alphabeta_parity(int threadID, RXBitBoard& board, int alpha, in
 	for (int parity = 1; parity >= 0; parity--) {
 		for(RXSquareList* empties = board.empties_list->next; empties->position != NOMOVE; empties = empties->next) {	
                         
-            if (board.local_Parity(empties->position) == parity && (legal_movesBB & 1ULL<<empties->position)) { ((board).*(board.generate_flips[empties->position]))(move);
+            if ((legal_movesBB & 1ULL<<empties->position) && board.local_Parity(empties->position) == parity) { ((board).*(board.generate_flips[empties->position]))(move);
 				board.n_nodes++;
 				
 				board.discs[board.player] |= (move.flipped | move.square);
@@ -144,7 +152,7 @@ int RXEngine::EG_alphabeta_hash_parity(int threadID, RXBitBoard& board, const bo
 	int upper = beta;
 		
 	if(USE_STABILITY) {
-		if ( alpha >= stability_threshold[board.n_empties] ) {
+		if ( (pv ? beta : alpha) >= stability_threshold[board.n_empties] ) {
 				int stability_bound = 6400 - 2 * board.get_stability(board.player^1, (6500-alpha)/2);
 				if ( stability_bound <= alpha )
 					return alpha;
@@ -212,7 +220,7 @@ int RXEngine::EG_alphabeta_hash_parity(int threadID, RXBitBoard& board, const bo
 	
 			for (int parity = 1; lower < upper && parity >= 0; parity--) {
 				for(RXSquareList* empties = board.empties_list->next; lower < upper && empties->position != NOMOVE; empties = empties->next) {
-                    if (empties->position != hashmove && board.local_Parity(empties->position) == parity && (legal_movesBB & 1ULL<<empties->position)) { ((board).*(board.generate_flips[empties->position]))(move);
+                    if (empties->position != hashmove && (legal_movesBB & 1ULL<<empties->position) &&  board.local_Parity(empties->position) == parity) { ((board).*(board.generate_flips[empties->position]))(move);
 						board.n_nodes++;
 						
 						board.discs[board.player] |= (move.flipped | move.square);
@@ -307,7 +315,7 @@ int RXEngine::EG_PVS_hash_mobility(int threadID, RXBitBoard& board, const bool p
 		*/
 			
 			
-		if ( alpha >= stability_threshold[board.n_empties] ) {
+		if ( (pv ? beta : alpha) >= stability_threshold[board.n_empties] ) {
 				int stability_bound = 6400 - 2 * board.get_stability(board.player^1, (6500-alpha)/2);
 				if ( stability_bound <= alpha )
 					return alpha;
@@ -557,7 +565,7 @@ int RXEngine::EG_PVS_ETC_mobility(int threadID, RXBitBoard& board, const bool pv
 			&
 			score_max<=score_max_calculŽ< beta  ==> diminution de la fenetre de recherche
 		*/
-		if ( alpha >= stability_threshold[board.n_empties] ) {
+		if ( (pv ? beta : alpha) >= stability_threshold[board.n_empties] ) {
 				int stability_bound = 6400 - 2 * board.get_stability(board.player^1, (6500-alpha)/2);
 				if ( stability_bound <= alpha )
 					return alpha;
@@ -857,7 +865,7 @@ int RXEngine::EG_PVS_deep(int threadID, RXBBPatterns& sBoard, const bool pv, con
 		*/
 			
 			
-		if ( lower >= HIGH_STABILITY_THRESOLD ) {
+		if ( upper >= stability_threshold[board.n_empties]  ) {
 				int stability_bound = 6400 - 2 * board.get_stability(board.player^1, (6500-alpha)/2);
 				if ( stability_bound <= alpha )
 					return alpha;
@@ -873,7 +881,7 @@ int RXEngine::EG_PVS_deep(int threadID, RXBBPatterns& sBoard, const bool pv, con
 	
 	//synchronized acces
 	RXHashValue entry;
-    unsigned long long hash_code = board.hashcode();
+    const unsigned long long hash_code = board.hashcode();
 	if(hTable->get(hash_code, type_hashtable, entry)) {
 	
 	
@@ -969,7 +977,7 @@ int RXEngine::EG_PVS_deep(int threadID, RXBBPatterns& sBoard, const bool pv, con
 		}
 		
 		
-		//for all empty square
+		//for other move
         const unsigned long long legal_movesBB = RXBitBoard::get_legal_moves(board.discs[board.player], board.discs[board.player^1]);
 		for(RXSquareList* empties = board.empties_list->next; empties->position != NOMOVE; empties = empties->next)
             if(bestmove != empties->position && (legal_movesBB & 1ULL<<empties->position)){
@@ -977,12 +985,12 @@ int RXEngine::EG_PVS_deep(int threadID, RXBBPatterns& sBoard, const bool pv, con
                 ((board).*(board.generate_flips[empties->position]))(*move);
 				board.n_nodes++;
 
-				move->score = 0;
+				move->score = 0;    //not in hash
 				
 				//synchronized acces
 				if(hTable->get(board.hashcode_after_move(move), type_hashtable, entry) &&  entry.depth>=board.n_empties) {
 
-					move->score = -3*VALUE_DISC;
+					move->score = -3*VALUE_DISC;    //in hash
 			
 					if(entry.selectivity >= selectivity) {
 					
@@ -1002,7 +1010,7 @@ int RXEngine::EG_PVS_deep(int threadID, RXBBPatterns& sBoard, const bool pv, con
 							
 						} else if(-entry.lower<=lower) {
 							
-							move->score += 5*VALUE_DISC;
+							move->score += 5*VALUE_DISC; // 2*VALUE_DISC probably bad move
 
 						}
 
@@ -1180,7 +1188,8 @@ int RXEngine::EG_PVS_deep(int threadID, RXBBPatterns& sBoard, const bool pv, con
 											for(RXSquareList* empties = board.empties_list->next; bestscore< -_lower && empties->position != NOMOVE; empties = empties->next) {
                                                 if ((legal_movesBB & 1ULL<<empties->position)){
                                                     
-                                                    ((sBoard).*(sBoard.generate_patterns[empties->position][board.player]))(lastMove);
+                                                    ((board).*(board.generate_flips[empties->position ]))(lastMove);
+                                                    ((sBoard).*(sBoard.update_patterns[empties->position ][board.player]))(lastMove);
 													board.n_nodes++;
 
 													int score = -sBoard.get_score(lastMove);	
@@ -1230,8 +1239,9 @@ int RXEngine::EG_PVS_deep(int threadID, RXBBPatterns& sBoard, const bool pv, con
 			
 								board.n_nodes++;
 								const unsigned long long p_discs = board.discs[p] | (iter->flipped | iter->square);
-								
-								iter->score += sBoard.get_score(*iter) + 2*(RXBitBoard::get_mobility(board.discs[o] ^ iter->flipped, p_discs)*VALUE_DISC) - (RXBitBoard::get_corner_stability(p_discs)*VALUE_DISC)/4;
+                                
+								//test 1 : score + 2*mobility_adv - corner_stability_adv/4
+                                iter->score += sBoard.get_score(*iter) + 2*(RXBitBoard::get_mobility(board.discs[o] ^ iter->flipped, p_discs)*VALUE_DISC) - (RXBitBoard::get_corner_stability(p_discs)*VALUE_DISC)/4;
 							}
 						}
 
@@ -1244,8 +1254,9 @@ int RXEngine::EG_PVS_deep(int threadID, RXBBPatterns& sBoard, const bool pv, con
 							
 							board.n_nodes++;
 							const unsigned long long p_discs = board.discs[p] | (iter->flipped | iter->square);
-																						
-							iter->score += sBoard.get_score(*iter) + 2*(RXBitBoard::get_mobility(board.discs[o] ^ iter->flipped, p_discs)*VALUE_DISC) - (RXBitBoard::get_corner_stability(p_discs)*VALUE_DISC)/4;
+							
+                            //test 1 : score + 2*mobility_adv - corner_stability_adv/4
+                            iter->score += sBoard.get_score(*iter) + 2*(RXBitBoard::get_mobility(board.discs[o] ^ iter->flipped, p_discs)*VALUE_DISC) - (RXBitBoard::get_corner_stability(p_discs)*VALUE_DISC)/4;
 						}
 
 					}
@@ -1609,8 +1620,8 @@ int RXEngine::EG_NWS_XEndCut(int threadID, RXBBPatterns& sBoard, const int pvDev
 	int bestmove = NOMOVE;
 
 	
-	if(USE_STABILITY && board.n_empties<19) {
-		if ( alpha >= HIGH_STABILITY_THRESOLD && alpha >= stability_threshold[board.n_empties] ) {
+	if(USE_STABILITY) {
+		if ( alpha >= stability_threshold[board.n_empties] ) {
 				int stability_bound = 6400 - 2 * board.get_stability(board.player^1, (6500-alpha)/2);
 				if ( stability_bound <= alpha )
 					return alpha;
@@ -2334,10 +2345,7 @@ void RXEngine::EG_driver(RXBBPatterns& sBoard, int selectivity, int end_selectiv
 	for(; !abort.load()  && selectivity <= end_selectivity; selectivity++) {
 		
 		selectivity = std::max(std::min(NO_SELECT, 26-sBoard.board.n_empties), std::max(EG_HIGH_SELECT, selectivity));
-		
-
-//	for(selectivity = 1 ; !abort.load()  && selectivity <= NO_SELECT; selectivity+=(NO_SELECT-1)) {
-		
+				
 		set_select_search(selectivity);
 		
 		if(dependent_time)
