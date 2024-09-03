@@ -367,8 +367,10 @@ inline int RXBitBoard::get_corner_stability(const unsigned long long& discs_play
 ///   - n_stables_cut: valeur de coupure (type alpha, beta)
 inline int RXBitBoard::get_stability(const int color, const int n_stables_cut) const {
         
-    unsigned long long filled = discs[BLACK] | discs[WHITE];
-    
+    const unsigned long long filled = discs[BLACK] | discs[WHITE];
+
+    //horizontals and verticals full lines
+
     static uint64x2_t shr_hv_4 = {-4,-32};
     static uint64x2_t shl_hv_4 = {64, 32};
     static uint64x2_t shr_hv_2 = {-2,-16};
@@ -378,21 +380,17 @@ inline int RXBitBoard::get_stability(const int color, const int n_stables_cut) c
     
     static uint64x2_t mask_hv = {0x8181818181818181ULL, 0xFF000000000000FFULL};
 
-
     uint64x2_t hv = vdupq_n_u64(filled);
     
     hv = vandq_u64( hv, vorrq_u64(vshlq_u64(hv, shr_hv_4), vshlq_u64(hv, shl_hv_4)));
     hv = vandq_u64( hv, vorrq_u64(vshlq_u64(hv, shr_hv_2), vshlq_u64(hv, shl_hv_2)));
     hv = vandq_u64( hv, vorrq_u64(vshlq_u64(hv, shr_hv_1), vshlq_u64(hv, shl_hv_1)));
      
-    
-    //pour l'instant je ne peux pas vectoriser
-    //trick multiplication par 255 (remplit le lignes)
-    uint64x1_t temp_0 = vcreate_u64((vgetq_lane_u64(hv, 0) & 0x0101010101010101ULL) * 0xFFULL);
-    
-    hv = vcombine_u64(temp_0, vget_high_u64(hv));
+    hv = vcombine_u64(((vget_low_u64(hv) & 0x0101010101010101ULL) * 0xFFULL), vget_high_u64(hv));
     hv = vorrq_u64(hv, mask_hv);
-        
+
+    //2 * diagonals full lines
+
     static uint64x2_t shr_dg_4 = {-28,-36};
     static uint64x2_t shl_dg_4 = { 28, 36};
     static uint64x2_t mask_right_4 = { 0x00000000F0F0F0F0ULL, 0x000000000F0F0F0FULL};
@@ -405,8 +403,10 @@ inline int RXBitBoard::get_stability(const int color, const int n_stables_cut) c
     static uint64x2_t mask_left_2  = { 0x3F3F3F3F3F3F0000ULL, 0xFCFCFCFCFCFC0000ULL};
     static uint64x2_t mask_2       = { 0xC0C0000000000303ULL, 0x030300000000C0C0ULL};
     
-    static uint64x2_t shr = {-7,-9};
-    static uint64x2_t shl = { 7, 9};
+    static uint64x2_t shr_hv = {-1,-8};
+    static uint64x2_t shl_hv = { 1, 8};
+    static uint64x2_t shr_dg = {-7,-9};
+    static uint64x2_t shl_dg = { 7, 9};
         
     uint64x2_t dg = vdupq_n_u64(filled);
     
@@ -419,12 +419,17 @@ inline int RXBitBoard::get_stability(const int color, const int n_stables_cut) c
     temp = vorrq_u64(temp , vandq_u64(vshlq_u64(dg, shl_dg_2), mask_left_2));
     dg = vandq_u64(dg, vorrq_u64(temp, mask_2));
 
-    dg = vandq_u64(dg, vandq_u64(vshlq_u64(dg, shr), vshlq_u64(dg, shl)));
+    dg = vandq_u64(dg, vandq_u64(vshlq_u64(dg, shr_dg), vshlq_u64(dg, shl_dg)));
     dg = vorrq_u64(dg, vdupq_n_u64(0xFF818181818181FFULL));
     
     
+    // mix full lines and discs color
+    uint64x2_t d_color = vdupq_n_u64(discs[color]);
     temp = vandq_u64(hv, dg);
-    unsigned long long stable = vgetq_lane_u64(temp, 0) & vgetq_lane_u64(temp, 1) & discs[color];
+    temp = vandq_u64(vandq_u64(temp, vcombine_u64(vget_high_u64(temp), vget_low_u64(temp))), d_color);
+    
+    
+    unsigned long long stable = vgetq_lane_u64(temp, 0);
 
 
     if(stable == 0)
@@ -432,57 +437,31 @@ inline int RXBitBoard::get_stability(const int color, const int n_stables_cut) c
         
 
     int result = VALUE_DISC * __builtin_popcountll(stable);
-    if(result>=n_stables_cut)
+    if(result>=n_stables_cut) {
         return result;
+    }
     
 
     unsigned long long old_stable;
     uint64x2_t dir_hv;
     uint64x2_t dir_dg;
     
-    static uint64x2_t shr_hv = {-1,-8};
-    static uint64x2_t shl_hv = { 1, 8};
-    static uint64x2_t shr_dg = {-7,-9};
-    static uint64x2_t shl_dg = { 7, 9};
-        
+           
     do {
-
+        
         old_stable = stable;
         
-        dir_hv = vdupq_n_u64(stable);
-        dir_dg = vdupq_n_u64(stable);
-        
-        dir_hv = vorrq_u64(vorrq_u64(vshlq_u64(dir_hv, shr_hv), vshlq_u64(dir_hv, shl_hv)), hv);
-        dir_dg = vorrq_u64(vorrq_u64(vshlq_u64(dir_dg, shr_dg), vshlq_u64(dir_dg, shl_dg)), dg);
+        dir_hv = vorrq_u64(vorrq_u64(vshlq_u64(temp, shr_hv), vshlq_u64(temp, shl_hv)), hv);
+        dir_dg = vorrq_u64(vorrq_u64(vshlq_u64(temp, shr_dg), vshlq_u64(temp, shl_dg)), dg);
 
         temp = vandq_u64(dir_hv, dir_dg);
-        temp = vandq_u64(temp, vcombine_u64(vget_high_u64(temp), vget_low_u64(temp)));
-    
-        stable = vgetq_lane_u64(temp, 0) & discs[color];
-        
+        temp = vandq_u64(vandq_u64(temp, vcombine_u64(vget_high_u64(temp), vget_low_u64(temp))), d_color);
+
+        stable = vgetq_lane_u64(temp, 0);
 
     } while(stable != old_stable);
-  
-    
-//    do {
-//        
-//        old_stable = stable;
-//        
-//        bug
-//
-//        dir_hv = vorrq_u64(vorrq_u64(vshlq_u64(temp, shr_hv), vshlq_u64(temp, shl_hv)), hv);
-//        dir_dg = vorrq_u64(vorrq_u64(vshlq_u64(temp, shr_dg), vshlq_u64(temp, shl_dg)), dg);
-//
-//        temp = vandq_u64(dir_hv, dir_dg);
-//        temp = vandq_u64(temp, vcombine_u64(vget_high_u64(temp), vget_low_u64(temp)));
-//
-//
-//        stable = vgetq_lane_u64(temp, 0) & discs[color];
-//
-//    } while(stable != old_stable);
 
 
- //   std::cout << "stable : " << std::hex << stable << std::endl;
     
     if(stable == 0)
         return 0;

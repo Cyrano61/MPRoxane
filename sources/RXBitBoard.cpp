@@ -263,7 +263,7 @@ unsigned long long RXBitBoard::get_legal_moves(const unsigned long long p_discs,
     const uint64x2_t inner_oo_discs = vdupq_n_u64(o_discs & 0x7E7E7E7E7E7E7E7EULL);
 
     
-    //direction -1, +1
+    //horizontals directions -1, +1
     static int64x2_t shift_1 = {-1, 1};
     static int64x2_t shift_2 = {-2, 2};
     
@@ -279,7 +279,7 @@ unsigned long long RXBitBoard::get_legal_moves(const unsigned long long p_discs,
 
     uint64x2_t legals = vshlq_u64(flipped, shift_1);
 
-    //direction -8 , +8
+    //verticals directions -8 , +8
     static int64x2_t shift_8    = {-8, 8};
     static int64x2_t shift_16 = {-16, 16};
 
@@ -293,7 +293,7 @@ unsigned long long RXBitBoard::get_legal_moves(const unsigned long long p_discs,
 
     legals = vorrq_u64(legals, vshlq_u64(flipped, shift_8));
 
-    //direction -7 , +7
+    //diagonals directions -7 , +7
     static int64x2_t shift_7    = {-7, 7};
     static int64x2_t shift_14 = {-14, 14};
 
@@ -307,7 +307,7 @@ unsigned long long RXBitBoard::get_legal_moves(const unsigned long long p_discs,
 
     legals = vorrq_u64(legals, vshlq_u64(flipped, shift_7));
     
-    //direction -9 , +9
+    //diagonals directions -9 , +9
     static int64x2_t shift_9    = {-9, 9};
     static int64x2_t shift_18 = {-18, 18};
 

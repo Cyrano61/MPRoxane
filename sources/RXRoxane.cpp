@@ -502,7 +502,7 @@ void RXRoxane::get_move(const std::string& file_name) {
             speed = static_cast<int>((nodes/1000)/T);
             
             buffer << "Speed       : " << std::setw(15);
-			if (nodes > 500000) {
+			if (nodes > 300000) {
 				buffer  << speed << " kN/s";
             } else {
                 buffer << "N/A";

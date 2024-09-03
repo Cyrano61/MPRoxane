@@ -59,17 +59,16 @@ int RXEngine::EG_alphabeta_parity(int threadID, RXBitBoard& board, int alpha, in
 	int opponent = board.player^1;
 	
 	
-//	if(USE_STABILITY && board.n_empties == 6) {
-//		if ( alpha >= stability_threshold[board.n_empties]) {
-//				int stability_bound = 6400 - 2 * board.get_stability(board.player^1, (6500-alpha)/2);
-//				if ( stability_bound <= alpha )
-//					return alpha;
-//				if ( stability_bound < beta )
-//					beta = stability_bound + VALUE_DISC;
-//		}
-//	}
-	
-	
+    if(USE_STABILITY) {//} && board.n_empties > 5) {
+		if ( alpha >= stability_threshold[board.n_empties]) {
+				int stability_bound = 6400 - 2 * board.get_stability(board.player^1, (6500-alpha)/2);
+				if ( stability_bound <= alpha )
+					return alpha;
+				if ( stability_bound < beta )
+					beta = stability_bound + VALUE_DISC;
+		}
+	}
+
 	RXMove& move = threads[threadID]._move[board.n_empties][1];
 
     const unsigned long long legal_movesBB = RXBitBoard::get_legal_moves(board.discs[board.player], board.discs[board.player^1]);
@@ -151,17 +150,6 @@ int RXEngine::EG_alphabeta_hash_parity(int threadID, RXBitBoard& board, const bo
 	int lower = alpha;
 	int upper = beta;
 		
-	if(USE_STABILITY) {
-		if ( (pv ? beta : alpha) >= stability_threshold[board.n_empties] ) {
-				int stability_bound = 6400 - 2 * board.get_stability(board.player^1, (6500-alpha)/2);
-				if ( stability_bound <= alpha )
-					return alpha;
-			
-				if ( stability_bound < beta )
-					upper = stability_bound + VALUE_DISC;
-			 
-		}
-	}
 	
 	int bestmove = NOMOVE; 
 	int hashmove = NOMOVE;
@@ -191,6 +179,20 @@ int RXEngine::EG_alphabeta_hash_parity(int threadID, RXBitBoard& board, const bo
 		hashmove = entry.move;
 				
 	}
+    
+    if(USE_STABILITY  && hashmove == NOMOVE) {
+        
+        if ( (pv ? beta : alpha) >= stability_threshold[board.n_empties] ) {
+                int stability_bound = 6400 - 2 * board.get_stability(board.player^1, (6500-alpha)/2);
+                if ( stability_bound <= alpha )
+                    return alpha;
+            
+                if ( stability_bound < beta )
+                    upper = stability_bound + VALUE_DISC;
+             
+        }
+    }
+
 	
 	RXMove& move = threads[threadID]._move[board.n_empties][1];
 
@@ -304,28 +306,6 @@ int RXEngine::EG_PVS_hash_mobility(int threadID, RXBitBoard& board, const bool p
 	int lower = alpha;
 	int upper = beta;
 	
-	if(USE_STABILITY) {
-	
-		/*	
-			la stabilite calcule est inferieure ou egale a la stabilit reelle
-			donc le score_max_calcul est surestim.
-			score_max<=score_max_calcul<=alpha ==> coupure
-			&
-			score_max<=score_max_calcul< beta  ==> diminution de la fenetre de recherche
-		*/
-			
-			
-		if ( (pv ? beta : alpha) >= stability_threshold[board.n_empties] ) {
-				int stability_bound = 6400 - 2 * board.get_stability(board.player^1, (6500-alpha)/2);
-				if ( stability_bound <= alpha )
-					return alpha;
-			
-				if ( stability_bound < beta )
-					upper = std::max(beta, stability_bound + VALUE_DISC);
-			 
-		}
-		
-	}
 
 	RXMove* list = threads[threadID]._move[board.n_empties];
 	RXMove* move = list + 1;
@@ -356,7 +336,30 @@ int RXEngine::EG_PVS_hash_mobility(int threadID, RXBitBoard& board, const bool p
 		bestmove = entry.move;
 				
 	}
-	
+
+    if(USE_STABILITY  && bestmove == NOMOVE) {
+    
+        /*
+            la stabilite calcule est inferieure ou egale a la stabilit reelle
+            donc le score_max_calcul est surestim.
+            score_max<=score_max_calcul<=alpha ==> coupure
+            &
+            score_max<=score_max_calcul< beta  ==> diminution de la fenetre de recherche
+        */
+            
+            
+        if ( (pv ? beta : alpha) >= stability_threshold[board.n_empties] ) {
+                int stability_bound = 6400 - 2 * board.get_stability(board.player^1, (6500-alpha)/2);
+                if ( stability_bound <= alpha )
+                    return alpha;
+            
+                if ( stability_bound < beta )
+                    upper = std::max(beta, stability_bound + VALUE_DISC);
+             
+        }
+        
+    }
+
 	int bestscore = UNDEF_SCORE;
 
 	if(bestmove != PASS) {
@@ -556,28 +559,6 @@ int RXEngine::EG_PVS_ETC_mobility(int threadID, RXBitBoard& board, const bool pv
 	int lower = alpha;
 	int upper = beta;
 	
-	if(USE_STABILITY) {
-	
-		/*	
-			la stabilite calcule est inferieure ou egale a la stabilit reelle
-			donc le score_max_calcul est surestim.
-			score_max<=score_max_calcul<=alpha ==> coupure
-			&
-			score_max<=score_max_calcul< beta  ==> diminution de la fenetre de recherche
-		*/
-		if ( (pv ? beta : alpha) >= stability_threshold[board.n_empties] ) {
-				int stability_bound = 6400 - 2 * board.get_stability(board.player^1, (6500-alpha)/2);
-				if ( stability_bound <= alpha )
-					return alpha;
-			
-				if ( stability_bound < beta )
-					upper = std::max(beta, stability_bound + VALUE_DISC);
-			 
-		}
-		
-	}
-	
-	//synchronized acces
 	RXHashValue entry;
     unsigned long long hash_code = board.hashcode();
 	if(hTable->get(hash_code, type_hashtable, entry)) {
@@ -603,7 +584,30 @@ int RXEngine::EG_PVS_ETC_mobility(int threadID, RXBitBoard& board, const bool pv
 		bestmove = entry.move;
 				
 	}
-	
+
+    if(USE_STABILITY && bestmove == NOMOVE) {
+    
+        /*
+            la stabilite calcule est inferieure ou egale a la stabilit reelle
+            donc le score_max_calcul est surestim.
+            score_max<=score_max_calcul<=alpha ==> coupure
+            &
+            score_max<=score_max_calcul< beta  ==> diminution de la fenetre de recherche
+        */
+        if ( (pv ? beta : alpha) >= stability_threshold[board.n_empties] ) {
+                int stability_bound = 6400 - 2 * board.get_stability(board.player^1, (6500-alpha)/2);
+                if ( stability_bound <= alpha )
+                    return alpha;
+            
+                if ( stability_bound < beta )
+                    upper = std::max(beta, stability_bound + VALUE_DISC);
+             
+        }
+        
+    }
+    
+    //synchronized acces
+
 	int bestscore = UNDEF_SCORE;
 
 	RXMove* list = threads[threadID]._move[board.n_empties];
@@ -854,27 +858,6 @@ int RXEngine::EG_PVS_deep(int threadID, RXBBPatterns& sBoard, const bool pv, con
 	RXBitBoard& board = sBoard.board;
 	selective_cutoff = false;
 		
-	if(USE_STABILITY) {
-	
-		/*	
-			la stabilit calcule est inferieure ou egale a la stabilit reelle
-			donc le score_max_calcul est surestim.
-			score_max<=score_max_calcul<=alpha ==> coupure
-			&
-			score_max<=score_max_calcul< beta  ==> diminution de la fenetre de recherche
-		*/
-			
-			
-		if ( upper >= stability_threshold[board.n_empties]  ) {
-				int stability_bound = 6400 - 2 * board.get_stability(board.player^1, (6500-alpha)/2);
-				if ( stability_bound <= alpha )
-					return alpha;
-			
-				if ( stability_bound < beta )
-					upper = std::max(beta, stability_bound + VALUE_DISC);
-			 
-		}
-	}
 	
 		
 	bool hiProb_alphaCut = false;
@@ -925,6 +908,29 @@ int RXEngine::EG_PVS_deep(int threadID, RXBBPatterns& sBoard, const bool pv, con
 		bestmove = entry.move;
 
 	}
+    
+    if(USE_STABILITY  && bestmove == NOMOVE) {
+    
+        /*
+            la stabilit calcule est inferieure ou egale a la stabilit reelle
+            donc le score_max_calcul est surestim.
+            score_max<=score_max_calcul<=alpha ==> coupure
+            &
+            score_max<=score_max_calcul< beta  ==> diminution de la fenetre de recherche
+        */
+            
+            
+        if ( upper >= stability_threshold[board.n_empties]  ) {
+                int stability_bound = 6400 - 2 * board.get_stability(board.player^1, (6500-alpha)/2);
+                if ( stability_bound <= alpha )
+                    return alpha;
+            
+                if ( stability_bound < beta )
+                    upper = std::max(beta, stability_bound + VALUE_DISC);
+             
+        }
+    }
+
 	
 		
 //	IID & IIS
@@ -1620,15 +1626,6 @@ int RXEngine::EG_NWS_XEndCut(int threadID, RXBBPatterns& sBoard, const int pvDev
 	int bestmove = NOMOVE;
 
 	
-	if(USE_STABILITY) {
-		if ( alpha >= stability_threshold[board.n_empties] ) {
-				int stability_bound = 6400 - 2 * board.get_stability(board.player^1, (6500-alpha)/2);
-				if ( stability_bound <= alpha )
-					return alpha;
-		}
-	}
-	
-	
 	//synchronized acces
 	RXHashValue entry;
     unsigned long long hash_code = board.hashcode();
@@ -1658,7 +1655,14 @@ int RXEngine::EG_NWS_XEndCut(int threadID, RXBBPatterns& sBoard, const int pvDev
 		
 	}
 
-	
+    if(USE_STABILITY  && bestmove == NOMOVE) {
+        if ( alpha >= stability_threshold[board.n_empties] ) {
+                int stability_bound = 6400 - 2 * board.get_stability(board.player^1, (6500-alpha)/2);
+                if ( stability_bound <= alpha )
+                    return alpha;
+        }
+    }
+
 	//param mpc
 	int lower_probcut, upper_probcut;
 	int probcut_depth = (board.n_empties/4)*2 + (board.n_empties&1);

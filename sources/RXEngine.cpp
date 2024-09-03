@@ -1395,7 +1395,7 @@ std::string RXEngine::display(RXBitBoard& board, const int type, const int allow
                 unsigned long long speed = 0;
                 if(time_level>0)
                     speed = board.n_nodes/time_level;
-                if (board.n_nodes > 500000) {
+                if (board.n_nodes > 300000) {
                     buffer << std::setw(8) << (time_level == 0 ? ' ': speed) << " |";
                 } else {
                     buffer << std::setw(8) << " N/A" << " |";
@@ -1567,7 +1567,7 @@ void RXEngine::get_move(RXSearch& s) {
         
         buffer.str("");
         buffer << "speed : " << std::setw(14);
-        if(s.bestMove.nodes > 500000) {
+        if(s.bestMove.nodes > 300000) {
             buffer << static_cast<int>(speed) << " kN/s";
         } else {
             buffer << "N/A";
