@@ -280,7 +280,7 @@ unsigned long long RXBitBoard::get_legal_moves(const unsigned long long p_discs,
     uint64x2_t legals = vshlq_u64(flipped, shift_1);
 
     //verticals directions -8 , +8
-    static int64x2_t shift_8    = {-8, 8};
+    static int64x2_t shift_8  = {-8,   8};
     static int64x2_t shift_16 = {-16, 16};
 
     flipped = vandq_u64(vshlq_u64(pp_discs, shift_8), oo_discs);
@@ -294,7 +294,7 @@ unsigned long long RXBitBoard::get_legal_moves(const unsigned long long p_discs,
     legals = vorrq_u64(legals, vshlq_u64(flipped, shift_8));
 
     //diagonals directions -7 , +7
-    static int64x2_t shift_7    = {-7, 7};
+    static int64x2_t shift_7  = {-7,   7};
     static int64x2_t shift_14 = {-14, 14};
 
     flipped = vandq_u64(vshlq_u64(pp_discs, shift_7), inner_oo_discs);
@@ -308,7 +308,7 @@ unsigned long long RXBitBoard::get_legal_moves(const unsigned long long p_discs,
     legals = vorrq_u64(legals, vshlq_u64(flipped, shift_7));
     
     //diagonals directions -9 , +9
-    static int64x2_t shift_9    = {-9, 9};
+    static int64x2_t shift_9  = {-9,   9};
     static int64x2_t shift_18 = {-18, 18};
 
     flipped = vandq_u64(vshlq_u64(pp_discs, shift_9), inner_oo_discs);
@@ -868,7 +868,7 @@ int RXBitBoard::local_Parity(const int position) const {
     
     const unsigned long long quadrant_Filled = (discs[BLACK] | discs[WHITE]) & QUADRANT_MASK[QUADRANT_ID[position]];
     
-    return static_cast<int>(__builtin_popcountll(quadrant_Filled) & 0x00000000000001ULL);
+    return (__builtin_popcountll(quadrant_Filled) & 1);
 }
 
 

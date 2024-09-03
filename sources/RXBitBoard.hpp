@@ -368,8 +368,10 @@ inline int RXBitBoard::get_corner_stability(const unsigned long long& discs_play
 inline int RXBitBoard::get_stability(const int color, const int n_stables_cut) const {
         
     const unsigned long long filled = discs[BLACK] | discs[WHITE];
+    const uint64x2_t dd_color = vdupq_n_u64(discs[color]);
 
-    //horizontals and verticals full lines
+
+    //static for horizontals and verticals full lines
 
     static uint64x2_t shr_hv_4 = {-4,-32};
     static uint64x2_t shl_hv_4 = {64, 32};
@@ -379,17 +381,8 @@ inline int RXBitBoard::get_stability(const int color, const int n_stables_cut) c
     static uint64x2_t shl_hv_1 = {64,  8};
     
     static uint64x2_t mask_hv = {0x8181818181818181ULL, 0xFF000000000000FFULL};
-
-    uint64x2_t hv = vdupq_n_u64(filled);
     
-    hv = vandq_u64( hv, vorrq_u64(vshlq_u64(hv, shr_hv_4), vshlq_u64(hv, shl_hv_4)));
-    hv = vandq_u64( hv, vorrq_u64(vshlq_u64(hv, shr_hv_2), vshlq_u64(hv, shl_hv_2)));
-    hv = vandq_u64( hv, vorrq_u64(vshlq_u64(hv, shr_hv_1), vshlq_u64(hv, shl_hv_1)));
-     
-    hv = vcombine_u64(((vget_low_u64(hv) & 0x0101010101010101ULL) * 0xFFULL), vget_high_u64(hv));
-    hv = vorrq_u64(hv, mask_hv);
-
-    //2 * diagonals full lines
+    //static for 2 * diagonals full lines
 
     static uint64x2_t shr_dg_4 = {-28,-36};
     static uint64x2_t shl_dg_4 = { 28, 36};
@@ -402,12 +395,26 @@ inline int RXBitBoard::get_stability(const int color, const int n_stables_cut) c
     static uint64x2_t mask_right_2 = { 0x0000FCFCFCFCFCFCULL, 0x00003F3F3F3F3F3FULL};
     static uint64x2_t mask_left_2  = { 0x3F3F3F3F3F3F0000ULL, 0xFCFCFCFCFCFC0000ULL};
     static uint64x2_t mask_2       = { 0xC0C0000000000303ULL, 0x030300000000C0C0ULL};
+    static uint64x2_t mask_dg      = { 0xFF818181818181FFULL, 0xFF818181818181FFULL};
+
     
     static uint64x2_t shr_hv = {-1,-8};
     static uint64x2_t shl_hv = { 1, 8};
     static uint64x2_t shr_dg = {-7,-9};
     static uint64x2_t shl_dg = { 7, 9};
-        
+
+    //horizontals and verticals full lines
+    uint64x2_t hv = vdupq_n_u64(filled);
+    
+    hv = vandq_u64( hv, vorrq_u64(vshlq_u64(hv, shr_hv_4), vshlq_u64(hv, shl_hv_4)));
+    hv = vandq_u64( hv, vorrq_u64(vshlq_u64(hv, shr_hv_2), vshlq_u64(hv, shl_hv_2)));
+    hv = vandq_u64( hv, vorrq_u64(vshlq_u64(hv, shr_hv_1), vshlq_u64(hv, shl_hv_1)));
+     
+    hv = vcombine_u64(((vget_low_u64(hv) & 0x0101010101010101ULL) * 0xFFULL), vget_high_u64(hv));
+    hv = vorrq_u64(hv, mask_hv);
+
+    
+    //2 * diagonals full lines
     uint64x2_t dg = vdupq_n_u64(filled);
     
     uint64x2_t
@@ -420,13 +427,12 @@ inline int RXBitBoard::get_stability(const int color, const int n_stables_cut) c
     dg = vandq_u64(dg, vorrq_u64(temp, mask_2));
 
     dg = vandq_u64(dg, vandq_u64(vshlq_u64(dg, shr_dg), vshlq_u64(dg, shl_dg)));
-    dg = vorrq_u64(dg, vdupq_n_u64(0xFF818181818181FFULL));
+    dg = vorrq_u64(dg, mask_dg);
     
     
     // mix full lines and discs color
-    uint64x2_t d_color = vdupq_n_u64(discs[color]);
     temp = vandq_u64(hv, dg);
-    temp = vandq_u64(vandq_u64(temp, vcombine_u64(vget_high_u64(temp), vget_low_u64(temp))), d_color);
+    temp = vandq_u64(vandq_u64(temp, vcombine_u64(vget_high_u64(temp), vget_low_u64(temp))), dd_color);
     
     
     unsigned long long stable = vgetq_lane_u64(temp, 0);
@@ -455,7 +461,7 @@ inline int RXBitBoard::get_stability(const int color, const int n_stables_cut) c
         dir_dg = vorrq_u64(vorrq_u64(vshlq_u64(temp, shr_dg), vshlq_u64(temp, shl_dg)), dg);
 
         temp = vandq_u64(dir_hv, dir_dg);
-        temp = vandq_u64(vandq_u64(temp, vcombine_u64(vget_high_u64(temp), vget_low_u64(temp))), d_color);
+        temp = vandq_u64(vandq_u64(temp, vcombine_u64(vget_high_u64(temp), vget_low_u64(temp))), dd_color);
 
         stable = vgetq_lane_u64(temp, 0);
 
@@ -669,16 +675,17 @@ inline int RXBitBoard::final_score_3(const unsigned long long discs_player, cons
     
     if(!passed) {
         // parity based move sorting
-        int tmp;
         switch (sort3 & 0x03) {
             case 1:
-                tmp = idSquare1; idSquare1 = idSquare2; idSquare2 = tmp;    // case 1(x2) 2(x1 x3)
+                //tmp = idSquare1; idSquare1 = idSquare2; idSquare2 = tmp;    // case 1(x2) 2(x1 x3)
+                std::swap(idSquare1, idSquare2);
                 break;
             case 2:
-                tmp = idSquare1; idSquare1 = idSquare3; idSquare3 = idSquare2; idSquare2 = tmp;    // case 1(x3) 2(x1 x2)
-                break;
+                //tmp = idSquare1; idSquare1 = idSquare3; idSquare3 = idSquare2; idSquare2 = tmp;    // case 1(x3) 2(x1 x2)
+                std::swap(idSquare1, idSquare3);
             case 3:
-                tmp = idSquare2; idSquare2 = idSquare3; idSquare3 = tmp;
+                //tmp = idSquare2; idSquare2 = idSquare3; idSquare3 = tmp;
+                std::swap(idSquare2, idSquare3);
                 break;
         }
     }
@@ -811,25 +818,30 @@ inline int RXBitBoard::final_score_4(int alpha, const int beta, const bool passe
     // The following hole sizes are possible:
     //    4 - 1 3 - 2 2 - 1 1 2 - 1 1 1 1
     // Only the 1 1 2 case needs move sorting on this ply.
-    int tmp, paritysort;
 
     
-    paritysort = parity_case[((sq_3 ^ sq_4) & 0x24) + ((((sq_2 ^ sq_4) & 0x24) * 2 + ((sq_1 ^ sq_4) & 0x4)) >> 2)];
+    int paritysort = parity_case[((sq_3 ^ sq_4) & 0x24) + ((((sq_2 ^ sq_4) & 0x24) * 2 + ((sq_1 ^ sq_4) & 0x4)) >> 2)];
     switch (paritysort) {
         case 4: // case 1(sq_1) 1(sq_3) 2(sq_2 sq_4)
-            tmp = sq_2; sq_2 = sq_3; sq_3 = tmp;
+            //tmp = sq_2; sq_2 = sq_3; sq_3 = tmp;
+            std::swap(sq_2, sq_3);
             break;
         case 5: // case 1(sq_1) 1(sq_4) 2(sq_2 sq_3)
-            tmp = sq_2; sq_2 = sq_4; sq_4 = sq_3; sq_3 = tmp;
+            //tmp = sq_2; sq_2 = sq_4; sq_4 = sq_3; sq_3 = tmp;
+            std::swap(sq_2, sq_4);
             break;
         case 6:    // case 1(sq_2) 1(sq_3) 2(sq_1 sq_4)
-            tmp = sq_1; sq_1 = sq_2; sq_2 = sq_3; sq_3 = tmp;
+           //tmp = sq_1; sq_1 = sq_2; sq_2 = sq_3; sq_3 = tmp;
+            std::swap(sq_1, sq_3);
             break;
         case 7: // case 1(sq_2) 1(sq_4) 2(sq_1 sq_3)
-            tmp = sq_1; sq_1 = sq_2; sq_2 = sq_4; sq_4 = sq_3; sq_3 = tmp;
+            //tmp = sq_1; sq_1 = sq_2; sq_2 = sq_4; sq_4 = sq_3; sq_3 = tmp;
+            std::swap(sq_1, sq_4);
             break;
         case 8:    // case 1(sq_3) 1(sq_4) 2(sq_1 sq_2)
-            tmp = sq_1; sq_1 = sq_3; sq_3 = tmp; tmp = sq_2; sq_2 = sq_4; sq_4 = tmp;
+            //tmp = sq_1; sq_1 = sq_3; sq_3 = tmp; tmp = sq_2; sq_2 = sq_4; sq_4 = tmp;
+            std::swap(sq_1, sq_3);
+            std::swap(sq_2, sq_4);
             break;
     }
     sort3 = sort3_shuf[paritysort];
