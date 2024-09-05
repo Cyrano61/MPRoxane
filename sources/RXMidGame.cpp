@@ -327,7 +327,7 @@ int RXEngine::MG_PVS_deep(int threadID, RXBBPatterns& sBoard, const bool pv, con
 	
 	//synchronized acces
 	RXHashValue entry;
-    unsigned long long hash_code = board.hashcode();
+    const unsigned long long hash_code = board.hashcode();
 	if(hTable->get(hash_code, type_hashtable, entry)) {
 		
 		if(!pv && entry.depth >= depth) {
@@ -1062,7 +1062,7 @@ int RXEngine::MG_PVS_shallow(int threadID, RXBBPatterns& sBoard, const bool pv, 
 	
 	//synchronized acces
 	RXHashValue entry;
-    unsigned long long hash_code = board.hashcode();
+    const unsigned long long hash_code = board.hashcode();
 	if(hTable->get(hash_code, type_hashtable, entry)) {
 
 		if(!pv && entry.depth >= depth) {
@@ -1448,7 +1448,7 @@ int RXEngine::MG_NWS_XProbCut(int threadID, RXBBPatterns& sBoard, const int pvDe
 
 	//synchronized acces
 	RXHashValue entry;
-    unsigned long long hash_code = board.hashcode();
+    const unsigned long long hash_code = board.hashcode();
 	if(hTable->get(hash_code, type_hashtable, entry)) {
 	
 		if(entry.depth >= depth) {
@@ -1585,7 +1585,7 @@ int RXEngine::MG_NWS_XProbCut(int threadID, RXBBPatterns& sBoard, const int pvDe
 		if(passed) {
 			board.n_nodes--;
 			bestscore = sBoard.final_score();
-			hTable->update(board.hashcode(), false, type_hashtable, NO_SELECT, DEPTH_BOOSTER+board.n_empties, -MAX_SCORE, MAX_SCORE,  bestscore, bestmove);
+			hTable->update(hash_code, false, type_hashtable, NO_SELECT, DEPTH_BOOSTER+board.n_empties, -MAX_SCORE, MAX_SCORE,  bestscore, bestmove);
 			return bestscore;
 		} else {
 			board.n_nodes++;

@@ -312,7 +312,7 @@ int RXEngine::EG_PVS_hash_mobility(int threadID, RXBitBoard& board, const bool p
 	
 	//synchronized acces
 	RXHashValue entry;
-    unsigned long long hash_code = board.hashcode();
+    const unsigned long long hash_code = board.hashcode();
 	if(hTable->get(hash_code, type_hashtable, entry)) {
 	
 		if(!pv && entry.selectivity == NO_SELECT && entry.depth >= board.n_empties) {
@@ -560,7 +560,7 @@ int RXEngine::EG_PVS_ETC_mobility(int threadID, RXBitBoard& board, const bool pv
 	int upper = beta;
 	
 	RXHashValue entry;
-    unsigned long long hash_code = board.hashcode();
+    const unsigned long long hash_code = board.hashcode();
 	if(hTable->get(hash_code, type_hashtable, entry)) {
 	
 		if(!pv && entry.selectivity == NO_SELECT && entry.depth >= board.n_empties) {
@@ -1628,7 +1628,7 @@ int RXEngine::EG_NWS_XEndCut(int threadID, RXBBPatterns& sBoard, const int pvDev
 	
 	//synchronized acces
 	RXHashValue entry;
-    unsigned long long hash_code = board.hashcode();
+    const unsigned long long hash_code = board.hashcode();
 	if(hTable->get(hash_code, type_hashtable, entry)) {
 		
 		if(entry.selectivity >= selectivity && entry.depth>=board.n_empties) {
@@ -2541,7 +2541,7 @@ void RXEngine::check_PV(RXBBPatterns& sBoard, const int score, const int alpha, 
 		//move in hash
 		int movePV = NOMOVE;
 		RXHashValue entry;
-        unsigned long long hash_code = board.hashcode();
+        const unsigned long long hash_code = board.hashcode();
 		if(hTable->get(hash_code, type_hashtable, entry)) {
 			
 			if(entry.depth >= board.n_empties && entry.selectivity == NO_SELECT) {
