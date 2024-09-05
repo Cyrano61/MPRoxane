@@ -417,7 +417,7 @@ int RXEngine::EG_PVS_hash_mobility(int threadID, RXBitBoard& board, const bool p
 						const unsigned long long p_discs = board.discs[p] | (iter->flipped | iter->square);
 						const unsigned long long o_discs = board.discs[o] ^ iter->flipped;
 						
-						iter->score = (RXBitBoard::get_mobility(o_discs, p_discs)<<5) - (RXBitBoard::get_corner_stability(p_discs)<<2) - (RXBitBoard::local_Parity(o_discs, p_discs, iter->position)^1);
+                        iter->score = (RXBitBoard::get_mobility(o_discs, p_discs)<<5) - (RXBitBoard::get_corner_stability(p_discs)<<2) - (RXBitBoard::local_Parity(o_discs, p_discs, iter->position)^1);
 						
 					}
 						
@@ -641,6 +641,8 @@ int RXEngine::EG_PVS_ETC_mobility(int threadID, RXBitBoard& board, const bool pv
                 
                 ((board).*(board.generate_flips[empties->position]))(*move);
 				board.n_nodes++;
+                
+                move->score = 0;
 								
 				//synchronized acces
 				if(hTable->get(board.hashcode_after_move(move), type_hashtable, entry) && !pv && entry.selectivity == NO_SELECT && entry.depth>=board.n_empties) {
@@ -649,8 +651,14 @@ int RXEngine::EG_PVS_ETC_mobility(int threadID, RXBitBoard& board, const bool pv
 					if(-entry.upper >= upper) {
 						return -entry.upper ;
 					}
+                    
+                    move->score = -2*VALUE_DISC;
 
-				}	
+                    if(-entry.lower <= lower)
+                        move->score = 3*VALUE_DISC;
+
+
+				}
 				
 				previous = previous->next = move++;
 				n_Moves++;
@@ -716,8 +724,8 @@ int RXEngine::EG_PVS_ETC_mobility(int threadID, RXBitBoard& board, const bool pv
 					const unsigned long long p_discs = board.discs[p] | (iter->flipped | iter->square);
 					const unsigned long long o_discs = board.discs[o] ^ iter->flipped;
 					
-                    //score for try : mobility * 32 - corner_stability * 2 - reserve local_parity
-                    iter->score = (RXBitBoard::get_mobility(o_discs, p_discs)<<5) - (RXBitBoard::get_corner_stability(p_discs)<<2) - (RXBitBoard::local_Parity(o_discs, p_discs, iter->position)^1);
+                    //score for try : mobility * VALUE_DISC - corner_stability * 8
+                    iter->score += (RXBitBoard::get_mobility(o_discs, p_discs)*VALUE_DISC) - (RXBitBoard::get_corner_stability(p_discs)<<3);// - (RXBitBoard::local_Parity(o_discs, p_discs, iter->position)^1);
 					
 				}
 									
@@ -1016,7 +1024,7 @@ int RXEngine::EG_PVS_deep(int threadID, RXBBPatterns& sBoard, const bool pv, con
 							
 						} else if(-entry.lower<=lower) {
 							
-							move->score += 5*VALUE_DISC; // 2*VALUE_DISC probably bad move
+							move->score = 2*VALUE_DISC; // 2*VALUE_DISC probably bad move
 
 						}
 

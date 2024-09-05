@@ -284,7 +284,7 @@ inline int RXBitBoard::local_Parity(const unsigned long long p_discs, const unsi
     
     const unsigned long long quadrant_Filled = (p_discs | o_discs) & QUADRANT_MASK[QUADRANT_ID[position]];
     
-    return static_cast<int>(__builtin_popcountll(quadrant_Filled) & 0x00000000000001ULL);
+    return (__builtin_popcountll(quadrant_Filled) & 1);
 }
 
 
