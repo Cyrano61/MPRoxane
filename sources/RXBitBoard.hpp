@@ -333,17 +333,6 @@ inline uint64_t RXBitBoard::calc_legal(const uint64_t P, const uint64_t O){
 
 
 
-/*
-    @brief Get a bitboard representing all legal moves
-
-    @param P                    a bitboard representing player
-    @param O                    a bitboard representing opponent
-    @return all legal moves as a bitboard
-*/
-
-  
-
-
 inline int RXBitBoard::get_corner_stability(const unsigned long long& discs_player) {
 
     unsigned long long stables = discs_player & 0x8100000000000081ULL;
@@ -353,7 +342,7 @@ inline int RXBitBoard::get_corner_stability(const unsigned long long& discs_play
     stables |= (discs_player & (stables << 8)) & 0x0000000000008100ULL;
     stables |= (discs_player & (stables >> 8)) & 0x0081000000000000ULL;
         
-    return static_cast<unsigned int>(__builtin_popcountll(stables));
+    return __builtin_popcountll(stables);
 }
 
 #ifdef __ARM_NEON
@@ -366,42 +355,44 @@ inline int RXBitBoard::get_corner_stability(const unsigned long long& discs_play
 ///   - color: couleur du joueur
 ///   - n_stables_cut: valeur de coupure (type alpha, beta)
 inline int RXBitBoard::get_stability(const int color, const int n_stables_cut) const {
-        
+
+    //static const for horizontals and verticals full lines
+
+    static const uint64x2_t shr_hv_4 = {-4,-32};
+    static const uint64x2_t shl_hv_4 = {64, 32};
+    static const uint64x2_t shr_hv_2 = {-2,-16};
+    static const uint64x2_t shl_hv_2 = {64, 16};
+    static const uint64x2_t shr_hv_1 = {-1, -8};
+    static const uint64x2_t shl_hv_1 = {64,  8};
+    
+    static const uint64x2_t mask_hv = {0x8181818181818181ULL, 0xFF000000000000FFULL};
+    
+    //static const for 2 * diagonals full lines
+
+    static const uint64x2_t shr_dg_4 = {-28,-36};
+    static const uint64x2_t shl_dg_4 = { 28, 36};
+    static const uint64x2_t mask_right_4 = { 0x00000000F0F0F0F0ULL, 0x000000000F0F0F0FULL};
+    static const uint64x2_t mask_left_4  = { 0x0F0F0F0F00000000ULL, 0xF0F0F0F000000000ULL};
+    static const uint64x2_t mask_4       = { 0xF0F0F0F00F0F0F0FULL, 0x0F0F0F0FF0F0F0F0ULL};
+
+    static const uint64x2_t shr_dg_2 = {-14,-18};
+    static const uint64x2_t shl_dg_2 = { 14, 18};
+    static const uint64x2_t mask_right_2 = { 0x0000FCFCFCFCFCFCULL, 0x00003F3F3F3F3F3FULL};
+    static const uint64x2_t mask_left_2  = { 0x3F3F3F3F3F3F0000ULL, 0xFCFCFCFCFCFC0000ULL};
+    static const uint64x2_t mask_2       = { 0xC0C0000000000303ULL, 0x030300000000C0C0ULL};
+    static const uint64x2_t mask_dg      = { 0xFF818181818181FFULL, 0xFF818181818181FFULL};
+
+    
+    static const uint64x2_t shr_hv = {-1,-8};
+    static const uint64x2_t shl_hv = { 1, 8};
+    static const uint64x2_t shr_dg = {-7,-9};
+    static const uint64x2_t shl_dg = { 7, 9};
+    
+    //--------------------------------------------------------------------------------------------
+    
     const unsigned long long filled = discs[BLACK] | discs[WHITE];
     const uint64x2_t dd_color = vdupq_n_u64(discs[color]);
 
-
-    //static for horizontals and verticals full lines
-
-    static uint64x2_t shr_hv_4 = {-4,-32};
-    static uint64x2_t shl_hv_4 = {64, 32};
-    static uint64x2_t shr_hv_2 = {-2,-16};
-    static uint64x2_t shl_hv_2 = {64, 16};
-    static uint64x2_t shr_hv_1 = {-1, -8};
-    static uint64x2_t shl_hv_1 = {64,  8};
-    
-    static uint64x2_t mask_hv = {0x8181818181818181ULL, 0xFF000000000000FFULL};
-    
-    //static for 2 * diagonals full lines
-
-    static uint64x2_t shr_dg_4 = {-28,-36};
-    static uint64x2_t shl_dg_4 = { 28, 36};
-    static uint64x2_t mask_right_4 = { 0x00000000F0F0F0F0ULL, 0x000000000F0F0F0FULL};
-    static uint64x2_t mask_left_4  = { 0x0F0F0F0F00000000ULL, 0xF0F0F0F000000000ULL};
-    static uint64x2_t mask_4       = { 0xF0F0F0F00F0F0F0FULL, 0x0F0F0F0FF0F0F0F0ULL};
-
-    static uint64x2_t shr_dg_2 = {-14,-18};
-    static uint64x2_t shl_dg_2 = { 14, 18};
-    static uint64x2_t mask_right_2 = { 0x0000FCFCFCFCFCFCULL, 0x00003F3F3F3F3F3FULL};
-    static uint64x2_t mask_left_2  = { 0x3F3F3F3F3F3F0000ULL, 0xFCFCFCFCFCFC0000ULL};
-    static uint64x2_t mask_2       = { 0xC0C0000000000303ULL, 0x030300000000C0C0ULL};
-    static uint64x2_t mask_dg      = { 0xFF818181818181FFULL, 0xFF818181818181FFULL};
-
-    
-    static uint64x2_t shr_hv = {-1,-8};
-    static uint64x2_t shl_hv = { 1, 8};
-    static uint64x2_t shr_dg = {-7,-9};
-    static uint64x2_t shl_dg = { 7, 9};
 
     //horizontals and verticals full lines
     uint64x2_t hv = vdupq_n_u64(filled);
@@ -766,19 +757,25 @@ inline int RXBitBoard::final_score_4(int alpha, const int beta, const bool passe
     //stability Cutoff
 	int diffPions = 2*__builtin_popcountll(discs[player]) - 60;
 	
-	if (alpha >= 4*VALUE_DISC || (alpha >= 0 && (diffPions*VALUE_DISC <= alpha - 12*VALUE_DISC))) {
+	if (alpha >= 6*VALUE_DISC || (alpha >= 0 && (diffPions*VALUE_DISC <= alpha - 8*VALUE_DISC))) {
 
 		int stability_bound = 64*VALUE_DISC - 2 * get_stability(player^1, (65*VALUE_DISC-alpha)/2);
 		if ( stability_bound <= alpha )
 			return stability_bound; //alpha
 		
-	} else if (beta <= -6*VALUE_DISC || (beta <= 0 && (diffPions*VALUE_DISC >= beta + 12*VALUE_DISC))) {
+	} else if (beta <= -8*VALUE_DISC || (beta <= 0 && (diffPions*VALUE_DISC >= beta + 8*VALUE_DISC))) {
 
 		int stability_bound = -64*VALUE_DISC + 2 * get_stability(player, (65*VALUE_DISC+beta)/2);
 		if ( stability_bound >= beta )
 			return stability_bound; //beta
 		
 	}
+    
+//    if (alpha < -6*VALUE_DISC) {
+//        int stability_bound = 2 * get_stability(player^1, (65*VALUE_DISC-alpha)/2)-64*VALUE_DISC;
+//        if ( stability_bound > alpha )
+//            return stability_bound; //beta
+//    }
 	
 	int sq_1 = empties_list->next->position;
 	int sq_2 = empties_list->next->next->position;
