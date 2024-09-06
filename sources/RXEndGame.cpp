@@ -1739,7 +1739,6 @@ int RXEngine::EG_NWS_XEndCut(int threadID, RXBBPatterns& sBoard, const int pvDev
 				//synchronized acces
 				if(hTable->get(board.hashcode_after_move(move), type_hashtable, entry) && entry.selectivity >= selectivity && entry.depth>=board.n_empties) {
 				
-					move->score = -3*VALUE_DISC;
 
 					if(-entry.upper > alpha) {
 						if(entry.selectivity != NO_SELECT)
@@ -1747,6 +1746,9 @@ int RXEngine::EG_NWS_XEndCut(int threadID, RXBBPatterns& sBoard, const int pvDev
 							
 						return -entry.upper;
 					}
+                    
+                    move->score = -3*VALUE_DISC;
+
 
 					if(-entry.lower<=alpha)
 						move->score += 5*VALUE_DISC;

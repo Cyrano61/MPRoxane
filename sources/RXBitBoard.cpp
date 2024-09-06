@@ -179,6 +179,7 @@ unsigned long long RXBitBoard::hashcodeTable_lines3_4[2][65536];
 unsigned long long RXBitBoard::hashcodeTable_lines5_6[2][65536];
 unsigned long long RXBitBoard::hashcodeTable_lines7_8[2][65536];
 
+#ifdef __ARM_NEON
 
 /** rotated outflank array (indexed with inner 6 bits) */
 const unsigned char RXBitBoard::OUTFLANK_3[64] = {    // ...bahgf
@@ -213,6 +214,7 @@ const unsigned long long RXBitBoard::FLIPPED_4_H[19] = {    // ...cbahg
     0x0808080808080808, 0x2828282828282828, 0x6868686868686868
 };
 
+#endif
 
 
 

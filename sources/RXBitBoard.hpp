@@ -44,11 +44,13 @@ class RXBitBoard {
     
 	public :
     
+
+#ifdef __ARM_NEON
     static const unsigned char OUTFLANK_3[64];
     static const unsigned char OUTFLANK_4[64];
     static const unsigned long long FLIPPED_3_H[21];
     static const unsigned long long FLIPPED_4_H[19];
-
+#endif
     
     static void init_hashcodeTable();
 	
@@ -333,19 +335,26 @@ inline uint64_t RXBitBoard::calc_legal(const uint64_t P, const uint64_t O){
 
 
 
-inline int RXBitBoard::get_corner_stability(const unsigned long long& discs_player) {
-
-    unsigned long long stables = discs_player & 0x8100000000000081ULL;
- 
-    stables |= (discs_player & (stables << 1)) & 0x0200000000000002ULL;
-    stables |= (discs_player & (stables >> 1)) & 0x4000000000000040ULL;
-    stables |= (discs_player & (stables << 8)) & 0x0000000000008100ULL;
-    stables |= (discs_player & (stables >> 8)) & 0x0081000000000000ULL;
-        
-    return __builtin_popcountll(stables);
-}
 
 #ifdef __ARM_NEON
+
+inline int RXBitBoard::get_corner_stability(const unsigned long long& discs_player) {
+
+    static const uint64x2_t shr_hv = {-1,-8};
+    static const uint64x2_t shl_hv = { 1, 8};
+    
+    static const uint64x2_t mask_right = {0x4000000000000040ULL, 0x0081000000000000ULL};
+    static const uint64x2_t mask_left  = {0x0200000000000002ULL, 0x0000000000008100ULL};
+
+    const uint64x2_t discs  = vdupq_n_u64(discs_player);
+    uint64x2_t stable = vdupq_n_u64(discs_player & 0x8100000000000081ULL);
+ 
+    stable = vorrq_u64(vandq_u64(vandq_u64(vshlq_u64(stable, shr_hv), discs), mask_right), stable);
+    stable = vorrq_u64(vandq_u64(vandq_u64(vshlq_u64(stable, shl_hv), discs), mask_left ), stable);
+
+    return __builtin_popcountll(vgetq_lane_u64(stable, 0) | vgetq_lane_u64(stable, 1));
+}
+
 
 /// retourne un pseudo (sous evalué) score de pions stables
 /// la 1ere partie determine les lignes (dans les 4 directions) pleines
@@ -468,6 +477,19 @@ inline int RXBitBoard::get_stability(const int color, const int n_stables_cut) c
 }
 
 #else
+
+inline int RXBitBoard::get_corner_stability(const unsigned long long& discs_player) {
+
+    unsigned long long stables = discs_player & 0x8100000000000081ULL;
+ 
+    stables |= (discs_player & (stables << 1)) & 0x0200000000000002ULL;
+    stables |= (discs_player & (stables >> 1)) & 0x4000000000000040ULL;
+    stables |= (discs_player & (stables << 8)) & 0x0000000000008100ULL;
+    stables |= (discs_player & (stables >> 8)) & 0x0081000000000000ULL;
+        
+    return __builtin_popcountll(stables);
+}
+
 
 /// retourne un pseudo (sous evalué) score de pions stables
 /// - Parameters:

@@ -1,5 +1,5 @@
 //
-//  RXBBGenerateFlips_Edax.cpp
+//  RXBBGenerateFlips_NEON_Edax.cpp
 //  Roxane
 //  adaptation flip_neon_bitscan from Edax
 //  Created by Causse Bruno on 15/08/2024.

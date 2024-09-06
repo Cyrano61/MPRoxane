@@ -245,6 +245,10 @@ class RXEngine: public Runnable, public RXHelper {
 	bool probable_timeout(double probable_time_next_level) const;
 	int pTime_next_level(RXBitBoard& board, int time_level, int depth = 1, int next_depth = 3) const;
 	void determine_move_time(RXBitBoard& board);
+    
+    int get_current_time() const;
+    int get_current_dependentTime() const;
+    int time_limit() const;
 	
 	void set_type_search(t_search ts);
 	t_search get_type_search() const;
@@ -260,9 +264,6 @@ class RXEngine: public Runnable, public RXHelper {
 	std::string display(RXBitBoard& board, const int type, const int allowed_display = 0, int score = 0, const int time = 0, const int time_level = 0);
 	
 
-	int get_current_time() const;
-	int get_current_dependentTime() const;
-	int time_limit() const;
 
 	void probcut_bounds(const RXBitBoard& board, const int selectivity, const int depth, const int pvDev, const int pivot, int& lower_bound, int& upper_bound) const;
 
