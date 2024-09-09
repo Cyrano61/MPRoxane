@@ -25,10 +25,10 @@
 
 
 /*******************************************************************/
-/*           version Fast Solver             */
-/*                                           */
-/*   split at EG_PVS_root    fforum-40-59    */
-/*   selectivity 84% et 100% fforum-40-59    */
+/*           version Fast Solver           */
+/*                                         */
+/*   split at EG_PVS_root    fforum-40-59  */
+/*   selectivity 84% et 100% fforum-40-59  */
 /*******************************************************************/
 
 
@@ -61,7 +61,7 @@ int main (int argc, char * const argv[]) {
 		}
 	}
 
-	std::cout << "Version Roxane 2.0.0" << std::endl;
+	std::cout << "Version Roxane 2.0.1" << std::endl;
 	std::cout << "Number of threads: " << nThreads << std::endl;
 	std::cout << "Size hashTable: " << nBitsTable << std::endl;
     std::cout << file_name << std::endl;

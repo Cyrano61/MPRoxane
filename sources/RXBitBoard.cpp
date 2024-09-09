@@ -256,6 +256,28 @@ void RXBitBoard::init_hashcodeTable() {
 
 #ifdef __ARM_NEON
 
+int RXBitBoard::count_potential_moves(const unsigned long long p_discs, const unsigned long long o_discs) {
+    
+    static const uint64x2_t mask_hv = {0x7E7E7E7E7E7E7E7EULL, 0x00FFFFFFFFFFFF00ULL};
+    static const uint64x2_t mask_dg = {0x007E7E7E7E7E7E00ULL, 0x007E7E7E7E7E7E00ULL};
+    
+    static const uint64x2_t shl_hv  = { 1, 8};
+    static const uint64x2_t shr_hv  = {-1,-8};
+    static const uint64x2_t shl_dg  = { 7, 9};
+    static const uint64x2_t shr_dg  = {-7,-9};
+    
+    uint64x2_t oo = vdupq_n_u64(o_discs);
+    
+    uint64x2_t hv = vandq_u64(oo, mask_hv);
+    hv = vorrq_u64(vshlq_u64(hv, shl_hv),vshlq_u64(hv, shr_hv)) ;
+    
+    uint64x2_t dg = vandq_u64(oo,  mask_dg);
+    dg = vorrq_u64(vshlq_u64(dg, shl_dg),vshlq_u64(dg, shr_dg)) ;
+    
+    return __builtin_popcountll((vgetq_lane_u64(hv, 0) | vgetq_lane_u64(hv, 1) | vgetq_lane_u64(dg, 0) | vgetq_lane_u64(dg, 1)) & ~(p_discs|o_discs));
+}
+
+
 
 unsigned long long RXBitBoard::get_legal_moves(const unsigned long long p_discs, const unsigned long long o_discs ) {
     
@@ -422,6 +444,26 @@ unsigned long long RXBitBoard::hashcode_after_move(RXMove* move) const {
 
 
 #else
+
+int RXBitBoard::count_potential_moves(const unsigned long long p_discs, const unsigned long long o_discs) {
+
+    unsigned long long
+    inner_opp = o_discs & 0x7E7E7E7E7E7E7E7EULL;
+    unsigned long long
+    pot_moves = (inner_opp << 1 | inner_opp >> 1);
+
+    inner_opp = o_discs & 0x00FFFFFFFFFFFF00ULL;
+    pot_moves |= (inner_opp << 8 | inner_opp >> 8);
+
+    inner_opp = o_discs & 0x007E7E7E7E7E7E00ULL;
+    pot_moves |= (inner_opp << 7 | inner_opp >> 7);
+    pot_moves |= (inner_opp << 9 | inner_opp >> 9);
+    
+    pot_moves &= ~(p_discs|o_discs);
+    
+    return __builtin_popcountll(pot_moves);
+
+}
 
 unsigned long long RXBitBoard::get_legal_moves(const unsigned long long p_discs, const unsigned long long o_discs) {
     

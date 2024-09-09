@@ -99,14 +99,14 @@ inline void RXMove::sort_bestmove(int bestmove) {
 		}
 }
 
-// from smallest to biggest
+// from smallest score to biggest score
 inline void RXMove::sort_by_score() {
 	RXMove *best, *previousBest, *previous;
 	
 	for(RXMove* iter = this; iter->next != NULL; iter = iter->next){
 		previousBest = iter;
 		for(previous = previousBest->next; previous->next != NULL; previous =previous->next)
-			if(previousBest->next->score>previous->next->score)
+			if(previousBest->next->score > previous->next->score)
 				previousBest = previous;
 				
 		if(previousBest != iter) {

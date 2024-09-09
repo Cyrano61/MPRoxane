@@ -166,10 +166,7 @@ class RXEngine: public Runnable, public RXHelper {
 	
 	enum t_search {BOOK, MIDGAME, ENDGAME};
 
-	static const int CHECK_TO_LAST_THREE;
-	static const bool USE_SINGULAR_EXTENSION;
-	static const bool USE_SINGULAR_PROBCUT;
-	
+	static const int CHECK_TO_LAST_THREE;	
 
 	static const int HASHTABLE;
 	static const int INFERIOR;
@@ -267,8 +264,7 @@ class RXEngine: public Runnable, public RXHelper {
 
 	void probcut_bounds(const RXBitBoard& board, const int selectivity, const int depth, const int pvDev, const int pivot, int& lower_bound, int& upper_bound) const;
 
-	bool singular_move(int threadID, RXBBPatterns& sBoard, const int selectivity, const int depth, int alpha, RXMove* list, const int position);
-	void sort_moves(int threadID, const bool endgame, RXBBPatterns& sBoard, const int depth, const int alpha, const int beta, RXMove* list);
+	void sort_moves(int threadID, RXBBPatterns& sBoard, const int depth, const int alpha, RXMove* list);
 		
 	bool probcut(int threadID, const bool endgame, RXBBPatterns& sBoard, const int selectivity, const int depth, const int lower_probcut, const int upper_probcut, RXMove* list, const bool hashMove);
 	int PVS_check(int threadID, RXBBPatterns& sBoard, const int depth, int alpha, int beta, bool passed);

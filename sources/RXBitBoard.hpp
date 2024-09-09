@@ -139,11 +139,12 @@ bool generate_flips_##pos(RXMove& move) const
     
     int moves_producing(RXMove* start) const;
     
-    static uint64_t calc_legal(const uint64_t P, const uint64_t O);
     static unsigned long long get_legal_moves(const unsigned long long discs_player, const unsigned long long discs_opponent);
-    
+
+    static int count_potential_moves(const unsigned long long p_discs, const unsigned long long o_discs);
+
     static int get_mobility(const unsigned long long discs_player, const unsigned long long discs_opponent);
-    static int get_corner_stability(const unsigned long long& discs_player);
+    static int get_corner_stability(const unsigned long long discs_player);
     int get_stability(const int color, const int n_stables_cut) const;
     
     static int local_Parity(const unsigned long long p_discs, const unsigned long long o_discs, const int position);
@@ -303,63 +304,36 @@ inline int RXBitBoard::get_mobility(const unsigned long long p_discs, const unsi
 }
 
 
-/*
-    @brief Get a bitboard representing all legal moves
-
-    @param P                    a bitboard representing player
-    @param O                    a bitboard representing opponent
-    @return all legal moves as a bitboard
-*/
-// original code from http://www.amy.hi-ho.ne.jp/okuhara/bitboard.htm
-// modified by Nyanyan
-// version EDAX version identique a Roxane (presentation pour la vectorisation)
-inline uint64_t RXBitBoard::calc_legal(const uint64_t P, const uint64_t O){
-    uint64_t moves, mO;
-    uint64_t flip1, flip7, flip9, flip8, pre1, pre7, pre9, pre8;
-    mO = O & 0x7e7e7e7e7e7e7e7eULL;
-    flip1 = mO & (P << 1);         flip7  = mO & (P << 7);        flip9  = mO & (P << 9);        flip8  = O & (P << 8);
-    flip1 |= mO & (flip1 << 1);    flip7 |= mO & (flip7 << 7);    flip9 |= mO & (flip9 << 9);    flip8 |= O & (flip8 << 8);
-    pre1 = mO & (mO << 1);         pre7 = mO & (mO << 7);         pre9 = mO & (mO << 9);         pre8 = O & (O << 8);
-    flip1 |= pre1 & (flip1 << 2);  flip7 |= pre7 & (flip7 << 14); flip9 |= pre9 & (flip9 << 18); flip8 |= pre8 & (flip8 << 16);
-    flip1 |= pre1 & (flip1 << 2);  flip7 |= pre7 & (flip7 << 14); flip9 |= pre9 & (flip9 << 18); flip8 |= pre8 & (flip8 << 16);
-    moves = flip1 << 1;            moves |= flip7 << 7;           moves |= flip9 << 9;           moves |= flip8 << 8;
-    flip1 = mO & (P >> 1);         flip7  = mO & (P >> 7);        flip9  = mO & (P >> 9);        flip8  = O & (P >> 8);
-    flip1 |= mO & (flip1 >> 1);    flip7 |= mO & (flip7 >> 7);    flip9 |= mO & (flip9 >> 9);    flip8 |= O & (flip8 >> 8);
-    pre1 >>= 1;                    pre7 >>= 7;                    pre9 >>= 9;                    pre8 >>= 8;
-    flip1 |= pre1 & (flip1 >> 2);  flip7 |= pre7 & (flip7 >> 14); flip9 |= pre9 & (flip9 >> 18); flip8 |= pre8 & (flip8 >> 16);
-    flip1 |= pre1 & (flip1 >> 2);  flip7 |= pre7 & (flip7 >> 14); flip9 |= pre9 & (flip9 >> 18); flip8 |= pre8 & (flip8 >> 16);
-    moves |= flip1 >> 1;           moves |= flip7 >> 7;           moves |= flip9 >> 9;           moves |= flip8 >> 8;
-    return moves & ~(P | O);
-}
-
-
-
-
 
 #ifdef __ARM_NEON
 
-inline int RXBitBoard::get_corner_stability(const unsigned long long& discs_player) {
+inline int RXBitBoard::get_corner_stability(const unsigned long long discs_player) {
 
-    static const uint64x2_t shr_hv = {-1,-8};
-    static const uint64x2_t shl_hv = { 1, 8};
+    static const uint64x2_t shr_hv = {-1, -8};
+    static const uint64x2_t shl_hv = { 1,  8};
+    static const uint64x2_t sh     = {16,-16};
     
     static const uint64x2_t mask_right = {0x4000000000000040ULL, 0x0081000000000000ULL};
     static const uint64x2_t mask_left  = {0x0200000000000002ULL, 0x0000000000008100ULL};
 
     const uint64x2_t discs  = vdupq_n_u64(discs_player);
-    uint64x2_t stable = vdupq_n_u64(discs_player & 0x8100000000000081ULL);
+    uint64x2_t corner = vdupq_n_u64(discs_player & 0x8100000000000081ULL);
  
-    stable = vorrq_u64(vandq_u64(vandq_u64(vshlq_u64(stable, shr_hv), discs), mask_right), stable);
+    uint64x2_t
+    stable = vorrq_u64(vandq_u64(vandq_u64(vshlq_u64(corner, shr_hv), discs), mask_right), corner);
     stable = vorrq_u64(vandq_u64(vandq_u64(vshlq_u64(stable, shl_hv), discs), mask_left ), stable);
-
+    
+    //bonus corner
+    stable = vorrq_u64(stable, vshlq_u64(corner, sh));
+  
     return __builtin_popcountll(vgetq_lane_u64(stable, 0) | vgetq_lane_u64(stable, 1));
 }
 
 
 /// retourne un pseudo (sous evalué) score de pions stables
 /// la 1ere partie determine les lignes (dans les 4 directions) pleines
-/// si un pions est dans les 4 lignes et appartient a la color, il est stable
-/// la deuxieme partie trouve les pions stables adgacents au pions stables precedents (dans les 4 directions)
+/// si un pions est dans les 4 lignes et appartient a la coleur, il est stable
+/// la deuxieme partie trouve les pions stables adgacents aux pions stables precedents (dans les 4 directions)
 /// - Parameters:
 ///   - color: couleur du joueur
 ///   - n_stables_cut: valeur de coupure (type alpha, beta)
@@ -433,7 +407,6 @@ inline int RXBitBoard::get_stability(const int color, const int n_stables_cut) c
     // mix full lines and discs color
     temp = vandq_u64(hv, dg);
     temp = vandq_u64(vandq_u64(temp, vcombine_u64(vget_high_u64(temp), vget_low_u64(temp))), dd_color);
-    
     
     unsigned long long stable = vgetq_lane_u64(temp, 0);
 
@@ -785,7 +758,7 @@ inline int RXBitBoard::final_score_4(int alpha, const int beta, const bool passe
 		if ( stability_bound <= alpha )
 			return stability_bound; //alpha
 		
-	} else if (beta <= -8*VALUE_DISC || (beta <= 0 && (diffPions*VALUE_DISC >= beta + 8*VALUE_DISC))) {
+	} else if (beta <= -4*VALUE_DISC || (beta <= 0 && (diffPions*VALUE_DISC >= beta + 8*VALUE_DISC))) {
 
 		int stability_bound = -64*VALUE_DISC + 2 * get_stability(player, (65*VALUE_DISC+beta)/2);
 		if ( stability_bound >= beta )

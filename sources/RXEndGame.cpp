@@ -418,7 +418,7 @@ int RXEngine::EG_PVS_hash_mobility(int threadID, RXBitBoard& board, const bool p
 						const unsigned long long o_discs = board.discs[o] ^ iter->flipped;
 						
                         iter->score = (RXBitBoard::get_mobility(o_discs, p_discs)<<5) - (RXBitBoard::get_corner_stability(p_discs)<<2) - (RXBitBoard::local_Parity(o_discs, p_discs, iter->position)^1);
-						
+
 					}
 						
 					
@@ -1068,48 +1068,6 @@ int RXEngine::EG_PVS_deep(int threadID, RXBBPatterns& sBoard, const bool pv, con
 		bool moves_sorting = false;
 		
 		if(bestmove != NOMOVE) {
-
-			
-			/* use singular extension? */
-			int selectivity_extension = 0;
-			if(USE_SINGULAR_EXTENSION) {
-				
-				if (selectivity < NO_SELECT && board.n_empties > EG_DEEP_TO_MEDIUM) { //conditions
-					
-					if(n_Moves>1) {
-						
-						if(hTable->get(hash_code, type_hashtable, entry)) { // retrieve hash entry
-							
-							
-							if (entry.lower > -MAX_SCORE && entry.depth >= board.n_empties && entry.selectivity >= selectivity-1) { //enought good?
-								
-								const int sigma = static_cast<int> (PERCENTILE[entry.selectivity] * probcut_data[board.n_empties][board.n_empties]);
-								
-								const int reduced_depth = (board.n_empties & 1) + 2 * (board.n_empties / 4); //min 8
-								const int alpha = entry.lower - sigma;
-								
-								sort_moves(threadID, true, sBoard, reduced_depth, alpha, alpha+1, list->next); //not sort bestmove
-								moves_sorting = true;
-								
-								
-								if (singular_move(threadID, sBoard, entry.selectivity, reduced_depth, alpha, list, bestmove)) {
-									selectivity_extension = 1;
-									
-//									*log << "Endgame: singular extension n_empties: " << board.n_empties << " /selectivity : " << CONFIDENCE[selectivity] << "%" << std::endl;
-								}
-								
-							}
-						}
-						
-					} else {
-						selectivity_extension = 1;
-//						*log << "Endgame: Only 1 move at n_empties: " << board.n_empties << " /selectivity : " << CONFIDENCE[selectivity] << "%" << std::endl;
-						
-					}
-					
-				}
-			}
-			
 			
 			/* first move */
 			list = list->next;
@@ -1123,7 +1081,7 @@ int RXEngine::EG_PVS_deep(int threadID, RXBBPatterns& sBoard, const bool pv, con
 				((sBoard).*(sBoard.update_patterns[list->position][board.player]))(*list);
 				
 				sBoard.do_move(*list);
-				bestscore = -EG_PVS_deep(threadID, sBoard, pv, selectivity+selectivity_extension , child_selective_cutoff, -upper, -lower, false);
+				bestscore = -EG_PVS_deep(threadID, sBoard, pv, selectivity , child_selective_cutoff, -upper, -lower, false);
 				sBoard.undo_move(*list);
 				
 			}
@@ -1733,8 +1691,6 @@ int RXEngine::EG_NWS_XEndCut(int threadID, RXBBPatterns& sBoard, const int pvDev
                 ((board).*(board.generate_flips[empties->position]))(*move);
 					
 				board.n_nodes++;
-
-				move->score = 0;
 				
 				//synchronized acces
 				if(hTable->get(board.hashcode_after_move(move), type_hashtable, entry) && entry.selectivity >= selectivity && entry.depth>=board.n_empties) {
@@ -1747,11 +1703,11 @@ int RXEngine::EG_NWS_XEndCut(int threadID, RXBBPatterns& sBoard, const int pvDev
 						return -entry.upper;
 					}
                     
-                    move->score = -3*VALUE_DISC;
+//                    move->score = -3*VALUE_DISC;
 
 
-					if(-entry.lower<=alpha)
-						move->score += 5*VALUE_DISC;
+//					if(-entry.lower<=alpha)
+//						move->score += 5*VALUE_DISC;
 					
 				}					
 				
@@ -1801,7 +1757,7 @@ int RXEngine::EG_NWS_XEndCut(int threadID, RXBBPatterns& sBoard, const int pvDev
 				return INTERRUPT_SEARCH;
 		
 		} else {
-			sort_moves(threadID, true, sBoard, probcut_depth, lower_probcut, upper_probcut, list);
+			sort_moves(threadID, sBoard, probcut_depth, lower_probcut, list);
 		}
 
 		

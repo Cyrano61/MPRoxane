@@ -569,45 +569,6 @@ int RXEngine::MG_PVS_deep(int threadID, RXBBPatterns& sBoard, const bool pv, con
 				
 			if(bestmove != NOMOVE) {
 				
-				/* use singular extension? */
-				int depth_extension = 0;
-				if(USE_SINGULAR_EXTENSION) {
-					
-					if (depth>=8 && (depth + 2) <= (board.n_empties-10)) {	//conditions
-						
-						if(n_Moves>1) {
-							
-							if(hTable->get(hash_code, type_hashtable, entry)) { //retrieve hash entry
-								
-								if (entry.lower > -MAX_SCORE && entry.depth >= (depth-2)) { //enough good?
-									
-									const int sigma = static_cast<int> (PERCENTILE[entry.selectivity] * probcut_data[sBoard.board.n_empties][entry.depth]);
-									const int alpha = entry.lower - sigma;
-									
-									const int reduced_depth = (entry.depth & 1) + 2 * (entry.depth / 4); //min reduced depth 2
-									
-									sort_moves(threadID, false, sBoard, reduced_depth, alpha, alpha+1, list->next); //not sort bestmove
-									moves_sorting = true;
-									
-									if (singular_move(threadID, sBoard, entry.selectivity, reduced_depth, alpha, list, bestmove)) {
-										
-										depth_extension = 2;
-										
-//										*log << "Midgame: singular extension n_empties: " << sBoard.board.n_empties << "/ depth " << depth << std::endl;
-									} 							
-								}
-							}
-							
-						} else { //only one move
-							depth_extension = 2;
-//							*log << "Midgame: only 1 move at n_empties: " << sBoard.board.n_empties << "/ depth " << depth << std::endl;
-							
-						}
-						
-						
-					}
-				}
-				
 				/* first move */
 				list = list->next;
 
@@ -618,7 +579,7 @@ int RXEngine::MG_PVS_deep(int threadID, RXBBPatterns& sBoard, const bool pv, con
 				if(depth <= MG_DEEP_TO_SHALLOW)
 					bestscore = -MG_PVS_shallow(threadID, sBoard, pv, depth-1, -upper, -lower, false);
 				else
-					bestscore = -MG_PVS_deep(threadID, sBoard, pv, selectivity, depth+depth_extension-1, child_selective_cutoff, -upper, -lower, false);
+					bestscore = -MG_PVS_deep(threadID, sBoard, pv, selectivity, depth-1, child_selective_cutoff, -upper, -lower, false);
 
 				sBoard.undo_move(*list);
 

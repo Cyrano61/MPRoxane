@@ -477,7 +477,16 @@ void RXRoxane::get_move(const std::string& file_name) {
 				search.bestMove.selectivity = 0;
 				search.bestMove.tElapsed    = 0.0;
 				search.bestMove.nodes	    = 0;
-					
+                
+//                //test routine Bitboard
+//                //test count_potential_moves
+//                RXBitBoard board = search.sBoard.board;
+//                std::cout << board << std::endl;
+//                int potential_moves = board.count_potential_moves(board.discs[board.player], board.discs[board.player^1]);
+//                std::cout << "potential moves = " << potential_moves <<std::endl;
+//                nodes += potential_moves;
+                
+                
 				engine[search.idEngine]->get_move(search);
 				
 				T += search.bestMove.tElapsed;
@@ -512,12 +521,14 @@ void RXRoxane::get_move(const std::string& file_name) {
 			engine[SHARED]->writeLog("");
 			
 			in.close();
+            
+            std::cout.imbue(loc);
 			
-//			std::cout << "Total time  : " << toHMS(T) << std::endl;
-//			std::cout << "Total nodes : " << nodes << std::endl;
-//			if (T>0) {
-//				std::cout << "N/s         : " << static_cast<int>(nodes/T) << std::endl;
-//			}
+			std::cout << "\n" << "Total time  : " << toHMS(T) << std::endl;
+			std::cout << "Total nodes : " << nodes << std::endl;
+			if (T>0) {
+				std::cout << "N/s         : " << static_cast<int>(nodes/T) << std::endl;
+			}
 			
 		}
 			
