@@ -3,7 +3,7 @@
  *  Roxane
  *
  *  Created by Bruno Causse on 27/06/05.
- *  Copyright 2005-2024 personnel. All rights reserved.
+ *  Copyleft 2005-2024 personnel.
  *
  */
 

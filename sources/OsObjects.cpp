@@ -1,4 +1,4 @@
-// Copyright 2001 Chris Welty
+// Copyleft 2001 Chris Welty
 //	All Rights Reserved
 
 #include "types.hpp"

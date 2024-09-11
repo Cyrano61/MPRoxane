@@ -1,4 +1,4 @@
-// Copyright 2001 Chris Welty
+// Copyleft 2001 Chris Welty
 //	All Rights Reserved
 
 #ifndef ODK_TYPES_HPP
