@@ -512,12 +512,14 @@ void RXRoxane::get_move(const std::string& file_name) {
 			engine[SHARED]->writeLog("");
 			
 			in.close();
-			
-//			std::cout << "Total time  : " << toHMS(T) << std::endl;
-//			std::cout << "Total nodes : " << nodes << std::endl;
-//			if (T>0) {
-//				std::cout << "N/s         : " << static_cast<int>(nodes/T) << std::endl;
-//			}
+            
+            cout.imbue(loc);
+
+			std::cout << "Total time  : " << toHMS(T) << std::endl;
+			std::cout << "Total nodes : " << nodes << std::endl;
+			if (T>0) {
+				std::cout << "N/s         : " << static_cast<int>(nodes/T) << std::endl;
+			}
 			
 		}
 			

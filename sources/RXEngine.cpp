@@ -35,8 +35,6 @@ const int RXEngine::NO_SELECT = 5;
 
 const int RXEngine::DEPTH_BOOSTER = 4;
 
-const bool RXEngine::USE_SINGULAR_EXTENSION = false;
-const bool RXEngine::USE_SINGULAR_PROBCUT   = false;
 
 
 std::vector< std::vector<int> >  RXEngine::probcut_data;
@@ -600,27 +598,6 @@ bool RXEngine::probcut(int threadID, const bool endgame, RXBBPatterns& sBoard, c
                     return false;
                 
                 if(bestscore >= upper_probcut) { //beta cut
-                    
-                    //				/* singular probcut */
-                    //				if(USE_SINGULAR_PROBCUT) {
-                    //
-                    //					if (depth > 4) {
-                    //
-                    //						if(singular_move(threadID, sBoard, selectivity, depth, (upper_probcut+lower_probcut)/2, list, iter->position)) { //(upper_probcut+lower_probcut)/2 == alpha
-                    //
-                    ////							*log << "singular probcut" << std::endl;
-                    //
-                    //							/* move first position */
-                    //							list->sort_bestmove(iter->position);
-                    //
-                    //							return NO_CUT;
-                    //						}
-                    //
-                    //
-                    //					}
-                    //
-                    //
-                    //				}
                     
                     
                     selectif_cutoff=child_selective_cutoff;
@@ -1436,11 +1413,6 @@ void RXEngine::stop(std::string msg) {
     
     abort.store(true);
     
-    if (manager->getEngine(BLACK) == this)
-        *log << "[" << get_current_time() << "] " << "        RXEngine BLACK : stop : " << msg << std::endl;
-    else
-        *log << "[" << get_current_time() << "] " << "        RXEngine WHITE : stop : " << msg << std::endl;
-    
     
     //wait end main thread
     if(pthreadMain[0] != NULL) {
@@ -1894,9 +1866,7 @@ void RXEngine::run() {
     //sleeping threads
     allThreadsShouldSleep = true;
     
-    abort.store(true);
-    *log << "[" << get_current_time() << "] " << "        RXEngine : end search" << std::endl;
-    
+    abort.store(true);    
     
     time_search = get_system_time() - time_search;
     

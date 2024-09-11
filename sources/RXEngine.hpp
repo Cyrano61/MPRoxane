@@ -167,8 +167,6 @@ class RXEngine: public Runnable, public RXHelper {
 	enum t_search {BOOK, MIDGAME, ENDGAME};
 
 	static const int CHECK_TO_LAST_THREE;
-	static const bool USE_SINGULAR_EXTENSION;
-	static const bool USE_SINGULAR_PROBCUT;
 	
 
 	static const int HASHTABLE;
