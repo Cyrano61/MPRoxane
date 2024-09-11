@@ -347,10 +347,7 @@ void RXEngine::sort_moves(int threadID, RXBBPatterns& sBoard, const int depth, c
 bool RXEngine::probcut(int threadID, const bool endgame, RXBBPatterns& sBoard, const int selectivity, const int depth, const int lower_probcut, const int upper_probcut, RXMove* list, const bool hashMove) {
     
     RXBitBoard& board = sBoard.board;
-    
-    
-    int static_eval = sBoard.get_score();
-    
+        
     RXMove* list1 = list;
     
     int bestscore = UNDEF_SCORE;
@@ -361,7 +358,7 @@ bool RXEngine::probcut(int threadID, const bool endgame, RXBBPatterns& sBoard, c
         
         ((sBoard).*(sBoard.update_patterns[list1->position][board.player]))(*list1);
         
-        if(static_eval>lower_probcut) {
+        if(sBoard.get_score()>lower_probcut) {
             
             bool selectif_cutoff = false;
             bool child_selective_cutoff = false;
@@ -371,7 +368,6 @@ bool RXEngine::probcut(int threadID, const bool endgame, RXBBPatterns& sBoard, c
                 
                 sBoard.do_move(*list1);
 
-                
                 if(depth == 2) {
                     
                     RXMove& lastMove = threads[threadID]._move[board.n_empties][1];
@@ -438,7 +434,7 @@ bool RXEngine::probcut(int threadID, const bool endgame, RXBBPatterns& sBoard, c
             bool selectif_cutoff = false;
             bool child_selective_cutoff = false;
             
-            if(iter->score < -upper_probcut) {
+            if(iter->score < -upper_probcut) { //
                 
                 sBoard.do_move(*iter);
                 

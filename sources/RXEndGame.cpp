@@ -867,9 +867,6 @@ int RXEngine::EG_PVS_deep(int threadID, RXBBPatterns& sBoard, const bool pv, con
 	selective_cutoff = false;
 		
 	
-		
-	bool hiProb_alphaCut = false;
-	
 	//synchronized acces
 	RXHashValue entry;
     const unsigned long long hash_code = board.hashcode();
@@ -904,11 +901,6 @@ int RXEngine::EG_PVS_deep(int threadID, RXBBPatterns& sBoard, const bool pv, con
 						}
 					}
 				
-				} else { //if(entry->selectivity == selectivity-1) {
-				
-					if(entry.upper<=lower)
-						hiProb_alphaCut = true;
-						
 				}
 			}
 			
@@ -1008,26 +1000,17 @@ int RXEngine::EG_PVS_deep(int threadID, RXBBPatterns& sBoard, const bool pv, con
 			
 					if(entry.selectivity >= selectivity) {
 					
-						if(-entry.upper >= upper) {
-							
-							if(pv) {
-								
-								move->score = -32*VALUE_DISC; // very good move
-								
-							} else {
-								
-								if(entry.selectivity != NO_SELECT)
-									selective_cutoff = true;
-									
-								return -entry.upper ;
-							}
-							
-						} else if(-entry.lower<=lower) {
-							
-							move->score = 2*VALUE_DISC; // 2*VALUE_DISC probably bad move
-
-						}
-
+                        if(-entry.upper >= upper) {
+                            
+                            if(entry.selectivity != NO_SELECT)
+                                selective_cutoff = true;
+                            
+                            return -entry.upper ;
+                            
+                            if(-entry.lower<=lower)
+                                move->score = 2*VALUE_DISC; // 2*VALUE_DISC probably bad move
+                            
+                        }
 						
 					}
 					
@@ -1064,9 +1047,7 @@ int RXEngine::EG_PVS_deep(int threadID, RXBBPatterns& sBoard, const bool pv, con
 
 		}
 	} else {
-		
-		bool moves_sorting = false;
-		
+				
 		if(bestmove != NOMOVE) {
 			
 			/* first move */
@@ -1105,27 +1086,22 @@ int RXEngine::EG_PVS_deep(int threadID, RXBBPatterns& sBoard, const bool pv, con
 		
 		if(lower < upper) {
 			
-			if(!moves_sorting) {
-
 				if(n_Moves>1) {
 
 					const int p = board.player;
 					const int o = p^1;
 					
-
-					if(board.n_empties>=18 && !hiProb_alphaCut) { //18
+					if(board.n_empties>=18) { //18
 
 						RXMove& lastMove = threads[threadID]._move[board.n_empties-1][1];
 						
 						int threshold_ff_Alpha = -MAX_SCORE;
 						int threshold_ff_Beta  =  MAX_SCORE;
 						probcut_bounds(board, 3, board.n_empties, 0, 0, threshold_ff_Alpha, threshold_ff_Beta); //selectivity 3 = 95%
-
-						int eval_position = sBoard.get_score();
 						
 						int _lower = std::max(-MAX_SCORE, lower+threshold_ff_Alpha);
 
-						if(_lower<= eval_position) { // && eval_position<=(beta+threshold_ff_Beta*2)) { //alpha 95% / beta 99%
+						if(_lower<= sBoard.get_score()) { // && sBoard.get_score()<=(beta+threshold_ff_Beta*2)) { //alpha 95% / beta 99%
 
 							//stable position -> sorting on evaluation
 
@@ -1188,8 +1164,8 @@ int RXEngine::EG_PVS_deep(int threadID, RXBBPatterns& sBoard, const bool pv, con
 									}
 						
 									if(iter->score < -std::min(+MAX_SCORE, (beta+threshold_ff_Beta))) {
-										iter->score /= 4; //4
-										iter->score -= MAX_SCORE; //good move	"probable beta cut"	study in first
+										iter->score /= 2; //4
+										iter->score -= MAX_SCORE/2; //good move	"probable beta cut"	study in first
 									}
 								
 								} else {
@@ -1198,7 +1174,7 @@ int RXEngine::EG_PVS_deep(int threadID, RXBBPatterns& sBoard, const bool pv, con
 									iter->score += MAX_SCORE/2; //bad move
 								}
 								
-								iter->score += board.get_mobility(board.discs[board.player], board.discs[board.player^1])*VALUE_DISC - (board.get_corner_stability(board.discs[board.player^1])*VALUE_DISC)/16;
+                                iter->score += board.get_mobility(board.discs[board.player], board.discs[board.player^1])*VALUE_DISC; // - (board.get_corner_stability(board.discs[board.player^1])*VALUE_DISC)/16;
 																
 								sBoard.undo_move(*iter);
 									
@@ -1213,7 +1189,7 @@ int RXEngine::EG_PVS_deep(int threadID, RXBBPatterns& sBoard, const bool pv, con
 								const unsigned long long p_discs = board.discs[p] | (iter->flipped | iter->square);
                                 
 								//test 1 : score + 2*mobility_adv - corner_stability_adv/4
-                                iter->score += sBoard.get_score(*iter) + 2*(RXBitBoard::get_mobility(board.discs[o] ^ iter->flipped, p_discs)*VALUE_DISC) - (RXBitBoard::get_corner_stability(p_discs)*VALUE_DISC)/4;
+                                iter->score += sBoard.get_score(*iter) + 2*(RXBitBoard::get_mobility(board.discs[o] ^ iter->flipped, p_discs)*VALUE_DISC); // - (RXBitBoard::get_corner_stability(p_discs)*VALUE_DISC)/4;
 							}
 						}
 
@@ -1228,7 +1204,7 @@ int RXEngine::EG_PVS_deep(int threadID, RXBBPatterns& sBoard, const bool pv, con
 							const unsigned long long p_discs = board.discs[p] | (iter->flipped | iter->square);
 							
                             //test 1 : score + 2*mobility_adv - corner_stability_adv/4
-                            iter->score += sBoard.get_score(*iter) + 2*(RXBitBoard::get_mobility(board.discs[o] ^ iter->flipped, p_discs)*VALUE_DISC) - (RXBitBoard::get_corner_stability(p_discs)*VALUE_DISC)/4;
+                            iter->score += sBoard.get_score(*iter) + 2*(RXBitBoard::get_mobility(board.discs[o] ^ iter->flipped, p_discs)*VALUE_DISC); // - (RXBitBoard::get_corner_stability(p_discs)*VALUE_DISC)/4;
 						}
 
 					}
@@ -1236,7 +1212,7 @@ int RXEngine::EG_PVS_deep(int threadID, RXBBPatterns& sBoard, const bool pv, con
 				} else if(n_Moves == 1) { 
 					((sBoard).*(sBoard.update_patterns[list->next->position][board.player]))(*(list->next));
 				}
-			}
+			
 			
 			
 			if(bestmove == NOMOVE) {
@@ -1689,26 +1665,19 @@ int RXEngine::EG_NWS_XEndCut(int threadID, RXBBPatterns& sBoard, const int pvDev
             if(bestmove != empties->position && (legal_movesBB & 1ULL<<empties->position)){
                 
                 ((board).*(board.generate_flips[empties->position]))(*move);
-					
+                
 				board.n_nodes++;
 				
 				//synchronized acces
 				if(hTable->get(board.hashcode_after_move(move), type_hashtable, entry) && entry.selectivity >= selectivity && entry.depth>=board.n_empties) {
 				
-
 					if(-entry.upper > alpha) {
 						if(entry.selectivity != NO_SELECT)
 							selective_cutoff = true;
 							
 						return -entry.upper;
 					}
-                    
-//                    move->score = -3*VALUE_DISC;
-
-
-//					if(-entry.lower<=alpha)
-//						move->score += 5*VALUE_DISC;
-					
+                    					
 				}					
 				
 				previous = previous->next = move++;
