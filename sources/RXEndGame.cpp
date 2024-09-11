@@ -725,7 +725,7 @@ int RXEngine::EG_PVS_ETC_mobility(int threadID, RXBitBoard& board, const bool pv
 					const unsigned long long o_discs = board.discs[o] ^ iter->flipped;
 					
                     //score for try : mobility * VALUE_DISC - corner_stability * 8
-                    iter->score += (RXBitBoard::get_mobility(o_discs, p_discs)*VALUE_DISC) - (RXBitBoard::get_corner_stability(p_discs)<<3);// - (RXBitBoard::local_Parity(o_discs, p_discs, iter->position)^1);
+                    iter->score += RXBitBoard::get_mobility(o_discs, p_discs)*VALUE_DISC; // - (RXBitBoard::get_corner_stability(p_discs)<<3);// - (RXBitBoard::local_Parity(o_discs, p_discs, iter->position)^1);
 					
 				}
 									
@@ -851,9 +851,7 @@ int RXEngine::EG_PVS_deep(int threadID, RXBBPatterns& sBoard, const bool pv, con
 	
 	
 	//time gestion
-	if(dependent_time && get_current_dependentTime() > time_limit()) {
-        *log << "        EG_PVS_deep : idThread :" << threadID << " time search expired, stops search" << std::endl;
-        
+	if(dependent_time && get_current_dependentTime() > time_limit()) {        
         abort.store(true);
 		return INTERRUPT_SEARCH;
 	}
@@ -1006,15 +1004,14 @@ int RXEngine::EG_PVS_deep(int threadID, RXBBPatterns& sBoard, const bool pv, con
                                 selective_cutoff = true;
                             
                             return -entry.upper ;
-                            
-                            if(-entry.lower<=lower)
-                                move->score = 2*VALUE_DISC; // 2*VALUE_DISC probably bad move
-                            
                         }
-						
+                        
+ 
 					}
 					
-					
+                    if(-entry.lower<=lower)
+                        move->score = 2*VALUE_DISC; // 2*VALUE_DISC probably bad move
+
 				}									
 				
 				previous = previous->next = move++;
@@ -1100,8 +1097,9 @@ int RXEngine::EG_PVS_deep(int threadID, RXBBPatterns& sBoard, const bool pv, con
 						probcut_bounds(board, 3, board.n_empties, 0, 0, threshold_ff_Alpha, threshold_ff_Beta); //selectivity 3 = 95%
 						
 						int _lower = std::max(-MAX_SCORE, lower+threshold_ff_Alpha);
+                        
 
-						if(_lower<= sBoard.get_score()) { // && sBoard.get_score()<=(beta+threshold_ff_Beta*2)) { //alpha 95% / beta 99%
+						if(_lower <= sBoard.get_score()) { // && sBoard.get_score()<=(beta+threshold_ff_Beta*2)) { //alpha 95% / beta 99%
 
 							//stable position -> sorting on evaluation
 
@@ -1113,7 +1111,7 @@ int RXEngine::EG_PVS_deep(int threadID, RXBBPatterns& sBoard, const bool pv, con
 								sBoard.do_move(*iter);
 								
 								int eval_move = sBoard.get_score();
-
+                                                            
 								if(eval_move <= -_lower) { //95%
 									
 									if(board.n_empties%2 == 0) {
@@ -1174,7 +1172,7 @@ int RXEngine::EG_PVS_deep(int threadID, RXBBPatterns& sBoard, const bool pv, con
 									iter->score += MAX_SCORE/2; //bad move
 								}
 								
-                                iter->score += board.get_mobility(board.discs[board.player], board.discs[board.player^1])*VALUE_DISC; // - (board.get_corner_stability(board.discs[board.player^1])*VALUE_DISC)/16;
+                                iter->score += board.get_mobility(board.discs[o], board.discs[p])*VALUE_DISC;// - (board.get_corner_stability(board.discs[board.player^1])*VALUE_DISC)/16;
 																
 								sBoard.undo_move(*iter);
 									
@@ -1189,7 +1187,7 @@ int RXEngine::EG_PVS_deep(int threadID, RXBBPatterns& sBoard, const bool pv, con
 								const unsigned long long p_discs = board.discs[p] | (iter->flipped | iter->square);
                                 
 								//test 1 : score + 2*mobility_adv - corner_stability_adv/4
-                                iter->score += sBoard.get_score(*iter) + 2*(RXBitBoard::get_mobility(board.discs[o] ^ iter->flipped, p_discs)*VALUE_DISC); // - (RXBitBoard::get_corner_stability(p_discs)*VALUE_DISC)/4;
+                                iter->score += sBoard.get_score(*iter) + (RXBitBoard::get_mobility(board.discs[o] ^ iter->flipped, p_discs)*VALUE_DISC);// - (RXBitBoard::get_corner_stability(p_discs)*VALUE_DISC)/4;
 							}
 						}
 
@@ -1204,7 +1202,7 @@ int RXEngine::EG_PVS_deep(int threadID, RXBBPatterns& sBoard, const bool pv, con
 							const unsigned long long p_discs = board.discs[p] | (iter->flipped | iter->square);
 							
                             //test 1 : score + 2*mobility_adv - corner_stability_adv/4
-                            iter->score += sBoard.get_score(*iter) + 2*(RXBitBoard::get_mobility(board.discs[o] ^ iter->flipped, p_discs)*VALUE_DISC); // - (RXBitBoard::get_corner_stability(p_discs)*VALUE_DISC)/4;
+                            iter->score += sBoard.get_score(*iter) + 2*(RXBitBoard::get_mobility(board.discs[o] ^ iter->flipped, p_discs)*VALUE_DISC);// - (RXBitBoard::get_corner_stability(p_discs)*VALUE_DISC)/4;
 						}
 
 					}
@@ -1556,8 +1554,6 @@ int RXEngine::EG_NWS_XEndCut(int threadID, RXBBPatterns& sBoard, const int pvDev
 	
 	//time gestion
 	if(dependent_time && get_current_dependentTime() > time_limit()) {
-        *log << "        EG_MWS_XEndCut : idThread :" << threadID << " time search expired, stops search" << std::endl;
-
 		abort.store(true);
 		return INTERRUPT_SEARCH;
 	}

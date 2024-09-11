@@ -257,7 +257,6 @@ void RXBitBoard::init_hashcodeTable() {
 #ifdef __ARM_NEON
 
 //not very efficient, not use
-
 int RXBitBoard::count_potential_moves(const unsigned long long p_discs, const unsigned long long o_discs) {
     
     static const uint64x2_t mask_hv = {0x7E7E7E7E7E7E7E7EULL, 0x00FFFFFFFFFFFF00ULL};

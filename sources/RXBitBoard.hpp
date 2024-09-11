@@ -292,7 +292,7 @@ inline int RXBitBoard::local_Parity(const unsigned long long p_discs, const unsi
 
 
 /*
-    @brief count all legal moves
+    @brief count all legal moves (with counting twice corners)
 
     @param P                    a bitboard representing player
     @param O                    a bitboard representing opponent
@@ -304,8 +304,7 @@ inline int RXBitBoard::get_mobility(const unsigned long long p_discs, const unsi
     
     const unsigned long long legals = get_legal_moves(p_discs, o_discs);
     
-    //add bonus for cornar
-    
+    //add bonus for corner [very good trick]
     unsigned long long bonus = ((legals & 0x8000000000000000ULL)>>27)
                              | ((legals & 0x0100000000000000ULL)>>21)
                              | ((legals & 0x80ULL)<<21)
@@ -322,7 +321,7 @@ inline int RXBitBoard::get_corner_stability(const unsigned long long discs_playe
 
     static const uint64x2_t shr_hv = {-1, -8};
     static const uint64x2_t shl_hv = { 1,  8};
-    static const uint64x2_t sh     = {16,-16};
+    //static const uint64x2_t sh     = {16,-16};
     
     static const uint64x2_t mask_right = {0x4000000000000040ULL, 0x0081000000000000ULL};
     static const uint64x2_t mask_left  = {0x0200000000000002ULL, 0x0000000000008100ULL};
@@ -334,8 +333,8 @@ inline int RXBitBoard::get_corner_stability(const unsigned long long discs_playe
     stable = vorrq_u64(vandq_u64(vandq_u64(vshlq_u64(corner, shr_hv), discs), mask_right), corner);
     stable = vorrq_u64(vandq_u64(vandq_u64(vshlq_u64(stable, shl_hv), discs), mask_left ), stable);
     
-    //bonus corner
-    stable = vorrq_u64(stable, vshlq_u64(corner, sh));
+    //bonus corner, not really efficient
+    //stable = vorrq_u64(stable, vshlq_u64(corner, sh));
   
     return __builtin_popcountll(vgetq_lane_u64(stable, 0) | vgetq_lane_u64(stable, 1));
 }
@@ -769,7 +768,7 @@ inline int RXBitBoard::final_score_4(int alpha, const int beta, const bool passe
 		if ( stability_bound <= alpha )
 			return stability_bound; //alpha
 		
-	} else if (beta <= -4*VALUE_DISC || (beta <= 0 && (diffPions*VALUE_DISC >= beta + 8*VALUE_DISC))) {
+	} else if (beta <= -4*VALUE_DISC || (beta <= 0 && (diffPions*VALUE_DISC >= beta + 12*VALUE_DISC))) {
 
 		int stability_bound = -64*VALUE_DISC + 2 * get_stability(player, (65*VALUE_DISC+beta)/2);
 		if ( stability_bound >= beta )

@@ -238,7 +238,6 @@ void RXEngine::sort_moves(int threadID, RXBBPatterns& sBoard, const int depth, c
                 if(_alpha<= sBoard.get_score()) { //~95%
                     
                     
-                    RXMove& lastMove = threads[threadID]._move[board.n_empties-1][1];
                     
                     for(; iter != NULL; iter = iter->next) {
                         ((sBoard).*(sBoard.update_patterns[iter->position][board.player]))(*iter);
@@ -273,6 +272,9 @@ void RXEngine::sort_moves(int threadID, RXBBPatterns& sBoard, const int depth, c
                                 iter->score = alphabeta_last_two_ply(threadID, sBoard, -MAX_SCORE, -_alpha, false);
                                 
                             } else {
+                                
+                                RXMove& lastMove = threads[threadID]._move[board.n_empties-1][1];
+
                                 
                                 int bestscore = UNDEF_SCORE; //masquage
                                 
@@ -1294,12 +1296,6 @@ std::string RXEngine::display(RXBitBoard& board, const int type, const int allow
 void RXEngine::stop(std::string msg) {
     
     abort.store(true);
-    
-    if (manager->getEngine(BLACK) == this)
-        *log << "[" << get_current_time() << "] " << "        RXEngine BLACK : stop : " << msg << std::endl;
-    else
-        *log << "[" << get_current_time() << "] " << "        RXEngine WHITE : stop : " << msg << std::endl;
-    
     
     //wait end main thread
     if(pthreadMain[0] != NULL) {
