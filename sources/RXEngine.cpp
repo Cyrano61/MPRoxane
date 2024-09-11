@@ -224,13 +224,11 @@ void RXEngine::sort_moves(int threadID, RXBBPatterns& sBoard, const int depth, c
         RXMove* iter = list->next;
         
         if(iter->next != NULL) {
-            
-            const int p = board.player;
-            
+                        
             if(depth>3) {
                 
                 int lower_probcut = -MAX_SCORE;
-                int upper_probcut  =  MAX_SCORE;
+                int upper_probcut =  MAX_SCORE;
                 probcut_bounds(board, 0, 4, 0, 0, lower_probcut, upper_probcut); //selectivity 72%
                 
                 int _alpha = std::max(-MAX_SCORE, alpha+lower_probcut);
@@ -238,20 +236,26 @@ void RXEngine::sort_moves(int threadID, RXBBPatterns& sBoard, const int depth, c
                 if(_alpha<= sBoard.get_score()) { //~95%
                     
                     
-                    
                     for(; iter != NULL; iter = iter->next) {
                         ((sBoard).*(sBoard.update_patterns[iter->position][board.player]))(*iter);
                         
                         sBoard.do_move(*iter);
                         
-                        if(depth>19) {
+                        if(depth > 21) {
+                            
+                            if((depth & 1) == 0)
+                                iter->score = PVS_check(threadID, sBoard, 6, -MAX_SCORE, -_alpha, false);
+                            else
+                                iter->score = PVS_check(threadID, sBoard, 5, -MAX_SCORE, -_alpha, false);
+
+                        } else if(depth>17) {
                             
                             if((depth & 1) == 0)
                                 iter->score = PVS_check(threadID, sBoard, 4, -MAX_SCORE, -_alpha, false);
                             else
                                 iter->score = PVS_check(threadID, sBoard, 5, -MAX_SCORE, -_alpha, false);
 
-                        } else if(depth>13) {
+                        } else if(depth>11) {
                             
                             if((depth & 1) == 0)
                                 iter->score = PVS_check(threadID, sBoard, 4, -MAX_SCORE, -_alpha, false);

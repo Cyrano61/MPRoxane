@@ -1169,7 +1169,7 @@ int RXEngine::EG_PVS_deep(int threadID, RXBBPatterns& sBoard, const bool pv, con
 								} else {
 									
 									iter->score += eval_move;
-									iter->score += MAX_SCORE/2; //bad move
+									iter->score += MAX_SCORE; //bad move
 								}
 								
                                 iter->score += board.get_mobility(board.discs[o], board.discs[p])*VALUE_DISC;// - (board.get_corner_stability(board.discs[board.player^1])*VALUE_DISC)/16;
