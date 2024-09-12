@@ -874,8 +874,6 @@ void RXEngine::MG_SP_search_DEEP(RXSplitPoint* sp, const unsigned int threadID) 
         
         pthread_mutex_lock(&(sp->lock));
         
-        
-        
         RXMove* move;
         if(sp->list != NULL && sp->list->next != NULL) {
             

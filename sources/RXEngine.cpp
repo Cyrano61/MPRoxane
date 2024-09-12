@@ -311,7 +311,7 @@ void RXEngine::sort_moves(int threadID, const bool endgame, RXBBPatterns& sBoard
             if(depth>3) {
                 
                 int lower_probcut = -MAX_SCORE;
-                int upper_probcut  =  MAX_SCORE;
+                int upper_probcut =  MAX_SCORE;
                 probcut_bounds(board, 0, 4, 0, 0, lower_probcut, upper_probcut); //selectivity 72%
                 
                 int _alpha = std::max(-MAX_SCORE, alpha+lower_probcut);
@@ -712,22 +712,19 @@ int RXEngine::PVS_check(int threadID, RXBBPatterns& sBoard, int depth, int alpha
                         
                         if(_lower<= eval_position) { //~95%
                             
-                            RXMove& lastMove = threads[threadID]._move[board.n_empties-1][1];
                             
                             for(; iter != NULL; iter = iter->next) {
                                 ((sBoard).*(sBoard.update_patterns[iter->position][board.player]))(*iter);
                                 
                                 sBoard.do_move(*iter);
                                 
-                                //								int eval_move = sBoard.get_score();
-                                //
-                                //								if(eval_move <= -_lower) {
-                                
                                 if(depth>9) {
                                     
                                     iter->score = alphabeta_last_two_ply(threadID, sBoard, -MAX_SCORE, -_lower, false);
                                     
                                 } else {
+                                    
+                                    RXMove& lastMove = threads[threadID]._move[board.n_empties-1][1];
                                     
                                     int bestscore = UNDEF_SCORE; //masquage
                                     const unsigned long long legal_movesBB = RXBitBoard::get_legal_moves(board.discs[board.player], board.discs[board.player^1]);
@@ -757,13 +754,6 @@ int RXEngine::PVS_check(int threadID, RXBBPatterns& sBoard, int depth, int alpha
                                     }
                                     
                                 }
-                                
-                                
-                                //								} else {
-                                //
-                                //									iter->score = eval_move + MAX_SCORE/2; //bad move
-                                //
-                                //								}
                                 
                                 sBoard.undo_move(*iter);
                                 

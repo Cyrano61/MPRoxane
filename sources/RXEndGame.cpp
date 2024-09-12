@@ -642,21 +642,25 @@ int RXEngine::EG_PVS_ETC_mobility(int threadID, RXBitBoard& board, const bool pv
                 ((board).*(board.generate_flips[empties->position]))(*move);
                 board.n_nodes++;
                 
-                move->score = 0;
+                move->score = 0; //not in Hash
                 
                 //synchronized acces
-                if(hTable->get(board.hashcode_after_move(move), type_hashtable, entry) && !pv && entry.selectivity == NO_SELECT && entry.depth>=board.n_empties) {
-                    
+                if(hTable->get(board.hashcode_after_move(move), type_hashtable, entry) && entry.depth>=board.n_empties) {
+                                        
                     move->score = -2*VALUE_DISC; //in hash
-
+                    
                     if(-entry.upper >= upper) {
-                        return -entry.upper ;
-                    }
-                    
-                    
-                    if(-entry.lower <= lower)
+                        
+                        if (!pv && entry.selectivity == NO_SELECT)
+                            return -entry.upper ;
+                        
+                        //very exceptional case
+                        move->score = -16*VALUE_DISC; //probably good move
+                        
+                    } else if(-entry.lower <= lower) {
                         move->score = 3*VALUE_DISC; //probably bad move
-                    
+                    }
+                        
                     
                 }
                 
@@ -777,7 +781,6 @@ int RXEngine::EG_PVS_ETC_mobility(int threadID, RXBitBoard& board, const bool pv
             
             // other moves : try to refute the first/best one
             int score;
-            //			for(;!abort.load() && lower < upper && list->next != NULL; list = list->next) {
             for(;lower < upper && list->next != NULL; list = list->next) {
                 
                 //find moves with worst answer
@@ -995,29 +998,22 @@ int RXEngine::EG_PVS_deep(int threadID, RXBBPatterns& sBoard, const bool pv, con
                 if(hTable->get(board.hashcode_after_move(move), type_hashtable, entry) &&  entry.depth>=board.n_empties) {
                     
                     move->score = -3*VALUE_DISC;    //in hash
-                    
-                    if(entry.selectivity >= selectivity) {
-                        
-                        if(-entry.upper >= upper) {
+ 
+                    if(-entry.upper >= upper) {
+ 
+                        if(!pv && entry.selectivity >= selectivity) {
                             
                             if(entry.selectivity != NO_SELECT)
                                 selective_cutoff = true;
                             
                             return -entry.upper ;
-                            
                         }
                         
-                        if(-entry.lower<=lower) {
-                            
-                            move->score = 2*VALUE_DISC; // 2*VALUE_DISC probably bad move
-                            
-                        }
-
-                         
+                        move->score = -10*VALUE_DISC; //probably very good move
+                        
+                    } else if(-entry.lower <= lower) {
+                        move->score = 2*VALUE_DISC; // 2*VALUE_DISC probably bad move
                     }
-                    
-  
-                    
                 }
                 
                 previous = previous->next = move++;
@@ -1053,9 +1049,6 @@ int RXEngine::EG_PVS_deep(int threadID, RXBBPatterns& sBoard, const bool pv, con
         
         
         if(bestmove != NOMOVE) {
-            
-            
-            
             
             /* first move */
             list = list->next;
@@ -1099,7 +1092,6 @@ int RXEngine::EG_PVS_deep(int threadID, RXBBPatterns& sBoard, const bool pv, con
                 const int o = p^1;
                 
                 if(board.n_empties>=18) { //18
-                    
                     
                     int threshold_ff_Alpha = -MAX_SCORE;
                     int threshold_ff_Beta  =  MAX_SCORE;
@@ -1679,21 +1671,26 @@ int RXEngine::EG_NWS_XEndCut(int threadID, RXBBPatterns& sBoard, const int pvDev
                 move->score = 0;
                 
                 //synchronized acces
-                if(hTable->get(board.hashcode_after_move(move), type_hashtable, entry) && entry.selectivity >= selectivity && entry.depth>=board.n_empties) {
-                    
-                    
-                    if(-entry.upper > alpha) {
-                        if(entry.selectivity != NO_SELECT)
-                            selective_cutoff = true;
-                        
-                        return -entry.upper;
-                    }
+                if(hTable->get(board.hashcode_after_move(move), type_hashtable, entry) && entry.depth>=board.n_empties) {
                     
                     move->score = -3*VALUE_DISC;
-                    
-                    
-                    if(-entry.lower<=alpha)
+
+                    if(-entry.upper > alpha) {
+                        
+                        if(entry.selectivity >= selectivity ) {
+                            if(entry.selectivity != NO_SELECT)
+                                selective_cutoff = true;
+                            
+                            return -entry.upper;
+                        }
+                        
+                        move->score = -16*VALUE_DISC;
+                        
+                    }else if(-entry.lower<=alpha) {
+                        
                         move->score += 5*VALUE_DISC;
+                        
+                    }
                     
                 }
                 
