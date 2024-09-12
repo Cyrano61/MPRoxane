@@ -712,7 +712,7 @@ inline int RXBitBoard::final_score_3(const unsigned long long discs_player, cons
             case 2:
                 //tmp = idSquare1; idSquare1 = idSquare3; idSquare3 = idSquare2; idSquare2 = tmp;    // case 1(x3) 2(x1 x2)
                 std::swap(idSquare1, idSquare3);
-            case 3:
+            case 3: //utiliy ?
                 //tmp = idSquare2; idSquare2 = idSquare3; idSquare3 = tmp;
                 std::swap(idSquare2, idSquare3);
                 break;

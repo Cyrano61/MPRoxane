@@ -318,9 +318,7 @@ void RXEngine::sort_moves(int threadID, const bool endgame, RXBBPatterns& sBoard
                 
                 if(_alpha<= sBoard.get_score()) { //~95%
                     
-                    
-                    RXMove& lastMove = threads[threadID]._move[board.n_empties-1][1];
-                    
+                                    
                     for(; iter != NULL; iter = iter->next) {
                         ((sBoard).*(sBoard.update_patterns[iter->position][board.player]))(*iter);
                         
@@ -354,6 +352,8 @@ void RXEngine::sort_moves(int threadID, const bool endgame, RXBBPatterns& sBoard
                                 iter->score += alphabeta_last_two_ply(threadID, sBoard, -MAX_SCORE, -_alpha, false);
                                 
                             } else {
+                                
+                                RXMove& lastMove = threads[threadID]._move[board.n_empties-1][1];
                                 
                                 int bestscore = UNDEF_SCORE; //masquage
                                 
@@ -395,7 +395,7 @@ void RXEngine::sort_moves(int threadID, const bool endgame, RXBBPatterns& sBoard
                         
                         //test PVS_Check
                         if(endgame)
-                            iter->score += board.get_mobility(board.discs[board.player], board.discs[board.player^1])*VALUE_DISC;// - (board.get_corner_stability(board.discs[board.player^1])*VALUE_DISC)/8;
+                            iter->score += RXBitBoard::get_mobility(board.discs[board.player], board.discs[board.player^1])*VALUE_DISC;// - (board.get_corner_stability(board.discs[board.player^1])*VALUE_DISC)/8;
                         
                         sBoard.undo_move(*iter);
                         
