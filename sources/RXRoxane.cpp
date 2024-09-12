@@ -3,7 +3,7 @@
  *  BitBoard
  *
  *  Created by Bruno Causse on 01/09/05.
- *  Copyright 2005-2024 personnel. All rights reserved.
+ *  Copyleft 2005-2024 personnel.
  *
  */
  
@@ -522,9 +522,15 @@ void RXRoxane::get_move(const std::string& file_name) {
 			
 			in.close();
             
+<<<<<<< HEAD
             std::cout.imbue(loc);
 			
 			std::cout << "\n" << "Total time  : " << toHMS(T) << std::endl;
+=======
+            cout.imbue(loc);
+
+			std::cout << "Total time  : " << toHMS(T) << std::endl;
+>>>>>>> Development
 			std::cout << "Total nodes : " << nodes << std::endl;
 			if (T>0) {
 				std::cout << "N/s         : " << static_cast<int>(nodes/T) << std::endl;

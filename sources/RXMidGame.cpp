@@ -3,7 +3,7 @@
  *  BitBoard
  *
  *  Created by Bruno Causse on 13/08/05.
- *  Copyright 2005-2024 personnel. All rights reserved.
+ *  Copyleft 2005-2024 personnel.
  *
  */
  
@@ -108,7 +108,7 @@ void RXEngine::iterative_deepening(RXBBPatterns& sBoard, RXMove* list, int depth
 		if(depth>6)			
 			if(probable_timeout(time_nextLevel)) {
 				abort.store(true);
-                *log << "[" << get_current_time() << "] " << "        RXEngine ID : likely timeout" << std::endl;
+                *log << "        ID driver : likely timeout" << std::endl;
 
 				break;
 			}
@@ -520,7 +520,11 @@ int RXEngine::MG_PVS_deep(int threadID, RXBBPatterns& sBoard, const bool pv, con
 
 							const unsigned long long p_discs = board.discs[p] | (iter->flipped | iter->square);
 								
+<<<<<<< HEAD
                             iter->score +=  (RXBitBoard::get_mobility(board.discs[o] ^ iter->flipped, p_discs)*VALUE_DISC); // - (RXBitBoard::get_corner_stability(p_discs)*VALUE_DISC)/4;
+=======
+                            iter->score += (RXBitBoard::get_mobility(board.discs[o] ^ iter->flipped, p_discs)*VALUE_DISC); // - (RXBitBoard::get_corner_stability(p_discs)*VALUE_DISC)/4;
+>>>>>>> Development
 						}
 								
 						list->sort_by_score();		
@@ -567,7 +571,11 @@ int RXEngine::MG_PVS_deep(int threadID, RXBBPatterns& sBoard, const bool pv, con
 			bool moves_sorting = false;
 				
 			if(bestmove != NOMOVE) {
+<<<<<<< HEAD
 				
+=======
+								
+>>>>>>> Development
 				/* first move */
 				list = list->next;
 
@@ -1127,7 +1135,11 @@ int RXEngine::MG_PVS_shallow(int threadID, RXBBPatterns& sBoard, const bool pv, 
 							const unsigned long long p_discs = board.discs[p] | (iter->flipped | iter->square);
                             const unsigned long long o_discs = board.discs[o] ^ iter->flipped;
 								
+<<<<<<< HEAD
                             iter->score = (RXBitBoard::get_mobility(o_discs, p_discs)<<2) - (RXBitBoard::get_corner_stability(p_discs)); // - (RXBitBoard::local_Parity(o_discs, p_discs, iter->position)^1);
+=======
+                            iter->score = (RXBitBoard::get_mobility(o_discs, p_discs)); // - (RXBitBoard::get_corner_stability(p_discs)<<2); // - (RXBitBoard::local_Parity(o_discs, p_discs, iter->position)^1);
+>>>>>>> Development
 						}
 								
 						list->sort_by_score();		

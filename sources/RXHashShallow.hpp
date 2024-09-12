@@ -3,16 +3,7 @@
  *  Roxane
  *
  *  Created by Bruno Causse on 28/03/06.
- *  Copyright 2006 personnel. All rights reserved.
- *
- */
-
-/*
- *  RXHashTable.h
- *  learn_01
- *
- *  Created by Bruno Causse on 18/05/05.
- *  Copyright 2005-2024 personnel. All rights reserved.
+ *  Copyleft 2006 personnel.
  *
  */
 

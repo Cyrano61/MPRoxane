@@ -3,7 +3,7 @@
  *  Roxane
  *
  *  Created by Bruno Causse on 27/06/05.
- *  Copyright 2005-2024 personnel. All rights reserved.
+ *  Copyleft 2005-2024 personnel.
  *
  */
 
@@ -267,7 +267,11 @@ int RXBitBoard::count_potential_moves(const unsigned long long p_discs, const un
     static const uint64x2_t shl_dg  = { 7, 9};
     static const uint64x2_t shr_dg  = {-7,-9};
     
+<<<<<<< HEAD
     uint64x2_t oo = vdupq_n_u64(o_discs);
+=======
+    const uint64x2_t oo = vdupq_n_u64(o_discs);
+>>>>>>> Development
     
     uint64x2_t hv = vandq_u64(oo, mask_hv);
     hv = vorrq_u64(vshlq_u64(hv, shl_hv),vshlq_u64(hv, shr_hv)) ;
@@ -466,6 +470,10 @@ int RXBitBoard::count_potential_moves(const unsigned long long p_discs, const un
 
 }
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> Development
 unsigned long long RXBitBoard::get_legal_moves(const unsigned long long p_discs, const unsigned long long o_discs) {
     
     

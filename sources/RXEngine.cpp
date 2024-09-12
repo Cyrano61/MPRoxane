@@ -3,7 +3,7 @@
  *  BitBoard
  *
  *  Created by Bruno Causse on 10/08/05.
- *  Copyright 2005-2024 personnel. All rights reserved.
+ *  Copyleft 2005-2024 personnel.
  *
  */
 #include <iomanip>
@@ -35,6 +35,11 @@ const int RXEngine::NO_SELECT = 5;
 
 const int RXEngine::DEPTH_BOOSTER = 4;
 
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> Development
 std::vector< std::vector<int> >  RXEngine::probcut_data;
 
 extern "C"
@@ -235,7 +240,11 @@ void RXEngine::sort_moves(int threadID, RXBBPatterns& sBoard, const int depth, c
                 
                 if(_alpha<= sBoard.get_score()) { //~95%
                     
+<<<<<<< HEAD
                     
+=======
+                                    
+>>>>>>> Development
                     for(; iter != NULL; iter = iter->next) {
                         ((sBoard).*(sBoard.update_patterns[iter->position][board.player]))(*iter);
                         
@@ -278,7 +287,10 @@ void RXEngine::sort_moves(int threadID, RXBBPatterns& sBoard, const int depth, c
                             } else {
                                 
                                 RXMove& lastMove = threads[threadID]._move[board.n_empties-1][1];
+<<<<<<< HEAD
 
+=======
+>>>>>>> Development
                                 
                                 int bestscore = UNDEF_SCORE; //masquage
                                 
@@ -311,6 +323,20 @@ void RXEngine::sort_moves(int threadID, RXBBPatterns& sBoard, const int depth, c
                             
                         }
                         
+<<<<<<< HEAD
+=======
+                        
+                        if(iter->score < -(beta + upper_probcut)) { //95%
+                            if(endgame)
+                                iter->score /= 4; //16
+                            iter->score -= MAX_SCORE; //good move	"probable beta cut"	study in first
+                        }
+                        
+                        //test PVS_Check
+                        if(endgame)
+                            iter->score += RXBitBoard::get_mobility(board.discs[board.player], board.discs[board.player^1])*VALUE_DISC;// - (board.get_corner_stability(board.discs[board.player^1])*VALUE_DISC)/8;
+                        
+>>>>>>> Development
                         sBoard.undo_move(*iter);
                         
                     }
@@ -491,6 +517,10 @@ bool RXEngine::probcut(int threadID, const bool endgame, RXBBPatterns& sBoard, c
                 
                 if(bestscore >= upper_probcut) { //beta cut
                     
+<<<<<<< HEAD
+=======
+                    
+>>>>>>> Development
                     selectif_cutoff=child_selective_cutoff;
                     
                     hTable->update(board.hashcode(), type_hashtable, selectif_cutoff? MG_SELECT:NO_SELECT, depth, upper_probcut-1, bestscore, iter->position);
@@ -1301,6 +1331,10 @@ void RXEngine::stop(std::string msg) {
     
     abort.store(true);
     
+<<<<<<< HEAD
+=======
+    
+>>>>>>> Development
     //wait end main thread
     if(pthreadMain[0] != NULL) {
         pthread_join(pthreadMain[0], NULL);
@@ -1753,9 +1787,7 @@ void RXEngine::run() {
     //sleeping threads
     allThreadsShouldSleep = true;
     
-    abort.store(true);
-    *log << "[" << get_current_time() << "] " << "        RXEngine : end search" << std::endl;
-    
+    abort.store(true);    
     
     time_search = get_system_time() - time_search;
     

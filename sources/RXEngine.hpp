@@ -3,7 +3,7 @@
  *  BitBoard
  *
  *  Created by Bruno Causse on 10/08/05.
- *  Copyright 2005-2024 personnel. All rights reserved.
+ *  Copyleft 2005-2024 personnel.
  *
  */
 
@@ -166,7 +166,12 @@ class RXEngine: public Runnable, public RXHelper {
 	
 	enum t_search {BOOK, MIDGAME, ENDGAME};
 
+<<<<<<< HEAD
 	static const int CHECK_TO_LAST_THREE;	
+=======
+	static const int CHECK_TO_LAST_THREE;
+	
+>>>>>>> Development
 
 	static const int HASHTABLE;
 	static const int INFERIOR;
