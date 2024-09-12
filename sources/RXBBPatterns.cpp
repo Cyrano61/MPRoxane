@@ -2,7 +2,7 @@
  *  RXBBPatterns.cpp
  *  Roxane
  *
- *  Created by Bruno Causse on 31/07/05.
+ *  Created by B Causse on 31/07/05.
  *  Copyleft 2005-2024 personnel.
  *
  */

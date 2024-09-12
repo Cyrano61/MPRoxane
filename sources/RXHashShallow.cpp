@@ -2,7 +2,7 @@
  *  RXHashShallow.cpp
  *  Roxane
  *
- *  Created by Bruno Causse on 28/03/06.
+ *  Created by B Causse on 28/03/06.
  *  Copyleft 2006 personnel.
  *
  */

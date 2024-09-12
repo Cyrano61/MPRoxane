@@ -2,7 +2,7 @@
 //  RXBBDoFlips_NEON_Edax.cpp
 //  Roxane
 //
-//  Created by Causse Bruno on 15/08/2024.
+//  Created by Causse B on 15/08/2024.
 //  Copyleft © 2024 personnel.
 //
 

@@ -2,7 +2,7 @@
  *  RXRoxane.hpp
  *  BitBoard
  *
- *  Created by Bruno Causse on 01/09/05.
+ *  Created by B Causse on 01/09/05.
  *  Copyleft 2005-2024 personnel.
  *
  */

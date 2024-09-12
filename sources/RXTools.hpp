@@ -2,7 +2,7 @@
  *  RXTools.hpp
  *  Roxane
  *
- *  Created by BrunoCausse on 04/11/08.
+ *  Created by B Causse on 04/11/08.
  *  Copyleft 2008-2024 personnel.
  *
  */

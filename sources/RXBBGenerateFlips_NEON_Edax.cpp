@@ -2,7 +2,7 @@
 //  RXBBGenerateFlips_NEON_Edax.cpp
 //  Roxane
 //  adaptation flip_neon_bitscan from Edax
-//  Created by Causse Bruno on 15/08/2024.
+//  Created by Causse B  on 15/08/2024.
 //  Copyleft © 2024 personnel.
 //
 

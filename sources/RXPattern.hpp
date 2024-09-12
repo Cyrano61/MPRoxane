@@ -2,7 +2,7 @@
  *  RXPattern.hpp
  *  Roxane
  *
- *  Created by Bruno Causse on 20/09/05.
+ *  Created by B Causse on 20/09/05.
  *  Copyleft 2005-2024 personnel.
  *
  */

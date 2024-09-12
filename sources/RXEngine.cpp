@@ -2,7 +2,7 @@
  *  RXEngine.cpp
  *  BitBoard
  *
- *  Created by Bruno Causse on 10/08/05.
+ *  Created by B Causse on 10/08/05.
  *  Copyleft 2005-2024 personnel.
  *
  */

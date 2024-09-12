@@ -2,7 +2,7 @@
  *  main.cpp
  *  Roxane
  *
- *  Created by Bruno Causse on 10/08/05.
+ *  Created by B Causse modify 12/09/2024.
  *  Copyleft 2005-2024 personnel.
  *
  */

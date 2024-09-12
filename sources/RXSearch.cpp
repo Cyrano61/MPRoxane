@@ -2,7 +2,7 @@
  *  RXSearch.cpp
  *  Roxane
  *
- *  Created by BrunoCausse on 07/10/09.
+ *  Created by B Causse on 07/10/09.
  *  Copyleft 2009-2024 personnel.
  *
  */

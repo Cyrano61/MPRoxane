@@ -2,7 +2,7 @@
  *  RXMidGame.cpp
  *  BitBoard
  *
- *  Created by Bruno Causse on 13/08/05.
+ *  Created by B Causse on 13/08/05.
  *  Copyleft 2005-2024 personnel.
  *
  */

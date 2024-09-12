@@ -2,7 +2,7 @@
  *  RXSquareList.hpp
  *  learn_01
  *
- *  Created by Bruno Causse on 11/05/05.
+ *  Created by B Causse on 11/05/05.
  *  Copyleft 2005-2024 personnel.
  *
  */

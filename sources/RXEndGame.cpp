@@ -2,7 +2,7 @@
  *  RXEndGame.cpp
  *  learn_01
  *
- *  Created by Bruno Causse on 11/06/05.
+ *  Created by B Causse on 11/06/05.
  *  Copyleft 2005-2024 personnel.
  *
  */

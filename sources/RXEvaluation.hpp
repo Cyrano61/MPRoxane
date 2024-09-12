@@ -2,7 +2,7 @@
  *  RXEvaluation.hpp
  *  Roxane
  *
- *  Created by Bruno Causse on 06/08/05.
+ *  Created by B Causse on 06/08/05.
  *  Copyleft 2005-2024 personnel.
  *
  */

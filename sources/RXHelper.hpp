@@ -2,7 +2,7 @@
  *  RXThreadHelper.hpp
  *  Roxane
  *
- *  Created by BrunoCausse on 10/09/08.
+ *  Created by B Causse on 10/09/08.
  *  Copyleft 2008-2024 personnel.
  *
  */
