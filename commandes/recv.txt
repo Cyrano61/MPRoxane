@@ -14,12 +14,31 @@ ftp.nj.nec.com      (138.15.10.2)  @ 4000/1/2, 5000/1/2, SSL: 5006
                     http://www.cs.ualberta.ca/~mburo/
 
 : Enter login (yours, or one you'd like to use).
-[send]Edmond
+[send]Rostand
 [recv]: Enter your password.
 [send]MDP
 [recv]READY
 
+: + /ax 1
 : + /os 1
+: + HCyrano 1
+: + OO7 1
+: + Rostand 1
+: + Saio2000 1
+: + Saio2002 1
+: + Saio2003 1
+: + Saio3000 1
+: + Saio3001 1
+: + Saio3002 1
+: + ant 1
+: + ant+ 1
+: + fly 1
+: + patzer 1
+: + piglet 1
+: + scorp+ 1
+: + scorpion 1
+: + viper 1
+READY
 : help faq
 Frequently Asked Questions
 --------------------------
@@ -38,19 +57,19 @@ Frequently Asked Questions
 
 4) I just want to play Othello, how do I do it? 
  = You have to talk to Othello Service Server .. (type: tell /os help)
-   If you haven't mastered (system) aliases yet go back to (3).
-
-5) I want to se Othello top list, I type tell /os top and get error?
- = /os implements all kinds of variants of Othello, you have to tell it
-   what variant you are interested in (type: tell /os top 8)
-
-6) What other games are avai[send]ve -ack
+   If you haven't mastered (system) aliase[send]ve -ack
 notify + /os
 mso
 tell /os client +
 ts trust +
 tell /os open 0
-[recv]lable?
+[recv]s yet go back to (3).
+
+5) I want to se Othello top list, I type tell /os top and get error?
+ = /os implements all kinds of variants of Othello, you have to tell it
+   what variant you are interested in (type: tell /os top 8)
+
+6) What other games are available?
  = /os = Othello, /ams = Amazons, /cks = Checkers.
 
 7) What other documentation is available?
@@ -97,129 +116,57 @@ READY
 READY
 READY
 
+: + ohr 1
+READY
+
+: - ohr 1
+READY
+
 HCyrano: t /os open 1
 READY
 [send]t /os open 1
 [recv]READY
-
-/os: +   .1 2678.7 Saio3001 05:00//02:00    s8r18 S 2700.5 Edmond   .32310
-READY
-[send]t /os accept .1
-[recv]READY
-
-/os: + match .1 2700 Edmond 2679 Saio3001 s8r18 R
-READY
-
-/os: join .1.0 (;GM[Othello]PC[GGS/os]DT[2024.09.05_13:08:58.MDT]
-|PB[Edmond]PW[Saio3001]
-|RB[2700.46]RW[2678.72]
-|TI[05:00//02:00]
-|TY[s8r18]RE[?]
-|BO[8 -------- -------- --*OO*-- --*O*O-- --O*OO-- --**O**- ----*--- -------- *]
-|;)
-READY
-
-/os: join .1.1 (;GM[Othello]PC[GGS/os]DT[2024.09.05_13:08:58.MDT]
-|PB[Saio3001]PW[Edmond]
-|RB[2678.72]RW[2700.46]
-|TI[05:00//02:00]
-|TY[s8r18]RE[?]
-|BO[8 -------- -------- --*OO*-- --*O*O-- --O*OO-- --**O**- ----*--- -------- *]
-|;)
-READY
-
-/os: -   .1 2678.7 Saio3001 05:00//02:00    s8r18 S 2700.5 Edmond   .32310
-READY
-[send]tell .Edmond --
-tell .Edmond game .1.0
-tell .Edmond HashTable SHARED
-
-tell .Edmond Active threads : 2
-
-tell .Edmond  14@72   D2 == -16
-tell .Edmond  16@72   D2 == -17
-[recv]READY
-READY
-READY
-READY
-READY
-READY
-READY
-READY
-[send]tell .Edmond  18@72   D2 == -16
-[recv]READY
-[send]tell .Edmond  20@72   D2 == -16
-[recv]READY
-[send]tell .Edmond  22@72   D2 == -16
-[recv]READY
-[send]tell .Edmond  24@72   D2 == -16
-[recv]READY
-
-/os: end .1.0 ( Edmond vs. Saio3001 ) player Saio3001 left
-READY
-
-/os: end .1.1 ( Edmond vs. Saio3001 ) player Saio3001 left
-READY
-
-/os: - match .1 2700 Edmond 2679 Saio3001 s8r18 R Saio3001 left .32310
-READY
-[send]tell .Edmond  24@72   D2 == -16  Pv : D2 f7 G3 g5 H4 d7 
-tell .Edmond Ts : 00:00:05.32   Tm : 00:00:05.32
-tell .Edmond nodes :    283 262 716
-tell .Edmond speed :         53 244 kN/s
-tell /os play .1.0 D2/-16.00/5.32
-[recv]READY
-READY
-READY
-READY
-READY
-
-/os: ERR match '.1' not found.
-READY
 
 HCyrano: ta s8r18 5:00 Saio2003
 READY
 [send]ta s8r18 5:00 Saio2003
 [recv]READY
 
-/os: +   .2 2700.5 Edmond   05:00//02:00    s8r18 R 2687.6 Saio2003
+/os: +   .7 2707.6 Rostand  05:00//02:00    s8r18 R 2702.3 Saio2003
 READY
 
-/os: + match .2 2700 Edmond 2688 Saio2003 s8r18 R
+/os: + match .7 2708 Rostand 2702 Saio2003 s8r18 R
 READY
 
-/os: join .2.0 (;GM[Othello]PC[GGS/os]DT[2024.09.05_13:09:11.MDT]
-|PB[Edmond]PW[Saio2003]
-|RB[2700.46]RW[2687.59]
+/os: join .7.0 (;GM[Othello]PC[GGS/os]DT[2024.09.13_09:32:55.MDT]
+|PB[Rostand]PW[Saio2003]
+|RB[2707.64]RW[2702.27]
 |TI[05:00//02:00]
 |TY[s8r18]RE[?]
-|BO[8 --O*---- --O*OO-- --OO---- --O****- -O-*O*-- -----O-- -------- -------- *]
+|BO[8 --O----- --O-O--- -OOO---- --OO*--- -OOO*--- ---****- ---*---- -------- *]
 |;)
 READY
 
-/os: join .2.1 (;GM[Othello]PC[GGS/os]DT[2024.09.05_13:09:11.MDT]
-|PB[Saio2003]PW[Edmond]
-|RB[2687.59]RW[2700.46]
+/os: join .7.1 (;GM[Othello]PC[GGS/os]DT[2024.09.13_09:32:55.MDT]
+|PB[Saio2003]PW[Rostand]
+|RB[2702.27]RW[2707.64]
 |TI[05:00//02:00]
 |TY[s8r18]RE[?]
-|BO[8 --O*---- --O*OO-- --OO---- --O****- -O-*O*-- -----O-- -------- -------- *]
+|BO[8 --O----- --O-O--- -OOO---- --OO*--- -OOO*--- ---****- ---*---- -------- *]
 |;)
 READY
 
-/os: -   .2 2700.5 Edmond   05:00//02:00    s8r18 R 2687.6 Saio2003
+/os: -   .7 2707.6 Rostand  05:00//02:00    s8r18 R 2702.3 Saio2003
 READY
-[send]tell .Edmond --
-tell .Edmond game .2.0
-tell .Edmond HashTable SHARED
+[send]tell .Rostand --
+tell .Rostand game .7.0
+tell .Rostand HashTable SHARED
 
-tell .Edmond Active threads : 2
+tell .Rostand Active threads : 4
 
-tell .Edmond  14@72   E6 == -2
-tell .Edmond  16@72   E6 == -3
-tell .Edmond  18@72   E6 == -3
-tell .Edmond  20@72   E6 == -3
-[recv]READY
-[send]tell .Edmond          B1 maybe better? 
+tell .Rostand  14@72   C6 == +8
+tell .Rostand  16@72   C6 == +7
+tell .Rostand  18@72   C6 == +7
 [recv]READY
 READY
 READY
@@ -229,76 +176,45 @@ READY
 READY
 READY
 READY
-[send]tell .Edmond  22@72   E6 == -2
+[send]tell .Rostand  20@72   C6 == +8
 [recv]READY
-[send]tell .Edmond  24@72   E6 == -2
+[send]tell .Rostand  22@72   C6 == +8
 [recv]READY
-READY
-[send]tell .Edmond  26@72   E6 == -3
+[send]tell .Rostand  24@72   C6 == +7
 [recv]READY
-[send]tell .Edmond  28@72   E6 == -2
+[send]tell .Rostand  26@72   C6 == +7
 [recv]READY
-[send]tell .Edmond  30@72   E6 == -2
+[send]tell .Rostand  28@72   C6 == +7
 [recv]READY
-[send]tell .Edmond  32@72+  E6 == -2
+[send]tell .Rostand  30@72   C6 == +6
 [recv]READY
-[send]tell .Edmond  34@72+  E6 == -2
+[send]tell .Rostand  32@72+  C6 == +6
 [recv]READY
-[send]tell .Edmond  36@72+  E6 == -2
+[send]tell .Rostand  34@72+  C6 == +6
 [recv]READY
-[send]tell .Edmond  36@72+  E6 == -2  Pv : E6 e3 B1 c5 B4 d6 
-tell .Edmond Ts : 00:00:53.23   Tm : 00:00:53.23
-tell .Edmond nodes :  3 757 133 405
-tell .Edmond speed :         70 573 kN/s
-tell /os play .2.0 E6/-2.00/53.24
+[send]tell .Rostand  36@72+  C6 == +6
 [recv]READY
-READY
-READY
-READY
-READY
-
-/os: update .2.0 E6/-2.00/53.24
-READY
-
-/os: update .2.1 e6/-2.00/42.16
-READY
-[send]tell .Edmond --
-tell .Edmond game .2.1
-tell .Edmond HashTable SHARED
-
-tell .Edmond Active threads : 2
-
-[recv]READY
-READY
-READY
-READY
-READY
-READY
-[send]tell .Edmond  45@72   E3 == +2
-[recv]READY
-[send]tell .Edmond  45@84   E3 == +2
-[recv]READY
-[send]tell .Edmond  45@84   E3 == +2  Pv : E3 b1 C5 b4 D6 f3 
-tell .Edmond Ts : 00:01:27.39   Tm : 00:01:26.89
-tell .Edmond nodes :  6 710 228 480
-tell .Edmond speed :         76 783 kN/s
-tell /os play .2.1 E3/2.00/86.90
+[send]tell .Rostand  36@72+  C6 == +6  Pv : C6 f4 F3 f2 G3 h4 
+tell .Rostand Ts : 00:00:52.61   Tm : 00:00:52.61
+tell .Rostand nodes :  4 900 462 924
+tell .Rostand speed :         93 132 kN/s
+tell /os play .7.0 C6/6.00/52.62
 [recv]READY
 READY
 READY
 READY
 READY
 
-/os: update .2.1 E3/2.00/86.90
+/os: update .7.0 C6/6.00/52.62
 READY
 
-/os: update .2.0 e3/2.00/35.50
+/os: update .7.1 c6/7.00/41.83
 READY
-[send]tell .Edmond --
-tell .Edmond game .2.0
-tell .Edmond HashTable SHARED
+[send]tell .Rostand --
+tell .Rostand game .7.1
+tell .Rostand HashTable SHARED
 
-tell .Edmond Active threads : 2
+tell .Rostand Active threads : 4
 
 [recv]READY
 READY
@@ -306,139 +222,119 @@ READY
 READY
 READY
 READY
-[send]tell .Edmond  44@84   B1 == -2  Pv : B1 c5 B4 d6 F3 a4 
-tell .Edmond Ts : 00:00:55.83   Tm : 00:00:55.28
-tell .Edmond nodes :  4 393 553 112
-tell .Edmond speed :         78 686 kN/s
-tell /os play .2.0 B1/-2.00/55.29
+[send]tell .Rostand  35@72+  F4 == -6  Pv : F4 f3 F2 g3 H4 b4 
+tell .Rostand Ts : 00:00:43.60   Tm : 00:00:43.12
+tell .Rostand nodes :  6 632 144 447
+tell .Rostand speed :        152 109 kN/s
+tell /os play .7.1 F4/-6.00/43.12
 [recv]READY
 READY
 READY
 READY
 READY
 
-/os: update .2.0 B1/-2.00/55.29
+/os: update .7.1 F4/-6.00/43.12
 READY
 
-/os: update .2.1 b1/-2.00/30.36
+/os: update .7.0 e7/-8.00/70.41
 READY
-[send]tell .Edmond --
-tell .Edmond game .2.1
-tell .Edmond HashTable SHARED
+[send]tell .Rostand --
+tell .Rostand game .7.0
+tell .Rostand HashTable BLACK
 
-tell .Edmond Active threads : 2
+tell .Rostand Active threads : 2
 
+tell .Rostand [34@72+] C7 >= +6
 [recv]READY
 READY
 READY
 READY
 READY
 READY
-[send]tell .Edmond  43@84   C5 == +2  Pv : C5 b4 D6 f3 A4 b3 
-tell .Edmond Ts : 00:00:47.22   Tm : 00:00:46.70
-tell .Edmond nodes :  3 645 679 937
-tell .Edmond speed :         77 193 kN/s
-tell /os play .2.1 C5/2.00/46.70
+READY
+[send]tell .Rostand  34@72+  C7 >= +6  Pv : C7 d8 B4 b6 A5 a3 
+tell .Rostand Ts : 00:00:29.81   Tm : 00:00:29.81
+tell .Rostand nodes :  1 439 320 465
+tell .Rostand speed :         48 279 kN/s
+tell /os play .7.0 C7/6.00/29.81
 [recv]READY
 READY
 READY
 READY
 READY
 
-/os: update .2.1 C5/2.00/46.70
+/os: update .7.0 C7/6.00/29.81
 READY
 
-/os: update .2.0 c5/2.00/30.88
+/os: update .7.1 a5/6.00/101.95
 READY
-[send]tell .Edmond --
-tell .Edmond game .2.0
-tell .Edmond HashTable SHARED
+[send]tell .Rostand --
+tell .Rostand game .7.1
+tell .Rostand HashTable WHITE
 
-tell .Edmond Active threads : 2
+tell .Rostand Active threads : 2
 
+tell .Rostand [33@72+] B6 >= -6
 [recv]READY
 READY
 READY
 READY
 READY
 READY
-[send]tell .Edmond  42@84   B4 == -2  Pv : B4 d6 F3 a4 B3 e1 
-tell .Edmond Ts : 00:00:41.72   Tm : 00:00:41.18
-tell .Edmond nodes :  3 191 000 629
-tell .Edmond speed :         76 480 kN/s
-tell /os play .2.0 B4/-2.00/41.18
+READY
+[send]tell .Rostand  33@72+  B6 == -6
+[recv]READY
+[send]tell .Rostand  33@72+  B6 == -6  Pv : B6 b4 A6 a7 F5 a4 
+tell .Rostand Ts : 00:00:49.69   Tm : 00:00:49.69
+tell .Rostand nodes :  2 365 726 947
+tell .Rostand speed :         47 602 kN/s
+tell /os play .7.1 B6/-6.00/49.70
 [recv]READY
 READY
 READY
 READY
 READY
 
-/os: update .2.0 B4/-2.00/41.18
+/os: update .7.1 B6/-6.00/49.70
 READY
 
-/os: update .2.1 b4/-2.00/26.92
+/os: update .7.0 d8/-6.00/10.48
 READY
-[send]tell .Edmond --
-tell .Edmond game .2.1
-tell .Edmond HashTable SHARED
+[send]tell .Rostand --
+tell .Rostand game .7.0
+tell .Rostand HashTable BLACK
 
-tell .Edmond Active threads : 2
+tell .Rostand Active threads : 2
 
+tell .Rostand [30@72+] B4 >= +6
 [recv]READY
 READY
 READY
 READY
 READY
 READY
-[send]tell .Edmond  41@84   D6 == +2  Pv : D6 f3 A4 b3 E1 f1 
-tell .Edmond Ts : 00:00:35.30   Tm : 00:00:34.79
-tell .Edmond nodes :  2 677 905 780
-tell .Edmond speed :         75 861 kN/s
-tell /os play .2.1 D6/2.00/34.80
+READY
+[send]tell .Rostand  30@72+  B4 >= +6  Pv : B4 f7 A6 a4 D2 a3 
+tell .Rostand Ts : 00:00:27.11   Tm : 00:00:27.11
+tell .Rostand nodes :  1 291 237 575
+tell .Rostand speed :         47 617 kN/s
+tell /os play .7.0 B4/6.00/27.12
 [recv]READY
 READY
 READY
 READY
 READY
 
-/os: update .2.1 D6/2.00/34.80
+/os: update .7.0 B4/6.00/27.12
 READY
 
-/os: update .2.0 d6/2.00/27.49
+/os: update .7.1 b4/6.00/12.38
 READY
-[send]tell .Edmond --
-tell .Edmond game .2.0
-tell .Edmond HashTable SHARED
+[send]tell .Rostand --
+tell .Rostand game .7.1
+tell .Rostand HashTable WHITE
 
-tell .Edmond Active threads : 2
-
-[recv]READY
-READY
-READY
-READY
-READY
-READY
-[send]tell .Edmond  40@84   F3 == -2  Pv : F3 a4 B3 e1 F1 g6 
-tell .Edmond Ts : 00:00:31.22   Tm : 00:00:30.68
-tell .Edmond nodes :  2 441 528 287
-tell .Edmond speed :         78 191 kN/s
-tell /os play .2.0 F3/-2.00/30.68
-[recv]READY
-READY
-READY
-READY
-READY
-
-/os: update .2.0 F3/-2.00/30.68
-READY
-
-/os: update .2.1 f3/-2.00/45.47
-READY
-[send]tell .Edmond --
-tell .Edmond game .2.1
-tell .Edmond HashTable SHARED
-
-tell .Edmond Active threads : 2
+tell .Rostand Active threads : 2
 
 [recv]READY
 READY
@@ -446,27 +342,57 @@ READY
 READY
 READY
 READY
-[send]tell .Edmond  39@91   A4 == +2  Pv : A4 b3 E1 f1 G6 c6 
-tell .Edmond Ts : 00:00:43.22   Tm : 00:00:28.24
-tell .Edmond nodes :  3 249 190 922
-tell .Edmond speed :         75 169 kN/s
-tell /os play .2.1 A4/2.00/28.25
+[send]tell .Rostand  31@72+  A6 == -6  Pv : A6 a7 F5 a4 A3 a2 
+tell .Rostand Ts : 00:00:56.37   Tm : 00:00:28.29
+tell .Rostand nodes :  4 579 992 204
+tell .Rostand speed :         81 241 kN/s
+tell /os play .7.1 A6/-6.00/28.29
 [recv]READY
 READY
 READY
 READY
 READY
 
-/os: update .2.1 A4/2.00/28.25
+/os: update .7.1 A6/-6.00/28.29
 READY
 
-/os: update .2.0 a4/2.00/42.03
+/os: update .7.0 b6/-6.00/13.38
 READY
-[send]tell .Edmond --
-tell .Edmond game .2.0
-tell .Edmond HashTable SHARED
+[send]tell .Rostand --
+tell .Rostand game .7.0
+tell .Rostand HashTable BLACK
 
-tell .Edmond Active threads : 2
+tell .Rostand Active threads : 2
+
+tell .Rostand [30@72+] A5 == +8
+[recv]READY
+READY
+READY
+READY
+READY
+READY
+READY
+[send]tell .Rostand  30@72+  A5 == +8  Pv : A5 a3 C8 a6 A4 f5 
+tell .Rostand Ts : 00:00:51.24   Tm : 00:00:51.24
+tell .Rostand nodes :  4 194 230 321
+tell .Rostand speed :         81 849 kN/s
+tell /os play .7.0 A5/8.00/51.24
+[recv]READY
+READY
+READY
+READY
+READY
+
+/os: update .7.0 A5/8.00/51.24
+READY
+
+/os: update .7.1 a7/8.00/16.55
+READY
+[send]tell .Rostand --
+tell .Rostand game .7.1
+tell .Rostand HashTable WHITE
+
+tell .Rostand Active threads : 2
 
 [recv]READY
 READY
@@ -474,741 +400,901 @@ READY
 READY
 READY
 READY
-[send]tell .Edmond  38@91   B3 == -2  Pv : B3 e1 F1 g6 C6 g5 
-tell .Edmond Ts : 00:00:39.11   Tm : 00:00:24.92
-tell .Edmond nodes :  2 904 232 481
-tell .Edmond speed :         74 248 kN/s
-tell /os play .2.0 B3/-2.00/24.92
+[send]tell .Rostand  29@72+  F5 == -6  Pv : F5 a4 A3 a2 F7 d2 
+tell .Rostand Ts : 00:01:16.00   Tm : 00:00:23.77
+tell .Rostand nodes :  6 431 017 163
+tell .Rostand speed :         84 613 kN/s
+tell /os play .7.1 F5/-6.00/23.77
 [recv]READY
 READY
 READY
 READY
 READY
 
-/os: update .2.0 B3/-2.00/24.92
+/os: update .7.1 F5/-6.00/23.77
 READY
 
-/os: update .2.1 b3/-2.00/22.75
+/os: update .7.0 a3/-8.00/46.56
 READY
-[send]tell .Edmond --
-tell .Edmond game .2.1
-tell .Edmond HashTable SHARED
+[send]tell .Rostand --
+tell .Rostand game .7.0
+tell .Rostand HashTable BLACK
 
-tell .Edmond Active threads : 2
+tell .Rostand Active threads : 2
 
 [recv]READY
 READY
 READY
 READY
 READY
+READY
+[send]tell .Rostand  28@72+  C8 == +8  Pv : C8 a6 A4 f5 F8 b8 
+tell .Rostand Ts : 00:01:04.69   Tm : 00:00:17.43
+tell .Rostand nodes :  5 575 309 495
+tell .Rostand speed :         86 179 kN/s
+tell /os play .7.0 C8/8.00/17.44
+[recv]READY
+READY
+READY
+READY
+READY
+
+/os: update .7.0 C8/8.00/17.44
+READY
+
+/os: update .7.1 a4/8.00/27.38
+READY
+[send]tell .Rostand --
+tell .Rostand game .7.1
+tell .Rostand HashTable WHITE
+
+tell .Rostand Active threads : 2
+
+[recv]READY
+READY
+READY
+READY
+READY
+READY
+[send]tell .Rostand  37@91   E7 == -6
+[recv]READY
+[send]tell .Rostand  37@91   E7 == -6  Pv : E7 g5 F7 c7 D8 f8 
+tell .Rostand Ts : 00:01:36.89   Tm : 00:00:46.05
+tell .Rostand nodes :  7 178 325 604
+tell .Rostand speed :         74 082 kN/s
+tell /os play .7.1 E7/-6.00/46.05
+[recv]READY
+READY
+READY
+READY
+READY
+
+/os: update .7.1 E7/-6.00/46.05
+READY
+
+/os: update .7.0 a6/-8.00/18.55
+READY
+[send]tell .Rostand --
+tell .Rostand game .7.0
+tell .Rostand HashTable BLACK
+
+tell .Rostand Active threads : 2
+
+[recv]READY
+READY
+READY
+READY
+READY
+READY
+[send]tell .Rostand  36@84   A4 == +8
+[recv]READY
+[send]tell .Rostand  36@84   A4 == +8  Pv : A4 f7 F5 b8 G8 g4 
+tell .Rostand Ts : 00:01:26.78   Tm : 00:00:29.78
+tell .Rostand nodes :  7 158 505 623
+tell .Rostand speed :         82 485 kN/s
+tell /os play .7.0 A4/8.00/29.78
+[recv]READY
+READY
+READY
+READY
+READY
+
+/os: update .7.0 A4/8.00/29.78
+READY
+
+/os: update .7.1 g5/6.00/5.50
+READY
+[send]tell .Rostand --
+tell .Rostand game .7.1
+tell .Rostand HashTable WHITE
+
+tell .Rostand Active threads : 2
+
+[recv]READY
+READY
+READY
+READY
+READY
+READY
+[send]tell .Rostand  35@95   F7 == -6  Pv : F7 c7 D8 f8 C8 d2 
+tell .Rostand Ts : 00:00:54.18   Tm : 00:00:23.39
+tell .Rostand nodes :  4 042 373 326
+tell .Rostand speed :         74 605 kN/s
+tell /os play .7.1 F7/-6.00/23.39
+[recv]READY
+READY
+READY
+READY
+READY
+
+/os: update .7.1 F7/-6.00/23.39
+READY
+
+/os: update .7.0 b8/-8.00/15.47
+READY
+[send]tell .Rostand --
+tell .Rostand game .7.0
+tell .Rostand HashTable BLACK
+
+tell .Rostand Active threads : 2
+
+tell .Rostand [34@84 ] B2 >= +8
+[recv]READY
+READY
+READY
+READY
+READY
+READY
+READY
+[send]tell .Rostand  34@84   B2 == +8
+[recv]READY
+[send]tell .Rostand  34@84   B2 == +8  Pv : B2 g5 E3 d2 F7 f2 
+tell .Rostand Ts : 00:00:28.48   Tm : 00:00:28.48
+tell .Rostand nodes :  2 300 481 636
+tell .Rostand speed :         80 752 kN/s
+tell /os play .7.0 B2/8.00/28.49
+[recv]READY
+READY
+READY
+READY
+READY
+
+/os: update .7.0 B2/8.00/28.49
+READY
+
+/os: update .7.1 c7/6.00/35.06
+READY
+[send]tell .Rostand --
+tell .Rostand game .7.1
+tell .Rostand HashTable WHITE
+
+tell .Rostand Active threads : 2
+
+[recv]READY
+READY
+READY
+READY
+READY
+READY
+[send]tell .Rostand  33@98   D8 == -6  Pv : D8 f8 C8 d2 E8 b8 
+tell .Rostand Ts : 00:01:01.59   Tm : 00:00:25.72
+tell .Rostand nodes :  5 087 039 927
+tell .Rostand speed :         82 588 kN/s
+tell /os play .7.1 D8/-6.00/25.73
+[recv]READY
+READY
+READY
+READY
+READY
+
+/os: update .7.1 D8/-6.00/25.73
+READY
+
+/os: update .7.0 g5/-8.00/17.45
+READY
+[send]tell .Rostand --
+tell .Rostand game .7.0
+tell .Rostand HashTable BLACK
+
+tell .Rostand Active threads : 2
+
+[recv]READY
+READY
+READY
+READY
+READY
+READY
+[send]tell .Rostand  32@91   E3 == +8  Pv : E3 d2 F7 f2 F3 g4 
+tell .Rostand Ts : 00:00:47.01   Tm : 00:00:13.96
+tell .Rostand nodes :  3 798 854 660
+tell .Rostand speed :         80 802 kN/s
+tell /os play .7.0 E3/8.00/13.97
+[recv]READY
+READY
+READY
+READY
+READY
+
+/os: update .7.0 E3/8.00/13.97
+READY
+
+/os: update .7.1 f8/6.00/24.09
+READY
+[send]tell .Rostand --
+tell .Rostand game .7.1
+tell .Rostand HashTable WHITE
+
+tell .Rostand Active threads : 2
+
+tell .Rostand  31@100  C8 == -6  Pv : C8 d2 E8 b8 A3 a2 
+tell .Rostand Ts : 00:00:00.00   Tm : 00:00:00.00
+tell .Rostand nodes :         23 703
+tell .Rostand speed :            N/A
+tell /os play .7.1 C8/-6.00
+[recv]READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+
+/os: update .7.1 C8/-6.00
+READY
+
+/os: update .7.0 d2/-8.00/49.33
+READY
+[send]tell .Rostand --
+tell .Rostand game .7.0
+tell .Rostand HashTable BLACK
+
+tell .Rostand Active threads : 2
+
+[recv]READY
+READY
+READY
+READY
+READY
+READY
+[send]tell .Rostand  30@100  F7 == +8  Pv : F7 f2 F3 g4 F5 f4 
+tell .Rostand Ts : 00:01:19.08   Tm : 00:00:18.92
+tell .Rostand nodes :  6 211 429 434
+tell .Rostand speed :         78 538 kN/s
+tell /os play .7.0 F7/8.00/18.92
+[recv]READY
+READY
+READY
+READY
+READY
+
+/os: update .7.0 F7/8.00/18.92
+READY
+
+/os: update .7.1 d2/6.00/5.50
+READY
+[send]tell .Rostand --
+tell .Rostand game .7.1
+tell .Rostand HashTable WHITE
+
+tell .Rostand Active threads : 2
+
+tell .Rostand  29@100  E8 == -6  Pv : E8 b8 A3 a2 D1 g8 
+tell .Rostand Ts : 00:00:00.00   Tm : 00:00:00.00
+tell .Rostand nodes :          1 008
+tell .Rostand speed :            N/A
+tell /os play .7.1 E8/-6.00
+[recv]READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+
+/os: update .7.1 E8/-6.00
+READY
+
+/os: update .7.0 f2/-8.00/17.20
+READY
+[send]tell .Rostand --
+tell .Rostand game .7.0
+tell .Rostand HashTable BLACK
+
+tell .Rostand Active threads : 2
+
+tell .Rostand  28@100  F3 == +8  Pv : F3 g4 F5 f4 B1 b7 
+tell .Rostand Ts : 00:00:00.00   Tm : 00:00:00.00
+tell .Rostand nodes :         28 011
+tell .Rostand speed :            N/A
+tell /os play .7.0 F3/8.00
+[recv]READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+
+/os: update .7.0 F3/8.00
+READY
+
+/os: update .7.1 b8/6.00/10.48
+READY
+[send]tell .Rostand --
+tell .Rostand game .7.1
+tell .Rostand HashTable WHITE
+
+tell .Rostand Active threads : 2
+
+tell .Rostand  27@100  A3 == -6  Pv : A3 a2 D1 g8 H4 f1 
+tell .Rostand Ts : 00:00:00.00   Tm : 00:00:00.00
+tell .Rostand nodes :            933
+tell .Rostand speed :            N/A
+tell /os play .7.1 A3/-6.00
+[recv]READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+
+/os: update .7.1 A3/-6.00
+READY
+
+/os: update .7.0 g4/-8.00/13.31
+READY
+[send]tell .Rostand --
+tell .Rostand game .7.0
+tell .Rostand HashTable BLACK
+
+tell .Rostand Active threads : 2
+
+tell .Rostand  26@100  F5 == +8  Pv : F5 f4 B1 b7 D1 e8 
+tell .Rostand Ts : 00:00:00.00   Tm : 00:00:00.00
+tell .Rostand nodes :          1 283
+tell .Rostand speed :            N/A
+tell /os play .7.0 F5/8.00
+[recv]READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+
+/os: update .7.0 F5/8.00
+READY
+
+/os: update .7.1 a2/6.00/0.01
+READY
+[send]tell .Rostand --
+tell .Rostand game .7.1
+tell .Rostand HashTable WHITE
+
+tell .Rostand Active threads : 2
+
+tell .Rostand  25@100  D1 == -6  Pv : D1 g8 H4 f1 F2 h5 
+tell .Rostand Ts : 00:00:00.00   Tm : 00:00:00.00
+tell .Rostand nodes :            865
+tell .Rostand speed :            N/A
+tell /os play .7.1 D1/-6.00
+[recv]READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+
+/os: update .7.1 D1/-6.00
+READY
+
+/os: update .7.0 f4/-8.00/0.01
+READY
+[send]tell .Rostand --
+tell .Rostand game .7.0
+tell .Rostand HashTable BLACK
+
+tell .Rostand Active threads : 2
+
+tell .Rostand  24@100  B1 == +8  Pv : B1 b7 D1 e8 F8 g8 
+tell .Rostand Ts : 00:00:00.00   Tm : 00:00:00.00
+tell .Rostand nodes :          1 209
+tell .Rostand speed :            N/A
+tell /os play .7.0 B1/8.00
+[recv]READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+
+/os: update .7.0 B1/8.00
+READY
+
+/os: update .7.1 g8/6.00/0.01
+READY
+[send]tell .Rostand --
+tell .Rostand game .7.1
+tell .Rostand HashTable WHITE
+
+tell .Rostand Active threads : 2
+
+tell .Rostand  23@100  H4 == -6  Pv : H4 f1 F2 h5 G4 h3 
+tell .Rostand Ts : 00:00:00.00   Tm : 00:00:00.00
+tell .Rostand nodes :            813
+tell .Rostand speed :            N/A
+tell /os play .7.1 H4/-6.00
+[recv]READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+
+/os: update .7.1 H4/-6.00
+READY
+
+/os: update .7.0 b7/-8.00/0.01
+READY
+[send]tell .Rostand --
+tell .Rostand game .7.0
+tell .Rostand HashTable BLACK
+
+tell .Rostand Active threads : 2
+
+tell .Rostand  22@100  D1 == +8  Pv : D1 e8 F8 g8 E1 f1 
+tell .Rostand Ts : 00:00:00.00   Tm : 00:00:00.00
+tell .Rostand nodes :          1 145
+tell .Rostand speed :            N/A
+tell /os play .7.0 D1/8.00
+[recv]READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+
+/os: update .7.0 D1/8.00
+READY
+
+/os: update .7.1 h5/6.00/0.01
+READY
+[send]tell .Rostand --
+tell .Rostand game .7.1
+tell .Rostand HashTable WHITE
+
+tell .Rostand Active threads : 2
+
+tell .Rostand [21@100] G4 >= -6
+tell .Rostand  21@100  G4 == -6
+tell .Rostand  21@100  G4 == -6  Pv : G4 h3 H6 h7 G3 g2 
+tell .Rostand Ts : 00:00:00.05   Tm : 00:00:00.05
+tell .Rostand nodes :      1 070 073
+tell .Rostand speed :         20 981 kN/s
+tell /os play .7.1 G4/-6.00/0.05
+[recv]READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+
+/os: update .7.1 G4/-6.00/0.05
+READY
+
+/os: update .7.0 e8/-8.00/0.01
+READY
+[send]tell .Rostand --
+tell .Rostand game .7.0
+tell .Rostand HashTable BLACK
+
+tell .Rostand Active threads : 2
+
+tell .Rostand  20@100  F8 == +8  Pv : F8 g8 E1 f1 H3 h4 
+tell .Rostand Ts : 00:00:00.00   Tm : 00:00:00.00
+tell .Rostand nodes :            765
+tell .Rostand speed :            N/A
+tell /os play .7.0 F8/8.00
+[recv]READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+
+/os: update .7.0 F8/8.00
+READY
+
+/os: update .7.1 h3/6.00/0.01
+READY
+[send]tell /os play .7.1 H6/-6.00/0.00
+[recv]READY
+
+/os: update .7.1 H6/-6.00
+READY
+
+/os: update .7.0 g8/-8.00/0.01
+READY
+[send]tell /os play .7.0 E1/8.00
+[recv]READY
+
+/os: update .7.0 E1/8.00
+READY
+
+/os: update .7.1 h7/6.00/0.01
+READY
+[send]tell /os play .7.1 G3/-6.00/0.00
+[recv]READY
+
+/os: update .7.1 G3/-6.00
+READY
+
+/os: update .7.0 f1/-8.00/0.01
+READY
+[send]tell /os play .7.0 H3/8.00/0.00
+[recv]READY
+
+/os: update .7.0 H3/8.00
+READY
+
+/os: update .7.1 g2/6.00/0.01
+READY
+[send]tell /os play .7.1 B2/-6.00/0.00
+[recv]READY
+
+/os: update .7.1 B2/-6.00
+READY
+
+/os: update .7.0 h4/-8.00/0.01
+READY
+[send]tell /os play .7.0 A8/8.00/0.00
+[recv]READY
+
+/os: update .7.0 A8/8.00
+READY
+
+/os: update .7.1 e1/6.00/0.01
+READY
+[send]tell /os play .7.1 E3/-6.00
+[recv]READY
+
+/os: update .7.1 E3/-6.00
+READY
+
+/os: update .7.0 a7/-8.00/0.01
+READY
+[send]tell /os play .7.0 H8/8.00/0.00
+[recv]READY
+
+/os: update .7.0 H8/8.00
+READY
+
+/os: update .7.1 a1/6.00/0.01
+READY
+[send]tell /os play .7.1 B1/-6.00/0.00
+[recv]READY
+
+/os: update .7.1 B1/-6.00
+READY
+
+/os: update .7.0 h6/-8.00/0.01
+READY
+[send]tell /os play .7.0 G7/8.00/0.00
+[recv]READY
+
+/os: update .7.0 G7/8.00
+READY
+
+/os: update .7.1 f2/6.00/0.01
+READY
+[send]tell /os play .7.1 F3/-6.00/0.00
+[recv]READY
+
+/os: update .7.1 F3/-6.00
+READY
+
+/os: update .7.0 a1/-8.00/0.01
+READY
+[send]tell /os play .7.0 A2/8.00/0.00
+[recv]READY
+
+/os: update .7.0 A2/8.00
+READY
+
+/os: update .7.1 f1/6.00/0.01
+READY
+[send]tell /os play .7.1 H1/-6.00/0.00
+[recv]READY
+
+/os: update .7.1 H1/-6.00
+READY
+
+/os: update .7.0 h7/-8.00/0.01
+READY
+[send]tell /os play .7.0 H5/8.00/0.00
+[recv]READY
+
+/os: update .7.0 H5/8.00
+READY
+
+/os: update .7.1 g1/6.00/0.01
+READY
+[send]tell /os play .7.1 H2/-6.00
+[recv]READY
+
+/os: update .7.1 H2/-6.00
+READY
+
+/os: update .7.0 pass
+READY
+[send]tell /os play .7.0 G3/8.00
+[recv]READY
+
+/os: update .7.0 G3/8.00
+READY
+
+/os: update .7.1 b7/6.00/0.01
+READY
+[send]tell /os play .7.1 A8/-6.00/0.00
+[recv]READY
+
+/os: update .7.1 A8/-6.00
+READY
+
+/os: update .7.0 h2/-8.00/0.01
+READY
+[send]tell /os play .7.0 H1/8.00/0.00
+[recv]READY
+
+/os: update .7.0 H1/8.00
+READY
+
+/os: update .7.1 g7/6.00/0.01
+READY
+[send]tell /os play .7.1 H8
+[recv]READY
+
+/os: update .7.1 H8
+READY
+
+/os: end .7.1 ( Rostand vs. Saio2003 ) -6.00
+READY
+
+/os: update .7.0 g2/-8.00/0.01
+READY
+[send]tell /os play .7.0 G1
+[recv]READY
+
+/os: update .7.0 G1
+READY
+
+/os: end .7.0 ( Rostand vs. Saio2003 ) +8.00
+READY
+
+/os: rating_update .7
+|Rostand  2707.64 @  76.09   +12.85 -> 2720.49 @  74.42
+|Saio2003 2702.27 @  72.39   -11.65 -> 2690.63 @  70.95
+READY
+
+/os: - match .7 2720 Rostand 2691 Saio2003 s8r18 R +1.00  .32329
+READY
+
+/os: +   .8 2678.7 Saio3001 05:00//02:00    s8r18 S 2720.5 Rostand  .32308
+READY
+[send]t /os accept .8
+[recv]READY
+
+/os: + match .8 2720 Rostand 2679 Saio3001 s8r18 R
+READY
+
+/os: join .8.0 (;GM[Othello]PC[GGS/os]DT[2024.09.13_09:46:13.MDT]
+|PB[Rostand]PW[Saio3001]
+|RB[2720.49]RW[2678.72]
+|TI[05:00//02:00]
+|TY[s8r18]RE[?]
+|BO[8 ----*--- ----**-- --***-O- --*OOO-- --OOO-*- ----O--- ----O*-- -------- *]
+|B[D6/-12.00/57.80]W[c6/12.00/45.52]B[B6/-12.00/67.77]W[b5/12.00/11.52]
+|B[A6/-12.00/23.06]W[c2/12.00/22.44]B[F5/-12.00/19.38]W[f3/12.00/25.50]
+|B[F6/-12.00/19.67]W[d1/12.00/22.41]B[G4/-12.00/14.94]W[d7/12.00/29.03]
+|B[C8/-12.00/32.22]W[d8/12.00/79.92]B[F8/-12.00/17.22]W[e8/12.00/11.34]
+|B[C7/-12.00/11.75]W[h3/12.00/8.48]B[B4/-12.00]W[h4/12.00/7.56]
+|B[G6/-12.00/2.71]W[h5/12.00/4.61]B[G2/-12.00]W[h1/12.00/0.01];)
+READY
+
+/os: join .8.1 (;GM[Othello]PC[GGS/os]DT[2024.09.13_09:46:13.MDT]
+|PB[Saio3001]PW[Rostand]
+|RB[2678.72]RW[2720.49]
+|TI[05:00//02:00]
+|TY[s8r18]RE[?]
+|BO[8 ----*--- ----**-- --***-O- --*OOO-- --OOO-*- ----O--- ----O*-- -------- *]
+|B[c6/-12.50/64.63]W[D2/12.00/55.54]B[f3/-12.50/9.38]W[D6[send]tell .Rostand --
+tell .Rostand game .8.0
+tell .Rostand HashTable SHARED
+
+tell .Rostand Active threads : 4
+
+[recv]/12.00/36.18]
+|B[d1/-12.50/9.48]W[B5/12.00/27.39]B[a6/-14.00/35.30]W[C2/14.00/24.09]
+|B[g4/-14.00/35.47]W[F5/14.00/35.25]B[b4/-14.00/16.47]W[B6/14.00/30.14]
+|B[h4/-14.00/57.44]W[A3/14.00/38.80]B[a4/-14.00/14.92]W[B2/14.00/13.91]
+|B[g6/-14.00/17.64]W[A5/14.00/12.96]B[b3/-14.00/11.16]W[C1/14.00]
+|B[e8/-14.00/5.56]W[F6/14.00]B[d7/-14.00/0.01]W[C7/14.00];)
+READY
+
+/os: -   .8 2678.7 Saio3001 05:00//02:00    s8r18 S 2720.5 Rostand  .32308
+READY
+[send]tell .Rostand  22@98   C1 <= -14
+[recv]READY
+READY
+READY
+READY
+READY
+READY
+READY
+[send]tell .Rostand          H6 maybe better? 
+tell .Rostand  22@98   H6 == -12
+tell .Rostand  22@100  H6 == -12
+tell .Rostand  22@100  H6 == -12  Pv : H6 b3 G7 h8 D2 f1 
+tell .Rostand Ts : 00:00:00.75   Tm : 00:00:00.75
+tell .Rostand nodes :     95 313 923
+tell .Rostand speed :        125 743 kN/s
+tell /os play .8.0 H6/-12.00/0.76
+[recv]READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+
+/os: update .8.0 H6/-12.00/0.76
+READY
+
+/os: end .8.0 ( Rostand vs. Saio3001 ) player Saio3001 left
+READY
+
+/os: end .8.1 ( Rostand vs. Saio3001 ) player Saio3001 left
+READY
+
+/os: - match .8 2720 Rostand 2679 Saio3001 s8r18 R Saio3001 left .32308
+READY
+
+/os: +   .9 2678.7 Saio3001 05:00//02:00    s8r18 S 2720.5 Rostand  .32308
+READY
+[send]t /os accept .9
+[recv]READY
+
+/os: + match .9 2720 Rostand 2679 Saio3001 s8r18 R
+READY
+
+/os: join .9.0 (;GM[Othello]PC[GGS/os]DT[2024.09.13_09:46:37.MDT]
+|PB[Rostand]PW[Saio3001]
+|RB[2720.49]RW[2678.72]
+|TI[05:00//02:00]
+|TY[s8r18]RE[?]
+|BO[8 ----*--- ----**-- --***-O- --*OOO-- --OOO-*- ----O--- ----O*-- -------- *]
+|B[D6/-12.00/57.80]W[c6/12.00/45.52]B[B6/-12.00/67.77]W[b5/12.00/11.52]
+|B[A6/-12.00/23.06]W[c2/12.00/22.44]B[F5/-12.00/19.38]W[f3/12.00/25.50]
+|B[F6/-12.00/19.67]W[d1/12.00/22.41]B[G4/-12.00/14.94]W[d7/12.00/29.03]
+|B[C8/-12.00/32.22]W[d8/12.00/79.92]B[F8/-12.00/17.22]W[e8/12.00/11.34]
+|B[C7/-12.00/11.75]W[h3/12.00/8.48]B[B4/-12.00]W[h4/12.00/7.56]
+|B[G6/-12.00/2.71]W[h5/12.00/4.61]B[G2/-12.00]W[h1/12.00/0.01];)
+READY
+
+/os: join .9.1 (;GM[Othello]PC[GGS/os]DT[2024.09.13_09:46:37.MDT]
+|PB[Saio3001]PW[Rostand]
+|RB[2678.72]RW[2720.49]
+|TI[05:00//02:00]
+|TY[s8r18]RE[?]
+|BO[8 ----*--- ----**-- --***-O- --*OOO-- --OOO-*- ----O--- ----O*-- -------- *]
+|B[c6/-12.50/64.63]W[D2/12.00/55.54]B[f3/-12.50/9.38]W[D6[send]tell .Rostand --
+tell .Rostand game .9.0
+tell .Rostand HashTable SHARED
+
+tell .Rostand Active threads : 4
+
+[recv]/12.00/36.18]
+|B[d1/-12.50/9.48]W[B5/12.00/27.39]B[a6/-14.00/35.30]W[C2/14.00/24.09]
+|B[g4/-14.00/35.47]W[F5/14.00/35.25]B[b4/-14.00/16.47]W[B6/14.00/30.14]
+|B[h4/-14.00/57.44]W[A3/14.00/38.80]B[a4/-14.00/14.92]W[B2/14.00/13.91]
+|B[g6/-14.00/17.64]W[A5/14.00/12.96]B[b3/-14.00/11.16]W[C1/14.00]
+|B[e8/-14.00/5.56]W[F6/14.00]B[d7/-14.00/0.01]W[C7/14.00];)
+READY
+
+/os: -   .9 2678.7 Saio3001 05:00//02:00    s8r18 S 2720.5 Rostand  .32308
+READY
+[send]tell .Rostand  22@98   C1 <= -14
+[recv]READY
+READY
+READY
+READY
+READY
+READY
+READY
+[send]tell .Rostand          H6 maybe better? 
+tell .Rostand  22@98   H6 == -12
+tell .Rostand  22@100  H6 == -12
+tell .Rostand  22@100  H6 == -12  Pv : H6 b3 G7 h8 D2 f1 
+tell .Rostand Ts : 00:00:00.75   Tm : 00:00:00.75
+tell .Rostand nodes :     95 208 499
+tell .Rostand speed :        125 604 kN/s
+tell /os play .9.0 H6/-12.00/0.76
+[recv]READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+
+/os: update .9.0 H6/-12.00/0.76
+READY
+
+/os: end .9.0 ( Rostand vs. Saio3001 ) player Saio3001 left
+READY
+
+/os: end .9.1 ( Rostand vs. Saio3001 ) player Saio3001 left
+READY
+
+/os: - match .9 2720 Rostand 2679 Saio3001 s8r18 R Saio3001 left .32308
 READY
 
 HCyrano: t /os open 0
 READY
 [send]t /os open 0
 [recv]READY
-[send]tell .Edmond  37@95   E1 == +2
-[recv]READY
-[send]tell .Edmond  37@95   E1 == +2  Pv : E1 f1 G6 c6 G5 e7 
-tell .Edmond Ts : 00:00:31.42   Tm : 00:00:30.89
-tell .Edmond nodes :  2 588 008 110
-tell .Edmond speed :         82 362 kN/s
-tell /os play .2.1 E1/2.00/30.90
-[recv]READY
-READY
-READY
-READY
-READY
-
-/os: update .2.1 E1/2.00/30.90
-READY
-
-/os: update .2.0 e1/2.00/24.94
-READY
-[send]tell .Edmond --
-tell .Edmond game .2.0
-tell .Edmond HashTable SHARED
-
-tell .Edmond Active threads : 2
-
-[recv]READY
-READY
-READY
-READY
-READY
-READY
-[send]tell .Edmond  36@95   F1 == -2  Pv : F1 g6 C6 g5 E7 a3 
-tell .Edmond Ts : 00:00:19.50   Tm : 00:00:19.13
-tell .Edmond nodes :  1 373 674 748
-tell .Edmond speed :         70 423 kN/s
-tell /os play .2.0 F1/-2.00/19.14
-[recv]READY
-READY
-READY
-READY
-READY
-
-/os: update .2.0 F1/-2.00/19.14
-READY
-
-/os: update .2.1 f1/-2.00/24.83
-READY
-[send]tell .Edmond --
-tell .Edmond game .2.1
-tell .Edmond HashTable SHARED
-
-tell .Edmond Active threads : 2
-
-[recv]READY
-READY
-READY
-READY
-READY
-READY
-[send]tell .Edmond  35@95   G6 == +2  Pv : G6 c6 G5 e7 A3 g3 
-tell .Edmond Ts : 00:00:18.54   Tm : 00:00:12.55
-tell .Edmond nodes :  1 282 628 841
-tell .Edmond speed :         69 151 kN/s
-tell /os play .2.1 G6/2.00/12.56
-[recv]READY
-READY
-READY
-READY
-READY
-
-/os: update .2.1 G6/2.00/12.56
-READY
-
-/os: update .2.0 g6/2.00/43.26
-READY
-[send]tell .Edmond --
-tell .Edmond game .2.0
-tell .Edmond HashTable SHARED
-
-tell .Edmond Active threads : 2
-
-[recv]READY
-READY
-READY
-READY
-READY
-READY
-[send]tell .Edmond  34@95   C6 == -2  Pv : C6 g5 E7 a3 G3 h4 
-tell .Edmond Ts : 00:00:51.40   Tm : 00:00:20.21
-tell .Edmond nodes :  3 642 037 116
-tell .Edmond speed :         70 853 kN/s
-tell /os play .2.0 C6/-2.00/20.21
-[recv]READY
-READY
-READY
-READY
-READY
-
-/os: update .2.0 C6/-2.00/20.21
-READY
-
-/os: update .2.1 c6/-2.00/21.63
-READY
-[send]tell .Edmond --
-tell .Edmond game .2.1
-tell .Edmond HashTable SHARED
-
-tell .Edmond Active threads : 2
-
-[recv]READY
-READY
-READY
-READY
-READY
-READY
-[send]tell .Edmond  33@98   G5 == +2
-[recv]READY
-[send]tell .Edmond  33@98   G5 == +2  Pv : G5 e7 A3 g3 H4 f7 
-tell .Edmond Ts : 00:00:22.01   Tm : 00:00:20.09
-tell .Edmond nodes :  1 506 147 917
-tell .Edmond speed :         68 427 kN/s
-tell /os play .2.1 G5/2.00/20.09
-[recv]READY
-READY
-READY
-READY
-READY
-
-/os: update .2.1 G5/2.00/20.09
-READY
-
-/os: update .2.0 g5/2.00/19.00
-READY
-[send]tell .Edmond --
-tell .Edmond game .2.0
-tell .Edmond HashTable SHARED
-
-tell .Edmond Active threads : 2
-
-[recv]READY
-READY
-READY
-READY
-READY
-READY
-[send]tell .Edmond  32@98   E7 == -2  Pv : E7 a3 G3 h4 F7 h3 
-tell .Edmond Ts : 00:00:12.18   Tm : 00:00:11.70
-tell .Edmond nodes :  1 040 243 709
-tell .Edmond speed :         85 349 kN/s
-tell /os play .2.0 E7/-2.00/11.71
-[recv]READY
-READY
-READY
-READY
-READY
-
-/os: update .2.0 E7/-2.00/11.71
-READY
-
-/os: update .2.1 e7/-2.00/21.78
-READY
-[send]tell .Edmond --
-tell .Edmond game .2.1
-tell .Edmond HashTable SHARED
-
-tell .Edmond Active threads : 2
-
-[recv]READY
-READY
-READY
-READY
-READY
-READY
-[send]tell .Edmond  31@98   A3 == +2  Pv : A3 g3 H4 f7 H3 a6 
-tell .Edmond Ts : 00:00:18.33   Tm : 00:00:07.99
-tell .Edmond nodes :  1 543 742 199
-tell .Edmond speed :         84 178 kN/s
-tell /os play .2.1 A3/2.00/7.99
-[recv]READY
-READY
-READY
-READY
-READY
-
-/os: update .2.1 A3/2.00/7.99
-READY
-
-/os: update .2.0 a3/2.00/15.75
-READY
-[send]tell .Edmond --
-tell .Edmond game .2.0
-tell .Edmond HashTable SHARED
-
-tell .Edmond Active threads : 2
-
-[recv]READY
-READY
-READY
-READY
-READY
-READY
-[send]tell .Edmond  30@100  G3 == -2
-[recv]READY
-[send]tell .Edmond  30@100  G3 == -2  Pv : G3 h4 F7 h3 A6 a5 
-tell .Edmond Ts : 00:00:23.02   Tm : 00:00:14.79
-tell .Edmond nodes :  1 972 147 377
-tell .Edmond speed :         85 659 kN/s
-tell /os play .2.0 G3/-2.00/14.79
-[recv]READY
-READY
-READY
-READY
-READY
-
-/os: update .2.0 G3/-2.00/14.79
-READY
-
-/os: update .2.1 g3/-2.00/28.34
-READY
-[send]tell .Edmond --
-tell .Edmond game .2.1
-tell .Edmond HashTable SHARED
-
-tell .Edmond Active threads : 2
-
-tell .Edmond  29@100  H4 == +2  Pv : H4 f7 H3 a6 A5 b6 
-tell .Edmond Ts : 00:00:04.66   Tm : 00:00:00.00
-tell .Edmond nodes :    402 104 038
-tell .Edmond speed :         86 195 kN/s
-tell /os play .2.1 H4/2.00
-[recv]READY
-READY
-READY
-READY
-READY
-READY
-READY
-READY
-READY
-READY
-READY
-
-/os: update .2.1 H4/2.00
-READY
-
-/os: update .2.0 h4/2.00/33.80
-READY
-[send]tell .Edmond --
-tell .Edmond game .2.0
-tell .Edmond HashTable SHARED
-
-tell .Edmond Active threads : 2
-
-tell .Edmond  28@100  F7 == -2  Pv : F7 h3 A6 a5 B6 a7 
-tell .Edmond Ts : 00:00:00.40   Tm : 00:00:00.00
-tell .Edmond nodes :     28 333 999
-tell .Edmond speed :         69 788 kN/s
-tell /os play .2.0 F7/-2.00/0.00
-[recv]READY
-READY
-READY
-READY
-READY
-READY
-READY
-READY
-READY
-READY
-READY
-
-/os: update .2.0 F7/-2.00
-READY
-
-/os: update .2.1 f7/-2.00/0.01
-READY
-[send]tell .Edmond --
-tell .Edmond game .2.1
-tell .Edmond HashTable SHARED
-
-tell .Edmond Active threads : 2
-
-tell .Edmond  27@100  H3 == +2  Pv : H3 a6 A5 b6 A7 g2 
-tell .Edmond Ts : 00:00:00.00   Tm : 00:00:00.00
-tell .Edmond nodes :          8 186
-tell .Edmond speed :            N/A
-tell /os play .2.1 H3/2.00/0.00
-[recv]READY
-READY
-READY
-READY
-READY
-READY
-READY
-READY
-READY
-READY
-READY
-
-/os: update .2.1 H3/2.00
-READY
-
-/os: update .2.0 h3/2.00/6.16
-READY
-[send]tell .Edmond --
-tell .Edmond game .2.0
-tell .Edmond HashTable SHARED
-
-tell .Edmond Active threads : 2
-
-tell .Edmond  26@100  A6 == -2  Pv : A6 a5 B6 a7 G2 g8 
-tell .Edmond Ts : 00:00:00.00   Tm : 00:00:00.00
-tell .Edmond nodes :          1 566
-tell .Edmond speed :            N/A
-tell /os play .2.0 A6/-2.00
-[recv]READY
-READY
-READY
-READY
-READY
-READY
-READY
-READY
-READY
-READY
-READY
-
-/os: update .2.0 A6/-2.00
-READY
-
-/os: update .2.1 a6/-2.00/0.01
-READY
-[send]tell .Edmond --
-tell .Edmond game .2.1
-tell .Edmond HashTable SHARED
-
-tell .Edmond Active threads : 2
-
-tell .Edmond  25@100  A5 == +2  Pv : A5 b6 A7 g2 G8 h5 
-tell .Edmond Ts : 00:00:00.00   Tm : 00:00:00.00
-tell .Edmond nodes :          1 526
-tell .Edmond speed :            N/A
-tell /os play .2.1 A5/2.00/0.00
-[recv]READY
-READY
-READY
-READY
-READY
-READY
-READY
-READY
-READY
-READY
-READY
-
-/os: update .2.1 A5/2.00
-READY
-
-/os: update .2.0 a5/2.00/0.01
-READY
-[send]tell .Edmond --
-tell .Edmond game .2.0
-tell .Edmond HashTable SHARED
-
-tell .Edmond Active threads : 2
-
-tell .Edmond  24@100  B6 == -2  Pv : B6 a7 G2 g8 H5 d7 
-tell .Edmond Ts : 00:00:00.00   Tm : 00:00:00.00
-tell .Edmond nodes :          1 496
-tell .Edmond speed :            N/A
-tell /os play .2.0 B6/-2.00/0.00
-[recv]READY
-READY
-READY
-READY
-READY
-READY
-READY
-READY
-READY
-READY
-READY
-
-/os: update .2.0 B6/-2.00
-READY
-
-/os: update .2.1 b6/-2.00/0.01
-READY
-[send]tell .Edmond --
-tell .Edmond game .2.1
-tell .Edmond HashTable SHARED
-
-tell .Edmond Active threads : 2
-
-tell .Edmond  23@100  A7 == +2  Pv : A7 g2 G8 h5 D7 b7 
-tell .Edmond Ts : 00:00:00.00   Tm : 00:00:00.00
-tell .Edmond nodes :          1 461
-tell .Edmond speed :            N/A
-tell /os play .2.1 A7/2.00
-[recv]READY
-READY
-READY
-READY
-READY
-READY
-READY
-READY
-READY
-READY
-READY
-
-/os: update .2.1 A7/2.00
-READY
-
-/os: update .2.0 b2/2.00/0.01
-READY
-[send]tell .Edmond --
-tell .Edmond game .2.0
-tell .Edmond HashTable BLACK
-
-tell .Edmond Active thread : 1
-
-tell .Edmond [22@72 ] G2 >= -2
-[recv]READY
-READY
-READY
-READY
-READY
-READY
-READY
-[send]tell .Edmond  22@98   G2 == -2
-tell .Edmond  22@100  G2 == -2
-tell .Edmond  22@100  G2 == -2  Pv : G2 d8 D7 b7 H2 c8 
-tell .Edmond Ts : 00:00:00.47   Tm : 00:00:00.47
-tell .Edmond nodes :     19 435 369
-tell .Edmond speed :         41 089 kN/s
-tell /os play .2.0 G2/-2.00/0.47
-[recv]READY
-READY
-READY
-READY
-READY
-READY
-READY
-
-/os: update .2.0 G2/-2.00/0.47
-READY
-
-/os: update .2.1 g2/-2.00/0.01
-READY
-[send]tell .Edmond --
-tell .Edmond game .2.1
-tell .Edmond HashTable WHITE
-
-tell .Edmond Active thread : 1
-
-tell .Edmond [21@100] G8 == +2
-tell .Edmond  21@100  G8 == +2
-tell .Edmond  21@100  G8 == +2  Pv : G8 h5 D7 b7 G1 h1 
-tell .Edmond Ts : 00:00:00.13   Tm : 00:00:00.13
-tell .Edmond nodes :      4 182 379
-tell .Edmond speed :         31 211 kN/s
-tell /os play .2.1 G8/2.00/0.14
-[recv]READY
-READY
-READY
-READY
-READY
-READY
-READY
-READY
-READY
-READY
-READY
-READY
-READY
-
-/os: update .2.1 G8/2.00/0.14
-READY
-
-/os: update .2.0 d8/2.00/0.01
-READY
-[send]tell .Edmond --
-tell .Edmond game .2.0
-tell .Edmond HashTable BLACK
-
-tell .Edmond Active thread : 1
-
-tell .Edmond  20@100  D7 == -2  Pv : D7 b7 H2 c8 A1 a2 
-tell .Edmond Ts : 00:00:00.00   Tm : 00:00:00.00
-tell .Edmond nodes :            747
-tell .Edmond speed :            N/A
-tell /os play .2.0 D7/-2.00
-[recv]READY
-READY
-READY
-READY
-READY
-READY
-READY
-READY
-READY
-READY
-READY
-
-/os: update .2.0 D7/-2.00
-READY
-
-/os: update .2.1 h5/-2.00/0.01
-READY
-[send]tell /os play .2.1 D7/2.00
-[recv]READY
-
-/os: update .2.1 D7/2.00
-READY
-
-/os: update .2.0 c8/2.00/0.01
-READY
-[send]tell /os play .2.0 E8/-2.00/0.03
-[recv]READY
-
-/os: update .2.0 E8/-2.00/0.03
-READY
-
-/os: update .2.1 b7/-2.00/0.01
-READY
-[send]tell /os play .2.1 G1/2.00
-[recv]READY
-
-/os: update .2.1 G1/2.00
-READY
-
-/os: update .2.0 b7/2.00/0.01
-READY
-[send]tell /os play .2.0 H2/-2.00/0.00
-[recv]READY
-
-/os: update .2.0 H2/-2.00
-READY
-
-/os: update .2.1 h1/-2.00/0.01
-READY
-[send]tell /os play .2.1 H2/2.00/0.00
-[recv]READY
-
-/os: update .2.1 H2/2.00
-READY
-
-/os: update .2.0 c7/2.00/0.01
-READY
-[send]tell /os play .2.0 A1/-2.00/0.00
-[recv]READY
-
-/os: update .2.0 A1/-2.00
-READY
-
-/os: update .2.1 b2/-2.00/0.01
-READY
-[send]tell /os play .2.1 A8/2.00/0.00
-[recv]READY
-
-/os: update .2.1 A8/2.00
-READY
-
-/os: update .2.0 a2/2.00/0.01
-READY
-[send]tell /os play .2.0 B8/-2.00/0.00
-[recv]READY
-
-/os: update .2.0 B8/-2.00
-READY
-
-/os: update .2.1 c8/-2.00/0.01
-READY
-[send]tell /os play .2.1 E8/2.00/0.00
-[recv]READY
-
-/os: update .2.1 E8/2.00
-READY
-
-/os: update .2.0 f8/2.00/0.01
-READY
-[send]tell /os play .2.0 G8/-2.00/0.00
-[recv]READY
-
-/os: update .2.0 G8/-2.00
-READY
-
-/os: update .2.1 b8/-2.00/0.01
-READY
-[send]tell /os play .2.1 C7/2.00/0.00
-[recv]READY
-
-/os: update .2.1 C7/2.00
-READY
-
-/os: update .2.0 a8/2.00/0.01
-READY
-[send]tell /os play .2.0 A7/-2.00
-[recv]READY
-
-/os: update .2.0 A7/-2.00
-READY
-
-/os: update .2.1 d8/-2.00/0.01
-READY
-[send]tell /os play .2.1 F8/2.00/0.00
-[recv]READY
-
-/os: update .2.1 F8/2.00
-READY
-
-/os: update .2.0 h8/2.00/0.01
-READY
-[send]tell /os play .2.0 H6/-2.00/0.00
-[recv]READY
-
-/os: update .2.0 H6/-2.00
-READY
-
-/os: update .2.1 h8/-2.00/0.01
-READY
-[send]tell /os play .2.1 H6/2.00/0.00
-[recv]READY
-
-/os: update .2.1 H6/2.00
-READY
-
-/os: update .2.0 h7/2.00/0.01
-READY
-[send]tell /os play .2.0 H5/-2.00/0.00
-[recv]READY
-
-/os: update .2.0 H5/-2.00
-READY
-
-/os: update .2.1 h7/-2.00/0.01
-READY
-[send]tell /os play .2.1 G7/2.00
-[recv]READY
-
-/os: update .2.1 G7/2.00
-READY
-
-/os: update .2.0 h1/2.00/0.01
-READY
-[send]tell /os play .2.0 G1//0.00
-[recv]READY
-
-/os: update .2.0 G1
-READY
-
-/os: update .2.1 pass
-READY
-[send]tell /os play .2.1 A1/2.00
-[recv]READY
-
-/os: update .2.1 A1/2.00
-READY
-
-/os: update .2.0 g7/2.00/0.01
-READY
-
-/os: end .2.0 ( Edmond vs. Saio2003 ) -2.00
-READY
-
-/os: update .2.1 a2/-2.00/0.01
-READY
-
-/os: end .2.1 ( Edmond vs. Saio2003 ) +2.00
-READY
-
-/os: rating_update .2
-|Edmond   2700.46 @  55.44    -0.60 -> 2699.86 @  54.79
-|Saio2003 2687.59 @  83.52    +1.37 -> 2688.96 @  81.28
-READY
-
-/os: - match .2 2700 Edmond 2689 Saio2003 s8r18 R +0.00  .32313
-READY
-
-HCyrano: t /os open 1
-READY
-[send]t /os open 1
-[recv]READY
-
-HCyrano:  ta s8r18 5:00 Saio2003
-READY
-[send]ta s8r18 5:00 Saio2003
-[recv]READY
-
-/os: +   .3 2699.9 Edmond   05:00//02:00    s8r18 R 2689.0 Saio2003
-READY
-
-/os: -   .3 2699.9 Edmond   05:00//02:00    s8r18 R 2689.0 Saio2003
-READY
-
-Saio2003: Sorry, i will accept new games in 1693 seconds, now expanding this line : D3C3C4E3F4D6C6C5
-READY
-
-HCyrano: t /os open 0
-READY
-[send]t /os open 0
-[recv]READY
-
-HCyrano: quit
-READY
-[send]quit

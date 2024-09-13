@@ -70,10 +70,7 @@ void RXRoxane::connectGGS(CODKStream* client) {
 
 void RXRoxane::stop_engine(const string& _idg, COsGame* g) {
     
-    int player = g->pos.board.fBlackMove? BLACK : WHITE;
-
-    std::cout << "RXRoxane::stop_game :" << _idg << " Engine : " << (player == BLACK? "BLACK" : "WHITE") << std::endl;
-    
+    int player = g->pos.board.fBlackMove? BLACK : WHITE;    
     engine[player]->resume();
     
 }

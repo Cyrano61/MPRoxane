@@ -29,8 +29,11 @@ const int RXEngine::INTERRUPT = 4;
 const int RXEngine::GGS_MSG = 5;
 
 const int RXEngine::CONFIDENCE[]   = {  72,   84,   91,   95,   98,   100}; // 99
-//const float RXEngine::PERCENTILE[] = {1.1f, 1.4f, 1.8f, 2.3f, 2.9f};		//  3.6f
-const float RXEngine::PERCENTILE[] = {1.2f, 1.45f, 1.8f, 2.3f, 2.9f};
+//const float RXEngine::PERCENTILE[] = {1.2f, 1.45f, 1.8f, 2.3f, 2.9f}; //old values v stop_2.0.2
+const float RXEngine::PERCENTILE[] = {1.2f, 1.4f, 1.7f, 2.1f, 2.6f}; // standard
+//const float RXEngine::PERCENTILE[] = {1.15f, 1.3f, 1.5f, 1.9f, 2.4f}; // agressive
+
+
 const int RXEngine::NO_SELECT = 5;
 
 const int RXEngine::DEPTH_BOOSTER = 4;
@@ -1454,10 +1457,7 @@ void RXEngine::get_move(RXSearch& s) {
         new_search = false;
         
         determine_move_time(board);
-        
-        //DEGUG
-        *log << "[" << get_current_time() << "] " << "        RXEngine : dependent time : " << (dependent_time ? "true":"false" )<< std::endl;
-        
+                
         //interrupt search if time limit < probable time search
         if(time_limit() < (time_nextLevel - (get_current_time() - time_startLevel))) {
             *log  << "        interrupt search: likely timeout\n" <<  std::endl;
@@ -1665,9 +1665,7 @@ void RXEngine::run() {
     *log	<< "---------------------------------------------------------------------------------------------------\n"
     << search_sBoard
     << std::endl;
-    //DEGUG
-    *log << "[" << get_current_time() << "] " << "        RXEngine : dependent time : " << (dependent_time ? "true":"false" )<< std::endl;
-    
+
     
     RXBitBoard& board = search_sBoard.board;
     root_player = board.player;
@@ -2419,6 +2417,8 @@ bool RXEngine::split(RXBBPatterns& sBoard, bool pv, int pvDev,
     RXSplitPoint& splitPoint = threads[master].splitPointStack[threads[master].activeSplitPoints];
     splitPoint.n_Slaves = 1;
     
+
+    
     pthread_mutex_unlock(&MP_sync);
     
     // add thread
@@ -2463,10 +2463,15 @@ bool RXEngine::split(RXBBPatterns& sBoard, bool pv, int pvDev,
     pthread_mutex_unlock(&MP_sync);
     
     
-    // sans synchronisation
+    // without synchronisation
     // Initialize the split point object:
     
     splitPoint.sBoard = &sBoard; // pointer on sBoard
+    
+    //free scheduling rather than under mutex
+    if (callback == RXSplitPoint::MID_PVS || callback == RXSplitPoint::END_PVS) //
+         list->sort_by_score();
+
     splitPoint.list = list;
     
     splitPoint.depth = depth;
@@ -2503,6 +2508,7 @@ bool RXEngine::split(RXBBPatterns& sBoard, bool pv, int pvDev,
             pthread_mutex_unlock(&threads[i].lock);
             
         }
+    
     
     
     // Everything is set up.  The master thread enters the idle loop, from

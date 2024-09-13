@@ -1,0 +1,568 @@
+---------------------------------------------------------------------------------------------------
+
+  A B C D E F G H 
+1 . . O . . . . . 1
+2 . . O . O . . . 2
+3 . O O O . . . . 3
+4 . . O O O O . . 4	Noirs: 11	Blancs: 10
+5 # # # # # . . . 5	BLANCS au trait
+6 . . # # # # # . 6
+7 . . . # . . . . 7
+8 . . . . . . . . 8
+  A B C D E F G H 
+
+Evaluation : -9
+
+  depth | score | principal variation                 | time        |      nodes (N) |     kN/s |
+[33@72 ]|>= -6  | B6 -- -- -- -- -- -- -- -- -- -- -- | 00:00:00.00 |                |          |
+
+        tr: 00:04:16.87 tm: 00:00:49.69 xt: 00:00:49.69
+        stop before       : 00:03:27.18   : 00:02:37.48
+
+[49698]         MG_NWS_XProbCut : idThread :0 time search expired, stops search
+[49698]         MG_NWS_XProbCut : idThread :1 time search expired, stops search
+ 33@72+ | # -6  | B6 b4 A6 a7 F5 a4 A3 a2 F7 d2 E3 f2 | 00:00:49.69 |  2 365 726 927 |   47 603 |
+I play B6
+evaluation -6
+time 00:00:49.69
+---------------------------------------------------------------------------------------------------
+
+  A B C D E F G H 
+1 . . O . . . . . 1
+2 . . O . O . . . 2
+3 . O O O . . . . 3
+4 . # O O O O . . 4	Noirs: 12	Blancs: 11
+5 # # # # # . . . 5	BLANCS au trait
+6 . O # # # # # . 6
+7 . . . # . . . . 7
+8 . . . . . . . . 8
+  A B C D E F G H 
+
+Evaluation : -9
+
+  depth | score | principal variation                 | time        |      nodes (N) |     kN/s |
+[31@72+]|   -6  | A6 a7 F5 a4 A3 a2 F7 d2 E3 f2 E7 f3 | 00:00:00.00 |                |          |
+
+        tr: 00:03:27.18 tm: 00:00:42.86 xt: 00:00:42.86
+        stop before       : 00:02:44.31   : 00:02:01.45
+
+ 31@72+ | # -6  | A6 a7 F5 a4 A3 a2 F7 d2 E3 f2 E7 f3 | 00:00:56.37 |  4 579 992 216 |   81 242 |
+I play A6
+evaluation -6
+time 00:00:28.29
+---------------------------------------------------------------------------------------------------
+
+  A B C D E F G H 
+1 . . O . . . . . 1
+2 . . O . O . . . 2
+3 . O O O . . . . 3
+4 . # O O O O . . 4	Noirs: 14	Blancs: 11
+5 # O # # # . . . 5	BLANCS au trait
+6 # # # # # # # . 6
+7 # . . # . . . . 7
+8 . . . . . . . . 8
+  A B C D E F G H 
+
+Evaluation : -2
+
+  depth | score | principal variation                 | time        |      nodes (N) |     kN/s |
+[29@72+]|   -6  | F5 a4 A3 a2 F7 d2 E3 f2 E7 f3 G4 g5 | 00:00:00.00 |                |          |
+
+        tr: 00:02:58.89 tm: 00:00:36.01 xt: 00:00:36.01
+        stop before       : 00:02:22.87   : 00:01:46.85
+
+[76005]         MG_NWS_XProbCut : idThread :1 time search expired, stops search
+ 29@72+ | # -6  | F5 a4 A3 a2 F7 d2 E3 f2 E7 f3 G4 g5 | 00:01:16.00 |  6 431 017 175 |   84 614 |
+I play F5
+evaluation -6
+time 00:00:23.77
+---------------------------------------------------------------------------------------------------
+
+  A B C D E F G H 
+1 . . O . . . . . 1
+2 . . O . O . . . 2
+3 . O O O . . . . 3
+4 # # O O O O . . 4	Noirs: 13	Blancs: 14
+5 # # O O O O . . 5	BLANCS au trait
+6 # # # # # # # . 6
+7 # . . # . . . . 7
+8 . . . . . . . . 8
+  A B C D E F G H 
+
+Evaluation : -6
+
+  depth | score | principal variation                 | time        |      nodes (N) |     kN/s |
+[27@72+]|   -6  | A3 a2 F7 d2 E3 f2 E7 f3 G4 g5 C8 h3 | 00:00:00.00 |                |          |
+ 37@72  |   -6  | E7 g5 F7 c7 D8 f8 C8 d2 E8 b8 A3 a2 | 00:00:08.34 |    681 899 105 |   81 742 |
+ 37@84  |   -6  | E7 g5 F7 c7 D8 f8 C8 d2 E8 b8 A3 a2 | 00:00:31.49 |  1 695 934 032 |   73 245 |
+
+        tr: 00:02:35.12 tm: 00:00:48.35 xt: 00:00:48.35
+        stop before       : 00:01:46.76   : 00:00:58.41
+
+ 37@91  |   -6  | E7 g5 F7 c7 D8 f8 C8 d2 E8 b8 A3 a2 | 00:01:20.35 |  3 598 895 730 |   73 666 |
+
+        tr: 00:02:05.61 tm: 00:00:40.26 xt: 00:00:40.26
+        stop before       : 00:01:25.34   : 00:00:45.07
+
+I play E7
+evaluation -6
+time 00:00:46.05
+---------------------------------------------------------------------------------------------------
+
+  A B C D E F G H 
+1 . . O . . . . . 1
+2 . . O . O . . . 2
+3 . O O O . . . . 3
+4 # # O O O O . . 4	Noirs: 16	Blancs: 13
+5 # # # # # # # . 5	BLANCS au trait
+6 # # # O O # # . 6
+7 # . . # O . . . 7
+8 . . . . . . . . 8
+  A B C D E F G H 
+
+Evaluation : -11
+
+  depth | score | principal variation                 | time        |      nodes (N) |     kN/s |
+[35@91 ]|   -6  | F7 c7 D8 f8 C8 d2 E8 b8 A3 a2 D1 g8 | 00:00:00.00 |                |          |
+ 35@95  |   -6  | F7 c7 D8 f8 C8 d2 E8 b8 A3 a2 D1 g8 | 00:00:30.35 |  2 329 554 913 |   76 736 |
+
+        tr: 00:01:49.07 tm: 00:00:35.43 xt: 00:00:35.43
+        stop before       : 00:01:13.63   : 00:00:38.19
+
+[54183]         MG_NWS_XProbCut : idThread :1 time search expired, stops search
+I play F7
+evaluation -6
+time 00:00:23.39
+---------------------------------------------------------------------------------------------------
+
+  A B C D E F G H 
+1 . . O . . . . . 1
+2 . . O . O . . . 2
+3 . O O O . . . . 3
+4 # # O O O O . . 4	Noirs: 16	Blancs: 15
+5 # # # # # O # . 5	BLANCS au trait
+6 # # # # O O # . 6
+7 # . # # O O . . 7
+8 . . . . . . . . 8
+  A B C D E F G H 
+
+Evaluation : -16
+
+  depth | score | principal variation                 | time        |      nodes (N) |     kN/s |
+[33@98 ]|   -6  | D8 f8 C8 d2 E8 b8 A3 a2 D1 g8 H4 f1 | 00:00:00.00 |                |          |
+
+        tr: 00:01:25.68 tm: 00:00:38.97 xt: 00:00:23.35
+        stop before       : 00:00:46.70   : 00:00:23.35
+
+I play D8
+evaluation -6
+time 00:00:25.72
+---------------------------------------------------------------------------------------------------
+
+  A B C D E F G H 
+1 . . O . . . . . 1
+2 . . O . O . . . 2
+3 . O O O . . . . 3
+4 # # O O O O . . 4	Noirs: 16	Blancs: 17
+5 # # # O # O # . 5	BLANCS au trait
+6 # # # # O O # . 6
+7 # . # O # O . . 7
+8 . . . O . # . . 8
+  A B C D E F G H 
+
+Evaluation : -13
+
+  depth | score | principal variation                 | time        |      nodes (N) |     kN/s |
+[31    ]|   -6  | C8 d2 E8 b8 A3 a2 D1 g8 H4 f1 F2 h5 | 00:00:00.00 |                |          |
+ 31     |   -6  | C8 d2 E8 b8 A3 a2 D1 g8 H4 f1 F2 h5 | 00:00:00.00 |         23 715 |      N/A |
+
+        tr: 00:00:59.95 tm: 00:00:26.21 xt: 00:00:16.86
+        stop before       : 00:00:33.73   : 00:00:16.86
+
+I play C8
+evaluation -6
+time 00:00:00.00
+---------------------------------------------------------------------------------------------------
+
+  A B C D E F G H 
+1 . . O . . . . . 1
+2 . . O # O . . . 2
+3 . O # # . . . . 3
+4 # # O # O O . . 4	Noirs: 18	Blancs: 17
+5 # # O # # O # . 5	BLANCS au trait
+6 # # O # O O # . 6
+7 # . O O # O . . 7
+8 . . O O . # . . 8
+  A B C D E F G H 
+
+Evaluation : -9
+
+  depth | score | principal variation                 | time        |      nodes (N) |     kN/s |
+[29    ]|   -6  | E8 b8 A3 a2 D1 g8 H4 f1 F2 h5 G4 h3 | 00:00:00.00 |                |          |
+ 29     |   -6  | E8 b8 A3 a2 D1 g8 H4 f1 F2 h5 G4 h3 | 00:00:00.00 |          1 020 |      N/A |
+
+        tr: 00:00:59.95 tm: 00:00:26.21 xt: 00:00:16.86
+        stop before       : 00:00:33.73   : 00:00:16.86
+
+I play E8
+evaluation -6
+time 00:00:00.00
+---------------------------------------------------------------------------------------------------
+
+  A B C D E F G H 
+1 . . O . . . . . 1
+2 . . O # O . . . 2
+3 . O # # . . . . 3
+4 # # O # O O . . 4	Noirs: 22	Blancs: 15
+5 # # O # # O # . 5	BLANCS au trait
+6 # # O # O O # . 6
+7 # . # O O O . . 7
+8 . # # # # # . . 8
+  A B C D E F G H 
+
+Evaluation : -8
+
+  depth | score | principal variation                 | time        |      nodes (N) |     kN/s |
+[27    ]|   -6  | A3 a2 D1 g8 H4 f1 F2 h5 G4 h3 H6 h7 | 00:00:00.00 |                |          |
+ 27     |   -6  | A3 a2 D1 g8 H4 f1 F2 h5 G4 h3 H6 h7 | 00:00:00.00 |            945 |      N/A |
+
+        tr: 00:00:59.95 tm: 00:00:31.46 xt: 00:00:14.24
+        stop before       : 00:00:28.48   : 00:00:14.24
+
+I play A3
+evaluation -6
+time 00:00:00.00
+---------------------------------------------------------------------------------------------------
+
+  A B C D E F G H 
+1 . . O . . . . . 1
+2 # . O # O . . . 2
+3 # # # # . . . . 3
+4 # O # # O O . . 4	Noirs: 25	Blancs: 14
+5 # # O # # O # . 5	BLANCS au trait
+6 # # O # O O # . 6
+7 # . # O O O . . 7
+8 . # # # # # . . 8
+  A B C D E F G H 
+
+Evaluation : -5
+
+  depth | score | principal variation                 | time        |      nodes (N) |     kN/s |
+[25    ]|   -6  | D1 g8 H4 f1 F2 h5 G4 h3 H6 h7 G3 g2 | 00:00:00.00 |                |          |
+ 25     |   -6  | D1 g8 H4 f1 F2 h5 G4 h3 H6 h7 G3 g2 | 00:00:00.00 |            877 |      N/A |
+
+        tr: 00:00:59.95 tm: 00:00:31.46 xt: 00:00:14.24
+        stop before       : 00:00:28.48   : 00:00:14.24
+
+I play D1
+evaluation -6
+time 00:00:00.00
+---------------------------------------------------------------------------------------------------
+
+  A B C D E F G H 
+1 . . O O . . . . 1
+2 # . O O O . . . 2
+3 # # # O . . . . 3
+4 # O # O O O . . 4	Noirs: 24	Blancs: 17
+5 # # O # # O # . 5	BLANCS au trait
+6 # # O O # O # . 6
+7 # . # O O # . . 7
+8 . # # # # # # . 8
+  A B C D E F G H 
+
+Evaluation : -6
+
+  depth | score | principal variation                 | time        |      nodes (N) |     kN/s |
+[23    ]|   -6  | H4 f1 F2 h5 G4 h3 H6 h7 G3 g2 B2 e3 | 00:00:00.00 |                |          |
+ 23     |   -6  | H4 f1 F2 h5 G4 h3 H6 h7 G3 g2 B2 e3 | 00:00:00.00 |            825 |      N/A |
+
+        tr: 00:00:59.95 tm: 00:00:34.09 xt: 00:00:12.93
+        stop before       : 00:00:25.86   : 00:00:12.93
+
+I play H4
+evaluation -6
+time 00:00:00.00
+---------------------------------------------------------------------------------------------------
+
+  A B C D E F G H 
+1 . . O O . # . . 1
+2 # . O O # . . . 2
+3 # # # # . . . . 3
+4 # O # O O O . O 4	Noirs: 26	Blancs: 17
+5 # # O # # O O . 5	BLANCS au trait
+6 # # O O # O # . 6
+7 # . # O O # . . 7
+8 . # # # # # # . 8
+  A B C D E F G H 
+
+Evaluation : -6
+
+  depth | score | principal variation                 | time        |      nodes (N) |     kN/s |
+[21    ]|   -6  | F2 h5 G4 h3 H6 h7 G3 g2 B2 e3 F3 b7 | 00:00:00.00 |                |          |
+ 21     |   -6  | F2 h5 G4 h3 H6 h7 G3 g2 B2 e3 F3 b7 | 00:00:00.00 |            661 |      N/A |
+---------------------------------------------------------------------------------------------------
+
+  A B C D E F G H 
+1 . . O O . . . . 1
+2 # . O O O . . . 2
+3 # # # O . . . . 3
+4 # O # O O O . O 4	Noirs: 26	Blancs: 17
+5 # # O # # # # # 5	BLANCS au trait
+6 # # O O # O # . 6
+7 # . # O O # . . 7
+8 . # # # # # # . 8
+  A B C D E F G H 
+
+Evaluation : -11
+
+  depth | score | principal variation                 | time        |      nodes (N) |     kN/s |
+[21    ]|>= -6  | G4 h3 H6 h7 G3 e3 F3 -- -- -- -- -- | 00:00:00.00 |                |          |
+
+        tr: 00:00:59.94 tm: 00:00:38.95 xt: 00:00:10.49
+        stop before       : 00:00:20.99   : 00:00:10.49
+
+ 21     |   -6  | G4 h3 H6 h7 G3 g2 B2 e1 E3 a1 B1 f2 | 00:00:00.05 |      1 070 085 |   21 401 |
+I play G4
+evaluation -6
+time 00:00:00.05
+---------------------------------------------------------------------------------------------------
+
+  A B C D E F G H 
+1 . . O O . . . . 1
+2 # . O O O . . . 2
+3 # # # O . . . # 3
+4 # O # O O O # # 4	Noirs: 30	Blancs: 15
+5 # # O # # # # # 5	BLANCS au trait
+6 # # O O # O # . 6
+7 # . # # O # . . 7
+8 . # # # # # # . 8
+  A B C D E F G H 
+
+Evaluation : -6
+
+  depth | score | principal variation                 | time        |      nodes (N) |     kN/s |
+[19    ]|   -6  | H6 h7 G3 g2 B2 e1 E3 a1 B1 f2 F3 f1 | 00:00:00.00 |                |          |
+ 19     |   -6  | H6 h7 G3 g2 B2 e1 E3 a1 B1 f2 F3 f1 | 00:00:00.00 |            445 |      N/A |
+
+        tr: 00:00:59.90 tm: 00:00:36.68 xt: 00:00:11.61
+        stop before       : 00:00:23.22   : 00:00:11.61
+
+I play H6
+evaluation -6
+time 00:00:00.00
+---------------------------------------------------------------------------------------------------
+
+  A B C D E F G H 
+1 . . O O . . . . 1
+2 # . O O O . . . 2
+3 # # # O . . . # 3
+4 # O # O O O # # 4	Noirs: 31	Blancs: 16
+5 # # O # # # O # 5	BLANCS au trait
+6 # # O O # O # # 6
+7 # . # # O # . # 7
+8 . # # # # # # . 8
+  A B C D E F G H 
+
+Evaluation : -8
+
+  depth | score | principal variation                 | time        |      nodes (N) |     kN/s |
+[17    ]|   -6  | G3 g2 B2 e1 E3 a1 B1 f2 F3 f1 H1 -- | 00:00:00.00 |                |          |
+ 17     |   -6  | G3 g2 B2 e1 E3 a1 B1 f2 F3 f1 H1 -- | 00:00:00.00 |            364 |      N/A |
+
+        tr: 00:00:59.90 tm: 00:00:36.68 xt: 00:00:11.61
+        stop before       : 00:00:23.22   : 00:00:11.61
+
+I play G3
+evaluation -6
+time 00:00:00.00
+---------------------------------------------------------------------------------------------------
+
+  A B C D E F G H 
+1 . . O O . . . . 1
+2 # . O O O . # . 2
+3 # # # O . . # # 3
+4 # O # O O O # # 4	Noirs: 34	Blancs: 15
+5 # # O # # # # # 5	BLANCS au trait
+6 # # O O # O # # 6
+7 # . # # O # . # 7
+8 . # # # # # # . 8
+  A B C D E F G H 
+
+Evaluation : -4
+
+  depth | score | principal variation                 | time        |      nodes (N) |     kN/s |
+[15    ]|   -6  | B2 e1 E3 a1 B1 f2 F3 f1 H1 -- -- -- | 00:00:00.00 |                |          |
+
+        tr: 00:00:59.89 tm: 00:00:43.41 xt: 00:00:08.24
+        stop before       : 00:00:16.48   : 00:00:08.24
+
+ 15     |   -6  | B2 e1 E3 a1 B1 f2 F3 f1 H1 -- -- -- | 00:00:00.00 |            315 |      N/A |
+I play B2
+evaluation -6
+time 00:00:00.00
+---------------------------------------------------------------------------------------------------
+
+  A B C D E F G H 
+1 . . O O # . . . 1
+2 # O O # O . # . 2
+3 # O # O . . # # 3
+4 # # # O O O # # 4	Noirs: 36	Blancs: 15
+5 # # O # # # # # 5	BLANCS au trait
+6 # # O O # O # # 6
+7 # . # # O # . # 7
+8 . # # # # # # . 8
+  A B C D E F G H 
+
+Evaluation : -11
+
+  depth | score | principal variation                 | time        |      nodes (N) |     kN/s |
+[13    ]|   -6  | E3 a1 B1 f2 F3 f1 H1 -- -- -- -- -- | 00:00:00.00 |                |          |
+
+        tr: 00:00:59.90 tm: 00:00:43.42 xt: 00:00:08.24
+        stop before       : 00:00:16.48   : 00:00:08.24
+
+ 13     |   -6  | E3 a1 B1 f2 F3 f1 H1 -- -- -- -- -- | 00:00:00.00 |            275 |      N/A |
+I play E3
+evaluation -6
+time 00:00:00.00
+---------------------------------------------------------------------------------------------------
+
+  A B C D E F G H 
+1 # . O O # . . . 1
+2 # # O O O . # . 2
+3 # O # O O . # # 3
+4 # # # O O O # # 4	Noirs: 37	Blancs: 16
+5 # # O # # # # # 5	BLANCS au trait
+6 # # O O # O # # 6
+7 # . # # O # . # 7
+8 . # # # # # # . 8
+  A B C D E F G H 
+
+Evaluation : -3
+
+  depth | score | principal variation                 | time        |      nodes (N) |     kN/s |
+[11    ]|   -6  | B1 f2 F3 f1 H1 -- -- -- -- -- -- -- | 00:00:00.00 |                |          |
+
+        tr: 00:00:59.89 tm: 00:00:44.71 xt: 00:00:07.59
+        stop before       : 00:00:15.18   : 00:00:07.59
+
+ 11     |   -6  | B1 f2 F3 f1 H1 -- -- -- -- -- -- -- | 00:00:00.00 |            247 |      N/A |
+I play B1
+evaluation -6
+time 00:00:00.00
+---------------------------------------------------------------------------------------------------
+
+  A B C D E F G H 
+1 # O O O # . . . 1
+2 # # # # # # # . 2
+3 # O # O # . # # 3
+4 # # # # O O # # 4	Noirs: 44	Blancs: 11
+5 # # # # # # # # 5	BLANCS au trait
+6 # # O O # O # # 6
+7 # . # # O # . # 7
+8 . # # # # # # . 8
+  A B C D E F G H 
+
+Evaluation : -5
+
+  depth | score | principal variation                 | time        |      nodes (N) |     kN/s |
+[ 9    ]|   -6  | F3 f1 H1 -- -- -- -- -- -- -- -- -- | 00:00:00.00 |                |          |
+
+        tr: 00:00:59.90 tm: 00:00:44.72 xt: 00:00:07.59
+        stop before       : 00:00:15.18   : 00:00:07.59
+
+  9     |   -6  | F3 f1 H1 -- -- -- -- -- -- -- -- -- | 00:00:00.00 |            223 |      N/A |
+I play F3
+evaluation -6
+time 00:00:00.00
+---------------------------------------------------------------------------------------------------
+
+  A B C D E F G H 
+1 # O O O # # . . 1
+2 # # # # # # # . 2
+3 # O # # O O # # 3
+4 # # # # O O # # 4	Noirs: 45	Blancs: 12
+5 # # # # # # # # 5	BLANCS au trait
+6 # # O O # O # # 6
+7 # . # # O # . # 7
+8 . # # # # # # . 8
+  A B C D E F G H 
+
+Evaluation : -1
+
+  depth | score | principal variation                 | time        |      nodes (N) |     kN/s |
+[ 7    ]|   -6  | H1 -- -- -- -- -- -- -- -- -- -- -- | 00:00:00.00 |                |          |
+
+        tr: 00:00:59.89 tm: 00:00:44.71 xt: 00:00:07.59
+        stop before       : 00:00:15.18   : 00:00:07.59
+
+  7     |   -6  | H1 -- -- -- -- -- -- -- -- -- -- -- | 00:00:00.00 |            154 |      N/A |
+I play H1
+evaluation -6
+time 00:00:00.00
+---------------------------------------------------------------------------------------------------
+
+  A B C D E F G H 
+1 # O O O # # # O 1
+2 # # # # # # # . 2
+3 # O # # O O # # 3
+4 # # # # O O # # 4	Noirs: 46	Blancs: 13
+5 # # # # # # # # 5	BLANCS au trait
+6 # # O O # O # # 6
+7 # . # # O # . # 7
+8 . # # # # # # . 8
+  A B C D E F G H 
+
+Evaluation : 1
+
+  depth | score | principal variation                 | time        |      nodes (N) |     kN/s |
+
+        tr: 00:00:59.90 tm: 00:00:44.72 xt: 00:00:07.59
+        stop before       : 00:00:15.18   : 00:00:07.59
+
+  5     |   -6  | H2 -- -- -- -- -- -- -- -- -- -- -- | 00:00:00.00 |             45 |      N/A |
+I play H2
+evaluation -6
+time 00:00:00.00
+---------------------------------------------------------------------------------------------------
+
+  A B C D E F G H 
+1 # O O O # # # O 1
+2 # # # # # # # O 2
+3 # O # # O O O # 3
+4 # # # # O O # # 4	Noirs: 47	Blancs: 14
+5 # # # # # # # # 5	BLANCS au trait
+6 # # # O # O # # 6
+7 # # # # O # . # 7
+8 . # # # # # # . 8
+  A B C D E F G H 
+
+Evaluation : 0
+
+  depth | score | principal variation                 | time        |      nodes (N) |     kN/s |
+
+        tr: 00:00:59.90 tm: 00:00:44.72 xt: 00:00:07.59
+        stop before       : 00:00:15.18   : 00:00:07.59
+
+  3     |   -6  | A8 -- -- -- -- -- -- -- -- -- -- -- | 00:00:00.00 |             14 |      N/A |
+I play A8
+evaluation -6
+time 00:00:00.00
+---------------------------------------------------------------------------------------------------
+
+  A B C D E F G H 
+1 # O O O # # # O 1
+2 # # # # # # # O 2
+3 # O # # O O O # 3
+4 # # # # O O # # 4	Noirs: 46	Blancs: 17
+5 # # # O # # # # 5	BLANCS au trait
+6 # # O O # # # # 6
+7 # O # # O # # # 7
+8 O # # # # # # . 8
+  A B C D E F G H 
+
+Evaluation : 0
+
+I play H8
+evaluation 0
+time 00:00:00.00

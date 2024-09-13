@@ -348,7 +348,6 @@ inline uint64_t RXBitBoard::calc_legal(const uint64_t P, const uint64_t O){
 
 #ifdef __ARM_NEON
 
-//not really efficient, not use
 
 inline int RXBitBoard::get_corner_stability(const unsigned long long& discs_player) {
 

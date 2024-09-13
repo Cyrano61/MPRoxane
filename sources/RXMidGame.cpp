@@ -873,34 +873,45 @@ void RXEngine::MG_SP_search_DEEP(RXSplitPoint* sp, const unsigned int threadID) 
     while(sp->alpha < sp->beta && !abort.load()  && !thread_should_stop(threadID)) {
         
         pthread_mutex_lock(&(sp->lock));
-        
+
         RXMove* move;
         if(sp->list != NULL && sp->list->next != NULL) {
             
-            RXMove* previous_move = sp->list;
-            move = previous_move->next;
-            
-            RXMove* previous_iter = move;
-            for(RXMove* iter = previous_iter->next ; iter != NULL; iter = (previous_iter = iter)->next) {
-                if(iter->score < move->score) {
-                    move = iter;
-                    previous_move = previous_iter;
-                }
-            }
-            
-            if(previous_move != sp->list) {
-                //move to front
-                previous_move->next = move->next;
-                move->next = sp->list->next;
-                sp->list->next = move;
-            }
-            
+            move = sp->list->next;
             sp->list = sp->list->next;
             
         } else {
             pthread_mutex_unlock(&(sp->lock));
             break;
         }
+
+//        RXMove* move;
+//        if(sp->list != NULL && sp->list->next != NULL) {
+//            
+//            RXMove* previous_move = sp->list;
+//            move = previous_move->next;
+//            
+//            RXMove* previous_iter = move;
+//            for(RXMove* iter = previous_iter->next ; iter != NULL; iter = (previous_iter = iter)->next) {
+//                if(iter->score < move->score) {
+//                    move = iter;
+//                    previous_move = previous_iter;
+//                }
+//            }
+//            
+//            if(previous_move != sp->list) {
+//                //move to front
+//                previous_move->next = move->next;
+//                move->next = sp->list->next;
+//                sp->list->next = move;
+//            }
+//            
+//            sp->list = sp->list->next;
+//            
+//        } else {
+//            pthread_mutex_unlock(&(sp->lock));
+//            break;
+//        }
         
         
         bool child_selective_cutoff = sp->child_selective_cutoff;
@@ -1393,7 +1404,6 @@ int RXEngine::MG_NWS_XProbCut(int threadID, RXBBPatterns& sBoard, const int pvDe
 	
 	//time gestion
 	if (dependent_time && get_current_dependentTime() > time_limit()) {
-        *log << "[" << get_current_time() << "] " << "        MG_NWS_XProbCut : idThread :" << threadID << " time search expired, stops search" << std::endl;
 		abort.store(true);
 		return INTERRUPT_SEARCH;
 	}

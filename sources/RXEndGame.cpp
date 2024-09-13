@@ -340,13 +340,13 @@ int RXEngine::EG_PVS_hash_mobility(int threadID, RXBitBoard& board, const bool p
     if(USE_STABILITY  && bestmove == NOMOVE) {
         
         /*
-         la stabilite calculée est inferieure ou egale a la stabilité reelle
-         donc le score_max_calculé est surestimé.
-         score_max<=score_max_calculé<=alpha ==> coupure
+         calculated stability is less than or equal to the real stability
+         stability_bound is overestimated.
+         score_max <= Stability_bound <= alpha ==> cutoff
          &
-         score_max<=score_max_calculé< beta  ==> diminution de la fenetre de recherche
+         score_max<=stability_bound < beta  ==> adjustment search window
          */
-        
+
         
         if ( (pv ? beta : alpha) >= stability_threshold[board.n_empties] ) {
             int stability_bound = 6400 - 2 * board.get_stability(board.player^1, (6500-alpha)/2);
@@ -588,11 +588,11 @@ int RXEngine::EG_PVS_ETC_mobility(int threadID, RXBitBoard& board, const bool pv
     if(USE_STABILITY && bestmove == NOMOVE) {
         
         /*
-         la stabilite calculée est inferieure ou egale a la stabilité reelle
-         donc le score_max_calculé est surestimé.
-         score_max<=score_max_calculé<=alpha ==> coupure
+         calculated stability is less than or equal to the real stability
+         stability_bound is overestimated.
+         score_max <= Stability_bound <= alpha ==> cutoff
          &
-         score_max<=score_max_calculé< beta  ==> diminution de la fenetre de recherche
+         score_max<=stability_bound < beta  ==> adjustment search window
          */
         if ( (pv ? beta : alpha) >= stability_threshold[board.n_empties] ) {
             int stability_bound = 6400 - 2 * board.get_stability(board.player^1, (6500-alpha)/2);
@@ -1274,7 +1274,6 @@ int RXEngine::EG_PVS_deep(int threadID, RXBBPatterns& sBoard, const bool pv, con
             //************************************************************************************************
             
             
-            
             /* other moves : try to refute the first/best one */
             for(;!abort.load()  && lower < upper && list->next != NULL; list = list->next) {
                 
@@ -1391,36 +1390,47 @@ void RXEngine::EG_SP_search_DEEP(RXSplitPoint* sp, const unsigned int threadID) 
         
         pthread_mutex_lock(&(sp->lock));
         
-        
         RXMove* move;
         if(sp->list != NULL && sp->list->next != NULL) {
             
-            RXMove* previous_move = sp->list;
-            move = previous_move->next;
-            
-            RXMove* previous_iter = move;
-            for(RXMove* iter = previous_iter->next ; iter != NULL; iter = (previous_iter = iter)->next) {
-                if(iter->score < move->score) {
-                    move = iter;
-                    previous_move = previous_iter;
-                }
-            }
-            
-            if(previous_move != sp->list) {
-                //move to front
-                previous_move->next = move->next;
-                move->next = sp->list->next;
-                sp->list->next = move;
-            }
-            
+            move = sp->list->next;
             sp->list = sp->list->next;
-            
             
         } else {
             pthread_mutex_unlock(&(sp->lock));
             break;
         }
+
         
+//        RXMove* move;
+//        if(sp->list != NULL && sp->list->next != NULL) {
+//            
+//            RXMove* previous_move = sp->list;
+//            move = previous_move->next;
+//            
+//            RXMove* previous_iter = move;
+//            for(RXMove* iter = previous_iter->next ; iter != NULL; iter = (previous_iter = iter)->next) {
+//                if(iter->score < move->score) {
+//                    move = iter;
+//                    previous_move = previous_iter;
+//                }
+//            }
+//            
+//            if(previous_move != sp->list) {
+//                //move to front
+//                previous_move->next = move->next;
+//                move->next = sp->list->next;
+//                sp->list->next = move;
+//            }
+//            
+//            sp->list = sp->list->next;
+//            
+//            
+//        } else {
+//            pthread_mutex_unlock(&(sp->lock));
+//            break;
+//        }
+       
         
         bool child_selective_cutoff = sp->child_selective_cutoff;
         
@@ -2012,14 +2022,14 @@ void RXEngine::EG_PVS_root(RXBBPatterns& sBoard, const int selectivity, int alph
         
         for (iter = iter->next; !abort.load()  && lower < upper && iter != NULL; iter = iter->next) {
             
-            //			if(activeThreads > 1 && iter->next != NULL && board.n_empties > EG_DEEP_TO_MEDIUM
-            //			   && !abort.load() && idle_thread_exists(0) && !thread_should_stop(0)
-            //			   && split(sBoard, true, 0, board.n_empties, selectivity, selective_cutoff, child_selective_cutoff,
-            //						lower, upper, bestscore, bestmove, iter, 0, RXSplitPoint::END_ROOT)) {
-            //
-            //
-            //				break;
-            //			}
+//            if(activeThreads > 1 && iter->next != NULL && board.n_empties > EG_DEEP_TO_MEDIUM
+//               && !abort.load() && idle_thread_exists(0) && !thread_should_stop(0)
+//               && split(sBoard, true, 0, board.n_empties, selectivity, selective_cutoff, child_selective_cutoff,
+//                        lower, upper, bestscore, bestmove, iter, 0, RXSplitPoint::END_ROOT)) {
+//                
+//                
+//                break;
+//            }
             
             
             sBoard.do_move(*iter);
