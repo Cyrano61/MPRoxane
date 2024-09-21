@@ -19,7 +19,7 @@ open ../build/log/tail_b.command
 sleep 1
 
 # lancement du prog
-../build/release/Roxane -mode ggs -login Rostand -passw MDP -h 26 -t 4 ../scripts/fforum-20-39.src
+../build/release/Roxane -mode ggs -login Rostand -passw MDP -h 20 -t 4 ../scripts/fforum-20-39.src
 
 
 

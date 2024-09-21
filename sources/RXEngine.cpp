@@ -2216,7 +2216,7 @@ void RXEngine::wake_sleeping_thread(unsigned int threadID) {
 // idle_thread_exists() tries to find an idle thread which is available as
 // a slave for the thread with threadID "master".
 
-bool RXEngine::idle_thread_exists(int master) {
+bool RXEngine::idle_thread_exists(unsigned int master) {
     
     //    assert(master >= 0 && master < activeThreads);
     //    assert(activeThreads > 1);
@@ -2240,7 +2240,7 @@ bool RXEngine::idle_thread_exists(int master) {
 // elle est synchronisée avec MP_Sync
 // si la methode est appelé depuis idle_thread_exists()
 // la methode est non synchronisée
-bool RXEngine::thread_is_available(int slave, int master) {
+bool RXEngine::thread_is_available(unsigned int slave, unsigned int master) {
     
     //    assert(slave >= 0 && slave < activeThreads);
     //    assert(master >= 0 && master < activeThreads);
@@ -2251,25 +2251,35 @@ bool RXEngine::thread_is_available(int slave, int master) {
         return false;
     }
     
-    // the "helpful master concept" in YBWC terminology
-    // cas particulier 2 threads
-    if(activeThreads == 2) {
-        return true;
-    }
+    //    // the "helpful master concept" in YBWC terminology
+    //    // cas particulier 2 threads
+    //    if(activeThreads == 2) {
+    //        return true;
+    //    }
     
     //copy local (argh... bug 25/01/2010)
     const unsigned int localActiveSplitPoints = threads[slave].activeSplitPoints;
     
     //Apply the "helpful master" concept if possible.
     if(localActiveSplitPoints == 0 || threads[slave].splitPointStack[localActiveSplitPoints-1].slaves[master]) {
-        
         return true;
     }
     
+    //improve helpful master concept
+    if(threads[master].splitPoint != NULL) {
+        RXSplitPoint* splitPoint = threads[master].splitPoint->parent;
+        
+        while (splitPoint != NULL) {
+            if(splitPoint->master == slave && &(threads[slave].splitPointStack[localActiveSplitPoints-1]) == splitPoint) {
+                return true;
+            }
+            splitPoint = splitPoint->parent;
+        };
+    }
+ 
+ 
     return false;
 }
-
-
 
 // split() does the actual work of distributing the work at a node between
 // several threads.  If it does not succeed in splitting the node (because no
@@ -2417,7 +2427,7 @@ bool RXEngine::split(RXBBPatterns& sBoard, bool pv, int pvDev,
     RXSplitPoint& splitPoint = threads[master].splitPointStack[threads[master].activeSplitPoints];
     splitPoint.n_Slaves = 1;
     
-
+    
     
     pthread_mutex_unlock(&MP_sync);
     
@@ -2425,7 +2435,7 @@ bool RXEngine::split(RXBBPatterns& sBoard, bool pv, int pvDev,
     for(unsigned int i = 0; i < activeThreads; i++) {
         
         //first without mutex
-        if(splitPoint.n_Slaves < THREAD_PER_SPLITPOINT_MAX && thread_is_available(i, master)) {
+        if(splitPoint.n_Slaves < THREAD_PER_SPLITPOINT_MAX  && thread_is_available(i, master)) {
             
             pthread_mutex_lock(&MP_sync);
             

@@ -55,11 +55,11 @@
       </BuildableProductRunnable>
       <CommandLineArguments>
          <CommandLineArgument
-            argument = "-t 1 -h 24"
+            argument = "-t 1 -h 20"
             isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
-            argument = "-t 8 -h 24"
+            argument = "-t 8 -h 20"
             isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
@@ -76,6 +76,10 @@
          </CommandLineArgument>
          <CommandLineArgument
             argument = "/Users/caussebruno/Documents/othello/MPRoxane[2024-07-21]/scripts/fforum-60-79.src"
+            isEnabled = "NO">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "/Users/caussebruno/Documents/othello/MPRoxane[2024-07-21]/scripts/endgame_24.script"
             isEnabled = "NO">
          </CommandLineArgument>
       </CommandLineArguments>

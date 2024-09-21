@@ -344,7 +344,7 @@ class RXEngine: public Runnable, public RXHelper {
 	
 	const unsigned int THREAD_MAX;
 	static const unsigned int ACTIVE_SPLITPOINT_MAX = 8;
-	static const unsigned int THREAD_PER_SPLITPOINT_MAX = 4; //4
+    static const unsigned int THREAD_PER_SPLITPOINT_MAX = 4; //4
 
 	
 	//parameter for launch thread
@@ -370,9 +370,9 @@ class RXEngine: public Runnable, public RXHelper {
 	void idle_loop(const unsigned int threadID, RXSplitPoint* waitSp);
 	void wake_sleeping_threads();
 	void wake_sleeping_thread(unsigned int threadID);
-	bool idle_thread_exists(int master);
-	bool thread_is_available(int slave, int master);
-	bool thread_should_stop(int threadID);
+	bool idle_thread_exists(unsigned int master);
+	bool thread_is_available(unsigned int slave, unsigned int master);
+	bool thread_should_stop(unsigned int threadID);
 	
 	bool split(	RXBBPatterns& sBoard, bool pv, int pvDev, 
 			   int depth, int selectivity, bool& selective_cutoff, bool& child_selective_cutoff,
@@ -494,7 +494,7 @@ inline RXBBPatterns& RXEngine::get_board() {
 // cutoff has occured in thre thread's currently active split point, or in
 // some ancestor of the current split point.
 
-inline bool RXEngine::thread_should_stop(int threadID) {
+inline bool RXEngine::thread_should_stop(unsigned int threadID) {
 	
     //assert(threadID >= 0 && threadID < activeThreads);
 	

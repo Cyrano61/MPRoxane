@@ -27,7 +27,7 @@ const int RXEngine::stability_threshold[] =
     6500, 6500, 6500, 6500, 6500, 6500, 6500, 6500};
 
 int RXEngine::EG_DEEP_TO_MEDIUM = 17;
-const int RXEngine::EG_MEDIUM_HI_TO_LOW = 14; //12 (6'42) : 13 (6'25) : 14 (6'26)
+const int RXEngine::EG_MEDIUM_HI_TO_LOW = 14; //12 (6'42) : 13 (6'25) : 14 (6'26) en cour de test
 const int RXEngine::EG_MEDIUM_TO_SHALLOW = 8; //
 
 int RXEngine::MIN_DEPTH_USE_ENDCUT = 16;
@@ -1282,10 +1282,10 @@ int RXEngine::EG_PVS_deep(int threadID, RXBBPatterns& sBoard, const bool pv, con
                 if(move->next != NULL) { //more 1 move
                     
                     // Split?
-                    if(activeThreads > 1 && board.n_empties>MIN_EMPTIES_SPLITPOINT && !abort.load()
+                    if(activeThreads > 1  && !abort.load() && board.n_empties>MIN_EMPTIES_SPLITPOINT
                        && !thread_should_stop(threadID) && idle_thread_exists(threadID)
                        && split(sBoard, pv, 0, board.n_empties, selectivity, selective_cutoff, child_selective_cutoff,
-                                lower, upper, bestscore, bestmove, list, threadID, RXSplitPoint::END_PVS))
+                                lower, upper, bestscore, bestmove, list, threadID, RXSplitPoint::END_PVS)) //
                         
                         break;
                     
@@ -1789,11 +1789,11 @@ int RXEngine::EG_NWS_XEndCut(int threadID, RXBBPatterns& sBoard, const int pvDev
             //				std::cout << "Error" << std::endl;
             
             
-            if(activeThreads > 1
-               && board.n_empties>MIN_EMPTIES_SPLITPOINT && (list->next)->next != NULL
-               && !abort.load()   && idle_thread_exists(threadID) && !thread_should_stop(threadID)
+            if(activeThreads > 1 && board.n_empties>MIN_EMPTIES_SPLITPOI
+               && (list->next)->next != NULL
+               && !abort.load() && idle_thread_exists(threadID) && !thread_should_stop(threadID)
                && split(sBoard, false, pvDev, board.n_empties, selectivity, selective_cutoff, child_selective_cutoff,
-                        alpha, (alpha + VALUE_DISC), bestscore, bestmove, list, threadID, RXSplitPoint::END_XPROBCUT))
+                        alpha, (alpha + VALUE_DISC), bestscore, bestmove, list, threadID, RXSplitPoint::END_XPROBCUT)) //
                 
                 break;
             
