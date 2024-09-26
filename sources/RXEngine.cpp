@@ -396,7 +396,6 @@ void RXEngine::sort_moves(int threadID, const bool endgame, RXBBPatterns& sBoard
                             iter->score -= MAX_SCORE; //good move	"probable beta cut"	study in first
                         }
                         
-                        //test PVS_Check
                         if(endgame)
                             iter->score += RXBitBoard::get_mobility(board.discs[board.player], board.discs[board.player^1])*VALUE_DISC;// - (board.get_corner_stability(board.discs[board.player^1])*VALUE_DISC)/8;
                         
@@ -2419,6 +2418,7 @@ bool RXEngine::split(RXBBPatterns& sBoard, bool pv, int pvDev,
     pthread_mutex_lock(&MP_sync);
     
     if (threads[master].activeSplitPoints >= ACTIVE_SPLITPOINT_MAX) {
+        std::cout << "max splitpoint for thread : " << master << std::endl;
         pthread_mutex_unlock(&MP_sync);
         return false;
     }
@@ -2432,15 +2432,15 @@ bool RXEngine::split(RXBBPatterns& sBoard, bool pv, int pvDev,
     pthread_mutex_unlock(&MP_sync);
     
     // add thread
-    for(unsigned int i = 0; i < activeThreads; i++) {
+    for(unsigned int i = 0; i < activeThreads && splitPoint.n_Slaves < THREAD_PER_SPLITPOINT_MAX ; i++) {
         
         //first without mutex
-        if(splitPoint.n_Slaves < THREAD_PER_SPLITPOINT_MAX  && thread_is_available(i, master)) {
+        if(thread_is_available(i, master)) {
             
             pthread_mutex_lock(&MP_sync);
             
             //second control with mutex
-            if(splitPoint.n_Slaves < THREAD_PER_SPLITPOINT_MAX && thread_is_available(i, master)) {
+            if(thread_is_available(i, master)) { // splitPoint.n_Slaves < THREAD_PER_SPLITPOINT_MAX && 
                 
                 
                 pthread_mutex_lock(&(threads[i].lock));

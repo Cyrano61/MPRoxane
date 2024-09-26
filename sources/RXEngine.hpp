@@ -141,7 +141,7 @@ public:
 	
 	
 	//le parametre maxThread est utile pour splitPointStack
-	RXThread(int maxThreads, int maxActiveSplitPoint = 4) : splitPoint(NULL), activeSplitPoints(0),
+	RXThread(int maxThreads, int maxActiveSplitPoint = 8) : splitPoint(NULL), activeSplitPoints(0),
 	splitPointStack(maxActiveSplitPoint, RXSplitPoint(maxThreads)) {
 	
         pthread_mutex_init(&lock, NULL);

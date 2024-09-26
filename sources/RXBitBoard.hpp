@@ -144,9 +144,11 @@ bool generate_flips_##pos(RXMove& move) const
 
     static int count_potential_moves(const unsigned long long p_discs, const unsigned long long o_discs);
 
-    static int get_mobility(const unsigned long long discs_player, const unsigned long long discs_opponent);
-    static int get_corner_stability(const unsigned long long& discs_player);
-    int get_stability(const int color, const int n_stables_cut) const;
+    static inline int get_mobility(const unsigned long long discs_player, const unsigned long long discs_opponent);
+    static inline int get_corner_stability(const unsigned long long& discs_player);
+    inline int get_stability(const int player) const;
+    static inline int get_stability_opponent(const unsigned long long discs_player, const unsigned long long discs_opponent);
+
     
     static int local_Parity(const unsigned long long p_discs, const unsigned long long o_discs, const int position);
     int local_Parity(const int position) const;
@@ -309,7 +311,7 @@ inline int RXBitBoard::get_mobility(const unsigned long long p_discs, const unsi
                              | ((legals & 0x80ULL) << 21)
                              | ((legals & 0x01ULL) << 27);
     
-    return __builtin_popcountll(legals |bonus);
+    return __builtin_popcountll(legals | bonus);
 }
 
 
@@ -342,6 +344,16 @@ inline uint64_t RXBitBoard::calc_legal(const uint64_t P, const uint64_t O){
     return moves & ~(P | O);
 }
 
+/// retourne un pseudo (sous evalué) score de pions stables
+/// la 1ere partie determine les lignes (dans les 4 directions) pleines
+/// si un pions est dans les 4 lignes et appartient a la color, il est stable
+/// la deuxieme partie trouve les pions stables adgacents au pions stables precedents (dans les 4 directions)
+/// - Parameters:
+///   - color: couleur du joueur
+///   - n_stables_cut: valeur de coupure (type alpha, beta)
+inline int RXBitBoard::get_stability(const int player) const {
+    return RXBitBoard::get_stability_opponent(discs[player^1], discs[player]);
+}
 
 
 
@@ -371,14 +383,9 @@ inline int RXBitBoard::get_corner_stability(const unsigned long long& discs_play
 }
 
 
-/// retourne un pseudo (sous evalué) score de pions stables
-/// la 1ere partie determine les lignes (dans les 4 directions) pleines
-/// si un pions est dans les 4 lignes et appartient a la color, il est stable
-/// la deuxieme partie trouve les pions stables adgacents au pions stables precedents (dans les 4 directions)
-/// - Parameters:
-///   - color: couleur du joueur
-///   - n_stables_cut: valeur de coupure (type alpha, beta)
-inline int RXBitBoard::get_stability(const int color, const int n_stables_cut) const {
+    
+    
+inline int RXBitBoard::get_stability_opponent(const unsigned long long discs_player, const unsigned long long discs_opponent) {
 
     //static const for horizontals and verticals full lines
 
@@ -414,8 +421,8 @@ inline int RXBitBoard::get_stability(const int color, const int n_stables_cut) c
     
     //--------------------------------------------------------------------------------------------
     
-    const unsigned long long filled = discs[BLACK] | discs[WHITE];
-    const uint64x2_t dd_color = vdupq_n_u64(discs[color]);
+    const unsigned long long filled = discs_player | discs_opponent;
+    const uint64x2_t dd_color = vdupq_n_u64(discs_opponent);
 
 
     //horizontals and verticals full lines
@@ -457,10 +464,10 @@ inline int RXBitBoard::get_stability(const int color, const int n_stables_cut) c
         return 0;
         
 
-    int result = VALUE_DISC * __builtin_popcountll(stable);
-    if(result>=n_stables_cut) {
-        return result;
-    }
+//    int result = VALUE_DISC * __builtin_popcountll(stable);
+//    if(result>=n_stables_cut) {
+//        return result;
+//    }
     
 
     unsigned long long old_stable;
@@ -510,10 +517,10 @@ inline int RXBitBoard::get_corner_stability(const unsigned long long& discs_play
 /// - Parameters:
 ///   - color: couleur du joueur
 ///   - n_stables_cut: valeur de coupure (type alpha, beta)
-inline int RXBitBoard::get_stability(const int color, const int n_stables_cut) const {
+inline int RXBitBoard::get_stability_opponent(const unsigned long long discs_player, const unsigned long long discs_opponent) {
     
     
-    unsigned long long filled = discs[BLACK] | discs[WHITE];
+    unsigned long long filled = discs_player | discs_opponent;
     
     unsigned long long left_right, up_down, diag_a, diag_b;
 
@@ -549,16 +556,16 @@ inline int RXBitBoard::get_stability(const int color, const int n_stables_cut) c
     
     diag_b |= 0xFF818181818181FFULL;
     
-    unsigned long long stable = left_right & up_down & diag_a & diag_b & discs[color];
+    unsigned long long stable = left_right & up_down & diag_a & diag_b & discs_opponent;
 
 
     if(stable == 0)
         return 0;
         
 
-    int result = VALUE_DISC * __builtin_popcountll(stable);
-    if(result>=n_stables_cut)
-        return result;
+//    int result = VALUE_DISC * __builtin_popcountll(stable);
+//    if(result>=n_stables_cut)
+//        return result;
     
 
     unsigned long long old_stable, dir_1, dir_2, dir_3, dir_4;
@@ -573,7 +580,7 @@ inline int RXBitBoard::get_stability(const int color, const int n_stables_cut) c
         dir_3 = (stable << 7) | (stable >> 7 ) | diag_a;
         dir_4 = (stable << 9) | (stable >> 9 ) | diag_b;
 
-        stable = dir_1 & dir_2 & dir_3 & dir_4 & discs[color];
+        stable = dir_1 & dir_2 & dir_3 & dir_4 & ddiscs_opponent;
 
 
     } while(stable != old_stable);
@@ -796,20 +803,20 @@ inline int RXBitBoard::final_score_4(int alpha, const int beta, const bool passe
 	
 	if (alpha >= 6*VALUE_DISC || (alpha >= 0 && (diffPions*VALUE_DISC <= alpha - 8*VALUE_DISC))) {
 
-		int stability_bound = 64*VALUE_DISC - 2 * get_stability(player^1, (65*VALUE_DISC-alpha)/2);
+		int stability_bound = 64*VALUE_DISC - 2 * get_stability(player^1);
 		if ( stability_bound <= alpha )
 			return stability_bound; //alpha
 		
 	} else if (beta <= -8*VALUE_DISC || (beta <= 0 && (diffPions*VALUE_DISC >= beta + 8*VALUE_DISC))) {
 
-		int stability_bound = -64*VALUE_DISC + 2 * get_stability(player, (65*VALUE_DISC+beta)/2);
+		int stability_bound = -64*VALUE_DISC + 2 * get_stability(player);
 		if ( stability_bound >= beta )
 			return stability_bound; //beta
 		
 	}
     
 //    if (alpha < -6*VALUE_DISC) {
-//        int stability_bound = 2 * get_stability(player^1, (65*VALUE_DISC-alpha)/2)-64*VALUE_DISC;
+//        int stability_bound = 2 * get_stability(player^1)-64*VALUE_DISC;
 //        if ( stability_bound > alpha )
 //            return stability_bound; //beta
 //    }

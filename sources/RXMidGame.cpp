@@ -20,7 +20,6 @@
 const int RXEngine::MG_SELECT = 0;
 
 
-//const int RXEngine::MAX_DEPTH_USE_PROBCUT = 50;
 const int RXEngine::MIN_DEPTH_USE_PROBCUT = 4; // DO NOT CHANGE
 
 const int RXEngine::MIN_DEPTH_SPLITPOINT = 8;

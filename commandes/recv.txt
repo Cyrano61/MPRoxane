@@ -14,16 +14,16 @@ ftp.nj.nec.com      (138.15.10.2)  @ 4000/1/2, 5000/1/2, SSL: 5006
                     http://www.cs.ualberta.ca/~mburo/
 
 : Enter login (yours, or one you'd like to use).
-[send]Roxane
-[recv]: Enter your password.
 [send]Rostand
+[recv]: Enter your password.
+[send]MDP
 [recv]READY
 
 : + /ax 1
 : + /os 1
 : + HCyrano 1
 : + OO7 1
-: + Roxane 1
+: + Rostand 1
 : + Saio2000 1
 : + Saio2002 1
 : + Saio2003 1
@@ -33,7 +33,6 @@ ftp.nj.nec.com      (138.15.10.2)  @ 4000/1/2, 5000/1/2, SSL: 5006
 : + ant 1
 : + ant+ 1
 : + fly 1
-: + ohr 1
 : + patzer 1
 : + piglet 1
 : + scorp+ 1
@@ -58,13 +57,13 @@ Frequently Asked Questions
 
 4) I just want to play Othello, how do I do it? 
  = You have to talk to Othello Service Server .. (type: tell /os help)
-   If you haven't mastered (syst[send]ve -ack
+   If you haven't mastered (system) aliase[send]ve -ack
 notify + /os
 mso
 tell /os client +
 ts trust +
 tell /os open 0
-[recv]em) aliases yet go back to (3).
+[recv]s yet go back to (3).
 
 5) I want to se Othello top list, I type tell /os top and get error?
  = /os implements all kinds of variants of Othello, you have to tell it
@@ -115,4 +114,175 @@ READY
 READY
 READY
 READY
+READY
+
+HCyrano: t /os open 1
+READY
+[send]t /os open 1
+[recv]READY
+
+/os: +   .7 2690.6 Saio2003 05:00//02:00    s8r18 S 2714.9 Rostand  .32331
+READY
+[send]t /os accept .7
+[recv]READY
+
+/os: + match .49 2715 Rostand 2691 Saio2003 s8r18 R
+READY
+
+/os: join .49.0 (;GM[Othello]PC[GGS/os]DT[2024.09.23_10:30:05.MDT]
+|PB[Rostand]PW[Saio2003]
+|RB[2714.93]RW[2690.63]
+|TI[05:00//02:00]
+|TY[s8r18]RE[?]
+|BO[8 -------- -------- --OOOO-- -O**O--- -****O-- -***O--- ---O---- -------- *]
+|;)
+READY
+
+/os: join .49.1 (;GM[Othello]PC[GGS/os]DT[2024.09.23_10:30:05.MDT]
+|PB[Saio2003]PW[Rostand]
+|RB[2690.63]RW[2714.93]
+|TI[05:00//02:00]
+|TY[s8r18]RE[?]
+|BO[8 -------- -------- --OOOO-- -O**O--- -****O-- -***O--- ---O---- -------- *]
+|;)
+READY
+
+/os: -   .7 2690.6 Saio2003 05:00//02:00    s8r18 S 2714.9 Rostand  .32331
+READY
+[send]tell .Rostand --
+tell .Rostand game .49.0
+tell .Rostand HashTable SHARED
+
+tell .Rostand Active threads : 4
+
+tell .Rostand  14@72   F6 == +13
+tell .Rostand  16@72   F6 == +13
+tell .Rostand  18@72   F6 == +12
+[recv]READY
+[send]tell .Rostand  20@72   F6 == +13
+tell .Rostand  22@72   F6 == +12
+[recv]READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+[send]tell .Rostand  24@72   F6 == +12
+[recv]READY
+[send]tell .Rostand  26@72   F6 == +13
+[recv]READY
+
+/os: end .49.0 ( Rostand vs. Saio2003 ) player Saio2003 left
+READY
+
+/os: end .49.1 ( Rostand vs. Saio2003 ) player Saio2003 left
+READY
+
+/os: - match .49 2715 Rostand 2691 Saio2003 s8r18 R Saio2003 left .32331
+READY
+[send]tell .Rostand  26@72   F6 == +13  Pv : F6 f7 F4 g5 D2 c2 
+tell .Rostand Ts : 00:00:05.25   Tm : 00:00:05.25
+tell .Rostand nodes :    490 876 224
+tell .Rostand speed :         93 446 kN/s
+tell /os play .49.0 F6/13.00/5.25
+[recv]READY
+READY
+READY
+READY
+READY
+
+/os: ERR match '.49' not found.
+READY
+
+/os: +   .8 2678.7 Saio3001 05:00//02:00    s8r18 S 2714.9 Rostand  .32308
+READY
+[send]t /os accept .8
+[recv]READY
+
+/os: + match .50 2715 Rostand 2679 Saio3001 s8r18 R
+READY
+
+/os: join .50.0 (;GM[Othello]PC[GGS/os]DT[2024.09.23_10:30:30.MDT]
+|PB[Rostand]PW[Saio3001]
+|RB[2714.93]RW[2678.72]
+|TI[05:00//02:00]
+|TY[s8r18]RE[?]
+|BO[8 ----*--- ----**-- --***-O- --*OOO-- --OOO-*- ----O--- ----O*-- -------- *]
+|B[D6/-12.00/57.80]W[c6/12.00/45.52]B[B6/-12.00/67.77]W[b5/12.00/11.52]
+|B[A6/-12.00/23.06]W[c2/12.00/22.44]B[F5/-12.00/19.38]W[f3/12.00/25.50]
+|B[F6/-12.00/19.67]W[d1/12.00/22.41]B[G4/-12.00/14.94]W[d7/12.00/29.03]
+|B[C8/-12.00/32.22]W[d8/12.00/79.92]B[F8/-12.00/17.22]W[e8/12.00/11.34]
+|B[C7/-12.00/11.75]W[h3/12.00/8.48]B[B4/-12.00]W[h4/12.00/7.56]
+|B[G6/-12.00/2.71]W[h5/12.00/4.61]B[G2/-12.00]W[h1/12.00/0.01];)
+READY
+
+/os: join .50.1 (;GM[Othello]PC[GGS/os]DT[2024.09.23_10:30:30.MDT]
+|PB[Saio3001]PW[Rostand]
+|RB[2678.72]RW[2714.93]
+|TI[05:00//02:00]
+|TY[s8r18]RE[?]
+|BO[8 ----*--- ----**-- --***-O- --*OOO-- --OOO-*- ----O--- ----O*-- -------- *]
+|B[c6/-12.50/64.63]W[D2/12.00/55.54]B[f3/-12.50/9.38]W[send]tell .Rostand --
+tell .Rostand game .50.0
+tell .Rostand HashTable SHARED
+
+tell .Rostand Active threads : 4
+
+[recv][D6/12.00/36.18]
+|B[d1/-12.50/9.48]W[B5/12.00/27.39]B[a6/-14.00/35.30]W[C2/14.00/24.09]
+|B[g4/-14.00/35.47]W[F5/14.00/35.25]B[b4/-14.00/16.47]W[B6/14.00/30.14]
+|B[h4/-14.00/57.44]W[A3/14.00/38.80]B[a4/-14.00/14.92]W[B2/14.00/13.91]
+|B[g6/-14.00/17.64]W[A5/14.00/12.96]B[b3/-14.00/11.16]W[C1/14.00]
+|B[e8/-14.00/5.56]W[F6/14.00]B[d7/-14.00/0.01]W[C7/14.00];)
+READY
+
+/os: -   .8 2678.7 Saio3001 05:00//02:00    s8r18 S[send]tell .Rostand  22@98   C1 <= -14
+[recv] 2714.9 Rostand  .32308
+READY
+[send]tell .Rostand          H6 maybe better? 
+tell .Rostand  22@98   H6 == -12
+[recv]READY
+[send]tell .Rostand  22@100  H6 == -12
+tell .Rostand  22@100  H6 == -12  Pv : H6 b3 G7 h8 D2 h7 
+tell .Rostand Ts : 00:00:00.70   Tm : 00:00:00.70
+tell .Rostand nodes :     94 631 210
+tell .Rostand speed :        134 610 kN/s
+tell /os play .50.0 H6/-12.00/0.70
+[recv]READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+READY
+
+/os: update .50.0 H6/-12.00/0.70
+READY
+
+/os: end .50.0 ( Rostand vs. Saio3001 ) player Saio3001 left
+READY
+
+/os: end .50.1 ( Rostand vs. Saio3001 ) player Saio3001 left
+READY
+
+/os: - match .50 2715 Rostand 2679 Saio3001 s8r18 R Saio3001 left .32308
+READY
+
+HCyrano: t /os open 0
+READY
+[send]t /os open 0
+[recv]READY
+
+: - HCyrano 1
 READY
