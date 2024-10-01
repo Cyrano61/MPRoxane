@@ -219,8 +219,8 @@ unsigned int RXEngine::selectivity_to_confidence(int s) {
 
 /*
  singular extension
- 
- 
+
+ not really efficient, unused
  conditions
  n_moves > 0
  depth >=2
@@ -1376,11 +1376,11 @@ std::string RXEngine::display(RXBitBoard& board, const int type, const int allow
         
         if(type != GGS_MSG) {
             if(type == HASHTABLE) {
-                buffer << "00:00:00.00 |                |          |";
+                buffer << "00:00:00.00 |                 |          |";
             } else {
                 buffer << toHMS(time/1000.0) << " | ";
                 
-                buffer << std::noshowpos << std::setprecision(0) << std::setw(14) << board.n_nodes << " | ";
+                buffer << std::noshowpos << std::setprecision(0) << std::setw(15) << board.n_nodes << " | ";
                 
                 unsigned long long speed = 0;
                 if(time_level>0)
@@ -1690,7 +1690,7 @@ void RXEngine::run() {
         
     } else {
         
-        *log << "  depth | score | principal variation                 | time        |      nodes (N) |     kN/s |" << std::endl;
+        *log << "  depth | score | principal variation                 | time        |       nodes (N) |     kN/s |" << std::endl;
         
         int depth = 2;
         int selectivity = MG_SELECT;
@@ -2140,13 +2140,18 @@ void RXEngine::idle_loop(unsigned int threadID, RXSplitPoint* waitSp) {
                 case RXSplitPoint::END_XPROBCUT:
                     EG_SP_search_XEndcut(splitPoint, threadID);
                     break;
+                    
+                case RXSplitPoint::END_ETC_MOBILITY:
+                    EG_SP_search_ETC_Mobility(splitPoint, threadID);
+                    break;
+
             }
             
             pthread_mutex_lock(&(threads[threadID].lock));
             threads[threadID].state = RXThread::AVAILABLE;
             pthread_mutex_unlock(&(threads[threadID].lock));
             
-            // dois je proteger l'acces ??
+            // je dois proteger l'acces
             pthread_mutex_lock(&threads[splitPoint->master].lock);
             if (threadID != splitPoint->master && threads[splitPoint->master].state == RXThread::AVAILABLE) {
                 wake_sleeping_thread(splitPoint->master);
@@ -2260,16 +2265,20 @@ bool RXEngine::thread_is_available(unsigned int slave, unsigned int master) {
     const unsigned int localActiveSplitPoints = threads[slave].activeSplitPoints;
     
     //Apply the "helpful master" concept if possible.
-    if(localActiveSplitPoints == 0 || threads[slave].splitPointStack[localActiveSplitPoints-1].slaves[master]) {
+    if(localActiveSplitPoints == 0) // threads[slave].splitPointStack[localActiveSplitPoints-1].slaves[master]) {
         return true;
-    }
+    
+    const RXSplitPoint& slave_activeSplitPoint = threads[slave].splitPointStack[localActiveSplitPoints-1];
+    
+    if(slave_activeSplitPoint.slaves[master])
+        return true;
     
     //improve helpful master concept
     if(threads[master].splitPoint != NULL) {
         RXSplitPoint* splitPoint = threads[master].splitPoint->parent;
         
         while (splitPoint != NULL) {
-            if(splitPoint->master == slave && &(threads[slave].splitPointStack[localActiveSplitPoints-1]) == splitPoint) {
+            if(splitPoint->master == slave && &slave_activeSplitPoint == splitPoint) {
                 return true;
             }
             splitPoint = splitPoint->parent;
@@ -2293,120 +2302,6 @@ bool RXEngine::thread_is_available(unsigned int slave, unsigned int master) {
 // split() returns true.
 
 
-//bool RXEngine::split(RXBBPatterns& sBoard, bool pv, int pvDev,
-//					 int depth, int selectivity, bool& selective_cutoff, bool& child_selective_cutoff,
-//					 int alpha, int beta, int& bestscore, int& bestmove,
-//					 RXMove* list, unsigned int master, RXSplitPoint::t_callBackSearch callback) {
-//
-//
-//	//	assert(bestscore >= -MAX_SCORE); // && *bestscore <= *alpha);	possible in aspiration window
-//	//	assert(alpha < beta);
-//	//	assert(beta <= MAX_SCORE);
-//	//
-//	//	assert(master >= 0 && master < activeThreads);
-//	//	assert(activeThreads > 1);
-//
-//	MP_sync.lock();
-//
-//
-//	// If no other thread is available to help us, or if we have too many
-//	// active split points, don't split:
-//	if(!idle_thread_exists(master) || threads[master].activeSplitPoints >= ACTIVE_SPLITPOINT_MAX) {
-//
-//		MP_sync.unlock();
-//		return false;
-//	}
-//
-//	// Pick the next available split point object from the split point stack:
-//	RXSplitPoint& splitPoint = threads[master].splitPointStack[threads[master].activeSplitPoints];
-//
-//	threads[master].activeSplitPoints++;
-//
-//	splitPoint.parent = threads[master].splitPoint;
-//
-//
-//	// Initialize the split point object:
-//
-//	splitPoint.explored = false;
-//
-//	splitPoint.sBoard = &sBoard; // pointer on sBoard
-//	splitPoint.list = list;
-//
-//	splitPoint.depth = depth;
-//	splitPoint.pv = pv;
-//	splitPoint.pvDev = pvDev;
-//	splitPoint.selectivity = selectivity;
-//	splitPoint.alpha = alpha;
-//	splitPoint.beta = beta;
-//
-//	splitPoint.selective_cutoff = selective_cutoff;
-//	splitPoint.child_selective_cutoff = child_selective_cutoff;
-//	splitPoint.bestscore = bestscore;
-//	splitPoint.bestmove = bestmove;
-//
-//
-//	splitPoint.CBSearch = callback;
-//
-//	splitPoint.master = master;
-//
-//	for(unsigned int i = 0; i < activeThreads; i++)
-//		splitPoint.slaves[i] = false;
-//
-//
-//	// add thread
-//	unsigned int nWorker = 1;
-//	for(unsigned int i = 0; i < activeThreads && nWorker < THREAD_PER_SPLITPOINT_MAX; i++)
-//		if(thread_is_available(i, master)) {
-//
-//			threads[i].state = RXThread::RESERVED;
-//
-//			splitPoint.slaves[i] = true;
-//			nWorker++;
-//		}
-//
-//	MP_sync.unlock();
-//
-//	// Tell the threads that they have work to do.  This will make them leave
-//	// their idle loop.
-//
-//	for(unsigned int i = 0; i < activeThreads; i++)
-//		if(i == master || splitPoint.slaves[i]) {
-//
-//			threads[i].splitPoint = &splitPoint;
-//			threads[i].state = RXThread::WORKISWAITING;
-//
-//		}
-//
-//
-//	// Everything is set up.  The master thread enters the idle loop, from
-//	// which it will instantly launch a search, because its workIsWaiting
-//	// slot is 'true'.  We send the split point as a second parameter to the
-//	// idle loop, which means that the main thread will return from the idle
-//	// loop when all threads have finished their work at this split point
-//	// (i.e. when // splitPoint->n_Slaves == 0).
-//	idle_loop(master, &splitPoint);
-//
-//	// We have returned from the idle loop, which means that all threads are
-//	// finished.  Update bestvalue, and return:
-//	MP_sync.lock();
-//
-//	//update return value
-//	bestscore = splitPoint.bestscore;
-//	bestmove = splitPoint.bestmove;
-//	selective_cutoff = splitPoint.selective_cutoff;
-//	child_selective_cutoff = splitPoint.child_selective_cutoff;
-//
-//
-//	threads[master].activeSplitPoints--;
-//
-//	threads[master].splitPoint = splitPoint.parent;
-//
-//
-//	MP_sync.unlock();
-//
-//	return true;
-//}
-//
 
 bool RXEngine::split(RXBBPatterns& sBoard, bool pv, int pvDev,
                      int depth, int selectivity, bool& selective_cutoff, bool& child_selective_cutoff,
@@ -2418,7 +2313,6 @@ bool RXEngine::split(RXBBPatterns& sBoard, bool pv, int pvDev,
     pthread_mutex_lock(&MP_sync);
     
     if (threads[master].activeSplitPoints >= ACTIVE_SPLITPOINT_MAX) {
-        std::cout << "max splitpoint for thread : " << master << std::endl;
         pthread_mutex_unlock(&MP_sync);
         return false;
     }
@@ -2428,19 +2322,18 @@ bool RXEngine::split(RXBBPatterns& sBoard, bool pv, int pvDev,
     splitPoint.n_Slaves = 1;
     
     
-    
     pthread_mutex_unlock(&MP_sync);
     
     // add thread
     for(unsigned int i = 0; i < activeThreads && splitPoint.n_Slaves < THREAD_PER_SPLITPOINT_MAX ; i++) {
         
         //first without mutex
-        if(thread_is_available(i, master)) {
+        if(i != master && threads[i].state == RXThread::AVAILABLE) {
             
             pthread_mutex_lock(&MP_sync);
             
             //second control with mutex
-            if(thread_is_available(i, master)) { // splitPoint.n_Slaves < THREAD_PER_SPLITPOINT_MAX && 
+            if(thread_is_available(i, master)) {
                 
                 
                 pthread_mutex_lock(&(threads[i].lock));
@@ -2457,13 +2350,18 @@ bool RXEngine::split(RXBBPatterns& sBoard, bool pv, int pvDev,
         }
         
     }
-    
-    pthread_mutex_lock(&MP_sync);
-    
+
+    //without mutex
     if(splitPoint.n_Slaves == 1) {
-        pthread_mutex_unlock(&MP_sync);
         return false;
     }
+
+    pthread_mutex_lock(&MP_sync);
+    
+//    if(splitPoint.n_Slaves == 1) {
+//        pthread_mutex_unlock(&MP_sync);
+//        return false;
+//    }
     
     threads[master].activeSplitPoints++;
     splitPoint.parent = threads[master].splitPoint;
@@ -2479,7 +2377,7 @@ bool RXEngine::split(RXBBPatterns& sBoard, bool pv, int pvDev,
     splitPoint.sBoard = &sBoard; // pointer on sBoard
     
     //free scheduling rather than under mutex
-    if (callback == RXSplitPoint::MID_PVS || callback == RXSplitPoint::END_PVS) //
+    if (callback == RXSplitPoint::MID_PVS || callback == RXSplitPoint::END_PVS || callback == RXSplitPoint::END_ETC_MOBILITY ) //
          list->sort_by_score();
 
     splitPoint.list = list;

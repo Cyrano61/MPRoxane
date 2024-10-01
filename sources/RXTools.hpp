@@ -47,7 +47,7 @@ static inline unsigned long long _bsrll(const unsigned long long Mask)
 
 
 
-//static inline unsigned long long ©(const unsigned long long Mask)
+//static inline unsigned long long _popcntll(const unsigned long long Mask)
 //{
 //    unsigned long long Ret = Mask
 //        - ((Mask >> 1) & 0x7777777777777777ULL)

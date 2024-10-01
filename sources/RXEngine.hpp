@@ -64,7 +64,7 @@ class RXSplitPoint {
 	
 public:
 	
-	enum t_callBackSearch {MID_PVS, MID_XPROBCUT, END_ROOT, END_PVS, END_XPROBCUT};
+	enum t_callBackSearch {MID_PVS, MID_XPROBCUT, END_ROOT, END_PVS, END_XPROBCUT, END_ETC_MOBILITY};
 		
 	RXSplitPoint* parent;
 	
@@ -278,11 +278,9 @@ class RXEngine: public Runnable, public RXHelper {
 	static const int MIN_DEPTH_USE_PV_EXTENSION;
 	static const int PV_EXTENSION_DEPTH;
 
-//	static const int MAX_DEPTH_USE_PROBCUT;
 	static const int MIN_DEPTH_USE_PROBCUT;
 	
 	static const int MG_SELECT;
-
 
 	static const int MG_DEEP_TO_SHALLOW;
 	static const int MG_MOVING_WINDOW;
@@ -308,11 +306,11 @@ class RXEngine: public Runnable, public RXHelper {
 	/*--------------------------------------------     EndGame part (RXEndGame.cpp)    --------------------------------------------*/ 
 
 	static const bool USE_STABILITY;
-	static const int HIGH_STABILITY_THRESOLD;
+    static const bool USE_ENHANCED_STABLILITY;
 	static const int stability_threshold[];
 
 	static const int EG_MEDIUM_TO_SHALLOW;
-	static const int EG_MEDIUM_HI_TO_LOW ;
+	static int EG_MEDIUM_HI_TO_LOW ;
 	static int EG_DEEP_TO_MEDIUM;
 
 	static int MIN_DEPTH_USE_ENDCUT;
@@ -322,7 +320,7 @@ class RXEngine: public Runnable, public RXHelper {
 
 	void check_PV(RXBBPatterns& sBoard, const int score, const int alpha, const int beta);
 	
-	int EG_pv_extension(int threadID, RXBitBoard& board, const bool pv, int alpha, int beta, bool passed);
+    int EG_pv_extension(int threadID, RXBBPatterns& sboard, const bool pv, int alpha, int beta, bool passed);
 	
 	void EG_driver(RXBBPatterns& board, int selectivity, int end_selectivity, RXMove* list);
 	
@@ -332,7 +330,9 @@ class RXEngine: public Runnable, public RXHelper {
 	int	EG_PVS_deep(int threadID, RXBBPatterns& sBoard, const bool pv, const int selectivity, bool& selective_cutoff, int alpha, int beta, bool passed);
 	void EG_SP_search_DEEP(RXSplitPoint* sp, const unsigned int threadID);
 
-	int EG_PVS_ETC_mobility(int threadID, RXBitBoard& board, const bool pv, int alpha, int beta, bool passed);	
+	int EG_PVS_ETC_mobility(int threadID, RXBBPatterns& sBoard, const bool pv, int alpha, int beta, bool passed);
+    void EG_SP_search_ETC_Mobility(RXSplitPoint* sp, const unsigned int threadID);
+    
 	int EG_PVS_hash_mobility(int threadID, RXBitBoard& board, const bool pv, int alpha, int beta, bool passed);
 	int EG_alphabeta_hash_parity(int threadID, RXBitBoard& board, const bool pv, int alpha, int beta, bool passed);
 	int EG_alphabeta_parity(int threadID, RXBitBoard& board, int alpha, int beta, bool passed);
@@ -343,7 +343,7 @@ class RXEngine: public Runnable, public RXHelper {
 	/*--------------------------------------------     Multithreads part (RXEngine.cpp)    --------------------------------------------*/ 
 	
 	const unsigned int THREAD_MAX;
-	static const unsigned int ACTIVE_SPLITPOINT_MAX = 8;
+	static const unsigned int ACTIVE_SPLITPOINT_MAX = 12;
     static const unsigned int THREAD_PER_SPLITPOINT_MAX = 4; //4
 
 	
@@ -352,7 +352,7 @@ class RXEngine: public Runnable, public RXHelper {
 	
 
 	static const int MIN_DEPTH_SPLITPOINT;
-	static const int MIN_EMPTIES_SPLITPOINT;
+	static int MIN_EMPTIES_SPLITPOINT;
 
 	std::vector<RXThread> threads;
     volatile bool allThreadsShouldExit, allThreadsShouldSleep;

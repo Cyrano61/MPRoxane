@@ -306,8 +306,8 @@ int RXEngine::MG_PVS_deep(int threadID, RXBBPatterns& sBoard, const bool pv, con
 	if(abort.load()  || thread_should_stop(threadID))
 		return INTERRUPT_SEARCH;
 
-	if(threadID == 0)
-		pthread_yield_np(); //process->yield();
+//	if(threadID == 0)
+//		pthread_yield_np(); //process->yield();
 	
 	//time gestion
 	if(dependent_time && get_current_dependentTime() > time_limit()) {
@@ -488,7 +488,7 @@ int RXEngine::MG_PVS_deep(int threadID, RXBBPatterns& sBoard, const bool pv, con
 				((board).*(board.generate_flips[bestmove]))(*list);
 						
 				board.do_move(*list);
-				bestscore = -EG_pv_extension(threadID, board, pv, -upper, -lower, false);						
+				bestscore = -EG_pv_extension(threadID, sBoard, pv, -upper, -lower, false);
 				board.undo_move(*list);
 
 				//interrupt search
@@ -532,14 +532,14 @@ int RXEngine::MG_PVS_deep(int threadID, RXBBPatterns& sBoard, const bool pv, con
 						board.do_move(*iter);
 								
 						if(bestscore == UNDEF_SCORE) {
-							score = -EG_pv_extension(threadID, board, pv, -upper, -lower, false);						
+							score = -EG_pv_extension(threadID, sBoard, pv, -upper, -lower, false);
 						} else {
 							
 							//bug 2/10/2009 : avec -lower-1 ????? pas d'explication logique
-							score = -EG_pv_extension(threadID, board, false, -lower-VALUE_DISC, -lower, false);
+							score = -EG_pv_extension(threadID, sBoard, false, -lower-VALUE_DISC, -lower, false);
 																	
 							if(lower < score && score < upper)
-								score = -EG_pv_extension(threadID, board, pv, -upper, -score, false);
+								score = -EG_pv_extension(threadID, sBoard, pv, -upper, -score, false);
 
 						}
 									
@@ -1062,8 +1062,8 @@ int RXEngine::MG_PVS_shallow(int threadID, RXBBPatterns& sBoard, const bool pv, 
 	if(depth == 0) {
 		/*previous move == PASS*/
 		if(pv && use_pv_extension && board.n_empties <= pv_extension) {
-			return EG_pv_extension(threadID, board, pv, lower, upper, true);			
-		} else {			
+			return EG_pv_extension(threadID, sBoard, pv, lower, upper, true);
+		} else {
 			return sBoard.get_score();
 		}
 	}
@@ -1087,7 +1087,7 @@ int RXEngine::MG_PVS_shallow(int threadID, RXBBPatterns& sBoard, const bool pv, 
 				((board).*(board.generate_flips[bestmove]))(*move);
 						
 				board.do_move(*move);
-				bestscore = -EG_pv_extension(threadID, board, pv, -upper, -lower, false);						
+				bestscore = -EG_pv_extension(threadID, sBoard, pv, -upper, -lower, false);
 				board.undo_move(*move);
 				
 				//interrupt search
@@ -1145,14 +1145,14 @@ int RXEngine::MG_PVS_shallow(int threadID, RXBBPatterns& sBoard, const bool pv, 
 
 
 						if(bestscore == UNDEF_SCORE) {
-							score = -EG_pv_extension(threadID, board, pv, -upper, -lower, false);						
-						} else {	
+							score = -EG_pv_extension(threadID, sBoard, pv, -upper, -lower, false);
+						} else {
 						
 							// 2/10/2009 bug : - lower - 1 ??????
-							score = -EG_pv_extension(threadID, board, false, -lower-VALUE_DISC, -lower, false);
+							score = -EG_pv_extension(threadID, sBoard, false, -lower-VALUE_DISC, -lower, false);
 																								
 							if(lower < score && score < upper)
-								score = -EG_pv_extension(threadID, board, pv, -upper, -score, false);
+								score = -EG_pv_extension(threadID, sBoard, pv, -upper, -score, false);
 
 						}
 									
@@ -1176,7 +1176,7 @@ int RXEngine::MG_PVS_shallow(int threadID, RXBBPatterns& sBoard, const bool pv, 
 			
 			if(bestscore == UNDEF_SCORE) { // PASS
 				board.do_pass();
-				bestscore = -EG_pv_extension(threadID, board, pv, -upper, -lower, true);
+				bestscore = -EG_pv_extension(threadID, sBoard, pv, -upper, -lower, true);
 				board.do_pass();
 			}
 				
