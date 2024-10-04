@@ -30,7 +30,7 @@ const int RXEngine::GGS_MSG = 5;
 
 const int RXEngine::CONFIDENCE[]   = {  72,   84,   91,   95,   98,   100}; // 99
 //const float RXEngine::PERCENTILE[] = {1.2f, 1.45f, 1.8f, 2.3f, 2.9f}; //old values v stop_2.0.2
-const float RXEngine::PERCENTILE[] = {1.2f, 1.4f, 1.7f, 2.1f, 2.6f}; // standard
+const float RXEngine::PERCENTILE[] = {1.2f, 1.4f, 1.7f, 2.2f, 2.8f}; // standard
 //const float RXEngine::PERCENTILE[] = {1.15f, 1.3f, 1.5f, 1.9f, 2.4f}; // agressive
 
 
@@ -2265,25 +2265,27 @@ bool RXEngine::thread_is_available(unsigned int slave, unsigned int master) {
     const unsigned int localActiveSplitPoints = threads[slave].activeSplitPoints;
     
     //Apply the "helpful master" concept if possible.
-    if(localActiveSplitPoints == 0) // threads[slave].splitPointStack[localActiveSplitPoints-1].slaves[master]) {
+    if(localActiveSplitPoints == 0 || threads[slave].splitPointStack[localActiveSplitPoints-1].slaves[master])
         return true;
+
+//    //improve helpful master concept (not very efficient) : unused
+
+//    const RXSplitPoint& slave_activeSplitPoint = threads[slave].splitPointStack[localActiveSplitPoints-1];
+//    
+//    if(slave_activeSplitPoint.slaves[master])
+//        return true;
     
-    const RXSplitPoint& slave_activeSplitPoint = threads[slave].splitPointStack[localActiveSplitPoints-1];
-    
-    if(slave_activeSplitPoint.slaves[master])
-        return true;
-    
-    //improve helpful master concept
-    if(threads[master].splitPoint != NULL) {
-        RXSplitPoint* splitPoint = threads[master].splitPoint->parent;
-        
-        while (splitPoint != NULL) {
-            if(splitPoint->master == slave && &slave_activeSplitPoint == splitPoint) {
-                return true;
-            }
-            splitPoint = splitPoint->parent;
-        };
-    }
+//    //improve helpful master concept
+//    if(threads[master].splitPoint != NULL) {
+//        RXSplitPoint* splitPoint = threads[master].splitPoint->parent;
+//        
+//        while (splitPoint != NULL) {
+//            if(splitPoint->master == slave && &slave_activeSplitPoint == splitPoint) {
+//                return true;
+//            }
+//            splitPoint = splitPoint->parent;
+//        };
+//    }
  
  
     return false;
@@ -2298,7 +2300,7 @@ bool RXEngine::thread_is_available(unsigned int slave, unsigned int master) {
 // alpha, beta, the search depth, etc.), and we tell our helper threads that
 // they have been assigned work.  This will cause them to instantly leave
 // their idle loops and call sp_search().  When all threads have returned
-// from sp_search (or, equivalently, when splitPoint->cpus becomes 0),
+// from sp_search (or, equivalently, when splitPoint->n_slaves becomes 0),
 // split() returns true.
 
 
@@ -2325,7 +2327,7 @@ bool RXEngine::split(RXBBPatterns& sBoard, bool pv, int pvDev,
     pthread_mutex_unlock(&MP_sync);
     
     // add thread
-    for(unsigned int i = 0; i < activeThreads && splitPoint.n_Slaves < THREAD_PER_SPLITPOINT_MAX ; i++) {
+    for(unsigned int i = 0; i < activeThreads && splitPoint.n_Slaves <= THREAD_PER_SPLITPOINT_MAX ; i++) {
         
         //first without mutex
         if(i != master && threads[i].state == RXThread::AVAILABLE) {

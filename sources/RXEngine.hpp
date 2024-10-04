@@ -307,6 +307,7 @@ class RXEngine: public Runnable, public RXHelper {
 
 	static const bool USE_STABILITY;
     static const bool USE_ENHANCED_STABLILITY;
+
 	static const int stability_threshold[];
 
 	static const int EG_MEDIUM_TO_SHALLOW;
@@ -352,7 +353,6 @@ class RXEngine: public Runnable, public RXHelper {
 	
 
 	static const int MIN_DEPTH_SPLITPOINT;
-	static int MIN_EMPTIES_SPLITPOINT;
 
 	std::vector<RXThread> threads;
     volatile bool allThreadsShouldExit, allThreadsShouldSleep;

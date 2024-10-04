@@ -275,10 +275,19 @@ int RXBitBoard::count_potential_moves(const unsigned long long p_discs, const un
     uint64x2_t dg = vandq_u64(oo,  mask_dg);
     dg = vorrq_u64(vshlq_u64(dg, shl_dg),vshlq_u64(dg, shr_dg)) ;
     
-    return __builtin_popcountll((vgetq_lane_u64(hv, 0) | vgetq_lane_u64(hv, 1) | vgetq_lane_u64(dg, 0) | vgetq_lane_u64(dg, 1)) & ~(p_discs|o_discs));
+    const unsigned long long potential_moves = (vgetq_lane_u64(hv, 0) | vgetq_lane_u64(hv, 1) | vgetq_lane_u64(dg, 0) | vgetq_lane_u64(dg, 1)) & ~(p_discs|o_discs);
+    
+    const unsigned long long bonus = ((potential_moves & 0x8000000000000000ULL) >> 27)
+                             | ((potential_moves & 0x0100000000000000ULL) >> 21)
+                             | ((potential_moves & 0x80ULL) << 21)
+                             | ((potential_moves & 0x01ULL) << 27);
+ 
+    
+    return __builtin_popcountll(potential_moves | bonus);
 }
 
 
+    
 
 
 unsigned long long RXBitBoard::get_legal_moves(const unsigned long long p_discs, const unsigned long long o_discs ) {
