@@ -231,7 +231,7 @@ void RXEngine::MG_PVS_root(RXBBPatterns& sBoard, const int depth,  int alpha, in
 //			score = -MG_PVS_deep(0, sBoard, true, selectivity, depth-1, child_selective_cutoff, -lower-1, -lower, false);
 
 			//simple_PV pv == false ???
-			score = -MG_PVS_deep(0, sBoard, false, selectivity, depth-1, child_selective_cutoff, -lower-1, -lower, false);
+            score = -MG_PVS_deep(0, sBoard, false, selectivity, depth-1, child_selective_cutoff, -lower-1, -lower, false); //change
 
 			
 			if(!abort.load()  && lower < score && score < upper) {
@@ -609,11 +609,11 @@ int RXEngine::MG_PVS_deep(int threadID, RXBBPatterns& sBoard, const bool pv, con
 							
 							int threshold_Alpha = -MAX_SCORE;
 							int threshold_Beta  =  MAX_SCORE;
-							probcut_bounds(board, 0, 4, 0, 0, threshold_Alpha, threshold_Beta); //selectivity 0 = 72%
+							probcut_bounds(board, 3, 4, 0, 0, threshold_Alpha, threshold_Beta); //selectivity 3 = 95%
 
 							int eval_position = sBoard.get_score();
 							
-							int _lower = std::max(-MAX_SCORE, lower+threshold_Alpha*2);
+							int _lower = std::max(-MAX_SCORE, lower+threshold_Alpha); //*2
 
 							if(_lower<= eval_position) { // && eval_position<=(beta+threshold_ff_Beta*4)) { //alpha 95% / beta 99%
 
@@ -789,7 +789,7 @@ int RXEngine::MG_PVS_deep(int threadID, RXBBPatterns& sBoard, const bool pv, con
 					sBoard.do_move(*move);
 					
 					if(depth <= MG_DEEP_TO_SHALLOW) {
-						score = -MG_PVS_shallow(threadID, sBoard, false, depth-1, -lower-1, -lower, false);
+                        score = -MG_PVS_shallow(threadID, sBoard, false, depth-1, -lower-1, -lower, false); //change
                         if(lower < score && score < upper) {
                             if(pv && use_pv_extension && board.n_empties-(depth-1)<=pv_extension) {
                                 score = -MG_PVS_shallow(threadID, sBoard, pv, depth-1, -upper, -lower, false);
@@ -799,7 +799,7 @@ int RXEngine::MG_PVS_deep(int threadID, RXBBPatterns& sBoard, const bool pv, con
                         }
 					} else {
 							
-						score = -MG_NWS_XProbCut(threadID, sBoard, 0, selectivity, depth-1, child_selective_cutoff, -lower-1, false);
+                        score = -MG_NWS_XProbCut(threadID, sBoard, 0, selectivity, depth-1, child_selective_cutoff, -lower-1, false); //change
 
 						if(lower < score && score < upper)
 								score = -MG_PVS_deep(threadID, sBoard, pv, selectivity, depth-1, child_selective_cutoff, -upper, -lower, false);
@@ -1292,7 +1292,7 @@ int RXEngine::MG_PVS_shallow(int threadID, RXBBPatterns& sBoard, const bool pv, 
 								if(bestscore == UNDEF_SCORE) {
 									score = -MG_PVS_shallow(threadID, sBoard, pv, depth-1, -upper, -lower, false);
 								} else {
-									score = -MG_PVS_shallow(threadID, sBoard, false, depth-1, -lower-1, -lower, false);
+                                    score = -MG_PVS_shallow(threadID, sBoard, false, depth-1, -lower-1, -lower, false); //change
 
 									if(lower < score && score < upper)
 											score = -MG_PVS_shallow(threadID, sBoard, pv, depth-1, -upper, -lower, false);
@@ -1332,7 +1332,7 @@ int RXEngine::MG_PVS_shallow(int threadID, RXBBPatterns& sBoard, const bool pv, 
 									score = -MG_PVS_shallow(threadID, sBoard, pv, depth-1, -upper, -lower, false);
 								} else {
 									
-									score = -MG_PVS_shallow(threadID, sBoard, false, depth-1, -lower-1, -lower, false);
+                                    score = -MG_PVS_shallow(threadID, sBoard, false, depth-1, -lower-1, -lower, false); //change
 
 									if(lower < score && score < upper)
 											score = -MG_PVS_shallow(threadID, sBoard, pv, depth-1, -upper, -score, false);

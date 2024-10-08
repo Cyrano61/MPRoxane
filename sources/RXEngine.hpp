@@ -313,6 +313,8 @@ class RXEngine: public Runnable, public RXHelper {
 	static const int EG_MEDIUM_TO_SHALLOW;
 	static int EG_MEDIUM_HI_TO_LOW ;
 	static int EG_DEEP_TO_MEDIUM;
+    
+    static const bool USE_POTENTIAL_MOBILITY;
 
 	static int MIN_DEPTH_USE_ENDCUT;
 
@@ -335,7 +337,8 @@ class RXEngine: public Runnable, public RXHelper {
     void EG_SP_search_ETC_Mobility(RXSplitPoint* sp, const unsigned int threadID);
     
 	int EG_PVS_hash_mobility(int threadID, RXBitBoard& board, const bool pv, int alpha, int beta, bool passed);
-	int EG_alphabeta_hash_parity(int threadID, RXBitBoard& board, const bool pv, int alpha, int beta, bool passed);
+    int EG_alphabeta_hash_mobility(int threadID, RXBitBoard& board, const bool pv, int alpha, int beta, bool passed);
+    int EG_alphabeta_hash_parity(int threadID, RXBitBoard& board, const bool pv, int alpha, int beta, bool passed);
 	int EG_alphabeta_parity(int threadID, RXBitBoard& board, int alpha, int beta, bool passed);
 	
 	int EG_NWS_XEndCut(int threadID, RXBBPatterns& sBoard, const int pvDev, const int selectivity, bool& selective_cutoff, int alpha, const bool passed);

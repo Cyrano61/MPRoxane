@@ -431,7 +431,7 @@ inline int RXBitBoard::get_stability_opponent(const unsigned long long discs_pla
     hv = vandq_u64( hv, vorrq_u64(vshlq_u64(hv, shr_hv_4), vshlq_u64(hv, shl_hv_4)));
     hv = vandq_u64( hv, vorrq_u64(vshlq_u64(hv, shr_hv_2), vshlq_u64(hv, shl_hv_2)));
     hv = vandq_u64( hv, vorrq_u64(vshlq_u64(hv, shr_hv_1), vshlq_u64(hv, shl_hv_1)));
-     
+
     hv = vcombine_u64(((vget_low_u64(hv) & 0x0101010101010101ULL) * 0xFFULL), vget_high_u64(hv));
     hv = vorrq_u64(hv, mask_hv);
 

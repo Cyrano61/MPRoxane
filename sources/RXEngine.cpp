@@ -315,7 +315,7 @@ void RXEngine::sort_moves(int threadID, const bool endgame, RXBBPatterns& sBoard
                 
                 int lower_probcut = -MAX_SCORE;
                 int upper_probcut =  MAX_SCORE;
-                probcut_bounds(board, 0, 4, 0, 0, lower_probcut, upper_probcut); //selectivity 72%
+                probcut_bounds(board, 3, 4, 0, 0, lower_probcut, upper_probcut); //selectivity 95%
                 
                 int _alpha = std::max(-MAX_SCORE, alpha+lower_probcut);
                 
@@ -707,12 +707,12 @@ int RXEngine::PVS_check(int threadID, RXBBPatterns& sBoard, int depth, int alpha
                         
                         int lower_probcut = -MAX_SCORE;
                         int upper_probcut  =  MAX_SCORE;
-                        probcut_bounds(board, 0, 4, 0, 0, lower_probcut, upper_probcut); //72%
+                        probcut_bounds(board, 3, 4, 0, 0, lower_probcut, upper_probcut); //91%
                         
                         int eval_position = sBoard.get_score();
-                        int _lower = std::max(-MAX_SCORE, lower+lower_probcut*2);
+                        int _lower = std::max(-MAX_SCORE, lower+lower_probcut);
                         
-                        if(_lower<= eval_position) { //~95%
+                        if(_lower<= eval_position) {
                             
                             
                             for(; iter != NULL; iter = iter->next) {
@@ -848,11 +848,11 @@ int RXEngine::PVS_check(int threadID, RXBBPatterns& sBoard, int depth, int alpha
                     sBoard.do_move(*move);
                     
                     if(depth == CHECK_TO_LAST_THREE) {
-                        score = -PVS_last_three_ply(threadID, sBoard, -lower-1, -lower, false);
+                        score = -PVS_last_three_ply(threadID, sBoard, -lower-1, -lower, false); //change
                         if(lower < score && score < upper)
                             score = -PVS_last_three_ply(threadID, sBoard, -upper, -score, false);
                     } else {
-                        score = -PVS_check(threadID, sBoard, depth-1, -lower-1, -lower, false);
+                        score = -PVS_check(threadID, sBoard, depth-1, -lower-1, -lower, false); //change
                         if(lower < score && score < upper)
                             score = -PVS_check(threadID, sBoard, depth-1, -upper, -score, false);
                     }
@@ -938,9 +938,7 @@ int RXEngine::PVS_last_three_ply(int threadID, RXBBPatterns& sBoard, int alpha, 
         }
         
         hashmove = entry.move;
-    } /*else if(hTable->get_sync(board, type_hashtable, entry)) {
-       hashmove = entry.move;
-       }*/
+    }
     
     int bestscore = UNDEF_SCORE;
     
@@ -950,7 +948,7 @@ int RXEngine::PVS_last_three_ply(int threadID, RXBBPatterns& sBoard, int alpha, 
         RXSquareList* empties = board.empties_list->next;
         
         //const unsigned long long discs_opponent = board.discs[board.player^1];
-        const unsigned long long legal_movesBB = RXBitBoard::get_legal_moves(board.discs[board.player], board.discs[board.player^1]);
+        unsigned long long legal_movesBB;
         
         
         //fisrt move
@@ -967,9 +965,13 @@ int RXEngine::PVS_last_three_ply(int threadID, RXBBPatterns& sBoard, int alpha, 
             if(bestscore>lower)
                 lower = bestscore;
             
+            if(lower<upper)
+                legal_movesBB = RXBitBoard::get_legal_moves(board.discs[board.player], board.discs[board.player^1]);
+            
         } else {
             
-            
+            legal_movesBB = RXBitBoard::get_legal_moves(board.discs[board.player], board.discs[board.player^1]);
+
             do {
                 if(legal_movesBB & 1ULL<<empties->position) {
                     ((board).*(board.generate_flips[empties->position]))(move);
@@ -999,7 +1001,7 @@ int RXEngine::PVS_last_three_ply(int threadID, RXBBPatterns& sBoard, int alpha, 
                 ((sBoard).*(sBoard.update_patterns[move.position][board.player]))(move);
                 
                 sBoard.do_move(move);
-                score = -alphabeta_last_two_ply(threadID, sBoard, -lower-1, -lower, false);
+                score = -alphabeta_last_two_ply(threadID, sBoard, -lower-1, -lower, false); //change
                 if(lower < score && score < upper)
                     score = -alphabeta_last_two_ply(threadID, sBoard, -upper, -score, false);
                 
@@ -1886,7 +1888,7 @@ int RXEngine::pTime_next_level(RXBitBoard& board, int time_level, int depth, int
     
     if(board.n_empties>(depth+10)) { //midgame
     
-        if(depth<7 || time_level == 0)
+        if(depth<13 || time_level == 0)
             return 0;
         
         double width = std::max(pow(board.n_nodes, 1.0/depth), 1.85);
@@ -2268,13 +2270,16 @@ bool RXEngine::thread_is_available(unsigned int slave, unsigned int master) {
     if(localActiveSplitPoints == 0 || threads[slave].splitPointStack[localActiveSplitPoints-1].slaves[master])
         return true;
 
-//    //improve helpful master concept (not very efficient) : unused
+    /*improve helpful master concept (not very efficient) : unused*/
 
+//    if(localActiveSplitPoints == 0)
+//        return true;
+//    
 //    const RXSplitPoint& slave_activeSplitPoint = threads[slave].splitPointStack[localActiveSplitPoints-1];
 //    
 //    if(slave_activeSplitPoint.slaves[master])
 //        return true;
-    
+//    
 //    //improve helpful master concept
 //    if(threads[master].splitPoint != NULL) {
 //        RXSplitPoint* splitPoint = threads[master].splitPoint->parent;

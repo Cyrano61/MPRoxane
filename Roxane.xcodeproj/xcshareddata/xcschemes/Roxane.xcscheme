@@ -55,12 +55,12 @@
       </BuildableProductRunnable>
       <CommandLineArguments>
          <CommandLineArgument
-            argument = "-t 1 -h 20"
-            isEnabled = "NO">
+            argument = "-t 1 -h 18"
+            isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
             argument = "-t 8 -h 20"
-            isEnabled = "YES">
+            isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
             argument = "-mode ggs -login Roxane -passw Rostand"
@@ -68,11 +68,11 @@
          </CommandLineArgument>
          <CommandLineArgument
             argument = "/Users/caussebruno/Documents/othello/MPRoxane[2024-07-21]/scripts/fforum-20-39.src"
-            isEnabled = "NO">
+            isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
             argument = "/Users/caussebruno/Documents/othello/MPRoxane[2024-07-21]/scripts/fforum-40-59.src"
-            isEnabled = "YES">
+            isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
             argument = "/Users/caussebruno/Documents/othello/MPRoxane[2024-07-21]/scripts/fforum-60-79.src"

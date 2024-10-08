@@ -18,7 +18,7 @@ sleep 1
 
 
 # lancement du prog
-../build/Release/Roxane -h 20 -t 1 /Users/caussebruno/Documents/othello/MPRoxane[2024-07-21]/scripts/endgame_24.script
+../build/Release/Roxane -h 24 -t 12 /Users/caussebruno/Documents/othello/MPRoxane[2024-07-21]/scripts/endgame_all.script
 
 # fin du script
 

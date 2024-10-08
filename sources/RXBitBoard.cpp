@@ -256,7 +256,7 @@ void RXBitBoard::init_hashcodeTable() {
 
 #ifdef __ARM_NEON
 
-//not very efficient, not use
+//not very efficient
 int RXBitBoard::count_potential_moves(const unsigned long long p_discs, const unsigned long long o_discs) {
     
     static const uint64x2_t mask_hv = {0x7E7E7E7E7E7E7E7EULL, 0x00FFFFFFFFFFFF00ULL};
@@ -275,19 +275,20 @@ int RXBitBoard::count_potential_moves(const unsigned long long p_discs, const un
     uint64x2_t dg = vandq_u64(oo,  mask_dg);
     dg = vorrq_u64(vshlq_u64(dg, shl_dg),vshlq_u64(dg, shr_dg)) ;
     
-    const unsigned long long potential_moves = (vgetq_lane_u64(hv, 0) | vgetq_lane_u64(hv, 1) | vgetq_lane_u64(dg, 0) | vgetq_lane_u64(dg, 1)) & ~(p_discs|o_discs);
-    
-    const unsigned long long bonus = ((potential_moves & 0x8000000000000000ULL) >> 27)
-                             | ((potential_moves & 0x0100000000000000ULL) >> 21)
-                             | ((potential_moves & 0x80ULL) << 21)
-                             | ((potential_moves & 0x01ULL) << 27);
- 
-    
-    return __builtin_popcountll(potential_moves | bonus);
+    return __builtin_popcountll((vgetq_lane_u64(hv, 0) | vgetq_lane_u64(hv, 1) | vgetq_lane_u64(dg, 0) | vgetq_lane_u64(dg, 1)) & ~(p_discs|o_discs));
+
+//    //bonus for corner
+//    const unsigned long long potential_moves = (vgetq_lane_u64(hv, 0) | vgetq_lane_u64(hv, 1) | vgetq_lane_u64(dg, 0) | vgetq_lane_u64(dg, 1)) & ~(p_discs|o_discs);
+//
+//    const unsigned long long bonus = ((potential_moves & 0x8000000000000000ULL) >> 27)
+//                             | ((potential_moves & 0x0100000000000000ULL) >> 21)
+//                             | ((potential_moves & 0x80ULL) << 21)
+//                             | ((potential_moves & 0x01ULL) << 27);
+// 
+//    
+//    return __builtin_popcountll(potential_moves | bonus);
 }
 
-
-    
 
 
 unsigned long long RXBitBoard::get_legal_moves(const unsigned long long p_discs, const unsigned long long o_discs ) {
@@ -299,8 +300,8 @@ unsigned long long RXBitBoard::get_legal_moves(const unsigned long long p_discs,
 
     
     //horizontals directions -1, +1
-    static int64x2_t shift_1 = {-1, 1};
-    static int64x2_t shift_2 = {-2, 2};
+    static const int64x2_t shift_1 = {-1, 1};
+    static const int64x2_t shift_2 = {-2, 2};
     
     uint64x2_t
     flipped = vandq_u64(vshlq_u64(pp_discs, shift_1), inner_oo_discs);
@@ -315,8 +316,8 @@ unsigned long long RXBitBoard::get_legal_moves(const unsigned long long p_discs,
     uint64x2_t legals = vshlq_u64(flipped, shift_1);
 
     //verticals directions -8 , +8
-    static int64x2_t shift_8  = {-8,   8};
-    static int64x2_t shift_16 = {-16, 16};
+    static const int64x2_t shift_8  = {-8,   8};
+    static const int64x2_t shift_16 = {-16, 16};
 
     flipped = vandq_u64(vshlq_u64(pp_discs, shift_8), oo_discs);
     flipped = vorrq_u64(flipped, vandq_u64(vshlq_u64(flipped, shift_8), oo_discs));
@@ -329,8 +330,8 @@ unsigned long long RXBitBoard::get_legal_moves(const unsigned long long p_discs,
     legals = vorrq_u64(legals, vshlq_u64(flipped, shift_8));
 
     //diagonals directions -7 , +7
-    static int64x2_t shift_7  = {-7,   7};
-    static int64x2_t shift_14 = {-14, 14};
+    static const int64x2_t shift_7  = {-7,   7};
+    static const int64x2_t shift_14 = {-14, 14};
 
     flipped = vandq_u64(vshlq_u64(pp_discs, shift_7), inner_oo_discs);
     flipped = vorrq_u64(flipped, vandq_u64(vshlq_u64(flipped, shift_7), inner_oo_discs));
@@ -343,8 +344,8 @@ unsigned long long RXBitBoard::get_legal_moves(const unsigned long long p_discs,
     legals = vorrq_u64(legals, vshlq_u64(flipped, shift_7));
     
     //diagonals directions -9 , +9
-    static int64x2_t shift_9  = {-9,   9};
-    static int64x2_t shift_18 = {-18, 18};
+    static const int64x2_t shift_9  = {-9,   9};
+    static const int64x2_t shift_18 = {-18, 18};
 
     flipped = vandq_u64(vshlq_u64(pp_discs, shift_9), inner_oo_discs);
     flipped = vorrq_u64(flipped, vandq_u64(vshlq_u64(flipped, shift_9), inner_oo_discs));
@@ -364,8 +365,7 @@ unsigned long long RXBitBoard::get_legal_moves(const unsigned long long p_discs,
 
 
 //version Edax semble plus lente que la version classique ????
-//pourquoi des operations 64 bits et 128 bits ?
-
+//same speed
 //unsigned long long RXBitBoard::get_legal_moves(const unsigned long long p_discs, const unsigned long long o_discs ){
 //    
 //    unsigned int  mO, movesL, movesH, flip1, pre1;

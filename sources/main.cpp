@@ -34,6 +34,13 @@
 
 int main (int argc, char * const argv[]) {
     
+#ifdef __ARM_FEATURE_SVE
+    std::cout << "ARM SVE Dispo" << std::endl;
+#endif
+#ifdef __ARM_NEON
+    std::cout << "ARM NEON Dispo" << std::endl;
+#endif
+
     	
 	std::string login, password, file_name, mode, imposed_opening = "";
 	unsigned int nBitsTable = 20;

@@ -11,13 +11,14 @@
 cd ${0%/*}
 
 #visualisation des log
-open tail_a.command
+open ../build/log/tail_a.command
 
 #attente du lancement des tails
 sleep 1
 
 
 # lancement du prog
-./Roxane -h 23 -t 1 ../../endgame_18.script
+../build/Release/Roxane -h 17 -t 12 /Users/caussebruno/Documents/othello/MPRoxane[2024-07-21]/scripts/endgame_18.script
+
 # fin du script
 
