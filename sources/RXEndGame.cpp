@@ -1414,7 +1414,7 @@ int RXEngine::EG_PVS_deep(int threadID, RXBBPatterns& sBoard, const bool pv, con
                     
                     int threshold_ff_Alpha = -MAX_SCORE;
                     int threshold_ff_Beta  =  MAX_SCORE;
-                    probcut_bounds(board, std::min(3, selectivity), board.n_empties, 0, 0, threshold_ff_Alpha, threshold_ff_Beta); //selectivity 3 = 91%
+                    probcut_bounds(board, 3, board.n_empties, 0, 0, threshold_ff_Alpha, threshold_ff_Beta); //selectivity 0 = 91%
                     
                     
                     int _lower = std::max(-MAX_SCORE, lower+threshold_ff_Alpha);
@@ -1435,17 +1435,17 @@ int RXEngine::EG_PVS_deep(int threadID, RXBBPatterns& sBoard, const bool pv, con
                             if(eval_move <= -_lower) { //95%
                                 
                                 if(board.n_empties%2 == 0) {
-                                    if(board.n_empties >= 26) { //26
+                                    if(board.n_empties >= (pv? 26:28)) { //26
                                         iter->score += PVS_check(threadID, sBoard, 6, -MAX_SCORE, -_lower, false);
-                                    } else if(board.n_empties >= 22) {//22
+                                    } else if(board.n_empties >= (pv? 22:24)) {//22
                                         iter->score += PVS_check(threadID, sBoard, 4, -MAX_SCORE, -_lower, false);
                                     } else {
                                         iter->score += alphabeta_last_two_ply(threadID, sBoard, -MAX_SCORE, -_lower, false);
                                     }
                                 } else {
-                                    if(board.n_empties >= 25) {//25
+                                    if(board.n_empties >= (pv? 25:27)) {//25
                                         iter->score += PVS_check(threadID, sBoard, 5, -MAX_SCORE, -_lower, false);
-                                    } else if(board.n_empties >= 21) {//21
+                                    } else if(board.n_empties >= (pv? 21:23)) {//21
                                         iter->score += PVS_last_three_ply(threadID, sBoard, -MAX_SCORE, -_lower, false);
                                     } else {
                                         

@@ -609,11 +609,11 @@ int RXEngine::MG_PVS_deep(int threadID, RXBBPatterns& sBoard, const bool pv, con
 							
 							int threshold_Alpha = -MAX_SCORE;
 							int threshold_Beta  =  MAX_SCORE;
-							probcut_bounds(board, 3, 4, 0, 0, threshold_Alpha, threshold_Beta); //selectivity 3 = 95%
+							probcut_bounds(board, 3, 4+depth/4, 0, 0, threshold_Alpha, threshold_Beta); //selectivity 0 = 72%
 
 							int eval_position = sBoard.get_score();
 							
-							int _lower = std::max(-MAX_SCORE, lower+threshold_Alpha); //*2
+							int _lower = std::max(-MAX_SCORE, lower+threshold_Alpha);
 
 							if(_lower<= eval_position) { // && eval_position<=(beta+threshold_ff_Beta*4)) { //alpha 95% / beta 99%
 

@@ -315,7 +315,7 @@ void RXEngine::sort_moves(int threadID, const bool endgame, RXBBPatterns& sBoard
                 
                 int lower_probcut = -MAX_SCORE;
                 int upper_probcut =  MAX_SCORE;
-                probcut_bounds(board, 3, 4, 0, 0, lower_probcut, upper_probcut); //selectivity 95%
+                probcut_bounds(board, 0, 4, 0, 0, lower_probcut, upper_probcut); //selectivity 72%
                 
                 int _alpha = std::max(-MAX_SCORE, alpha+lower_probcut);
                 
@@ -707,7 +707,7 @@ int RXEngine::PVS_check(int threadID, RXBBPatterns& sBoard, int depth, int alpha
                         
                         int lower_probcut = -MAX_SCORE;
                         int upper_probcut  =  MAX_SCORE;
-                        probcut_bounds(board, 3, 4, 0, 0, lower_probcut, upper_probcut); //91%
+                        probcut_bounds(board, 3, depth, 0, 0, lower_probcut, upper_probcut); //selectivity 91%
                         
                         int eval_position = sBoard.get_score();
                         int _lower = std::max(-MAX_SCORE, lower+lower_probcut);
