@@ -39,7 +39,6 @@ class RXHashShallow {
 		bool get(const unsigned long long hash_code, RXHashValue& entry) const;
 		
 		void update(const unsigned long long hash_code, const unsigned char depth, const int alpha, const int beta, const int score, const char move);
-		void update(const unsigned long long hash_code, const unsigned char depth, const int alpha, const int score, const char move);
 			
 	void new_search(const int n_empties);
 

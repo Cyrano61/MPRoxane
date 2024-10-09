@@ -265,7 +265,6 @@ class RXEngine: public Runnable, public RXHelper {
 
 	void probcut_bounds(const RXBitBoard& board, const int selectivity, const int depth, const int pvDev, const int pivot, int& lower_bound, int& upper_bound) const;
 
-	bool singular_move(int threadID, RXBBPatterns& sBoard, const int selectivity, const int depth, int alpha, RXMove* list, const int position);
 	void sort_moves(int threadID, const bool endgame, RXBBPatterns& sBoard, const int depth, const int alpha, const int beta, RXMove* list);
 		
 	bool probcut(int threadID, const bool endgame, RXBBPatterns& sBoard, const int selectivity, const int depth, const int lower_probcut, const int upper_probcut, RXMove* list, const bool hashMove);
@@ -300,7 +299,7 @@ class RXEngine: public Runnable, public RXHelper {
 	int MG_PVS_shallow(int threadID, RXBBPatterns& sBoard, const bool pv, const int depth, int alpha, int beta, const bool passed);
 	
 	int MG_NWS_XProbCut(int threadID, RXBBPatterns& sBoard, const int pvDev, const int selectivity, const int depth, bool& selective_cutoff, int alpha, const bool passed);
-	void MG_SP_search_XEndcut(RXSplitPoint* sp, const unsigned int threadID);
+	void MG_SP_search_XProbcut(RXSplitPoint* sp, const unsigned int threadID);
 	
 
 	/*--------------------------------------------     EndGame part (RXEndGame.cpp)    --------------------------------------------*/ 

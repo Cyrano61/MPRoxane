@@ -238,14 +238,16 @@ void RXHashTable::update(const unsigned long long hash_code, const t_hash type_h
 
 	
 	/* try to update deepest entry */
-	if (hash_code == deepest_hashcode && selectivity == deepest_value.selectivity  && depth == deepest_value.depth && alpha < score) {
+	if (hash_code == deepest_hashcode && selectivity == deepest_value.selectivity  && depth == deepest_value.depth) {
 		
 		if (score > alpha) {
 			if(score > deepest_value.lower)
 				deepest_value.lower =  static_cast<short>(score);
 		} else {
-			if(score < deepest_value.upper)
-				deepest_value.upper =  static_cast<short>(score);
+            if(score < deepest_value.upper) {
+                deepest_value.upper =  static_cast<short>(score);
+            }
+                
 		}
 		
 		/* control if lower>upper */	
@@ -276,7 +278,7 @@ void RXHashTable::update(const unsigned long long hash_code, const t_hash type_h
 		
 		
 		/* else try to update newest entry */
-		if (hash_code == newest_hashcode && selectivity == newest_value.selectivity  && depth == newest_value.depth && alpha < score) {
+		if (hash_code == newest_hashcode && selectivity == newest_value.selectivity  && depth == newest_value.depth) {
 			
 			if (score > alpha) {
 				if(score > newest_value.lower)

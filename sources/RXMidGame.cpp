@@ -227,11 +227,8 @@ void RXEngine::MG_PVS_root(RXBBPatterns& sBoard, const int depth,  int alpha, in
 			
 			sBoard.do_move(*iter);
 			
-			//multi_PV pv == true ???
-//			score = -MG_PVS_deep(0, sBoard, true, selectivity, depth-1, child_selective_cutoff, -lower-1, -lower, false);
-
 			//simple_PV pv == false ???
-            score = -MG_PVS_deep(0, sBoard, false, selectivity, depth-1, child_selective_cutoff, -lower-1, -lower, false); //change
+            score = -MG_PVS_deep(0, sBoard, false, selectivity, depth-1, child_selective_cutoff, -lower-VALUE_DISC, -lower, false); //change
 
 			
 			if(!abort.load()  && lower < score && score < upper) {
@@ -535,7 +532,6 @@ int RXEngine::MG_PVS_deep(int threadID, RXBBPatterns& sBoard, const bool pv, con
 							score = -EG_pv_extension(threadID, sBoard, pv, -upper, -lower, false);
 						} else {
 							
-							//bug 2/10/2009 : avec -lower-1 ????? pas d'explication logique
 							score = -EG_pv_extension(threadID, sBoard, false, -lower-VALUE_DISC, -lower, false);
 																	
 							if(lower < score && score < upper)
@@ -789,7 +785,7 @@ int RXEngine::MG_PVS_deep(int threadID, RXBBPatterns& sBoard, const bool pv, con
 					sBoard.do_move(*move);
 					
 					if(depth <= MG_DEEP_TO_SHALLOW) {
-                        score = -MG_PVS_shallow(threadID, sBoard, false, depth-1, -lower-1, -lower, false); //change
+                        score = -MG_PVS_shallow(threadID, sBoard, false, depth-1, -lower-VALUE_DISC, -lower, false);
                         if(lower < score && score < upper) {
                             if(pv && use_pv_extension && board.n_empties-(depth-1)<=pv_extension) {
                                 score = -MG_PVS_shallow(threadID, sBoard, pv, depth-1, -upper, -lower, false);
@@ -799,7 +795,7 @@ int RXEngine::MG_PVS_deep(int threadID, RXBBPatterns& sBoard, const bool pv, con
                         }
 					} else {
 							
-                        score = -MG_NWS_XProbCut(threadID, sBoard, 0, selectivity, depth-1, child_selective_cutoff, -lower-1, false); //change
+                        score = -MG_NWS_XProbCut(threadID, sBoard, 0, selectivity, depth-1, child_selective_cutoff, -lower-VALUE_DISC, false);
 
 						if(lower < score && score < upper)
 								score = -MG_PVS_deep(threadID, sBoard, pv, selectivity, depth-1, child_selective_cutoff, -upper, -lower, false);
@@ -925,7 +921,7 @@ void RXEngine::MG_SP_search_DEEP(RXSplitPoint* sp, const unsigned int threadID) 
         
         if(sp->depth <= MG_DEEP_TO_SHALLOW) {
             
-            score = -MG_PVS_shallow(threadID, sBoard, false, sp->depth-1, -alpha-1, -alpha, false);
+            score = -MG_PVS_shallow(threadID, sBoard, false, sp->depth-1, -alpha-VALUE_DISC, -alpha, false);
             
             if(alpha < score && score < sp->beta) {
                 if(sp->pv && use_pv_extension && board.n_empties-(sp->depth-1)<=pv_extension) {
@@ -936,29 +932,10 @@ void RXEngine::MG_SP_search_DEEP(RXSplitPoint* sp, const unsigned int threadID) 
             }
         } else {
             
-            //			if(sp->depth <=  MAX_DEPTH_USE_PROBCUT)
-            //				score = -MG_NWS_XProbCut(threadID, sBoard, sp->pvDev+1, sp->selectivity, sp->depth-1, child_selective_cutoff, -alpha-1, false);
-            //			else
-            //				score = -MG_PVS_deep(threadID, sBoard, false, sp->selectivity, sp->depth-1, child_selective_cutoff, -alpha-1, -alpha, false);
-            //
-            //			if(alpha < score && score < sp->beta)
-            //				if(sp->depth <=  MAX_DEPTH_USE_PROBCUT)
-            //					score = -MG_PVS_deep(threadID, sBoard, sp->pv, sp->selectivity, sp->depth-1, child_selective_cutoff, -sp->beta, -sp->alpha, false);
-            //				else
-            //					score = -MG_PVS_deep(threadID, sBoard, sp->pv, sp->selectivity, sp->depth-1, child_selective_cutoff, -sp->beta, child_selective_cutoff? -sp->alpha : -score, false);
-            
-            score = -MG_NWS_XProbCut(threadID, sBoard, sp->pvDev+1, sp->selectivity, sp->depth-1, child_selective_cutoff, -alpha-1, false);
+            score = -MG_NWS_XProbCut(threadID, sBoard, sp->pvDev+1, sp->selectivity, sp->depth-1, child_selective_cutoff, -alpha-VALUE_DISC, false);
             
             if(alpha < score && score < sp->beta)
                 score = -MG_PVS_deep(threadID, sBoard, sp->pv, sp->selectivity, sp->depth-1, child_selective_cutoff, -sp->beta, -sp->alpha, false);
-            
-            //			do {
-            //				alpha = sp->alpha;
-            //				score = -MG_NWS_XProbCut(threadID, sBoard, sp->pvDev+1, sp->selectivity, sp->depth-1, child_selective_cutoff, -alpha-1, false);
-            //			} while (sp->alpha>alpha && score>alpha);
-            //
-            //			if(alpha < score && score < sp->beta)
-            //					score = -MG_PVS_deep(threadID, sBoard, sp->pv, sp->selectivity, sp->depth-1, child_selective_cutoff, -sp->beta, -sp->alpha, false);
             
         }
         
@@ -1292,7 +1269,7 @@ int RXEngine::MG_PVS_shallow(int threadID, RXBBPatterns& sBoard, const bool pv, 
 								if(bestscore == UNDEF_SCORE) {
 									score = -MG_PVS_shallow(threadID, sBoard, pv, depth-1, -upper, -lower, false);
 								} else {
-                                    score = -MG_PVS_shallow(threadID, sBoard, false, depth-1, -lower-1, -lower, false); //change
+                                    score = -MG_PVS_shallow(threadID, sBoard, false, depth-1, -lower-VALUE_DISC, -lower, false); //change
 
 									if(lower < score && score < upper)
 											score = -MG_PVS_shallow(threadID, sBoard, pv, depth-1, -upper, -lower, false);
@@ -1332,7 +1309,7 @@ int RXEngine::MG_PVS_shallow(int threadID, RXBBPatterns& sBoard, const bool pv, 
 									score = -MG_PVS_shallow(threadID, sBoard, pv, depth-1, -upper, -lower, false);
 								} else {
 									
-                                    score = -MG_PVS_shallow(threadID, sBoard, false, depth-1, -lower-1, -lower, false); //change
+                                    score = -MG_PVS_shallow(threadID, sBoard, false, depth-1, -lower-VALUE_DISC, -lower, false); //change
 
 									if(lower < score && score < upper)
 											score = -MG_PVS_shallow(threadID, sBoard, pv, depth-1, -upper, -score, false);
@@ -1452,7 +1429,7 @@ int RXEngine::MG_NWS_XProbCut(int threadID, RXBBPatterns& sBoard, const int pvDe
 	
 		if(entry.lower >= upper_probcut) {
 			selective_cutoff = true;
-			return alpha+1;
+            return alpha+VALUE_DISC;
 		}
 			
 //		if(entry.upper <= lower_probcut) {
@@ -1558,9 +1535,9 @@ int RXEngine::MG_NWS_XProbCut(int threadID, RXBBPatterns& sBoard, const int pvDe
 			board.n_nodes++;
 			board.do_pass();
 			if(depth > MIN_DEPTH_USE_PROBCUT) {
-				bestscore = -MG_NWS_XProbCut(threadID, sBoard, pvDev, selectivity, depth-1, child_selective_cutoff, -alpha-1, true);
+                bestscore = -MG_NWS_XProbCut(threadID, sBoard, pvDev, selectivity, depth-1, child_selective_cutoff, -alpha-VALUE_DISC, true);
 			} else {
-				bestscore = -PVS_last_three_ply(threadID, sBoard, -alpha-1, -alpha, true);
+                bestscore = -PVS_last_three_ply(threadID, sBoard, -alpha-VALUE_DISC, -alpha, true);
 				if(use_pv_extension && board.n_empties-depth <= pv_extension)
 					selective_cutoff = child_selective_cutoff = true;
 			}
@@ -1574,7 +1551,7 @@ int RXEngine::MG_NWS_XProbCut(int threadID, RXBBPatterns& sBoard, const int pvDe
 		//XProbcut
 		if(probcut(threadID, false, sBoard, selectivity, probcut_depth, lower_probcut, upper_probcut, list, bestmove != NOMOVE) == true) {
 			selective_cutoff = true;
-			return alpha + 1;
+            return alpha + VALUE_DISC;
 		}
 
 		//interrupt search
@@ -1588,9 +1565,9 @@ int RXEngine::MG_NWS_XProbCut(int threadID, RXBBPatterns& sBoard, const int pvDe
 		sBoard.do_move(*move);
 		
 		if(depth > MIN_DEPTH_USE_PROBCUT) {
-			bestscore = -MG_NWS_XProbCut(threadID, sBoard, pvDev, selectivity, depth-1, child_selective_cutoff, -alpha-1, false);
+            bestscore = -MG_NWS_XProbCut(threadID, sBoard, pvDev, selectivity, depth-1, child_selective_cutoff, -alpha-VALUE_DISC, false);
 		} else {
-			bestscore = -PVS_last_three_ply(threadID, sBoard, -alpha-1, -alpha, false);
+            bestscore = -PVS_last_three_ply(threadID, sBoard, -alpha-VALUE_DISC, -alpha, false);
 			if(use_pv_extension && board.n_empties-depth <= pv_extension)
 				child_selective_cutoff = true;
 		}
@@ -1620,7 +1597,7 @@ int RXEngine::MG_NWS_XProbCut(int threadID, RXBBPatterns& sBoard, const int pvDe
 			if(activeThreads > 1 && depth>MIN_DEPTH_SPLITPOINT && (list->next)->next != NULL && !abort.load()
 			   && idle_thread_exists(threadID) && !thread_should_stop(threadID)
 			   && split(sBoard, false, pvDev, depth, selectivity, selective_cutoff, child_selective_cutoff,
-						alpha, (alpha+1), bestscore, bestmove, list, threadID, RXSplitPoint::MID_XPROBCUT))
+                        alpha, (alpha+VALUE_DISC), bestscore, bestmove, list, threadID, RXSplitPoint::MID_XPROBCUT))
 				
 				break;
 			
@@ -1628,9 +1605,9 @@ int RXEngine::MG_NWS_XProbCut(int threadID, RXBBPatterns& sBoard, const int pvDe
 			sBoard.do_move(*iter);
 			
 			if(depth > MIN_DEPTH_USE_PROBCUT) {
-				score = -MG_NWS_XProbCut(threadID, sBoard, pvDev+1,selectivity, depth-1, child_selective_cutoff, -alpha-1, false);
+                score = -MG_NWS_XProbCut(threadID, sBoard, pvDev+1,selectivity, depth-1, child_selective_cutoff, -alpha-VALUE_DISC, false);
 			} else {
-				score = -PVS_last_three_ply(threadID, sBoard, -alpha-1, -alpha, false);
+                score = -PVS_last_three_ply(threadID, sBoard, -alpha-VALUE_DISC, -alpha, false);
 				if(use_pv_extension && board.n_empties-depth <= pv_extension)
 					selective_cutoff = child_selective_cutoff = true;
 			}
@@ -1674,15 +1651,15 @@ int RXEngine::MG_NWS_XProbCut(int threadID, RXBBPatterns& sBoard, const int pvDe
 
 }
 
-// MG_SP_search_XEndcut() is used to search from a PV split point.  This function
+// MG_SP_search_XProbcut() is used to search from a PV split point.  This function
 // is called by each thread working at the split point.  It is similar to
 // the normal EG_NWS_XEndCut() function, but simpler.  Because we have already
 // probed the hash table and searched the first move before splitting, we
-// don't have to repeat all this work in MG_SP_search_XEndcut().  We also don't
+// don't have to repeat all this work in MG_SP_search_XProbcut().  We also don't
 // need to store anything to the hash table here:  This is taken care of
 // after we return from the split point.
 
-void RXEngine::MG_SP_search_XEndcut(RXSplitPoint* sp, const unsigned int threadID) {
+void RXEngine::MG_SP_search_XProbcut(RXSplitPoint* sp, const unsigned int threadID) {
 	
 	//    assert(threadID >= 0 && threadID < activeThreads);
 	//    assert(activeThreads > 1);	
@@ -1724,9 +1701,9 @@ void RXEngine::MG_SP_search_XEndcut(RXSplitPoint* sp, const unsigned int threadI
 		sBoard.do_move(*move);
 		
 		if(sp->depth > MIN_DEPTH_USE_PROBCUT) {
-			score = -MG_NWS_XProbCut(threadID, sBoard, sp->pvDev+1, sp->selectivity, sp->depth-1, child_selective_cutoff, -alpha-1, false);
+            score = -MG_NWS_XProbCut(threadID, sBoard, sp->pvDev+1, sp->selectivity, sp->depth-1, child_selective_cutoff, -alpha-VALUE_DISC, false);
 		} else {
-			score = -PVS_last_three_ply(threadID, sBoard, -alpha-1, -alpha, false);
+            score = -PVS_last_three_ply(threadID, sBoard, -alpha-VALUE_DISC, -alpha, false);
 			if(use_pv_extension && board.n_empties-sp->depth <= pv_extension)
 				child_selective_cutoff = true;
 		}
