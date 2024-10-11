@@ -174,6 +174,19 @@ const int RXBitBoard::QUADRANT_ID[] = {
 	2, 2, 2, 2, 3, 3, 3, 3
 };
 
+/*! a quadrant id for each square */
+const int RXBitBoard::QUADRANT_ID_2[] = {
+    1, 1, 1, 1, 2, 2, 2, 2,
+    1, 1, 1, 1, 2, 2, 2, 2,
+    1, 1, 1, 1, 2, 2, 2, 2,
+    1, 1, 1, 1, 2, 2, 2, 2,
+    4, 4, 4, 4, 8, 8, 8, 8,
+    4, 4, 4, 4, 8, 8, 8, 8,
+    4, 4, 4, 4, 8, 8, 8, 8,
+    4, 4, 4, 4, 8, 8, 8, 8,
+};
+
+
 unsigned long long RXBitBoard::hashcodeTable_lines1_2[2][65536];
 unsigned long long RXBitBoard::hashcodeTable_lines3_4[2][65536];
 unsigned long long RXBitBoard::hashcodeTable_lines5_6[2][65536];
@@ -291,77 +304,140 @@ int RXBitBoard::count_potential_moves(const unsigned long long p_discs, const un
 
 
 
+//unsigned long long RXBitBoard::get_legal_moves(const unsigned long long p_discs, const unsigned long long o_discs ) {
+//    
+//    const uint64x2_t pp_discs = vdupq_n_u64(p_discs);
+//    const uint64x2_t oo_discs = vdupq_n_u64(o_discs);
+//    
+//    const uint64x2_t inner_oo_discs = vdupq_n_u64(o_discs & 0x7E7E7E7E7E7E7E7EULL);
+//
+//    
+//    //horizontals directions -1, +1
+//    static const int64x2_t shift_1 = {-1, 1};
+//    static const int64x2_t shift_2 = {-2, 2};
+//    
+//    uint64x2_t
+//    flipped = vandq_u64(vshlq_u64(pp_discs, shift_1), inner_oo_discs);
+//    flipped = vorrq_u64(flipped, vandq_u64(vshlq_u64(flipped, shift_1), inner_oo_discs));
+//
+//    uint64x2_t 
+//    adjacent_oo_discs = vandq_u64(inner_oo_discs, vshlq_u64(inner_oo_discs, shift_1));
+//
+//    flipped = vorrq_u64(flipped, vandq_u64(vshlq_u64(flipped, shift_2), adjacent_oo_discs));
+//    flipped = vorrq_u64(flipped, vandq_u64(vshlq_u64(flipped, shift_2), adjacent_oo_discs));
+//
+//    uint64x2_t legals = vshlq_u64(flipped, shift_1);
+//
+//    //verticals directions -8 , +8
+//    static const int64x2_t shift_8  = {-8,   8};
+//    static const int64x2_t shift_16 = {-16, 16};
+//
+//    flipped = vandq_u64(vshlq_u64(pp_discs, shift_8), oo_discs);
+//    flipped = vorrq_u64(flipped, vandq_u64(vshlq_u64(flipped, shift_8), oo_discs));
+//    
+//    adjacent_oo_discs = vandq_u64(oo_discs, vshlq_u64(oo_discs, shift_8));
+//    
+//    flipped = vorrq_u64(flipped, vandq_u64(vshlq_u64(flipped, shift_16), adjacent_oo_discs));
+//    flipped = vorrq_u64(flipped, vandq_u64(vshlq_u64(flipped, shift_16), adjacent_oo_discs));
+//
+//    legals = vorrq_u64(legals, vshlq_u64(flipped, shift_8));
+//
+//    //diagonals directions -7 , +7
+//    static const int64x2_t shift_7  = {-7,   7};
+//    static const int64x2_t shift_14 = {-14, 14};
+//
+//    flipped = vandq_u64(vshlq_u64(pp_discs, shift_7), inner_oo_discs);
+//    flipped = vorrq_u64(flipped, vandq_u64(vshlq_u64(flipped, shift_7), inner_oo_discs));
+//
+//    adjacent_oo_discs = vandq_u64(inner_oo_discs, vshlq_u64(inner_oo_discs, shift_7));
+//
+//    flipped = vorrq_u64(flipped, vandq_u64(vshlq_u64(flipped, shift_14), adjacent_oo_discs));
+//    flipped = vorrq_u64(flipped, vandq_u64(vshlq_u64(flipped, shift_14), adjacent_oo_discs));
+//
+//    legals = vorrq_u64(legals, vshlq_u64(flipped, shift_7));
+//    
+//    //diagonals directions -9 , +9
+//    static const int64x2_t shift_9  = {-9,   9};
+//    static const int64x2_t shift_18 = {-18, 18};
+//
+//    flipped = vandq_u64(vshlq_u64(pp_discs, shift_9), inner_oo_discs);
+//    flipped = vorrq_u64(flipped, vandq_u64(vshlq_u64(flipped, shift_9), inner_oo_discs));
+//
+//    adjacent_oo_discs = vandq_u64(inner_oo_discs, vshlq_u64(inner_oo_discs, shift_9));
+//
+//    flipped = vorrq_u64(flipped, vandq_u64(vshlq_u64(flipped, shift_18), adjacent_oo_discs));
+//    flipped = vorrq_u64(flipped, vandq_u64(vshlq_u64(flipped, shift_18), adjacent_oo_discs));
+//
+//    legals = vorrq_u64(legals, vshlq_u64(flipped, shift_9));
+//    
+//    
+//    return ((vgetq_lane_u64(legals, 0) | vgetq_lane_u64(legals, 1)) & ~(p_discs | o_discs));
+//
+//}
+
+/*interleave version :more speed ? NO*/
 unsigned long long RXBitBoard::get_legal_moves(const unsigned long long p_discs, const unsigned long long o_discs ) {
-    
+
+    //horizontals directions -1, +1
+    static const int64x2_t shift_1 = {-1, 1};
+    static const int64x2_t shift_2 = {-2, 2};
+    //verticals directions -8 , +8
+    static const int64x2_t shift_8  = {-8,   8};
+    static const int64x2_t shift_16 = {-16, 16};
+    //diagonals directions -7 , +7
+    static const int64x2_t shift_7  = {-7,   7};
+    static const int64x2_t shift_14 = {-14, 14};
+    //diagonals directions -9 , +9
+    static const int64x2_t shift_9  = {-9,   9};
+    static const int64x2_t shift_18 = {-18, 18};
+
     const uint64x2_t pp_discs = vdupq_n_u64(p_discs);
     const uint64x2_t oo_discs = vdupq_n_u64(o_discs);
     
     const uint64x2_t inner_oo_discs = vdupq_n_u64(o_discs & 0x7E7E7E7E7E7E7E7EULL);
 
-    
-    //horizontals directions -1, +1
-    static const int64x2_t shift_1 = {-1, 1};
-    static const int64x2_t shift_2 = {-2, 2};
-    
     uint64x2_t
-    flipped = vandq_u64(vshlq_u64(pp_discs, shift_1), inner_oo_discs);
-    flipped = vorrq_u64(flipped, vandq_u64(vshlq_u64(flipped, shift_1), inner_oo_discs));
+    flip_h = vandq_u64(vshlq_u64(pp_discs, shift_1), inner_oo_discs);
+    uint64x2_t
+    flip_d7 = vandq_u64(vshlq_u64(pp_discs, shift_7), inner_oo_discs);
+    uint64x2_t
+    flip_d9 = vandq_u64(vshlq_u64(pp_discs, shift_9), inner_oo_discs);
+    uint64x2_t
+    flip_v = vandq_u64(vshlq_u64(pp_discs, shift_8), oo_discs);
 
-    uint64x2_t 
-    adjacent_oo_discs = vandq_u64(inner_oo_discs, vshlq_u64(inner_oo_discs, shift_1));
 
-    flipped = vorrq_u64(flipped, vandq_u64(vshlq_u64(flipped, shift_2), adjacent_oo_discs));
-    flipped = vorrq_u64(flipped, vandq_u64(vshlq_u64(flipped, shift_2), adjacent_oo_discs));
+    flip_h = vorrq_u64(flip_h, vandq_u64(vshlq_u64(flip_h, shift_1), inner_oo_discs));
+    flip_d7 = vorrq_u64(flip_d7, vandq_u64(vshlq_u64(flip_d7, shift_7), inner_oo_discs));
+    flip_d9 = vorrq_u64(flip_d9, vandq_u64(vshlq_u64(flip_d9, shift_9), inner_oo_discs));
+    flip_v = vorrq_u64(flip_v, vandq_u64(vshlq_u64(flip_v, shift_8), oo_discs));
 
-    uint64x2_t legals = vshlq_u64(flipped, shift_1);
 
-    //verticals directions -8 , +8
-    static const int64x2_t shift_8  = {-8,   8};
-    static const int64x2_t shift_16 = {-16, 16};
+    uint64x2_t
+    adjacent_h = vandq_u64(inner_oo_discs, vshlq_u64(inner_oo_discs, shift_1));
+    uint64x2_t
+    adjacent_d7 = vandq_u64(inner_oo_discs, vshlq_u64(inner_oo_discs, shift_7));
+    uint64x2_t
+    adjacent_d9 = vandq_u64(inner_oo_discs, vshlq_u64(inner_oo_discs, shift_9));
+    uint64x2_t
+    adjacent_v = vandq_u64(oo_discs, vshlq_u64(oo_discs, shift_8));
 
-    flipped = vandq_u64(vshlq_u64(pp_discs, shift_8), oo_discs);
-    flipped = vorrq_u64(flipped, vandq_u64(vshlq_u64(flipped, shift_8), oo_discs));
-    
-    adjacent_oo_discs = vandq_u64(oo_discs, vshlq_u64(oo_discs, shift_8));
-    
-    flipped = vorrq_u64(flipped, vandq_u64(vshlq_u64(flipped, shift_16), adjacent_oo_discs));
-    flipped = vorrq_u64(flipped, vandq_u64(vshlq_u64(flipped, shift_16), adjacent_oo_discs));
 
-    legals = vorrq_u64(legals, vshlq_u64(flipped, shift_8));
+    flip_h = vorrq_u64(flip_h, vandq_u64(vshlq_u64(flip_h, shift_2), adjacent_h));
+    flip_v = vorrq_u64(flip_v, vandq_u64(vshlq_u64(flip_v, shift_16), adjacent_v));
+    flip_d7 = vorrq_u64(flip_d7, vandq_u64(vshlq_u64(flip_d7, shift_14), adjacent_d7));
+    flip_d9 = vorrq_u64(flip_d9, vandq_u64(vshlq_u64(flip_d9, shift_18), adjacent_d9));
 
-    //diagonals directions -7 , +7
-    static const int64x2_t shift_7  = {-7,   7};
-    static const int64x2_t shift_14 = {-14, 14};
+    flip_h = vorrq_u64(flip_h, vandq_u64(vshlq_u64(flip_h, shift_2), adjacent_h));
+    flip_v = vorrq_u64(flip_v, vandq_u64(vshlq_u64(flip_v, shift_16), adjacent_v));
+    flip_d7 = vorrq_u64(flip_d7, vandq_u64(vshlq_u64(flip_d7, shift_14), adjacent_d7));
+    flip_d9 = vorrq_u64(flip_d9, vandq_u64(vshlq_u64(flip_d9, shift_18), adjacent_d9));
 
-    flipped = vandq_u64(vshlq_u64(pp_discs, shift_7), inner_oo_discs);
-    flipped = vorrq_u64(flipped, vandq_u64(vshlq_u64(flipped, shift_7), inner_oo_discs));
-
-    adjacent_oo_discs = vandq_u64(inner_oo_discs, vshlq_u64(inner_oo_discs, shift_7));
-
-    flipped = vorrq_u64(flipped, vandq_u64(vshlq_u64(flipped, shift_14), adjacent_oo_discs));
-    flipped = vorrq_u64(flipped, vandq_u64(vshlq_u64(flipped, shift_14), adjacent_oo_discs));
-
-    legals = vorrq_u64(legals, vshlq_u64(flipped, shift_7));
-    
-    //diagonals directions -9 , +9
-    static const int64x2_t shift_9  = {-9,   9};
-    static const int64x2_t shift_18 = {-18, 18};
-
-    flipped = vandq_u64(vshlq_u64(pp_discs, shift_9), inner_oo_discs);
-    flipped = vorrq_u64(flipped, vandq_u64(vshlq_u64(flipped, shift_9), inner_oo_discs));
-
-    adjacent_oo_discs = vandq_u64(inner_oo_discs, vshlq_u64(inner_oo_discs, shift_9));
-
-    flipped = vorrq_u64(flipped, vandq_u64(vshlq_u64(flipped, shift_18), adjacent_oo_discs));
-    flipped = vorrq_u64(flipped, vandq_u64(vshlq_u64(flipped, shift_18), adjacent_oo_discs));
-
-    legals = vorrq_u64(legals, vshlq_u64(flipped, shift_9));
+    uint64x2_t legals = vorrq_u64(vshlq_u64(flip_d9, shift_9), vorrq_u64(vshlq_u64(flip_d7, shift_7), vorrq_u64(vshlq_u64(flip_h, shift_1), vshlq_u64(flip_v, shift_8))));
     
     
     return ((vgetq_lane_u64(legals, 0) | vgetq_lane_u64(legals, 1)) & ~(p_discs | o_discs));
 
 }
-
 
 
 //version Edax semble plus lente que la version classique ????
@@ -919,6 +995,17 @@ bool RXBitBoard::isEndGame() {
 	}
 	return false;
 }
+
+//int RXBitBoard::test_parity() {
+//    
+//    int
+//    parity_test  = local_Parity(A1) <<3;
+//    parity_test ^= local_Parity(H1) <<2;
+//    parity_test ^= local_Parity(A8) <<1;
+//    parity_test ^= local_Parity(H8);
+//    
+//    return parity_test;
+//}
 
 int RXBitBoard::local_Parity(const int position) const {
     

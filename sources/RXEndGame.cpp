@@ -13,6 +13,10 @@
 
 #include "RXEngine.hpp"
 #include "RXRoxane.hpp"
+#include "RXBitBoard.hpp"
+
+//#define USE_SPLIT_AT_ETC_MOBILITY
+//#define USE_SPLIT_AT_ROOT
 
 
 
@@ -29,15 +33,27 @@ const int RXEngine::stability_threshold[] =
     6500, 6500, 6500, 6500, 6500, 6500, 6500, 6500,
     6500, 6500, 6500, 6500, 6500, 6500, 6500, 6500};
 
-int RXEngine::EG_DEEP_TO_MEDIUM = 17;           //standart 17
-int RXEngine::EG_MEDIUM_HI_TO_LOW = 14;         //[12 (6'42) : 13 (6'25) : standard 14 (6'26)]
-const int RXEngine::EG_MEDIUM_TO_SHALLOW = 8;   //Constant 8
+/* standart setting*/
+const int RXEngine::EG_DEEP_TO_MEDIUM = 17;
+const int RXEngine::EG_MEDIUM_HI_TO_LOW = 14;
+const int RXEngine::EG_MEDIUM_TO_SHALLOW = 8;
+const int RXEngine::MIN_DEPTH_USE_ENDCUT = 16;
 
-int RXEngine::MIN_DEPTH_USE_ENDCUT = 16;        //16
+const bool RXEngine::USE_POTENTIAL_MOBILITY = true; //false:true equivalent: is equal
+
+/* standart setting*/
+
+///*For Record fforum-20-39*/
+//const int RXEngine::EG_DEEP_TO_MEDIUM = 16;
+//const int RXEngine::EG_MEDIUM_HI_TO_LOW = 13;
+//const int RXEngine::EG_MEDIUM_TO_SHALLOW = 7;
+//const int RXEngine::MIN_DEPTH_USE_ENDCUT = 15;
+//
+//const bool RXEngine::USE_POTENTIAL_MOBILITY = false;
+///*For Record fforum-20-39*/
+
+
 const int RXEngine::EG_HIGH_SELECT = 0;
-
-const bool RXEngine::USE_POTENTIAL_MOBILITY = true;
-
 
 /*!
  * \brief  Evaluate a position using a shallow Alphabeta.
@@ -72,12 +88,17 @@ int RXEngine::EG_alphabeta_parity(int threadID, RXBitBoard& board, int alpha, in
     
     RXMove& move = threads[threadID]._move[board.n_empties][1];
     
-    const unsigned long long legal_movesBB = RXBitBoard::get_legal_moves(board.discs[board.player], board.discs[board.player^1]);
-    
+//    const unsigned long long legal_movesBB = RXBitBoard::get_legal_moves(board.discs[board.player], board.discs[board.player^1]);
     for (int parity = 1; parity >= 0; parity--) {
         for(RXSquareList* empties = board.empties_list->next; empties->position != NOMOVE; empties = empties->next) {
             
-            if ((legal_movesBB & 1ULL<<empties->position) && board.local_Parity(empties->position) == parity) { ((board).*(board.generate_flips[empties->position]))(move);
+//            if ((legal_movesBB & 1ULL<<empties->position) && board.local_Parity(empties->position) == parity) {
+//                ((board).*(board.generate_flips[empties->position]))(move);
+            
+            int square =empties->position;
+
+            if ((board.discs[opponent] & RXBitBoard::NEIGHBOR[square]) && board.local_Parity(square) == parity && ((board).*(board.generate_flips[square]))(move)) {
+
                 board.n_nodes++;
                 
                 board.discs[board.player] |= (move.flipped | move.square);
@@ -608,9 +629,11 @@ int RXEngine::EG_PVS_hash_mobility(int threadID, RXBitBoard& board, const bool p
                     for(RXMove* iter = list->next; iter != NULL; iter = iter->next) {
                         
                         board.n_nodes++;
+ 
                         
                         const unsigned long long p_discs = board.discs[p] | (iter->flipped | iter->square);
                         const unsigned long long o_discs = board.discs[o] ^ iter->flipped;
+                        
                         
                         iter->score = (RXBitBoard::get_mobility(o_discs, p_discs)<<5) - (RXBitBoard::get_corner_stability(p_discs)<<2) - (RXBitBoard::local_Parity(o_discs, p_discs, iter->position)^1);
 
@@ -939,7 +962,7 @@ int RXEngine::EG_PVS_ETC_mobility(int threadID, RXBBPatterns& sBoard, const bool
                     const unsigned long long o_discs = board.discs[o] ^ iter->flipped;
                     
                     //score for try : mobility * VALUE_DISC - corner_stability * 8
-                    iter->score += 2*(RXBitBoard::get_mobility(o_discs, p_discs)*VALUE_DISC) - (RXBitBoard::get_corner_stability(p_discs)*VALUE_DISC/10);// - (RXBitBoard::local_Parity(o_discs, p_discs, iter->position)^1);
+                    iter->score += 2*(RXBitBoard::get_mobility(o_discs, p_discs)*VALUE_DISC) - (RXBitBoard::get_corner_stability(p_discs)*VALUE_DISC/10);
                     
                 }
                 
@@ -987,25 +1010,32 @@ int RXEngine::EG_PVS_ETC_mobility(int threadID, RXBBPatterns& sBoard, const bool
                 list = list->next;
                 
             }
+
+#ifdef USE_SPLIT_AT_ETC_MOBILITY
+                        
+            //unused: only for conformity with split method
+            bool selective_cutoff= false;
+            bool child_selective_cutoff = false;
             
-//            //unused: only for conformity with split method
-//            bool selective_cutoff= false;
-//            bool child_selective_cutoff = false;
+#endif
             
             // other moves : try to refute the first/best one
             int score;
             for(;lower < upper && list->next != NULL; list = list->next) {
 
                 //find moves with worst answer
+
+#ifdef USE_SPLIT_AT_ETC_MOBILITY
                 
-//                // Split? not efficient : unused
-//                if(activeThreads > 1  && !abort.load() && (list->next)->next != NULL && board.n_empties>=EG_MEDIUM_HI_TO_LOW
-//                   && !thread_should_stop(threadID) && idle_thread_exists(threadID)
-//                   && split(sBoard, pv, 0, board.n_empties, NO_SELECT, selective_cutoff, child_selective_cutoff,
-//                            lower, upper, bestscore, bestmove, list, threadID, RXSplitPoint::END_ETC_MOBILITY))
-//                    
-//                    break;
+                // Split? not efficient : unused
+                if(activeThreads > 1  && !abort.load() && (list->next)->next != NULL && board.n_empties>=EG_MEDIUM_HI_TO_LOW
+                   && !thread_should_stop(threadID) && idle_thread_exists(threadID)
+                   && split(sBoard, pv, 0, board.n_empties, NO_SELECT, selective_cutoff, child_selective_cutoff,
+                            lower, upper, bestscore, bestmove, list, threadID, RXSplitPoint::END_ETC_MOBILITY))
+                    
+                    break;
                 
+#endif
                 
                 RXMove* previous_move = list;
                 RXMove* move = previous_move->next;
@@ -1906,7 +1936,7 @@ int RXEngine::EG_NWS_XEndCut(int threadID, RXBBPatterns& sBoard, const int pvDev
             
             if(entry.lower >= upper_probcut) {
                 selective_cutoff = true;
-                return alpha+VALUE_DISC;
+                return alpha + 2*VALUE_DISC;
             }
             
 //            if(entry.upper <= lower_probcut) {
@@ -2030,7 +2060,7 @@ int RXEngine::EG_NWS_XEndCut(int threadID, RXBBPatterns& sBoard, const int pvDev
             //XProbcut
             if(probcut(threadID, true, sBoard, selectivity, probcut_depth, lower_probcut, upper_probcut, list, bestmove != NOMOVE) == true) {
                 selective_cutoff = true;
-                return alpha + VALUE_DISC;
+                return alpha + 2*VALUE_DISC;
             }
             
             //interrupt search
@@ -2309,16 +2339,18 @@ void RXEngine::EG_PVS_root(RXBBPatterns& sBoard, const int selectivity, int alph
         first_move = false;
         
         for (iter = iter->next; !abort.load()  && lower < upper && iter != NULL; iter = iter->next) {
+ 
+#ifdef USE_SPLIT_AT_ROOT
             
-//            if(activeThreads > 1 && iter->next != NULL && board.n_empties >= EG_DEEP_TO_MEDIUM
-//               && !abort.load() && idle_thread_exists(0) && !thread_should_stop(0)
-//               && split(sBoard, true, 0, board.n_empties, selectivity, selective_cutoff, child_selective_cutoff,
-//                        lower, upper, bestscore, bestmove, iter, 0, RXSplitPoint::END_ROOT)) {
-//                
-//                
-//                break;
-//            }
-            
+            if(activeThreads > 1 && iter->next != NULL && board.n_empties >= EG_DEEP_TO_MEDIUM
+               && !abort.load() && idle_thread_exists(0) && !thread_should_stop(0)
+               && split(sBoard, true, 0, board.n_empties, selectivity, selective_cutoff, child_selective_cutoff,
+                        lower, upper, bestscore, bestmove, iter, 0, RXSplitPoint::END_ROOT)) {
+                
+                
+                break;
+            }
+#endif
             
             sBoard.do_move(*iter);
             
@@ -2595,6 +2627,7 @@ void RXEngine::EG_driver(RXBBPatterns& sBoard, int selectivity, int end_selectiv
 //    //VERSION FOR RECORD FFORUM-40-59
 //    selectivity = 1;
 //    for(; !abort.load()  && selectivity <= end_selectivity; selectivity+=4) {
+    
     for(; !abort.load()  && selectivity <= end_selectivity; selectivity++) {
 
         selectivity = std::max(std::min(NO_SELECT, 26-sBoard.board.n_empties), std::max(EG_HIGH_SELECT, selectivity));
@@ -2604,9 +2637,6 @@ void RXEngine::EG_driver(RXBBPatterns& sBoard, int selectivity, int end_selectiv
         if(dependent_time)
             determine_move_time(sBoard.board);
         
-        //unused
-        //MIN_DEPTH_USE_ENDCUT = std::min(18, 21-selectivity); //standard 18/21
-        //EG_DEEP_TO_MEDIUM = (selectivity>3 ? 17:18);
         
         int eTime_start_level = get_current_time();
         
@@ -2634,10 +2664,12 @@ void RXEngine::EG_driver(RXBBPatterns& sBoard, int selectivity, int end_selectiv
                 beta  += 2*VALUE_DISC - beta%(2*VALUE_DISC);
         }
         
-        //high score >= 56 skip selectivity stage
-        if (selectivity != 0 && abs(alpha) > 55*VALUE_DISC ) {
+        //high score >= 48 skip selectivity stage
+        if (selectivity == 0 && abs(alpha) > 48*VALUE_DISC) {
+            selectivity++;
+        } else  if (selectivity != 0 && abs(alpha) > 51*VALUE_DISC ) {
             selectivity = std::max(EG_HIGH_SELECT, ++selectivity);
-            if (abs(alpha) > 61*VALUE_DISC )
+            if (abs(alpha) > 59*VALUE_DISC )
                 selectivity = NO_SELECT;
         }
         

@@ -56,11 +56,11 @@
       <CommandLineArguments>
          <CommandLineArgument
             argument = "-t 1 -h 18"
-            isEnabled = "YES">
+            isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
             argument = "-t 8 -h 20"
-            isEnabled = "NO">
+            isEnabled = "YES">
          </CommandLineArgument>
          <CommandLineArgument
             argument = "-mode ggs -login Roxane -passw Rostand"

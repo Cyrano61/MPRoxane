@@ -35,10 +35,12 @@
 int main (int argc, char * const argv[]) {
     
 #ifdef __ARM_FEATURE_SVE
-    std::cout << "ARM SVE Dispo" << std::endl;
+    std::cout << "ARM SVE available" << std::endl;
+#else
+    std::cout << "ARM SVE unavailable" << std::endl;
 #endif
 #ifdef __ARM_NEON
-    std::cout << "ARM NEON Dispo" << std::endl;
+    std::cout << "ARM NEON available" << std::endl;
 #endif
 
     	

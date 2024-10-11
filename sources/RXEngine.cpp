@@ -18,6 +18,8 @@
 #include "RXEngine.hpp"
 #include "RXRoxane.hpp"
 
+//#define USE_IMPROVE_HELPFUL_MASTER_CONCEPT
+
 const int RXEngine::CHECK_TO_LAST_THREE = 4; // DO NOT CHANGE
 
 
@@ -2188,32 +2190,36 @@ bool RXEngine::thread_is_available(unsigned int slave, unsigned int master) {
     //copy local (argh... bug 25/01/2010)
     const unsigned int localActiveSplitPoints = threads[slave].activeSplitPoints;
     
+#ifndef USE_IMPROVE_HELPFUL_MASTER_CONCEPT
+
     //Apply the "helpful master" concept if possible.
     if(localActiveSplitPoints == 0 || threads[slave].splitPointStack[localActiveSplitPoints-1].slaves[master])
         return true;
-
+#else
     /*improve helpful master concept (not very efficient) : unused*/
+    
 
-//    if(localActiveSplitPoints == 0)
-//        return true;
-//    
-//    const RXSplitPoint& slave_activeSplitPoint = threads[slave].splitPointStack[localActiveSplitPoints-1];
-//    
-//    if(slave_activeSplitPoint.slaves[master])
-//        return true;
-//    
-//    //improve helpful master concept
-//    if(threads[master].splitPoint != NULL) {
-//        RXSplitPoint* splitPoint = threads[master].splitPoint->parent;
-//        
-//        while (splitPoint != NULL) {
-//            if(splitPoint->master == slave && &slave_activeSplitPoint == splitPoint) {
-//                return true;
-//            }
-//            splitPoint = splitPoint->parent;
-//        };
-//    }
- 
+    if(localActiveSplitPoints == 0)
+        return true;
+    
+    const RXSplitPoint& slave_activeSplitPoint = threads[slave].splitPointStack[localActiveSplitPoints-1];
+    
+    if(slave_activeSplitPoint.slaves[master])
+        return true;
+    
+    //improve helpful master concept
+    if(threads[master].splitPoint != NULL) {
+        RXSplitPoint* splitPoint = threads[master].splitPoint->parent;
+        
+        while (splitPoint != NULL) {
+            if(splitPoint->master == slave && &slave_activeSplitPoint == splitPoint) {
+                return true;
+            }
+            splitPoint = splitPoint->parent;
+        };
+    }
+    
+#endif
  
     return false;
 }

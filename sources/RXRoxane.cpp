@@ -476,6 +476,16 @@ void RXRoxane::get_move(const std::string& file_name) {
 				search.bestMove.nodes	    = 0;
 					
 				engine[search.idEngine]->get_move(search);
+                
+//                std::cout << search.sBoard.board << std::endl;
+//                search.sBoard.board.init_parity();
+//                std::cout << "parity global : " << search.sBoard.board.parity << std::endl;
+//                std::cout << "parity locale : " << search.sBoard.board.test_parity() << std::endl;
+//                
+//                int parity_globale = search.sBoard.board.parity & RXBitBoard::QUADRANT_ID_2[H7]? 0:1;
+//                int parity_locale = search.sBoard.board.local_Parity(H7)^1;
+//                
+//                std::cout << parity_globale << " : " << parity_locale << std::endl;
 				
 				T += search.bestMove.tElapsed;
 				nodes += search.bestMove.nodes;
