@@ -63,7 +63,7 @@ class RXBitBoard {
     
 	/*! a quadrant id for each square */
     static const unsigned long long QUADRANT_MASK[];
-    static const int QUADRANT_ID[];
+    static const int QUADRANT_SHITF[];
     static const int QUADRANT_ID_2[];
 
 	static const unsigned char COUNT_A[];
@@ -82,7 +82,7 @@ class RXBitBoard {
 	unsigned long long discs[2];
 	int player;
 	int n_empties;
-//    unsigned int parity;
+    int parity;
 	RXSquareList empties_list[62];
 	RXSquareList *position_to_empties[64];
 	mutable unsigned long long n_nodes;
@@ -150,13 +150,6 @@ bool generate_flips_##pos(RXMove& move) const
     static inline int get_corner_stability(const unsigned long long& discs_player);
     inline int get_stability(const int player) const;
     static inline int get_stability_opponent(const unsigned long long discs_player, const unsigned long long discs_opponent);
-
-//    void init_parity();
-//    int test_parity();
-
-
-    static int local_Parity(const unsigned long long p_discs, const unsigned long long o_discs, const int position);
-    int local_Parity(const int position) const;
     
     
     void do_move(const RXMove& move);
@@ -225,26 +218,6 @@ static inline unsigned long long OutflankToFlipmask(unsigned long long outflank)
     #define rotl8(x,y)    __builtin_ia32_rolqi((x),(y))
 #endif
 
-//inline void RXBitBoard::init_parity() {
-//    
-//    parity = 0;
-//    
-//    const unsigned long long Filled = (discs[BLACK] | discs[WHITE]);
-//    
-//    //Quadrant 0
-//    parity  = (__builtin_popcountll(Filled & 0x000000000F0F0F0FULL) & 1);
-//
-//    //Quadrant 1
-//    parity ^= (__builtin_popcountll(Filled & 0x00000000F0F0F0F0ULL) & 1)<<1;
-//
-//    //Quadrant 2
-//    parity ^= (__builtin_popcountll(Filled & 0x0F0F0F0F00000000ULL) & 1)<<2;
-//
-//    //Quadrant 3
-//    parity ^= (__builtin_popcountll(Filled & 0xF0F0F0F000000000ULL) & 1)<<3;
-//
-//    if (parity > 15) std::cout << "error" << std::endl;
-//}
 
 
 
@@ -278,6 +251,7 @@ inline void RXBitBoard::do_move(const RXMove& move) {
 	discs[player] ^= move.flipped;
 	
 	n_empties--;
+    parity ^= QUADRANT_ID_2[move.position];
 
 	const RXSquareList *remove = position_to_empties[move.position];
 	remove->previous->next = remove->next;
@@ -292,7 +266,8 @@ inline void RXBitBoard::undo_move(const RXMove& move) {
 	insert->previous->next = insert;
 	insert->next->previous = insert;
 	
-	n_empties++;
+    parity ^= QUADRANT_ID_2[move.position];
+    n_empties++;
 	
 	discs[player] |= move.flipped;
 	player ^=1;
@@ -312,12 +287,6 @@ inline void RXBitBoard::do_pass() {
     @param position                   square posistion
     @return local parity (0:1)
 */
-inline int RXBitBoard::local_Parity(const unsigned long long p_discs, const unsigned long long o_discs, const int position) {
-    
-    const unsigned long long quadrant_Filled = (p_discs | o_discs) & QUADRANT_MASK[QUADRANT_ID[position]];
-    
-    return (__builtin_popcountll(quadrant_Filled) & 1);
-}
 
 
 /*

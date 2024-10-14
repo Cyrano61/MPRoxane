@@ -70,7 +70,7 @@ int main (int argc, char * const argv[]) {
 		}
 	}
 
-	std::cout << "Version Roxane 2.0.4" << std::endl;
+	std::cout << "Version Roxane 2.0.5" << std::endl;
 	std::cout << "Number of threads: " << nThreads << std::endl;
 	std::cout << "Size hashTable: " << nBitsTable << std::endl;
     std::cout << file_name << std::endl;

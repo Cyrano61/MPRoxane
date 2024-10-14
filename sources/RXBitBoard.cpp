@@ -155,15 +155,24 @@ const int RXBitBoard::PRESORTED_POSITION[] = {
 };
 */
 
+//const unsigned long long RXBitBoard::QUADRANT_MASK[] = {
+//    0x000000000F0F0F0FULL,
+//    0x00000000F0F0F0F0ULL,
+//    0x0F0F0F0F00000000ULL,
+//    0xF0F0F0F000000000ULL   
+//};
+
+/** quadrant id to move mask */
 const unsigned long long RXBitBoard::QUADRANT_MASK[] = {
-    0x000000000F0F0F0FULL,
-    0x00000000F0F0F0F0ULL,
-    0x0F0F0F0F00000000ULL,
-    0xF0F0F0F000000000ULL   
+    0x0000000000000000, 0x000000000F0F0F0F, 0x00000000F0F0F0F0, 0x00000000FFFFFFFF,
+    0x0F0F0F0F00000000, 0x0F0F0F0F0F0F0F0F, 0x0F0F0F0FF0F0F0F0, 0x0F0F0F0FFFFFFFFF,
+    0xF0F0F0F000000000, 0xF0F0F0F00F0F0F0F, 0xF0F0F0F0F0F0F0F0, 0xF0F0F0F0FFFFFFFF,
+    0xFFFFFFFF00000000, 0xFFFFFFFF0F0F0F0F, 0xFFFFFFFFF0F0F0F0, 0xFFFFFFFFFFFFFFFF
 };
 
+
 /*! a quadrant id for each square */
-const int RXBitBoard::QUADRANT_ID[] = {
+const int RXBitBoard::QUADRANT_SHITF[] = {
 	0, 0, 0, 0, 1, 1, 1, 1,
 	0, 0, 0, 0, 1, 1, 1, 1,
 	0, 0, 0, 0, 1, 1, 1, 1,
@@ -748,7 +757,7 @@ unsigned long long RXBitBoard::hashcode_after_move(RXMove* move)  const {
 
 
 
-RXBitBoard::RXBitBoard(): player(BLACK), n_empties(60), n_nodes(0) {
+RXBitBoard::RXBitBoard(): player(BLACK), n_empties(60), n_nodes(0), parity(0xF){
     
     //start position
     discs[BLACK] = 0X000000810000000ULL;
@@ -792,6 +801,7 @@ RXBitBoard& RXBitBoard::operator=(const RXBitBoard& src) {
         player = src.player;
                 
         n_empties = src.n_empties;
+        parity = src.parity;
         
 
         RXSquareList* previous = empties_list;
@@ -820,6 +830,7 @@ RXBitBoard::RXBitBoard(const RXBitBoard& src) {
 	
 	player = src.player;
 	n_empties = src.n_empties;
+    parity = src.parity;
 	n_nodes = src.n_nodes;
 	
 	/* create emptiesList */
@@ -865,6 +876,7 @@ void RXBitBoard::build(const std::string& init) {
     discs[BLACK] = discs[WHITE] = 0ULL;
 
     n_empties = 64;
+    parity = 0;
     
     player = UNDEF;
 
@@ -877,11 +889,13 @@ void RXBitBoard::build(const std::string& init) {
             case '*':
                 discs[BLACK] |= 1ULL<<i;
                 n_empties--;
+                parity ^=QUADRANT_ID_2[i];
                 break;
             case 'o':
             case 'w':
                 discs[WHITE] |= 1ULL<<i;
                 n_empties--;
+                parity ^=QUADRANT_ID_2[i];
                 break;
             case '-':
             case '.':
@@ -933,7 +947,7 @@ void RXBitBoard::build(const std::string& init) {
     }
     empties_list[61].previous = previous;
     previous->next = &empties_list[61];
-    
+        
     
 }
 
@@ -994,24 +1008,6 @@ bool RXBitBoard::isEndGame() {
 		player ^= 1;
 	}
 	return false;
-}
-
-//int RXBitBoard::test_parity() {
-//    
-//    int
-//    parity_test  = local_Parity(A1) <<3;
-//    parity_test ^= local_Parity(H1) <<2;
-//    parity_test ^= local_Parity(A8) <<1;
-//    parity_test ^= local_Parity(H8);
-//    
-//    return parity_test;
-//}
-
-int RXBitBoard::local_Parity(const int position) const {
-    
-    const unsigned long long quadrant_Filled = (discs[BLACK] | discs[WHITE]) & QUADRANT_MASK[QUADRANT_ID[position]];
-    
-    return (__builtin_popcountll(quadrant_Filled) & 1);
 }
 
 
