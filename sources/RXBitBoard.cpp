@@ -184,7 +184,7 @@ const int RXBitBoard::QUADRANT_SHITF[] = {
 };
 
 /*! a quadrant id for each square */
-const int RXBitBoard::QUADRANT_ID_2[] = {
+const int RXBitBoard::QUADRANT_ID[] = {
     1, 1, 1, 1, 2, 2, 2, 2,
     1, 1, 1, 1, 2, 2, 2, 2,
     1, 1, 1, 1, 2, 2, 2, 2,
@@ -281,21 +281,27 @@ void RXBitBoard::init_hashcodeTable() {
 //not very efficient
 int RXBitBoard::count_potential_moves(const unsigned long long p_discs, const unsigned long long o_discs) {
     
-    static const uint64x2_t mask_hv = {0x7E7E7E7E7E7E7E7EULL, 0x00FFFFFFFFFFFF00ULL};
-    static const uint64x2_t mask_dg = {0x007E7E7E7E7E7E00ULL, 0x007E7E7E7E7E7E00ULL};
+//    static const uint64x2_t mask_hv = {0x7E7E7E7E7E7E7E7EULL, 0x00FFFFFFFFFFFF00ULL};
+//    static const uint64x2_t mask_dg = {0x007E7E7E7E7E7E00ULL, 0x007E7E7E7E7E7E00ULL};
     
-    static const uint64x2_t shl_hv  = { 1, 8};
-    static const uint64x2_t shr_hv  = {-1,-8};
-    static const uint64x2_t shl_dg  = { 7, 9};
-    static const uint64x2_t shr_dg  = {-7,-9};
+//    static const uint64x2_t shl_hv  = { 1, 8};
+//    static const uint64x2_t shr_hv  = {-1,-8};
+//    static const uint64x2_t shl_dg  = { 7, 9};
+//    static const uint64x2_t shr_dg  = {-7,-9};
+    
+    //use tab for speed
+    static const uint64x2_t mask[] = {  {0x7E7E7E7E7E7E7E7EULL, 0x00FFFFFFFFFFFF00ULL},
+                                        {0x007E7E7E7E7E7E00ULL, 0x007E7E7E7E7E7E00ULL}};
+    
+    static const uint64x2_t shift[] = {{ 1, 8}, {-1,-8}, { 7, 9}, {-7,-9}};
     
     const uint64x2_t oo = vdupq_n_u64(o_discs);
     
-    uint64x2_t hv = vandq_u64(oo, mask_hv);
-    hv = vorrq_u64(vshlq_u64(hv, shl_hv),vshlq_u64(hv, shr_hv)) ;
+    uint64x2_t hv = vandq_u64(oo, mask[0]);
+    hv = vorrq_u64(vshlq_u64(hv, shift[0]),vshlq_u64(hv, shift[1])) ;
     
-    uint64x2_t dg = vandq_u64(oo,  mask_dg);
-    dg = vorrq_u64(vshlq_u64(dg, shl_dg),vshlq_u64(dg, shr_dg)) ;
+    uint64x2_t dg = vandq_u64(oo,  mask[1]);
+    dg = vorrq_u64(vshlq_u64(dg, shift[2]),vshlq_u64(dg, shift[3])) ;
     
     return __builtin_popcountll((vgetq_lane_u64(hv, 0) | vgetq_lane_u64(hv, 1) | vgetq_lane_u64(dg, 0) | vgetq_lane_u64(dg, 1)) & ~(p_discs|o_discs));
 
@@ -387,18 +393,13 @@ int RXBitBoard::count_potential_moves(const unsigned long long p_discs, const un
 /*interleave version :more speed ? NO*/
 unsigned long long RXBitBoard::get_legal_moves(const unsigned long long p_discs, const unsigned long long o_discs ) {
 
-    //horizontals directions -1, +1
-    static const int64x2_t shift_1 = {-1, 1};
-    static const int64x2_t shift_2 = {-2, 2};
-    //verticals directions -8 , +8
-    static const int64x2_t shift_8  = {-8,   8};
-    static const int64x2_t shift_16 = {-16, 16};
-    //diagonals directions -7 , +7
-    static const int64x2_t shift_7  = {-7,   7};
-    static const int64x2_t shift_14 = {-14, 14};
-    //diagonals directions -9 , +9
-    static const int64x2_t shift_9  = {-9,   9};
-    static const int64x2_t shift_18 = {-18, 18};
+    //vector directions
+    static const int64x2_t shift[] = {
+        {-1, 1}, { -2,  2},     //0,1
+        {-8, 8}, {-16, 16},     //2,3
+        {-7, 7}, {-14, 14},     //4,5
+        {-9, 9}, {-18, 18} };   //6,7
+    
 
     const uint64x2_t pp_discs = vdupq_n_u64(p_discs);
     const uint64x2_t oo_discs = vdupq_n_u64(o_discs);
@@ -406,42 +407,42 @@ unsigned long long RXBitBoard::get_legal_moves(const unsigned long long p_discs,
     const uint64x2_t inner_oo_discs = vdupq_n_u64(o_discs & 0x7E7E7E7E7E7E7E7EULL);
 
     uint64x2_t
-    flip_h = vandq_u64(vshlq_u64(pp_discs, shift_1), inner_oo_discs);
+    flip_h = vandq_u64(vshlq_u64(pp_discs, shift[0]), inner_oo_discs);
     uint64x2_t
-    flip_d7 = vandq_u64(vshlq_u64(pp_discs, shift_7), inner_oo_discs);
+    flip_d7 = vandq_u64(vshlq_u64(pp_discs, shift[4]), inner_oo_discs);
     uint64x2_t
-    flip_d9 = vandq_u64(vshlq_u64(pp_discs, shift_9), inner_oo_discs);
+    flip_d9 = vandq_u64(vshlq_u64(pp_discs, shift[6]), inner_oo_discs);
     uint64x2_t
-    flip_v = vandq_u64(vshlq_u64(pp_discs, shift_8), oo_discs);
+    flip_v = vandq_u64(vshlq_u64(pp_discs, shift[2]), oo_discs);
 
 
-    flip_h = vorrq_u64(flip_h, vandq_u64(vshlq_u64(flip_h, shift_1), inner_oo_discs));
-    flip_d7 = vorrq_u64(flip_d7, vandq_u64(vshlq_u64(flip_d7, shift_7), inner_oo_discs));
-    flip_d9 = vorrq_u64(flip_d9, vandq_u64(vshlq_u64(flip_d9, shift_9), inner_oo_discs));
-    flip_v = vorrq_u64(flip_v, vandq_u64(vshlq_u64(flip_v, shift_8), oo_discs));
+    flip_h = vorrq_u64(flip_h, vandq_u64(vshlq_u64(flip_h, shift[0]), inner_oo_discs));
+    flip_d7 = vorrq_u64(flip_d7, vandq_u64(vshlq_u64(flip_d7, shift[4]), inner_oo_discs));
+    flip_d9 = vorrq_u64(flip_d9, vandq_u64(vshlq_u64(flip_d9, shift[6]), inner_oo_discs));
+    flip_v = vorrq_u64(flip_v, vandq_u64(vshlq_u64(flip_v, shift[2]), oo_discs));
 
 
     uint64x2_t
-    adjacent_h = vandq_u64(inner_oo_discs, vshlq_u64(inner_oo_discs, shift_1));
+    adjacent_h = vandq_u64(inner_oo_discs, vshlq_u64(inner_oo_discs, shift[0]));
     uint64x2_t
-    adjacent_d7 = vandq_u64(inner_oo_discs, vshlq_u64(inner_oo_discs, shift_7));
+    adjacent_d7 = vandq_u64(inner_oo_discs, vshlq_u64(inner_oo_discs, shift[4]));
     uint64x2_t
-    adjacent_d9 = vandq_u64(inner_oo_discs, vshlq_u64(inner_oo_discs, shift_9));
+    adjacent_d9 = vandq_u64(inner_oo_discs, vshlq_u64(inner_oo_discs, shift[6]));
     uint64x2_t
-    adjacent_v = vandq_u64(oo_discs, vshlq_u64(oo_discs, shift_8));
+    adjacent_v = vandq_u64(oo_discs, vshlq_u64(oo_discs, shift[2]));
 
 
-    flip_h = vorrq_u64(flip_h, vandq_u64(vshlq_u64(flip_h, shift_2), adjacent_h));
-    flip_v = vorrq_u64(flip_v, vandq_u64(vshlq_u64(flip_v, shift_16), adjacent_v));
-    flip_d7 = vorrq_u64(flip_d7, vandq_u64(vshlq_u64(flip_d7, shift_14), adjacent_d7));
-    flip_d9 = vorrq_u64(flip_d9, vandq_u64(vshlq_u64(flip_d9, shift_18), adjacent_d9));
+    flip_h = vorrq_u64(flip_h, vandq_u64(vshlq_u64(flip_h, shift[1]), adjacent_h));
+    flip_v = vorrq_u64(flip_v, vandq_u64(vshlq_u64(flip_v, shift[3]), adjacent_v));
+    flip_d7 = vorrq_u64(flip_d7, vandq_u64(vshlq_u64(flip_d7, shift[5]), adjacent_d7));
+    flip_d9 = vorrq_u64(flip_d9, vandq_u64(vshlq_u64(flip_d9, shift[7]), adjacent_d9));
 
-    flip_h = vorrq_u64(flip_h, vandq_u64(vshlq_u64(flip_h, shift_2), adjacent_h));
-    flip_v = vorrq_u64(flip_v, vandq_u64(vshlq_u64(flip_v, shift_16), adjacent_v));
-    flip_d7 = vorrq_u64(flip_d7, vandq_u64(vshlq_u64(flip_d7, shift_14), adjacent_d7));
-    flip_d9 = vorrq_u64(flip_d9, vandq_u64(vshlq_u64(flip_d9, shift_18), adjacent_d9));
+    flip_h = vorrq_u64(flip_h, vandq_u64(vshlq_u64(flip_h, shift[1]), adjacent_h));
+    flip_v = vorrq_u64(flip_v, vandq_u64(vshlq_u64(flip_v, shift[3]), adjacent_v));
+    flip_d7 = vorrq_u64(flip_d7, vandq_u64(vshlq_u64(flip_d7, shift[5]), adjacent_d7));
+    flip_d9 = vorrq_u64(flip_d9, vandq_u64(vshlq_u64(flip_d9, shift[7]), adjacent_d9));
 
-    uint64x2_t legals = vorrq_u64(vshlq_u64(flip_d9, shift_9), vorrq_u64(vshlq_u64(flip_d7, shift_7), vorrq_u64(vshlq_u64(flip_h, shift_1), vshlq_u64(flip_v, shift_8))));
+    uint64x2_t legals = vorrq_u64(vshlq_u64(flip_d9, shift[6]), vorrq_u64(vshlq_u64(flip_d7, shift[4]), vorrq_u64(vshlq_u64(flip_h, shift[0]), vshlq_u64(flip_v, shift[2]))));
     
     
     return ((vgetq_lane_u64(legals, 0) | vgetq_lane_u64(legals, 1)) & ~(p_discs | o_discs));
@@ -889,13 +890,13 @@ void RXBitBoard::build(const std::string& init) {
             case '*':
                 discs[BLACK] |= 1ULL<<i;
                 n_empties--;
-                parity ^=QUADRANT_ID_2[i];
+                parity ^=QUADRANT_ID[i];
                 break;
             case 'o':
             case 'w':
                 discs[WHITE] |= 1ULL<<i;
                 n_empties--;
-                parity ^=QUADRANT_ID_2[i];
+                parity ^=QUADRANT_ID[i];
                 break;
             case '-':
             case '.':

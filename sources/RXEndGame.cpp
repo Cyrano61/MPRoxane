@@ -39,18 +39,12 @@ const int RXEngine::EG_MEDIUM_HI_TO_LOW = 14;
 const int RXEngine::EG_MEDIUM_TO_SHALLOW = 8;
 const int RXEngine::MIN_DEPTH_USE_ENDCUT = 16;
 
-const bool RXEngine::USE_POTENTIAL_MOBILITY = true; //false:true equivalent: is equal
-
-/* standart setting*/
-
-///*For Record fforum-20-39*/
+/* for record fforum-40-59 setting*/
 //const int RXEngine::EG_DEEP_TO_MEDIUM = 16;
 //const int RXEngine::EG_MEDIUM_HI_TO_LOW = 13;
 //const int RXEngine::EG_MEDIUM_TO_SHALLOW = 7;
 //const int RXEngine::MIN_DEPTH_USE_ENDCUT = 16;
 //
-//const bool RXEngine::USE_POTENTIAL_MOBILITY = true;
-///*For Record fforum-20-39*/
 
 
 const int RXEngine::EG_HIGH_SELECT = 0;
@@ -118,6 +112,35 @@ int RXEngine::EG_alphabeta_parity(int threadID, RXBitBoard& board, int alpha, in
     }
 
     
+//    unsigned long long d_opponent = board.discs[board.player^1];
+//    
+//    for (int parity = 1; alpha < beta && parity >= 0; parity--) {
+//        
+//        for(RXSquareList* empties = board.empties_list->next; alpha < beta && empties->position != NOMOVE; empties = empties->next) {
+//            int square = empties->position;
+//            if (((board.parity & RXBitBoard::QUADRANT_ID[square])>>RXBitBoard::QUADRANT_SHITF[square]) == parity && (d_opponent & RXBitBoard::NEIGHBOR[square]) && ((board).*(board.generate_flips[square]))(move)) {  
+//                
+//                board.do_move(move);
+//                if (board.n_empties == 4) {
+//                    score = -board.final_score_4(-beta, -alpha, false);
+//                } else {
+//                    score = -EG_alphabeta_parity(threadID, board, -beta, -alpha, false);
+//                }
+//                board.undo_move(move);
+//                
+//                if (score > bestscore) {
+//                    bestscore = score;
+//                    if (bestscore > alpha) {
+//                        alpha = bestscore;
+//                        if (alpha >= beta) {
+//                            return bestscore;
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//    }
+
     //if PASS
     if(bestscore == UNDEF_SCORE) {
         if(passed) {
@@ -347,7 +370,7 @@ int RXEngine::EG_alphabeta_hash_mobility(int threadID, RXBitBoard& board, const 
                     const unsigned long long p_discs = board.discs[p] | (move->flipped | move->square);
                     const unsigned long long o_discs = board.discs[o] ^ move->flipped;
                     
-                    move->score = RXBitBoard::count_potential_moves(o_discs, p_discs) - ((board.parity & RXBitBoard::QUADRANT_ID_2[move->position])>>RXBitBoard::QUADRANT_SHITF[move->position]);
+                    move->score = RXBitBoard::count_potential_moves(o_discs, p_discs) - ((board.parity & RXBitBoard::QUADRANT_ID[move->position])>>RXBitBoard::QUADRANT_SHITF[move->position]);
                     
                     previous = previous->next = move++;
                     n_Moves++;
@@ -541,10 +564,7 @@ int RXEngine::EG_PVS_hash_mobility(int threadID, RXBitBoard& board, const bool p
             /* first move */
             board.do_move(*move);
             if (board.n_empties < EG_MEDIUM_TO_SHALLOW) {
-                if(USE_POTENTIAL_MOBILITY)
-                    bestscore = -EG_alphabeta_hash_mobility(threadID, board, pv, -upper, -lower, false);
-                else
-                    bestscore = -EG_alphabeta_hash_parity(threadID, board, pv, -upper, -lower, false);
+                bestscore = -EG_alphabeta_hash_mobility(threadID, board, pv, -upper, -lower, false);
             } else {
                 bestscore = -EG_PVS_hash_mobility(threadID, board, pv, -upper, -lower, false);
             }
@@ -592,7 +612,7 @@ int RXEngine::EG_PVS_hash_mobility(int threadID, RXBitBoard& board, const bool p
                         const unsigned long long o_discs = board.discs[o] ^ iter->flipped;
                         
                         
-                        iter->score = (RXBitBoard::get_mobility(o_discs, p_discs)<<5) - (RXBitBoard::get_corner_stability(p_discs)<<2) - ((board.parity & RXBitBoard::QUADRANT_ID_2[iter->position])>>RXBitBoard::QUADRANT_SHITF[iter->position]);
+                        iter->score = (RXBitBoard::get_mobility(o_discs, p_discs)<<5) - (RXBitBoard::get_corner_stability(p_discs)<<2) - ((board.parity & RXBitBoard::QUADRANT_ID[iter->position])>>RXBitBoard::QUADRANT_SHITF[iter->position]);
                         
                     }
                     
@@ -622,10 +642,7 @@ int RXEngine::EG_PVS_hash_mobility(int threadID, RXBitBoard& board, const bool p
                     
                     board.do_move(*move);
                     if (board.n_empties < EG_MEDIUM_TO_SHALLOW) {
-                        if(USE_POTENTIAL_MOBILITY)
-                            bestscore = -EG_alphabeta_hash_mobility(threadID, board, pv, -upper, -lower, false);
-                        else
-                            bestscore = -EG_alphabeta_hash_parity(threadID, board, pv, -upper, -lower, false);
+                        bestscore = -EG_alphabeta_hash_mobility(threadID, board, pv, -upper, -lower, false);
                     } else {
                         bestscore = -EG_PVS_hash_mobility(threadID, board, pv, -upper, -lower, false);
                     }
@@ -667,10 +684,7 @@ int RXEngine::EG_PVS_hash_mobility(int threadID, RXBitBoard& board, const bool p
                     board.do_move(*move);
                     
                     if (board.n_empties < EG_MEDIUM_TO_SHALLOW) {
-                        if(USE_POTENTIAL_MOBILITY)
-                            score = -EG_alphabeta_hash_mobility(threadID, board, pv, -upper, -lower, false);
-                        else
-                            score = -EG_alphabeta_hash_parity(threadID, board, pv, -upper, -lower, false);
+                        score = -EG_alphabeta_hash_mobility(threadID, board, pv, -upper, -lower, false);
                     } else {
                         score = -EG_PVS_hash_mobility(threadID, board, false, -lower - VALUE_DISC, -lower, false);
                         if (lower < score && score < upper)

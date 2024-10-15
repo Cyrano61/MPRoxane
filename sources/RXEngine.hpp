@@ -313,8 +313,6 @@ class RXEngine: public Runnable, public RXHelper {
 	static const int EG_MEDIUM_HI_TO_LOW ;
 	static const int EG_DEEP_TO_MEDIUM;
     
-    static const bool USE_POTENTIAL_MOBILITY;
-
 	static const int MIN_DEPTH_USE_ENDCUT;
 
 	static const int EG_HIGH_SELECT;

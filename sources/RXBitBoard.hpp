@@ -64,7 +64,7 @@ class RXBitBoard {
 	/*! a quadrant id for each square */
     static const unsigned long long QUADRANT_MASK[];
     static const int QUADRANT_SHITF[];
-    static const int QUADRANT_ID_2[];
+    static const int QUADRANT_ID[];
 
 	static const unsigned char COUNT_A[];
 	static const unsigned char COUNT_B[];
@@ -251,7 +251,7 @@ inline void RXBitBoard::do_move(const RXMove& move) {
 	discs[player] ^= move.flipped;
 	
 	n_empties--;
-    parity ^= QUADRANT_ID_2[move.position];
+    parity ^= QUADRANT_ID[move.position];
 
 	const RXSquareList *remove = position_to_empties[move.position];
 	remove->previous->next = remove->next;
@@ -266,7 +266,7 @@ inline void RXBitBoard::undo_move(const RXMove& move) {
 	insert->previous->next = insert;
 	insert->next->previous = insert;
 	
-    parity ^= QUADRANT_ID_2[move.position];
+    parity ^= QUADRANT_ID[move.position];
     n_empties++;
 	
 	discs[player] |= move.flipped;
@@ -358,21 +358,22 @@ inline int RXBitBoard::get_stability(const int player) const {
 
 inline int RXBitBoard::get_corner_stability(const unsigned long long& discs_player) {
 
-    static const uint64x2_t shr_hv = {-1,-8};
-    static const uint64x2_t shl_hv = { 1, 8};
-    //static const uint64x2_t sh     = {16,-16};
-
-    static const uint64x2_t mask_right = {0x4000000000000040ULL, 0x0081000000000000ULL};
-    static const uint64x2_t mask_left  = {0x0200000000000002ULL, 0x0000000000008100ULL};
-
+//    static const uint64x2_t shr_hv = {-1,-8};
+//    static const uint64x2_t shl_hv = { 1, 8};
+//
+//    static const uint64x2_t mask_right = {0x4000000000000040ULL, 0x0081000000000000ULL};
+//    static const uint64x2_t mask_left  = {0x0200000000000002ULL, 0x0000000000008100ULL};
+    
+    static const uint64x2_t shift[] = {{-1,-8}, { 1, 8}};
+    static const uint64x2_t mask[] = {
+        {0x4000000000000040ULL, 0x0081000000000000ULL},
+        {0x0200000000000002ULL, 0x0000000000008100ULL}};
+    
     const uint64x2_t discs  = vdupq_n_u64(discs_player);
     uint64x2_t stable = vdupq_n_u64(discs_player & 0x8100000000000081ULL);
  
-    stable = vorrq_u64(vandq_u64(vandq_u64(vshlq_u64(stable, shr_hv), discs), mask_right), stable);
-    stable = vorrq_u64(vandq_u64(vandq_u64(vshlq_u64(stable, shl_hv), discs), mask_left ), stable);
-
-    //bonus corner, not very efficient
-    //stable = vorrq_u64(stable, vshlq_u64(corner, sh));
+    stable = vorrq_u64(vandq_u64(vandq_u64(vshlq_u64(stable, shift[0]), discs), mask[0]), stable);
+    stable = vorrq_u64(vandq_u64(vandq_u64(vshlq_u64(stable, shift[1]), discs), mask[1] ), stable);
 
     return __builtin_popcountll(vgetq_lane_u64(stable, 0) | vgetq_lane_u64(stable, 1));
 }
@@ -384,35 +385,52 @@ inline int RXBitBoard::get_stability_opponent(const unsigned long long discs_pla
 
     //static const for horizontals and verticals full lines
 
-    static const uint64x2_t shr_hv_4 = {-4,-32};
-    static const uint64x2_t shl_hv_4 = {64, 32};
-    static const uint64x2_t shr_hv_2 = {-2,-16};
-    static const uint64x2_t shl_hv_2 = {64, 16};
-    static const uint64x2_t shr_hv_1 = {-1, -8};
-    static const uint64x2_t shl_hv_1 = {64,  8};
+//    static const uint64x2_t shr_hv_4 = {-4,-32};
+//    static const uint64x2_t shl_hv_4 = {64, 32};
+//    static const uint64x2_t shr_hv_2 = {-2,-16};
+//    static const uint64x2_t shl_hv_2 = {64, 16};
+//    static const uint64x2_t shr_hv_1 = {-1, -8};
+//    static const uint64x2_t shl_hv_1 = {64,  8};
     
-    static const uint64x2_t mask_hv = {0x8181818181818181ULL, 0xFF000000000000FFULL};
+//    static const uint64x2_t mask_hv = {0x8181818181818181ULL, 0xFF000000000000FFULL};
     
     //static const for 2 * diagonals full lines
 
-    static const uint64x2_t shr_dg_4 = {-28,-36};
-    static const uint64x2_t shl_dg_4 = { 28, 36};
-    static const uint64x2_t mask_right_4 = { 0x00000000F0F0F0F0ULL, 0x000000000F0F0F0FULL};
-    static const uint64x2_t mask_left_4  = { 0x0F0F0F0F00000000ULL, 0xF0F0F0F000000000ULL};
-    static const uint64x2_t mask_4       = { 0xF0F0F0F00F0F0F0FULL, 0x0F0F0F0FF0F0F0F0ULL};
+//    static const uint64x2_t shr_dg_4 = {-28,-36};
+//    static const uint64x2_t shl_dg_4 = { 28, 36};
+//    static const uint64x2_t mask_right_4 = { 0x00000000F0F0F0F0ULL, 0x000000000F0F0F0FULL};
+//    static const uint64x2_t mask_left_4  = { 0x0F0F0F0F00000000ULL, 0xF0F0F0F000000000ULL};
+//    static const uint64x2_t mask_4       = { 0xF0F0F0F00F0F0F0FULL, 0x0F0F0F0FF0F0F0F0ULL};
 
-    static const uint64x2_t shr_dg_2 = {-14,-18};
-    static const uint64x2_t shl_dg_2 = { 14, 18};
-    static const uint64x2_t mask_right_2 = { 0x0000FCFCFCFCFCFCULL, 0x00003F3F3F3F3F3FULL};
-    static const uint64x2_t mask_left_2  = { 0x3F3F3F3F3F3F0000ULL, 0xFCFCFCFCFCFC0000ULL};
-    static const uint64x2_t mask_2       = { 0xC0C0000000000303ULL, 0x030300000000C0C0ULL};
-    static const uint64x2_t mask_dg      = { 0xFF818181818181FFULL, 0xFF818181818181FFULL};
+//    static const uint64x2_t shr_dg_2 = {-14,-18};
+//    static const uint64x2_t shl_dg_2 = { 14, 18};
+//    static const uint64x2_t mask_right_2 = { 0x0000FCFCFCFCFCFCULL, 0x00003F3F3F3F3F3FULL};
+//    static const uint64x2_t mask_left_2  = { 0x3F3F3F3F3F3F0000ULL, 0xFCFCFCFCFCFC0000ULL};
+//    static const uint64x2_t mask_2       = { 0xC0C0000000000303ULL, 0x030300000000C0C0ULL};
+//    static const uint64x2_t mask_dg      = { 0xFF818181818181FFULL, 0xFF818181818181FFULL};
 
     
-    static const uint64x2_t shr_hv = {-1,-8};
-    static const uint64x2_t shl_hv = { 1, 8};
-    static const uint64x2_t shr_dg = {-7,-9};
-    static const uint64x2_t shl_dg = { 7, 9};
+//    static const uint64x2_t shr_hv = {-1,-8};
+//    static const uint64x2_t shl_hv = { 1, 8};
+//    static const uint64x2_t shr_dg = {-7,-9};
+//    static const uint64x2_t shl_dg = { 7, 9};
+    
+    static const uint64x2_t shift[] = {
+        {-4,-32}, {64, 32}, {-2,-16}, {64, 16}, {-1, -8}, {64,  8},
+        {-28,-36}, { 28, 36}, {-14,-18}, { 14, 18},
+        {-1,-8}, { 1, 8}, {-7,-9}, { 7, 9}
+    };
+    
+    static const uint64x2_t mask[] = {
+        { 0x8181818181818181ULL, 0xFF000000000000FFULL},
+        { 0x00000000F0F0F0F0ULL, 0x000000000F0F0F0FULL},
+        { 0x0F0F0F0F00000000ULL, 0xF0F0F0F000000000ULL},
+        { 0xF0F0F0F00F0F0F0FULL, 0x0F0F0F0FF0F0F0F0ULL},
+        { 0x0000FCFCFCFCFCFCULL, 0x00003F3F3F3F3F3FULL},
+        { 0x3F3F3F3F3F3F0000ULL, 0xFCFCFCFCFCFC0000ULL},
+        { 0xC0C0000000000303ULL, 0x030300000000C0C0ULL},
+        { 0xFF818181818181FFULL, 0xFF818181818181FFULL}
+    };
     
     //--------------------------------------------------------------------------------------------
     
@@ -423,28 +441,28 @@ inline int RXBitBoard::get_stability_opponent(const unsigned long long discs_pla
     //horizontals and verticals full lines
     uint64x2_t hv = vdupq_n_u64(filled);
     
-    hv = vandq_u64( hv, vorrq_u64(vshlq_u64(hv, shr_hv_4), vshlq_u64(hv, shl_hv_4)));
-    hv = vandq_u64( hv, vorrq_u64(vshlq_u64(hv, shr_hv_2), vshlq_u64(hv, shl_hv_2)));
-    hv = vandq_u64( hv, vorrq_u64(vshlq_u64(hv, shr_hv_1), vshlq_u64(hv, shl_hv_1)));
+    hv = vandq_u64( hv, vorrq_u64(vshlq_u64(hv, shift[0]), vshlq_u64(hv, shift[1])));
+    hv = vandq_u64( hv, vorrq_u64(vshlq_u64(hv, shift[2]), vshlq_u64(hv, shift[3])));
+    hv = vandq_u64( hv, vorrq_u64(vshlq_u64(hv, shift[4]), vshlq_u64(hv, shift[5])));
 
     hv = vcombine_u64(((vget_low_u64(hv) & 0x0101010101010101ULL) * 0xFFULL), vget_high_u64(hv));
-    hv = vorrq_u64(hv, mask_hv);
+    hv = vorrq_u64(hv, mask[0]);
 
     
     //2 * diagonals full lines
     uint64x2_t dg = vdupq_n_u64(filled);
     
     uint64x2_t
-    temp = vandq_u64(vshlq_u64(dg, shr_dg_4), mask_right_4);
-    temp = vorrq_u64(temp , vandq_u64(vshlq_u64(dg, shl_dg_4), mask_left_4));
-    dg = vandq_u64(dg, vorrq_u64(temp, mask_4));
+    temp = vandq_u64(vshlq_u64(dg, shift[6]), mask[1]);
+    temp = vorrq_u64(temp , vandq_u64(vshlq_u64(dg, shift[7]), mask[2]));
+    dg = vandq_u64(dg, vorrq_u64(temp, mask[3]));
 
-    temp = vandq_u64(vshlq_u64(dg, shr_dg_2), mask_right_2);
-    temp = vorrq_u64(temp , vandq_u64(vshlq_u64(dg, shl_dg_2), mask_left_2));
-    dg = vandq_u64(dg, vorrq_u64(temp, mask_2));
+    temp = vandq_u64(vshlq_u64(dg, shift[8]), mask[4]);
+    temp = vorrq_u64(temp , vandq_u64(vshlq_u64(dg, shift[9]), mask[5]));
+    dg = vandq_u64(dg, vorrq_u64(temp, mask[6]));
 
-    dg = vandq_u64(dg, vandq_u64(vshlq_u64(dg, shr_dg), vshlq_u64(dg, shl_dg)));
-    dg = vorrq_u64(dg, mask_dg);
+    dg = vandq_u64(dg, vandq_u64(vshlq_u64(dg, shift[12]), vshlq_u64(dg, shift[13])));
+    dg = vorrq_u64(dg, mask[7]);
     
     
     // mix full lines and discs color
@@ -459,12 +477,6 @@ inline int RXBitBoard::get_stability_opponent(const unsigned long long discs_pla
         return 0;
         
 
-//    int result = VALUE_DISC * __builtin_popcountll(stable);
-//    if(result>=n_stables_cut) {
-//        return result;
-//    }
-    
-
     unsigned long long old_stable;
     uint64x2_t dir_hv;
     uint64x2_t dir_dg;
@@ -474,8 +486,8 @@ inline int RXBitBoard::get_stability_opponent(const unsigned long long discs_pla
         
         old_stable = stable;
         
-        dir_hv = vorrq_u64(vorrq_u64(vshlq_u64(temp, shr_hv), vshlq_u64(temp, shl_hv)), hv);
-        dir_dg = vorrq_u64(vorrq_u64(vshlq_u64(temp, shr_dg), vshlq_u64(temp, shl_dg)), dg);
+        dir_hv = vorrq_u64(vorrq_u64(vshlq_u64(temp, shift[10]), vshlq_u64(temp, shift[11])), hv);
+        dir_dg = vorrq_u64(vorrq_u64(vshlq_u64(temp, shift[12]), vshlq_u64(temp, shift[13])), dg);
 
         temp = vandq_u64(dir_hv, dir_dg);
         temp = vandq_u64(vandq_u64(temp, vcombine_u64(vget_high_u64(temp), vget_low_u64(temp))), dd_color);
