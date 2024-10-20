@@ -608,99 +608,256 @@ inline int RXBitBoard::final_score_2(int alpha, const int beta, const bool passe
 	return final_score_2(discs[player], discs[player^1], alpha/VALUE_DISC, beta/VALUE_DISC, passed,  empties_list->next->position,  empties_list->next->next->position)*VALUE_DISC;
 }
 
-
+//unroll method
 inline int RXBitBoard::final_score_2(const unsigned long long discs_player, const unsigned long long discs_opponent, const int alpha, const int beta, const bool passed, const int idSquare1, const int idSquare2) {
-	
-	unsigned long long d_player = discs_player;
-	unsigned long long d_opponent = discs_opponent;
-			
-	int n_flips, bestscore = UNDEF_SCORE;
-		
-	// try to play on the first available square
-	if((d_opponent & NEIGHBOR[idSquare1]) && (do_flips[idSquare1](d_player, d_opponent))) {
-		n_nodes++;
-		
-		bestscore = 62 - 2*__builtin_popcountll(d_opponent);
+    
+    unsigned long long d_player = discs_player;
+    unsigned long long d_opponent = discs_opponent;
+            
+    int n_flips, bestscore = UNDEF_SCORE;
+            
+    // try to play on the first available square
+    if((d_opponent & NEIGHBOR[idSquare1]) && (do_flips[idSquare1](d_player, d_opponent))) {
+        n_nodes++;
+        
+        bestscore = 62 - 2*__builtin_popcountll(d_opponent);
 
-		
-		
-		n_flips = count_flips[idSquare2](d_opponent);
-		if(n_flips !=0) {
-			bestscore -= n_flips;
-		} else {
-			if(bestscore >= 0) {
-				bestscore += 2;
-				if(bestscore < beta) {
-					bestscore += count_flips[idSquare2](d_player);
-				}
-			} else {
-				if(bestscore < beta) {
-					n_flips = count_flips[idSquare2](d_player);
+        n_flips = count_flips[idSquare2](d_opponent);
+        if(n_flips !=0) {
+            bestscore -= n_flips;
+        } else {
+            if(bestscore >= 0) {
+                bestscore += 2;
+                if(bestscore < beta) {
+                    bestscore += count_flips[idSquare2](d_player);
+                }
+            } else {
+                if(bestscore < beta) {
+                    n_flips = count_flips[idSquare2](d_player);
 
-					if(n_flips != 0)
-						bestscore += n_flips + 2;
-				}
-			}
-		}
+                    if(n_flips != 0)
+                        bestscore += n_flips + 2;
+                }
+            }
+        }
 
-		if(bestscore >= beta)
-			return bestscore;
+        if(bestscore >= beta)
+            return bestscore;
 
-		d_player = discs_player;
-		d_opponent = discs_opponent;
-			
-	}
-								
-	// if needed, try to play on the second & last available square
-	if((d_opponent & NEIGHBOR[idSquare2]) && (do_flips[idSquare2](d_player, d_opponent))) {
-		n_nodes++;
-		
-		int score = 62 - 2*__builtin_popcountll(d_opponent);
+        d_player = discs_player;
+        d_opponent = discs_opponent;
+            
+    }
+                                
+    // if needed, try to play on the second & last available square
+    if((d_opponent & NEIGHBOR[idSquare2]) && (do_flips[idSquare2](d_player, d_opponent))) {
+        n_nodes++;
+        
+        int score = 62 - 2*__builtin_popcountll(d_opponent);
 
-		
-		n_flips = count_flips[idSquare1](d_opponent);
-		if(n_flips !=0) {
-			score -= n_flips;
-		} else {
-			if(score >= 0) {
-				score += 2;
-				if(score < beta) {
-					score += count_flips[idSquare1](d_player);
-				}
-			} else {
-				if(score < beta) {
-					n_flips = count_flips[idSquare1](d_player);
-					if(n_flips != 0)
-						score += n_flips + 2;
-				}
-			}
-		}
+        
+        n_flips = count_flips[idSquare1](d_opponent);
+        if(n_flips !=0) {
+            score -= n_flips;
+        } else {
+            if(score >= 0) {
+                score += 2;
+                if(score < beta) {
+                    score += count_flips[idSquare1](d_player);
+                }
+            } else {
+                if(score < beta) {
+                    n_flips = count_flips[idSquare1](d_player);
+                    if(n_flips != 0)
+                        score += n_flips + 2;
+                }
+            }
+        }
 
-		if(score > bestscore)
-			return score;
-			
-		return bestscore;
+        if(score > bestscore)
+            return score;
+            
+        return bestscore;
 
-	}
+    }
 
-	// if no move were available
-	if(bestscore == UNDEF_SCORE) {
-		if (passed) {
-			n_nodes--;
-			bestscore = 62 - 2*__builtin_popcountll(discs_opponent);
-			if(bestscore>0)
-				bestscore+=2;
-			else if (bestscore<0)
-				bestscore-=2;
-								
-		} else {
-			n_nodes++;
-			bestscore = -final_score_2(discs_opponent, discs_player, -beta, -alpha, true, idSquare1, idSquare2);
-		}
-	}
-				
-	return bestscore;
+    // if no move were available
+    if(bestscore == UNDEF_SCORE) {
+        n_nodes++; //PASS
+        
+        if((do_flips[idSquare1](d_opponent, d_player))) {
+            n_nodes++;
+            
+            bestscore = 62 - 2*__builtin_popcountll(d_player);
+
+            n_flips = count_flips[idSquare2](d_player);
+            if(n_flips !=0) {
+                bestscore -= n_flips;
+            } else {
+                if(bestscore >= 0) {
+                    bestscore += 2;
+                    if(bestscore < -alpha) {
+                        bestscore += count_flips[idSquare2](d_opponent);
+                    }
+                } else {
+                    if(bestscore < -alpha) {
+                        n_flips = count_flips[idSquare2](d_opponent);
+
+                        if(n_flips != 0)
+                            bestscore += n_flips + 2;
+                    }
+                }
+            }
+
+            if(bestscore >= -alpha)
+                return -bestscore;
+
+            d_player = discs_player;
+            d_opponent = discs_opponent;
+                
+        }
+                                    
+        // if needed, try to play on the second & last available square
+        if((do_flips[idSquare2](d_opponent, d_player))) {
+            n_nodes++;
+            
+            int score = 62 - 2*__builtin_popcountll(d_player);
+
+            
+            n_flips = count_flips[idSquare1](d_player);
+            if(n_flips !=0) {
+                score -= n_flips;
+            } else {
+                if(score >= 0) {
+                    score += 2;
+                    if(score < -alpha) {
+                        score += count_flips[idSquare1](d_opponent);
+                    }
+                } else {
+                    if(score < -alpha) {
+                        n_flips = count_flips[idSquare1](d_opponent);
+                        if(n_flips != 0)
+                            score += n_flips + 2;
+                    }
+                }
+            }
+
+            if(score > bestscore)
+                return -score;
+                
+            return -bestscore;
+
+        }
+        
+        if(bestscore == UNDEF_SCORE) {
+            n_nodes--; //undo PASS
+            bestscore = 62 - 2*__builtin_popcountll(discs_player);
+            if(bestscore>0)
+                bestscore+=2;
+            else if (bestscore<0)
+                bestscore-=2;
+        }
+       
+        return -bestscore;
+                                
+    }
+                
+    return bestscore;
 }
+
+
+//inline int RXBitBoard::final_score_2(const unsigned long long discs_player, const unsigned long long discs_opponent, const int alpha, const int beta, const bool passed, const int idSquare1, const int idSquare2) {
+//	
+//	unsigned long long d_player = discs_player;
+//	unsigned long long d_opponent = discs_opponent;
+//			
+//	int n_flips, bestscore = UNDEF_SCORE;
+//		
+//	// try to play on the first available square
+//	if((d_opponent & NEIGHBOR[idSquare1]) && (do_flips[idSquare1](d_player, d_opponent))) {
+//		n_nodes++;
+//		
+//		bestscore = 62 - 2*__builtin_popcountll(d_opponent);
+//
+//		
+//		
+//		n_flips = count_flips[idSquare2](d_opponent);
+//		if(n_flips !=0) {
+//			bestscore -= n_flips;
+//		} else {
+//			if(bestscore >= 0) {
+//				bestscore += 2;
+//				if(bestscore < beta) {
+//					bestscore += count_flips[idSquare2](d_player);
+//				}
+//			} else {
+//				if(bestscore < beta) {
+//					n_flips = count_flips[idSquare2](d_player);
+//
+//					if(n_flips != 0)
+//						bestscore += n_flips + 2;
+//				}
+//			}
+//		}
+//
+//		if(bestscore >= beta)
+//			return bestscore;
+//
+//		d_player = discs_player;
+//		d_opponent = discs_opponent;
+//			
+//	}
+//								
+//	// if needed, try to play on the second & last available square
+//	if((d_opponent & NEIGHBOR[idSquare2]) && (do_flips[idSquare2](d_player, d_opponent))) {
+//		n_nodes++;
+//		
+//		int score = 62 - 2*__builtin_popcountll(d_opponent);
+//
+//		
+//		n_flips = count_flips[idSquare1](d_opponent);
+//		if(n_flips !=0) {
+//			score -= n_flips;
+//		} else {
+//			if(score >= 0) {
+//				score += 2;
+//				if(score < beta) {
+//					score += count_flips[idSquare1](d_player);
+//				}
+//			} else {
+//				if(score < beta) {
+//					n_flips = count_flips[idSquare1](d_player);
+//					if(n_flips != 0)
+//						score += n_flips + 2;
+//				}
+//			}
+//		}
+//
+//		if(score > bestscore)
+//			return score;
+//			
+//		return bestscore;
+//
+//	}
+//
+//	// if no move were available
+//	if(bestscore == UNDEF_SCORE) {
+//		if (passed) {
+//			n_nodes--;
+//			bestscore = 62 - 2*__builtin_popcountll(discs_opponent);
+//			if(bestscore>0)
+//				bestscore+=2;
+//			else if (bestscore<0)
+//				bestscore-=2;
+//								
+//		} else {
+//			n_nodes++;
+//			bestscore = -final_score_2(discs_opponent, discs_player, -beta, -alpha, true, idSquare1, idSquare2);
+//		}
+//	}
+//				
+//	return bestscore;
+//}
 
 
 
