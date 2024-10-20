@@ -174,7 +174,7 @@ int RXEngine::EG_alphabeta_hash_parity(int threadID, RXBitBoard& board, const bo
     unsigned long long  hash_code = board.hashcode();
     if(hTable->get(hash_code, type_hashtable, entry)) {
         
-        if(entry.selectivity == NO_SELECT && entry.depth >= board.n_empties) { // !pv &&
+        if(!pv && entry.selectivity == NO_SELECT && entry.depth >= board.n_empties) { //
             
             if (upper > entry.upper) {
                 upper = entry.upper;
@@ -295,7 +295,7 @@ int RXEngine::EG_alphabeta_hash_mobility(int threadID, RXBitBoard& board, const 
     unsigned long long  hash_code = board.hashcode();
     if(hTable->get(hash_code, type_hashtable, entry)) {
         
-        if(entry.selectivity == NO_SELECT && entry.depth >= board.n_empties) { // !pv &&
+        if(!pv && entry.selectivity == NO_SELECT && entry.depth >= board.n_empties) { //
             
             if (upper > entry.upper) {
                 upper = entry.upper;
@@ -508,7 +508,7 @@ int RXEngine::EG_PVS_hash_mobility(int threadID, RXBitBoard& board, const bool p
     const unsigned long long hash_code = board.hashcode();
     if(hTable->get(hash_code, type_hashtable, entry)) {
         
-        if(entry.selectivity == NO_SELECT && entry.depth >= board.n_empties) { // !pv &&
+        if(!pv && entry.selectivity == NO_SELECT && entry.depth >= board.n_empties) { //
             
             
             if (upper > entry.upper) {
@@ -758,7 +758,7 @@ int RXEngine::EG_PVS_ETC_mobility(int threadID, RXBBPatterns& sBoard, const bool
     const unsigned long long hash_code = board.hashcode();
     if(hTable->get(hash_code, type_hashtable, entry)) {
         
-        if(entry.selectivity == NO_SELECT && entry.depth >= board.n_empties) { // !pv &&
+        if(!pv && entry.selectivity == NO_SELECT && entry.depth >= board.n_empties) { //
             
             
             if (upper > entry.upper) {
@@ -1186,7 +1186,7 @@ int RXEngine::EG_PVS_deep(int threadID, RXBBPatterns& sBoard, const bool pv, con
         
         
         if(entry.depth >= board.n_empties) {
-            if(entry.selectivity >= selectivity) { // !pv &&
+            if(!pv && entry.selectivity >= selectivity) { //
                 
                 
                 if (upper > entry.upper) {
@@ -2378,6 +2378,12 @@ void RXEngine::EG_PVS_root(RXBBPatterns& sBoard, const int selectivity, int alph
                             score = -EG_PVS_deep(0, sBoard, true, selectivity, child_selective_cutoff, -upper, child_selective_cutoff? -lower : -score, false);
                         else
                             score = -EG_PVS_deep(0, sBoard, true, selectivity, child_selective_cutoff, -upper, -score, false);
+
+                        if(search_client == RXSearch::kGGSMode && !abort.load()) {    // GGS mode
+                            if(dependent_time && board.n_empties>19 && score <= bestscore)
+                                manager->sendMsg("         " + RXMove::index_to_coord(iter->position) + " refuted ");
+                        }
+
                         
                         extra_time--;
                     }
@@ -2493,6 +2499,12 @@ void RXEngine::EG_SP_search_root(RXSplitPoint* sp, const unsigned int threadID) 
                 score = -EG_PVS_deep(threadID, sBoard, true, sp->selectivity, child_selective_cutoff, -sp->beta, (child_selective_cutoff? -sp->alpha : -score), false);
             else
                 score = -EG_PVS_deep(threadID, sBoard, true, sp->selectivity, child_selective_cutoff, -sp->beta, -score, false);
+            
+            if(search_client == RXSearch::kGGSMode && !(abort.load() || thread_should_stop(threadID))) {    // GGS mode
+                if(dependent_time && board.n_empties>19 && score <= sp->bestscore)
+                    manager->sendMsg("         " + RXMove::index_to_coord(move->position) + " refuted ");
+            }
+
             
             extra_time--; //thread-safe?
             

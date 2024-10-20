@@ -56,14 +56,14 @@
       <CommandLineArguments>
          <CommandLineArgument
             argument = "-t 1 -h 18"
-            isEnabled = "YES">
-         </CommandLineArgument>
-         <CommandLineArgument
-            argument = "-t 8 -h 20"
             isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
-            argument = "-mode ggs -login Roxane -passw Rostand"
+            argument = "-t 8 -h 20"
+            isEnabled = "YES">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "-mode ggs -login CyranoM -passw MDP"
             isEnabled = "NO">
          </CommandLineArgument>
          <CommandLineArgument
@@ -80,6 +80,10 @@
          </CommandLineArgument>
          <CommandLineArgument
             argument = "/Users/caussebruno/Documents/othello/MPRoxane[2024-07-21]/scripts/endgame_24.script"
+            isEnabled = "NO">
+         </CommandLineArgument>
+         <CommandLineArgument
+            argument = "/Users/caussebruno/Documents/othello/MPRoxane[2024-07-21]/scripts/score_64.src"
             isEnabled = "NO">
          </CommandLineArgument>
       </CommandLineArguments>

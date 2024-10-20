@@ -9,7 +9,9 @@
 #include <iostream>
 #include <new>
 #include <sstream>
-#include <algorithm> 
+#include <algorithm>
+
+#include <cassert>
 
 #include "RXHashTable.hpp"
 
@@ -87,6 +89,7 @@ void RXHashTable::update(const unsigned long long hash_code, const bool pv, cons
 //	assert(score != -INTERRUPT_SEARCH || score != INTERRUPT_SEARCH);
 //	assert(score != -UNDEF_SCORE || score != UNDEF_SCORE);
 	
+                          
 	RXHashEntry& entry = table[_offsetTable[type_hashtable] | (static_cast<unsigned int>(hash_code>>32) & _maskTable[type_hashtable])];
 	
 	RXHashRecord& deepest = entry.deepest;
@@ -223,7 +226,8 @@ void RXHashTable::update(const unsigned long long hash_code, const t_hash type_h
 //	assert(score != -MAX_SCORE || score != MAX_SCORE);
 //	assert(score != -INTERRUPT_SEARCH || score != INTERRUPT_SEARCH);
 //	assert(score != -UNDEF_SCORE || score != UNDEF_SCORE);
-
+    
+    
 	RXHashEntry& entry = table[_offsetTable[type_hashtable] | (static_cast<unsigned int>(hash_code>>32) & _maskTable[type_hashtable])];
 	
 	RXHashRecord& deepest = entry.deepest;

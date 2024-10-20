@@ -245,7 +245,11 @@ void RXEngine::MG_PVS_root(RXBBPatterns& sBoard, const int depth,  int alpha, in
 				score = -MG_PVS_deep(0, sBoard, true, selectivity, depth-1, child_selective_cutoff, -upper, -_lower, false);
 				extra_time--;
 				
-				
+                if(search_client == RXSearch::kGGSMode && !abort.load()) {    // GGS mode
+                    if(dependent_time && depth>13 && score <= bestscore)
+                        manager->sendMsg("         " + RXMove::index_to_coord(iter->position) + " refuted ");
+                }
+
 			}
 			
 			

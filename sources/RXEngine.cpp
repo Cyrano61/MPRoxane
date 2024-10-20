@@ -1789,7 +1789,7 @@ void RXEngine::run() {
 //monothread
 bool RXEngine::probable_timeout(double probable_time_next_level) const {
     
-    if(dependent_time) {
+    if(dependent_time && extra_time == 0) {
         
         double tElapsed_dependent = get_current_dependentTime() ;
         double time_for_move = time_move;

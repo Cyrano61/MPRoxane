@@ -41,7 +41,8 @@ RXRoxane::RXRoxane(unsigned int size_hashtable, int max_thread): GGSClient(NULL)
 	engine[BLACK] = new RXEngine(this, "../build/log/engine_0.txt", max_thread);
 	
 	engine[WHITE] = new RXEngine(this, "../build/log/engine_1.txt", std::max(1, max_thread/2));
-	
+
+
 	hTable = new RXHashTable(size_hashtable);
 	main_PV = new RXHashTable(19);
 	expected_PV = new RXHashTable(19);
