@@ -390,7 +390,7 @@ int RXEngine::MG_PVS_deep(int threadID, RXBBPatterns& sBoard, const bool pv, con
 			((board).*(board.generate_flips[bestmove]))(*move);
 			
 			//synchronized acces
-			if(hTable->get(board.hashcode_after_move(move), type_hashtable, entry) && !pv && entry.depth>=depth-1) {
+			if(!pv && hTable->get(board.hashcode_after_move(move), type_hashtable, entry) && entry.depth>=depth-1) {
 				
 				/*
 				BE CARREFUL : (board.n_empties-1)-(depth-1) == board.n_empties-depth
@@ -418,7 +418,7 @@ int RXEngine::MG_PVS_deep(int threadID, RXBBPatterns& sBoard, const bool pv, con
 				move->score = 0;
 				
 				//synchronized acces
-				if(hTable->get(board.hashcode_after_move(move), type_hashtable, entry) && !pv && entry.depth>=depth-1) {
+				if(!pv &&hTable->get(board.hashcode_after_move(move), type_hashtable, entry)  && entry.depth>=depth-1) {
 					
 					move->score = -3*VALUE_DISC;
 

@@ -301,12 +301,13 @@ inline int RXBitBoard::get_mobility(const unsigned long long p_discs, const unsi
     
     const unsigned long long legals = get_legal_moves(p_discs, o_discs);
     
-    unsigned long long bonus = ((legals & 0x8000000000000000ULL) >> 27)
-                             | ((legals & 0x0100000000000000ULL) >> 21)
-                             | ((legals & 0x80ULL) << 21)
-                             | ((legals & 0x01ULL) << 27);
+//    unsigned long long bonus = ((legals & 0x8000000000000000ULL) >> 27)
+//                             | ((legals & 0x0100000000000000ULL) >> 21)
+//                             | ((legals & 0x80ULL) << 21)
+//                             | ((legals & 0x01ULL) << 27);
+//    return __builtin_popcountll(legals | bonus);
     
-    return __builtin_popcountll(legals | bonus);
+    return __builtin_popcountll(legals) +  __builtin_popcountll(legals & 0x8100000000000081ULL);
 }
 
 

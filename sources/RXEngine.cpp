@@ -1629,7 +1629,7 @@ void RXEngine::run() {
         if(expected_PV->get(hash_code, type_hashtable, entry_PV)) {
             RXHashValue entry;
             if(!hTable->get(board, type_hashtable, entry)) {
-                *log << "        expected_PV -> hash :-)" << std::endl;
+                *log << "                 hash : expected_PV" << std::endl;
                 hTable->copyPV(expected_PV, type_hashtable, board, type_hashtable);
             }
         }
@@ -1637,7 +1637,7 @@ void RXEngine::run() {
         if(main_PV->get(hash_code, type_hashtable, entry_PV)) {
             RXHashValue entry;
             if(!hTable->get(board, type_hashtable, entry)) {
-                *log << "        main_PV -> hash :-)" << std::endl;
+                *log << "                 hash : main_PV" << std::endl;
                 hTable->copyPV(main_PV, type_hashtable, board, type_hashtable);
             }
         }
