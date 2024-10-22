@@ -1527,6 +1527,8 @@ void RXEngine::get_move(RXSearch& s) {
             // 17/07/2009
             //pas d'anticipation si le score n'est pas exacte
             
+            activeThreads = std::min<unsigned int>(std::max<unsigned int>(1, THREAD_MAX/2), THREAD_MAX);
+
             RXHashValue entry;
             if(hTable->get(search_sBoard.board, type_hashtable, entry) && entry.move != NOMOVE && entry.upper == entry.lower) {
                 
@@ -1631,7 +1633,7 @@ void RXEngine::run() {
         if(expected_PV->get(hash_code, type_hashtable, entry_PV)) {
             RXHashValue entry;
             if(!hTable->get(board, type_hashtable, entry)) {
-                *log << "                 hash : expected_PV" << std::endl;
+                *log << "                  in expected_PV" << std::endl;
                 hTable->copyPV(expected_PV, type_hashtable, board, type_hashtable);
             }
         }
@@ -1639,7 +1641,7 @@ void RXEngine::run() {
         if(main_PV->get(hash_code, type_hashtable, entry_PV)) {
             RXHashValue entry;
             if(!hTable->get(board, type_hashtable, entry)) {
-                *log << "                 hash : main_PV" << std::endl;
+                *log << "                  in main_PV" << std::endl;
                 hTable->copyPV(main_PV, type_hashtable, board, type_hashtable);
             }
         }
@@ -1889,7 +1891,7 @@ void RXEngine::determine_move_time(RXBitBoard& board) {
             tMove *= 2;							// * 1,5
     }
     
-    if(board.n_empties>34)
+    if(!new_search && board.n_empties>34)
         tMove = std::max(2*tMove/3, tSafety/6);
     
     //security

@@ -124,7 +124,9 @@ void CODKStream::HandleOsTimeout(const CMsgOsTimeout* pmsg){
     
     //logout
     int err = Logout();
-    
+    if(err)
+        std::cout << "erreur :" << err << std::endl;
+
     //wait 2 seconds
     sleep(2);
     

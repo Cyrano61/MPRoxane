@@ -40,7 +40,8 @@ RXRoxane::RXRoxane(unsigned int size_hashtable, int max_thread): GGSClient(NULL)
 	/*initialisations*/
 	engine[BLACK] = new RXEngine(this, "../build/log/engine_0.txt", max_thread);
 	
-	engine[WHITE] = new RXEngine(this, "../build/log/engine_1.txt", std::max(1, max_thread/2));
+//	engine[WHITE] = new RXEngine(this, "../build/log/engine_1.txt", std::max(1, max_thread/2));
+    engine[WHITE] = new RXEngine(this, "../build/log/engine_1.txt", max_thread);
 
 
 	hTable = new RXHashTable(size_hashtable);
@@ -188,9 +189,9 @@ RXEngine* RXRoxane::getEngine(const int color) const {
 //			
 //			for(int iRecord = 0; iRecord < nRecords; iRecord++) {
 //				
-//				from.read(reinterpret_cast<char*>(s), sizeof(short)); //N¡ du tournoi
-//				from.read(reinterpret_cast<char*>(s), sizeof(short)); //N¡ joueur noir
-//				from.read(reinterpret_cast<char*>(s), sizeof(short)); //N¡ joueur blanc
+//				from.read(reinterpret_cast<char*>(s), sizeof(short)); //N du tournoi
+//				from.read(reinterpret_cast<char*>(s), sizeof(short)); //N joueur noir
+//				from.read(reinterpret_cast<char*>(s), sizeof(short)); //N joueur blanc
 //				
 //				from.read(reinterpret_cast<char*>(c), sizeof(char)); //score reel
 //				from.read(reinterpret_cast<char*>(c), sizeof(char)); //score theorique
@@ -347,14 +348,13 @@ void RXRoxane::get_move(const string& _idg, COsGame* g) {
 				main_PV->shared(false);
 				expected_PV->shared(false);
 								
+                n_threads = engine[SHARED]->get_THREAD_MAX();
 				
-				
-			}
-			
-			n_threads = engine[player]->get_THREAD_MAX();
-			
-			if(player == BLACK)
-				n_threads /=2;
+            } else {
+                
+                n_threads = (engine[player]->get_THREAD_MAX())/2;
+                
+            }
 			
 			id_engine = player;
 		}

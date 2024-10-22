@@ -605,7 +605,7 @@ void RXHashTable::mergePV(RXBitBoard& board) {
 	const RXHashRecord* from_RecordBlack = get_record(board, HASH_BLACK);		// source black
 	const RXHashRecord* from_RecordWhite = get_record(board, HASH_WHITE); 		// source white
 	
-	//choix de lÕentrŽe
+	//entry choice
 	const RXHashRecord* from_Record = NULL;
 	if(from_RecordBlack != NULL && from_RecordBlack->get_move() != NOMOVE) {
 		from_Record = from_RecordBlack;
