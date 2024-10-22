@@ -889,8 +889,10 @@ int RXEngine::PVS_last_three_ply(int threadID, RXBBPatterns& sBoard, int alpha, 
             if(bestscore>lower)
                 lower = bestscore;
             
-            if(lower<upper)
+            if(lower<upper) {
                 legal_movesBB = RXBitBoard::get_legal_moves(board.discs[board.player], board.discs[board.player^1]);
+                legal_movesBB ^= 1ULL<<hashmove;
+            }
             
         } else {
             
@@ -919,7 +921,7 @@ int RXEngine::PVS_last_three_ply(int threadID, RXBBPatterns& sBoard, int alpha, 
         //other moves
         int score = UNDEF_SCORE;
         for(; lower<upper && empties->position != NOMOVE; empties = empties->next) {
-            if(empties->position != hashmove && (legal_movesBB & 1ULL<<empties->position)) {
+            if(legal_movesBB & 1ULL<<empties->position) {
                 
                 ((board).*(board.generate_flips[empties->position]))(move);
                 ((sBoard).*(sBoard.update_patterns[move.position][board.player]))(move);

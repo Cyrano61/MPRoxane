@@ -408,9 +408,12 @@ int RXEngine::MG_PVS_deep(int threadID, RXBBPatterns& sBoard, const bool pv, con
 		}
 			
 		//for all empty square
-        const unsigned long long legal_movesBB = RXBitBoard::get_legal_moves(board.discs[board.player], board.discs[board.player^1]);
+        unsigned long long legal_movesBB = RXBitBoard::get_legal_moves(board.discs[board.player], board.discs[board.player^1]);
+        if(bestmove != NOMOVE)
+            legal_movesBB ^= 1ULL<<bestmove;
+        
 		for(RXSquareList* empties = board.empties_list->next; empties->position != NOMOVE; empties = empties->next) {
-            if(bestmove != empties->position && (legal_movesBB & 1ULL<<empties->position)) {
+            if(legal_movesBB & 1ULL<<empties->position) {
                 ((board).*(board.generate_flips[empties->position]))(*move);
 					
 				board.n_nodes++;
@@ -1085,10 +1088,13 @@ int RXEngine::MG_PVS_shallow(int threadID, RXBBPatterns& sBoard, const bool pv, 
 				//list moves
 				RXMove* previous = list;
 				int n_Moves = 0;
-                const unsigned long long legal_movesBB = RXBitBoard::get_legal_moves(board.discs[board.player], board.discs[board.player^1]);
+                unsigned long long legal_movesBB = RXBitBoard::get_legal_moves(board.discs[board.player], board.discs[board.player^1]);
+                if(bestmove != NOMOVE)
+                    legal_movesBB ^= 1ULL<<bestmove;
 
 				for(RXSquareList* empties = board.empties_list->next; empties->position != NOMOVE; empties = empties->next)
-                    if(bestmove != empties->position && (legal_movesBB & 1ULL<<empties->position)) { ((board).*(board.generate_flips[empties->position]))(*move);
+                    if(legal_movesBB & 1ULL<<empties->position) {
+                        ((board).*(board.generate_flips[empties->position]))(*move);
 						previous = previous->next = move++;
 						n_Moves++;
 					}
@@ -1182,10 +1188,12 @@ int RXEngine::MG_PVS_shallow(int threadID, RXBBPatterns& sBoard, const bool pv, 
 						lower = bestscore;
 				}
 				
-                const unsigned long long legal_movesBB = RXBitBoard::get_legal_moves(board.discs[board.player], board.discs[board.player^1]);
+                unsigned long long legal_movesBB = RXBitBoard::get_legal_moves(board.discs[board.player], board.discs[board.player^1]);
+                if(hashmove != NOMOVE)
+                    legal_movesBB ^= 1ULL<<hashmove;
 
 				for(RXSquareList* empties = board.empties_list->next; lower < upper &&  empties->position != NOMOVE; empties = empties->next) {
-                    if(empties->position != hashmove && (legal_movesBB & 1ULL<<empties->position)) {
+                    if(legal_movesBB & 1ULL<<empties->position) {
                         
                         ((board).*(board.generate_flips[empties->position ]))(*move);
                         ((sBoard).*(sBoard.update_patterns[empties->position ][board.player]))(*move);
@@ -1229,10 +1237,13 @@ int RXEngine::MG_PVS_shallow(int threadID, RXBBPatterns& sBoard, const bool pv, 
 						RXMove *move = list + 1, *previous = list;
 						int nMoves = 0;
 						
-                        const unsigned long long legal_movesBB = RXBitBoard::get_legal_moves(board.discs[board.player], board.discs[board.player^1]);
+                        unsigned long long legal_movesBB = RXBitBoard::get_legal_moves(board.discs[board.player], board.discs[board.player^1]);
+                        if(hashmove != NOMOVE)
+                            legal_movesBB ^= 1ULL<<hashmove;
 
 						for(RXSquareList* empties = board.empties_list->next; empties->position != NOMOVE; empties = empties->next)
-                            if(empties->position != hashmove && (legal_movesBB & 1ULL<<empties->position)) { ((board).*(board.generate_flips[empties->position]))(*move);
+                            if(legal_movesBB & 1ULL<<empties->position) {
+                                ((board).*(board.generate_flips[empties->position]))(*move);
 								previous = previous->next = move++;
 								nMoves++;
 							}
@@ -1300,14 +1311,16 @@ int RXEngine::MG_PVS_shallow(int threadID, RXBBPatterns& sBoard, const bool pv, 
 					
 
 						int score = UNDEF_SCORE;
-                        const unsigned long long legal_movesBB = RXBitBoard::get_legal_moves(board.discs[board.player], board.discs[board.player^1]);
+                        unsigned long long legal_movesBB = RXBitBoard::get_legal_moves(board.discs[board.player], board.discs[board.player^1]);
+                        if(hashmove != NOMOVE)
+                            legal_movesBB ^= 1ULL<<hashmove;
 
 						for(RXSquareList* empties = board.empties_list->next; lower < upper && empties->position != NOMOVE; empties = empties->next) {
-                            if (empties->position != hashmove && (legal_movesBB & 1ULL<<empties->position)) { ((board).*(board.generate_flips[empties->position]))(*move);
-	
+                            if (legal_movesBB & 1ULL<<empties->position) {
+                                ((board).*(board.generate_flips[empties->position]))(*move);
 								((sBoard).*(sBoard.update_patterns[move->position][board.player]))(*move);
+                                
 								sBoard.do_move(*move);
-								
 								
 								if(bestscore == UNDEF_SCORE) {
 									score = -MG_PVS_shallow(threadID, sBoard, pv, depth-1, -upper, -lower, false);
@@ -1482,9 +1495,12 @@ int RXEngine::MG_NWS_XProbCut(int threadID, RXBBPatterns& sBoard, const int pvDe
 			}
 				
 			//for all empty square
-            const unsigned long long legal_movesBB = RXBitBoard::get_legal_moves(board.discs[board.player], board.discs[board.player^1]);
+            unsigned long long legal_movesBB = RXBitBoard::get_legal_moves(board.discs[board.player], board.discs[board.player^1]);
+            if(bestmove != NOMOVE)
+                legal_movesBB ^= 1ULL<<bestmove;
+
 			for(RXSquareList* empties = board.empties_list->next; empties->position != NOMOVE; empties = empties->next)
-                if(bestmove != empties->position && (legal_movesBB & 1ULL<<empties->position)) {
+                if(legal_movesBB & 1ULL<<empties->position) {
                     
                     ((board).*(board.generate_flips[empties->position]))(*move);
 						

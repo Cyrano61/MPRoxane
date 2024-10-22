@@ -393,10 +393,12 @@ int RXEngine::EG_alphabeta_hash_mobility(int threadID, RXBitBoard& board, const 
             //for all empty square
             RXMove* previous = list;
             int n_Moves = 0;
-            const unsigned long long legal_movesBB = RXBitBoard::get_legal_moves(board.discs[p], board.discs[o]);
-            
+            unsigned long long legal_movesBB = RXBitBoard::get_legal_moves(board.discs[board.player], board.discs[board.player^1]);
+            if(hashmove !=NOMOVE)
+                legal_movesBB ^= 1ULL<<hashmove;
+
             for(RXSquareList* empties = board.empties_list->next; empties->position != NOMOVE; empties = empties->next)
-                if(hashmove != empties->position && (legal_movesBB & 1ULL<<empties->position)) {
+                if(legal_movesBB & 1ULL<<empties->position) {
                     
                     ((board).*(board.generate_flips[empties->position]))(*move);
                     
@@ -617,10 +619,12 @@ int RXEngine::EG_PVS_hash_mobility(int threadID, RXBitBoard& board, const bool p
             //for all empty square
             RXMove* previous = list;
             int n_Moves = 0;
-            const unsigned long long legal_movesBB = RXBitBoard::get_legal_moves(board.discs[board.player], board.discs[board.player^1]);
-            
+            unsigned long long legal_movesBB = RXBitBoard::get_legal_moves(board.discs[board.player], board.discs[board.player^1]);
+            if(bestmove !=NOMOVE)
+                legal_movesBB ^= 1ULL<<bestmove;
+
             for(RXSquareList* empties = board.empties_list->next; empties->position != NOMOVE; empties = empties->next)
-                if(bestmove != empties->position && (legal_movesBB & 1ULL<<empties->position)) {
+                if(legal_movesBB & 1ULL<<empties->position) {
                     
                     ((board).*(board.generate_flips[empties->position]))(*move);
                     previous = previous->next = move++;
@@ -865,9 +869,12 @@ int RXEngine::EG_PVS_ETC_mobility(int threadID, RXBBPatterns& sBoard, const bool
         }
         
         //for all empty square
-        const unsigned long long legal_movesBB = RXBitBoard::get_legal_moves(board.discs[board.player], board.discs[board.player^1]);
+        unsigned long long legal_movesBB = RXBitBoard::get_legal_moves(board.discs[board.player], board.discs[board.player^1]);
+        if(bestmove !=NOMOVE)
+            legal_movesBB ^= 1ULL<<bestmove;
+
         for(RXSquareList* empties = board.empties_list->next; empties->position != NOMOVE; empties = empties->next)
-            if(bestmove != empties->position && (legal_movesBB & 1ULL<<empties->position)){
+            if(legal_movesBB & 1ULL<<empties->position){
                 
                 ((board).*(board.generate_flips[empties->position]))(*move);
                 board.n_nodes++;
@@ -1331,9 +1338,12 @@ int RXEngine::EG_PVS_deep(int threadID, RXBBPatterns& sBoard, const bool pv, con
         
         
         //for other move
-        const unsigned long long legal_movesBB = RXBitBoard::get_legal_moves(board.discs[board.player], board.discs[board.player^1]);
+        unsigned long long legal_movesBB = RXBitBoard::get_legal_moves(board.discs[board.player], board.discs[board.player^1]);
+        if(bestmove !=NOMOVE)
+            legal_movesBB ^= 1ULL<<bestmove;
+
         for(RXSquareList* empties = board.empties_list->next; empties->position != NOMOVE; empties = empties->next)
-            if(bestmove != empties->position && (legal_movesBB & 1ULL<<empties->position)){
+            if(legal_movesBB & 1ULL<<empties->position){
                 
                 ((board).*(board.generate_flips[empties->position]))(*move);
                 board.n_nodes++;
@@ -1986,9 +1996,12 @@ int RXEngine::EG_NWS_XEndCut(int threadID, RXBBPatterns& sBoard, const int pvDev
         }
         
         //for all empty square
-        const unsigned long long legal_movesBB = RXBitBoard::get_legal_moves(board.discs[board.player], board.discs[board.player^1]);
+        unsigned long long legal_movesBB = RXBitBoard::get_legal_moves(board.discs[board.player], board.discs[board.player^1]);
+        if(bestmove !=NOMOVE)
+            legal_movesBB ^= 1ULL<<bestmove;
+
         for(RXSquareList* empties = board.empties_list->next; empties->position != NOMOVE; empties = empties->next)
-            if(bestmove != empties->position && (legal_movesBB & 1ULL<<empties->position)){
+            if(legal_movesBB & 1ULL<<empties->position){
                 
                 ((board).*(board.generate_flips[empties->position]))(*move);
                 board.n_nodes++;
